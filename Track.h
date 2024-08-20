@@ -23,7 +23,7 @@ public:
   /// @brief constructor
   Track();
   /// @brief destrucor
-  virtual ~Track();
+  virtual ~Track() {}
 
   /// Setter
 
