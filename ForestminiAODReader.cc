@@ -522,9 +522,9 @@ Int_t ForestminiAODReader::setupChains()
                     {
                         ftmp->Close();
                     } // if (ftmp)
-                }     // if ( file.find(".root") != std::string::npos && file.find("Forest") != std::string::npos &&
-                      // file.find("AOD") != std::string::npos )
-            }         // while ( getline( inputStream, file ) )
+                } // if ( file.find(".root") != std::string::npos && file.find("Forest") != std::string::npos &&
+                  // file.find("AOD") != std::string::npos )
+            } // while ( getline( inputStream, file ) )
 
             std::cout << Form("Total number of files in chain: %d\n", nFiles);
             fEvents2Read = fEventTree->GetEntries();
@@ -773,7 +773,6 @@ void ForestminiAODReader::setupBranches()
         fTrkTree->SetBranchAddress("highPurity", &fTrackHighPurity);
         fTrkTree->SetBranchAddress("pfEcal", &fTrackPartFlowEcal);
         fTrkTree->SetBranchAddress("pfHcal", &fTrackPartFlowHcal);
-        fTrkTree->SetBranchAddress("trkAlgo", &fTrackAlgo);
     } // if ( fUseTrackBranch )
 
     // Gen particle quantities
@@ -1082,7 +1081,51 @@ Event *ForestminiAODReader::returnEvent()
 
             fEvent->recoJetCollection()->push_back(jet);
         } // for (Int_t iJet{0}; iJet<fNPFRecoJets; iJet++)
-    }     // if ( fUsePartFlowJetBranch )
+    } // if ( fUsePartFlowJetBranch )
+
+    if (fUseGenTrackBranch && fIsMc)
+    {
+        for (Int_t iGenTrack{0}; iGenTrack < fGenTrackPt.size(); iGenTrack++)
+        {
+            GenTrack *track = new GenTrack{};
+            track->setTrackPt(fGenTrackPt.at(iGenTrack));
+            track->setTrackEta(fGenTrackEta.at(iGenTrack));
+            track->setTrackPhi(fGenTrackPhi.at(iGenTrack));
+            track->setTrackChg(fGenTrackCharge.at(iGenTrack));
+            track->setTrackPDGID(fGenTrackPid.at(iGenTrack));
+            if (fCollidingSystem == "PbPb")
+            {
+                track->setTrackSube(fGenTrackSube.at(iGenTrack));
+            }
+            fEvent->genTrackCollection()->push_back(track);
+        }
+    }
+
+    if (fUseTrackBranch)
+    {
+        for (Int_t iTrack{0}; iTrack < fTrackPt.size(); iTrack++)
+        {
+            Track *track = new Track{};
+            track->setTrackPt(fTrackPt.at(iTrack));
+            track->setTrackEta(fTrackEta.at(iTrack));
+            track->setTrackPhi(fTrackPhi.at(iTrack));
+            track->setTrackChg(fTrackCharge.at(iTrack));
+            track->setTrackHighPurity(fTrackHighPurity.at(iTrack));
+            track->setTrackDxy(fTrackDcaXY.at(iTrack));
+            track->setTrackDxyErr(fTrackDcaXYErr.at(iTrack));
+            track->setTrackDz(fTrackDcaZ.at(iTrack));
+            track->setTrackDzErr(fTrackDcaZErr.at(iTrack));
+            track->setTrackPtErr(fTrackPtErr.at(iTrack));
+            if (fCollidingSystem == "PbPb")
+            {
+                track->setTrackChi2(fTrackChi2.at(iTrack));
+                track->setTrackpfEcal(fTrackPartFlowEcal.at(iTrack));
+                track->setTrackpfHcal(fTrackPartFlowHcal.at(iTrack));
+                track->setTrackNHits(fTrackNHits.at(iTrack));
+                track->setTrackNLayers(fTrackNLayers.at(iTrack));
+            }
+        }
+    }
 
     if (fEventCut && !fEventCut->pass(fEvent))
     {

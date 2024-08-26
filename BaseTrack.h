@@ -24,18 +24,18 @@ public:
     BaseTrack();
     ///@brief Destructor
     virtual ~BaseTrack();
-    
+
     ///
     /// Setters
     ///
     ///@brief  Set track transverse momentum
-    void setTrkPt(const Float_t &pt) { fTrkPt = {pt}; }
+    void setTrackPt(const Float_t &pt) { fTrkPt = {pt}; }
     ///@brief Set track pseudorapidity
-    void setTrkEta(const Float_t &eta) { fTrkEta = {eta}; }
+    void setTrackEta(const Float_t &eta) { fTrkEta = {eta}; }
     ///@brief Set track phi
-    void setTrkPhi(const Float_t &phi) { fTrkPhi = {phi}; }
+    void setTrackPhi(const Float_t &phi) { fTrkPhi = {phi}; }
     ///@brief Set Track Charge
-    void setTrkChg(const Int_t &chg) { fTrkChg = {chg}; }
+    void setTrackChg(const Int_t &chg) { fTrkChg = {chg}; }
     ///
     /// Getter
     ///

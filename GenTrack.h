@@ -28,18 +28,18 @@ public:
   /// Setter
 
   ///@brief Set Particle Identification
-  void setPDGID(const Int_t &pdg) { fPDGID = {pdg}; }
+  void setTrackPDGID(const Int_t &pdg) { fPDGID = {pdg}; }
   ///@brief Set Subevent
-  void setSube(const Char_t &sube) { fSube = {sube}; }
+  void setTrackSube(const Char_t &sube) { fSube = {sube}; }
   ///@brief Print parameters of tracks
   void print();
 
   // Getter
 
   ///@brief Get PDGID
-  Int_t TrkPDGID() const { return fPDGID; }
+  Int_t TrackPDGID() const { return fPDGID; }
   ///@brief Get Sube
-  Char_t TrkSube() const { return fSube; }
+  Char_t TrackSube() const { return fSube; }
 
 private:
   ///@brief Particle ID

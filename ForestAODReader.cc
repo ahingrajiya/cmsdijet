@@ -521,9 +521,9 @@ Int_t ForestAODReader::setupChains()
                     {
                         ftmp->Close();
                     } // if (ftmp)
-                }     // if ( file.find(".root") != std::string::npos && file.find("Forest") != std::string::npos &&
-                      // file.find("AOD") != std::string::npos )
-            }         // while ( getline( inputStream, file ) )
+                } // if ( file.find(".root") != std::string::npos && file.find("Forest") != std::string::npos &&
+                  // file.find("AOD") != std::string::npos )
+            } // while ( getline( inputStream, file ) )
 
             std::cout << Form("Total number of files in chain: %d\n", nFiles);
             fEvents2Read = fEventTree->GetEntries();
@@ -1085,8 +1085,54 @@ Event *ForestAODReader::returnEvent()
 
             fEvent->recoJetCollection()->push_back(jet);
         } // for (Int_t iJet{0}; iJet<fNPFRecoJets; iJet++)
-    }     // if ( fUsePartFlowJetBranch )
+    } // if ( fUsePartFlowJetBranch )
 
+    if (fUseGenTrackBranch && fIsMc)
+    {
+        for (Int_t iGenTrack{0}; iGenTrack < fGenTrackPt.size(); iGenTrack++)
+        {
+            GenTrack *track = new GenTrack{};
+            track->setTrackPt(fGenTrackPt.at(iGenTrack));
+            track->setTrackEta(fGenTrackEta.at(iGenTrack));
+            track->setTrackPhi(fGenTrackPhi.at(iGenTrack));
+            track->setTrackChg(fGenTrackCharge.at(iGenTrack));
+            track->setTrackPDGID(fGenTrackPid.at(iGenTrack));
+            if (fCollidingSystem == "PbPb")
+            {
+                track->setTrackSube(fGenTrackSube.at(iGenTrack));
+            }
+            fEvent->genTrackCollection()->push_back(track);
+        }
+    }
+    if (fUseTrackBranch)
+    {
+        for (Int_t iTrack{0}; iTrack < fNTracks; iTrack++)
+        {
+            Track *track = new Track{};
+            track->setTrackPt(fTrackPt[iTrack]);
+            track->setTrackPtErr(fTrackPtErr[iTrack]);
+            track->setTrackEta(fTrackEta[iTrack]);
+            track->setTrackPhi(fTrackPhi[iTrack]);
+            track->setTrackChg(fTrackCharge[iTrack]);
+            track->setTrackDxy(fTrackDcaXY[iTrack]);
+            track->setTrackDxyErr(fTrackDcaXYErr[iTrack]);
+            track->setTrackDz(fTrackDcaZ[iTrack]);
+            track->setTrackDzErr(fTrackDcaZErr[iTrack]);
+            track->setTrackHighPurity(fTrackHighPurity[iTrack]);
+            if (fCollidingSystem == "PbPb")
+            {
+                track->setTrackChi2(fTrackChi2[iTrack]);
+                track->setTrackNHits(fTrackNHits[iTrack]);
+                track->setTrackpfEcal(fTrackPartFlowEcal[iTrack]);
+                track->setTrackpfHcal(fTrackPartFlowHcal[iTrack]);
+                track->setTrackNLayers(fTrackNLayers[iTrack]);
+                track->setTrackAlgo(fTrackAlgo[iTrack]);
+                track->setTrackMVA(fTrackMVA[iTrack]);
+                track->setTrackNDOF(fTrackNDOF[iTrack]);
+            }
+            fEvent->trackCollection()->push_back(track);
+        }
+    }
     if (fEventCut && !fEventCut->pass(fEvent))
     {
         delete fEvent;

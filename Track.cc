@@ -15,6 +15,6 @@
 ClassImp(Track)
 
     //________________
-    Track::Track() : BaseTrack{}, fHighPurity{kFALSE}, fVertexDxy{0.}, fVertexDxyErr{0.}, fVertexDz{0.}, fVertexDzErr{0.}, fTrkpfHcal{0.}, fTrkpfEcal{0.}, fTrkNHits{0}, fTrkNormChi2{0.}, fTrkNLayers{0}
+    Track::Track() : BaseTrack{}, fHighPurity{kFALSE}, fTrkPtErr{0.}, fVertexDxy{0.}, fVertexDxyErr{0.}, fVertexDz{0.}, fVertexDzErr{0.}, fTrkpfHcal{0.}, fTrkpfEcal{0.}, fTrkNHits{0}, fTrkNormChi2{0.}, fTrkNLayers{0}, fTrkNDOF{0}, fTrkMVA{0.}, fTrkAlgo{0}
 {
 }
