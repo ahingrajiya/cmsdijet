@@ -22,6 +22,7 @@
 #include "Event.h"
 #include "EventCut.h"
 #include "JetCut.h"
+#include "TrackCut.h"
 #include "JetCorrector.h"
 #include "JetUncertainty.h"
 
@@ -90,6 +91,8 @@ public:
   void setIsMc(const Bool_t &isMc) { fIsMc = {isMc}; }
   /// @brief Fix jet arrays
   void fixJetArrays() { fFixJetArrays = {kTRUE}; }
+  ///@brief Set Track Cut
+  void setTrackCut(TrackCut *cut) { fTrackCut = {cut}; }
 
   /// @brief Return amount of events to read
   Long64_t nEventsTotal() const { return fEvents2Read; }
@@ -443,6 +446,8 @@ private:
   EventCut *fEventCut;
   /// @brief Jet cut
   JetCut *fJetCut;
+  ///@brief Track cut
+  TrackCut *fTrackCut;
 
   /// @brief Vector that contains indices of generated jets that matched to the
   /// reconsructed jet (should be of the reco/red size)

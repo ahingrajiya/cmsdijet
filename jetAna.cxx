@@ -35,7 +35,7 @@ int main(int argc, char const *argv[])
     TString JECFileName;
     if (isPbPb)
     {
-        inFileName = "../filelist.txt";
+        inFileName = "../lol.list";
         collEnergyGeV = {5020};
         collSystem = "PbPb";
         collYear = 2018;

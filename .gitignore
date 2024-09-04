@@ -37,3 +37,4 @@
 # build directory
 build/*
 *.txt
+*.list

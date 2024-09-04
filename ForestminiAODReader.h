@@ -23,6 +23,7 @@
 #include "EventCut.h"
 #include "JetCorrector.h"
 #include "JetCut.h"
+#include "TrackCut.h"
 #include "JetUncertainty.h"
 
 // C++ headers
@@ -116,6 +117,12 @@ public:
     void setJetCut(JetCut *cut)
     {
         fJetCut = {cut};
+    }
+
+    /// @brief Set Track cut
+    void setJetCut(TrackCut *cut)
+    {
+        fTrackCut = {cut};
     }
     /// @brief Is the dataset from MC
     void setIsMc(const Bool_t &isMc)
@@ -483,6 +490,8 @@ private:
     EventCut *fEventCut;
     /// @brief Jet cut
     JetCut *fJetCut;
+    ///@brief Track Cut
+    TrackCut *fTrackCut;
 
     /// @brief Vector that contains indices of generated jets that matched to the
     /// reconsructed jet (should be of the reco/red size)

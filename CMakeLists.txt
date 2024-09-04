@@ -40,6 +40,7 @@ add_definitions(${ROOT_CXX_FLAGS})
 # List all headers to be used to generate dictionary and added to the library
 set(HEADERS
         JetESRAnalysis.h
+        DiJetAnalysis.h
         Event.h
         Track.h
         GenTrack.h
@@ -51,6 +52,7 @@ set(HEADERS
         BaseJet.h
         BaseTrack.h
         HistoManagerJetESR.h
+        HistoManagerDiJet.h
         Collections.h
         ForestAODReader.h
         ForestminiAODReader.h
@@ -58,6 +60,7 @@ set(HEADERS
         JetUncertainty.h
         EventCut.h
         JetCut.h
+        TrackCut.h
         Manager.h
         TriggerAndSkim.h
 )
@@ -65,6 +68,7 @@ set(HEADERS
 # List source files
 set(SRC 
         JetESRAnalysis.cc
+        DiJetAnalysis.cc
         Event.cc
         Track.cc
         GenTrack.cc
@@ -74,12 +78,14 @@ set(SRC
         BaseJet.cc
         BaseTrack.cc
         HistoManagerJetESR.cc
+        HistoManagerDiJet.cc
         ForestAODReader.cc
         ForestminiAODReader.cc
         JetCorrector.cc
         JetUncertainty.cc
         EventCut.cc
         JetCut.cc
+        TrackCut.cc
         Manager.cc
         TriggerAndSkim.cc
 )

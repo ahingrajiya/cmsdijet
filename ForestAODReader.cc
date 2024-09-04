@@ -30,7 +30,7 @@ ClassImp(ForestAODReader)
       fTrkTree{nullptr}, fGenTrkTree{nullptr},
       fJEC{nullptr}, fJECFiles{}, fJEU{nullptr}, fJEUFiles{},
       fCollidingSystem{Form("PbPb")}, fCollidingEnergyGeV{5020}, fYearOfDataTaking{2018}, fDoJetPtSmearing{kFALSE},
-      fFixJetArrays{kFALSE}, fEventCut{nullptr}, fJetCut{nullptr}, fRecoJet2GenJetId{}, fGenJet2RecoJet{}
+      fFixJetArrays{kFALSE}, fEventCut{nullptr}, fJetCut{nullptr}, fRecoJet2GenJetId{}, fGenJet2RecoJet{}, fTrackCut{nullptr}
 {
     // Initialize many variables
     clearVariables();
@@ -45,7 +45,7 @@ ForestAODReader::ForestAODReader(const Char_t *inputStream, const Bool_t &useHlt
       fUseJets{useJets}, fUseTrackBranch{useTrackBranch}, fUseGenTrackBranch{useGenTrackBranch},
       fJEC{nullptr}, fJECFiles{}, fJEU{nullptr},
       fJEUFiles{}, fCollidingSystem{Form("PbPb")}, fCollidingEnergyGeV{5020}, fYearOfDataTaking{2018},
-      fDoJetPtSmearing{kFALSE}, fFixJetArrays{kFALSE}, fEventCut{nullptr}, fJetCut{nullptr}, fIsInStore{setStoreLocation}
+      fDoJetPtSmearing{kFALSE}, fFixJetArrays{kFALSE}, fEventCut{nullptr}, fJetCut{nullptr}, fIsInStore{setStoreLocation}, fTrackCut{nullptr}
 {
     // Initialize many variables
     clearVariables();
@@ -76,6 +76,8 @@ ForestAODReader::~ForestAODReader()
         delete fEventCut;
     if (fJetCut)
         delete fJetCut;
+    if (fTrackCut)
+        delete fTrackCut;
 }
 
 //_________________
@@ -1023,6 +1025,12 @@ Event *ForestAODReader::returnEvent()
                 jet->setFlavorForB(fRefJetPartonFlavorForB[fGenJet2RecoJet.at(iGenJet)]);
                 jet->setPtWeight(jetPtWeight(fIsMc, fCollidingSystem.Data(), fYearOfDataTaking, fCollidingEnergyGeV,
                                              fGenJetPt[iGenJet]));
+
+                if (fJetCut && !fJetCut->pass(jet))
+                {
+                    delete jet;
+                    continue;
+                }
                 fEvent->genJetCollection()->push_back(jet);
             } // for (Int_t iGenJet{0}; iGenJet<fNPFGenJets; iGenJet++)
 
@@ -1101,9 +1109,16 @@ Event *ForestAODReader::returnEvent()
             {
                 track->setTrackSube(fGenTrackSube.at(iGenTrack));
             }
+
+            if (fTrackCut && !fTrackCut->GenPass(track))
+            {
+                delete track;
+                continue;
+            }
             fEvent->genTrackCollection()->push_back(track);
         }
     }
+    Int_t iRecoMult = 0;
     if (fUseTrackBranch)
     {
         for (Int_t iTrack{0}; iTrack < fNTracks; iTrack++)
@@ -1130,9 +1145,16 @@ Event *ForestAODReader::returnEvent()
                 track->setTrackMVA(fTrackMVA[iTrack]);
                 track->setTrackNDOF(fTrackNDOF[iTrack]);
             }
+            if (fTrackCut && !fTrackCut->RecoPass(track))
+            {
+                delete track;
+                continue;
+            }
+            iRecoMult++;
             fEvent->trackCollection()->push_back(track);
         }
     }
+    fEvent->setMultiplicity(iRecoMult);
     if (fEventCut && !fEventCut->pass(fEvent))
     {
         delete fEvent;

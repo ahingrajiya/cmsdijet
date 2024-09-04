@@ -83,6 +83,8 @@ public:
   Float_t vz() const { return fVz; }
   /// @brief Return hiBin bin
   Int_t hiBin() const { return (Int_t)fHiBin; }
+  /// @brief Return hiBin bin for PYTHIA+HYDJET. This hiBin is -5% shifted to match multiplicity distribution with MB PbPb data
+  Int_t hiBinShifted() const { return (fHiBin - 10); }
   /// @brief Return centrality bin
   Double_t centrality() const { return (fHiBin < 0) ? -5 : 100. - Double_t(200 - fHiBin) * 0.5; }
   /// @brief Return ptHat

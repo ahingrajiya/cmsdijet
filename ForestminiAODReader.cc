@@ -28,7 +28,7 @@ ClassImp(ForestminiAODReader)
       fUseSkimmingBranch{kTRUE}, fJetCollection{"ak4PFJetAnalyzer"}, fUseJets{kTRUE}, fUseTrackBranch{kFALSE},
       fUseGenTrackBranch{kFALSE}, fHltTree{nullptr}, fSkimTree{nullptr}, fEventTree{nullptr}, fTrkTree{nullptr}, fGenTrkTree{nullptr},
       fJEC{nullptr}, fJECFiles{}, fJEU{nullptr}, fJEUFiles{}, fCollidingSystem{Form("PbPb")}, fCollidingEnergyGeV{5020}, fYearOfDataTaking{2018},
-      fDoJetPtSmearing{kFALSE}, fFixJetArrays{kFALSE}, fEventCut{nullptr}, fJetCut{nullptr}, fRecoJet2GenJetId{}, fGenJet2RecoJet{}, fIsInStore{kFALSE}
+      fDoJetPtSmearing{kFALSE}, fFixJetArrays{kFALSE}, fEventCut{nullptr}, fJetCut{nullptr}, fRecoJet2GenJetId{}, fGenJet2RecoJet{}, fIsInStore{kFALSE}, fTrackCut{nullptr}
 {
     // Initialize many variables
     clearVariables();
@@ -42,7 +42,7 @@ ForestminiAODReader::ForestminiAODReader(const Char_t *inputStream, const Bool_t
       fUseHltBranch{useHltBranch}, fUseSkimmingBranch{useSkimmingBranch}, fJetCollection{"ak4PFJetAnalyzer"},
       fUseJets{useJets}, fUseGenTrackBranch{useGenTrackBranch},
       fJEC{nullptr}, fJECFiles{}, fJEU{nullptr}, fJEUFiles{}, fCollidingSystem{Form("PbPb")}, fCollidingEnergyGeV{5020}, fYearOfDataTaking{2018},
-      fDoJetPtSmearing{kFALSE}, fFixJetArrays{kFALSE}, fEventCut{nullptr}, fJetCut{nullptr}, fIsInStore{setStoreLocation}
+      fDoJetPtSmearing{kFALSE}, fFixJetArrays{kFALSE}, fEventCut{nullptr}, fJetCut{nullptr}, fIsInStore{setStoreLocation}, fTrackCut{nullptr}
 {
     // Initialize many variables
     clearVariables();
@@ -73,6 +73,8 @@ ForestminiAODReader::~ForestminiAODReader()
         delete fEventCut;
     if (fJetCut)
         delete fJetCut;
+    if (fTrackCut)
+        delete fTrackCut;
 }
 
 //_________________
@@ -480,9 +482,10 @@ Int_t ForestminiAODReader::setupChains()
             size_t pos;
             while (getline(inputStream, file))
             {
+                // std::cout << file << std::endl;
                 // NOTE: our external formatters may pass "file NumEvents"
                 //       Take only the first part
-                // cout << "DEBUG found " <<  file << endl;
+                // std::cout << "DEBUG found " << file << std::endl;
                 pos = file.find_first_of(" ");
                 if (pos != std::string::npos)
                     file.erase(pos, file.length() - pos);
@@ -495,11 +498,15 @@ Int_t ForestminiAODReader::setupChains()
                     // Open file
                     if (fIsInStore)
                     {
-                        file = "root://cmsxrootd.fnal.gov/" + file;
+                        // file = "root://cmsxrootd.fnal.gov/" + file;
                     }
                     TFile *ftmp = TFile::Open(file.c_str());
+                    std::cout << file.c_str() << std::endl;
+                    // TFile *ftmp = TFile::Open("/home/abhishek/analysis/pPb/ph/ph/HiForestMiniAOD_PythiaHydjet2018_105.root");
+                    std::cout << ftmp << std::endl;
 
                     // Check file is not zombie and contains information
+
                     if (ftmp && !ftmp->IsZombie() && ftmp->GetNkeys())
                     {
                         std::cout << Form("Adding file to chain: %s\n", file.c_str());
@@ -1019,6 +1026,12 @@ Event *ForestminiAODReader::returnEvent()
                 jet->setFlavorForB(fRefJetPartonFlavorForB[fGenJet2RecoJet.at(iGenJet)]);
                 jet->setPtWeight(jetPtWeight(fIsMc, fCollidingSystem.Data(), fYearOfDataTaking, fCollidingEnergyGeV,
                                              fGenJetPt[iGenJet]));
+
+                if (fJetCut && !fJetCut->pass(jet))
+                {
+                    delete jet;
+                    continue;
+                }
                 fEvent->genJetCollection()->push_back(jet);
             } // for (Int_t iGenJet{0}; iGenJet<fNPFGenJets; iGenJet++)
 
@@ -1097,9 +1110,15 @@ Event *ForestminiAODReader::returnEvent()
             {
                 track->setTrackSube(fGenTrackSube.at(iGenTrack));
             }
+            if (fTrackCut && !fTrackCut->GenPass(track))
+            {
+                delete track;
+                continue;
+            }
             fEvent->genTrackCollection()->push_back(track);
         }
     }
+    Int_t iRecoMult = 0;
 
     if (fUseTrackBranch)
     {
@@ -1124,8 +1143,16 @@ Event *ForestminiAODReader::returnEvent()
                 track->setTrackNHits(fTrackNHits.at(iTrack));
                 track->setTrackNLayers(fTrackNLayers.at(iTrack));
             }
+            if (fTrackCut && !fTrackCut->RecoPass(track))
+            {
+                delete track;
+                continue;
+            }
+            iRecoMult++;
+            fEvent->trackCollection()->push_back(track);
         }
     }
+    fEvent->setMultiplicity(iRecoMult);
 
     if (fEventCut && !fEventCut->pass(fEvent))
     {

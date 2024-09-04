@@ -45,6 +45,8 @@ public:
     Float_t TrkEta() const { return fTrkEta; }
     ///@brief Azimuthal Angle
     Float_t TrkPhi() const { return fTrkPhi; }
+    ///@brief Track Charge
+    Int_t TrkChg() const { return fTrkChg; }
     ///@brief Return three vectors of tracks
     TVector3 vec() const
     {
