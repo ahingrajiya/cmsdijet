@@ -218,3 +218,15 @@ Double_t DiJetAnalysis::EventWeight(const Bool_t &ispPb, Bool_t &isMC, const Eve
 
     return eventWeight;
 }
+
+void DiJetAnalysis::processEvent(const Event *event)
+{
+    if (fVerbose)
+    {
+        std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
+        std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+        std::cout << "================Processing Events==================" << std::endl;
+        std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+        std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
+    }
+}

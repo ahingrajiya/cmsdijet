@@ -36,7 +36,7 @@ private:
     /// @param pt Pt bound is between 0 and 500
     /// @param eta Eta bound is between -2.4 and 2.4
     /// @return Return true if the track is within bounds
-    Bool_t checkBounds(Float_t pt, Float_t eta);
+    Bool_t checkBound(const Float_t &pt, const Float_t &eta);
 
     /// @brief Tracking efficiency table
     TFile *fTrkEffFile;
@@ -45,19 +45,19 @@ private:
     TH2D *fTrkEffHist;
 };
 
-Bool_t checkBound(const Float_t &pt, const Float_t &eta)
+inline Bool_t TrkEfficiency2016pPb::checkBound(const Float_t &pt, const Float_t &eta)
 {
     Bool_t isBounded = (TMath::Abs(eta) <= 2.4 && pt > 0 && pt <= 500);
 
     return isBounded;
 }
-TrkEfficiency2016pPb::TrkEfficiency2016pPb(std::string filePath)
+inline TrkEfficiency2016pPb::TrkEfficiency2016pPb(std::string filePath)
 {
     TFile *fTrkEffFile = TFile::Open(filePath.c_str(), "READ");
     fTrkEffHist = (TH2D *)fTrkEffFile->Get("rTotalEff3D_0");
 }
 
-Double_t TrkEfficiency2016pPb::getCorrection(const Float_t &pt, const Float_t &eta)
+inline Double_t TrkEfficiency2016pPb::getCorrection(const Float_t &pt, const Float_t &eta)
 {
     if (!checkBound(pt, eta))
     {
@@ -71,7 +71,7 @@ Double_t TrkEfficiency2016pPb::getCorrection(const Float_t &pt, const Float_t &e
 
     return 1. / CorrectionFactor;
 }
-TrkEfficiency2016pPb::~TrkEfficiency2016pPb()
+inline TrkEfficiency2016pPb::~TrkEfficiency2016pPb()
 {
     fTrkEffFile->Close();
 }

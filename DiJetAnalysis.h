@@ -128,6 +128,9 @@ private:
     /// @param event Event object
     /// @return Returns event level weight which has to be applied to every hisotgram
     Double_t EventWeight(const Bool_t &ispPb, Bool_t &isMC, const Event *event);
+    /// @brief Process all the events
+    /// @param event Event object
+    void processEvent(const Event *event);
     ///@brief Print debug information
     Bool_t fDebug;
     ///@brief Delta Phi selection for dijet

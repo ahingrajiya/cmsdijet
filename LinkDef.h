@@ -29,6 +29,8 @@
 #pragma link C++ class HistoManagerJetESR + ;
 #pragma link C++ class HistoManagerDiJet + ;
 #pragma link C++ class TriggerAndSkim + ;
+#pragma link C++ class TrkEff2018PbPb + ;
+#pragma link C++ class TrkEfficiency2016pPb + ;
 
 // User-defined classes
 #pragma link C++ class ForestAODReader + ;

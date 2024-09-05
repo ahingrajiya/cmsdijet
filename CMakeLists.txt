@@ -63,6 +63,8 @@ set(HEADERS
         TrackCut.h
         Manager.h
         TriggerAndSkim.h
+        pPb_TrackingEfficiency/TrkEfficiency2016pPb.h
+        PbPb_TrackingEfficiencies/trackingEfficiency2018PbPb.h
 )
 
 # List source files
