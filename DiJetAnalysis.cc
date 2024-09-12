@@ -28,14 +28,14 @@ ClassImp(DiJetAnalysis)
     DiJetAnalysis::DiJetAnalysis() : BaseAnalysis(), fDebug{kFALSE}, fUseCentralityWeight{kFALSE}, fHM{nullptr}, fIspPb{kFALSE},
                                      fIsMC{kFALSE}, fDeltaPhi{5. * TMath::Pi() / 6.}, fIsPbGoing{kTRUE}, fUseCMFrame{kFALSE},
                                      fEtaBoost{0.0}, fUseMultiplicityWeight{kFALSE}, fLeadJetPtLow{100.}, fSubLeadJetPtLow{50.}, fNEventsInSample{100000000},
-                                     fIsDiJetFound{kFALSE}, fVerbose{kFALSE}, fMinTrkPt{0.5}, fTrkEffPbPb{nullptr}, fTrkEffpPb{nullptr}, fTrkEffTable{""}
+                                     fIsDiJetFound{kFALSE}, fVerbose{kFALSE}, fMinTrkPt{0.5}, fTrkEffPbPb{nullptr}, fTrkEffpPb{nullptr}, fTrkEffTable{""}, fEventCounter{0}
 {
     fLeadJetEtaRange[0] = {-1.};
     fLeadJetEtaRange[1] = {1.};
     fSubLeadJetEtaRange[0] = {-1.};
     fSubLeadJetEtaRange[1] = {1.};
-    fPtHatRange[0] = {30.};
-    fPtHatRange[1] = {50.};
+    fMultiplicityRange[0] = {30.};
+    fMultiplicityRange[1] = {50.};
     fTrkEtaRange[0] = {-2.4};
     fTrkEtaRange[1] = {2.4};
 }
@@ -56,6 +56,27 @@ DiJetAnalysis::~DiJetAnalysis()
     {
         delete fTrkEffpPb;
         fTrkEffpPb = nullptr;
+    }
+}
+
+void DiJetAnalysis::init()
+{
+    if (fVerbose)
+    {
+        std::cout << "DiJetAnalysis::init  Initializing DiJet Analysis" << std::endl;
+    }
+
+    if (fIspPb)
+    {
+        fTrkEffpPb = new TrkEfficiency2016pPb(fTrkEffTable);
+    }
+    else if (!fIspPb)
+    {
+        fTrkEffPbPb = new TrkEff2018PbPb("general", "", false, fTrkEffTable);
+    }
+    else
+    {
+        std::cerr << "Tracking efficiency table not set" << std::endl;
     }
 }
 
@@ -154,6 +175,39 @@ Int_t DiJetAnalysis::GenMultiplicity(const Bool_t &isMC, const Event *event)
     return iGenMult;
 }
 
+Int_t DiJetAnalysis::SubEventMultiplicity(const Bool_t &isMC, const Bool_t &ispPb, const Event *event)
+{
+    if (!isMC)
+    {
+        std::cerr << "Subevent can only be calculated for PYTHIA + HYDJET Monte Carlo. MC is set to be FALSE" << std::endl;
+        return -1;
+    }
+
+    if (ispPb)
+    {
+        std::cerr << "Subevent can only be calculated for PYTHIA + HYDJET Monte Carlo. IspPb is set to be TRUE" << std::endl;
+        return -1;
+    }
+    Int_t iSube = 0;
+    GenTrackIterator genIterator;
+    for (genIterator = event->genTrackCollection()->begin(); genIterator != event->genTrackCollection()->end(); genIterator++)
+    {
+        Double_t trackPt = (*genIterator)->TrkPt();
+        Double_t trackEta = (*genIterator)->TrkEta();
+        Int_t trackSube = (*genIterator)->TrackSube();
+
+        Bool_t isGoodTrack = (trackPt > fMinTrkPt && trackEta > fTrkEtaRange[0] && trackEta < fTrkEtaRange[1] && trackSube > 0);
+        if (fVerbose)
+        {
+            Form("%5.2f < Track Pt: %5.2f , %5.2f < Track Eta: %5.2f < %5,2f , Track Sube : %i \t %s \n", fMinTrkPt, trackPt, fTrkEtaRange[0], trackEta, fTrkEtaRange[1], trackSube, (isGoodTrack) ? "True" : "False");
+        }
+
+        if (isGoodTrack)
+            iSube++;
+    }
+    return iSube;
+}
+
 Double_t DiJetAnalysis::EventWeight(const Bool_t &ispPb, Bool_t &isMC, const Event *event)
 {
     Double_t ptHatWeight{1.};
@@ -208,6 +262,7 @@ Double_t DiJetAnalysis::EventWeight(const Bool_t &ispPb, Bool_t &isMC, const Eve
         {
             ptHatWeight = 7.9191586e-14 * 1000000;
         }
+        ptHatWeight /= fNEventsInSample;
     }
     else if (isMC && !ispPb)
     {
@@ -228,5 +283,94 @@ void DiJetAnalysis::processEvent(const Event *event)
         std::cout << "================Processing Events==================" << std::endl;
         std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
         std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
+    }
+
+    fEventCounter++;
+    if (fEventCounter >= 50000)
+    {
+        fCycleCounter++;
+        std::cout << Form("DiJetAnalysis::processEvent [INFO] Events processed: %d Sample fraction: %3.2f%%",
+                          fCycleCounter * 50000, (Double_t)(fCycleCounter * 50000) / fNEventsInSample)
+                  << std::endl;
+        fEventCounter = {0};
+    }
+
+    if (!fHM)
+    {
+        std::cerr << "Oops ! You are missing something ! It is Histogram Manager." << std::endl;
+        return;
+    }
+
+    Double_t Event_Weight = EventWeight(fIspPb, fIsMC, event);
+
+    Int_t iRecoMult = RecoMultiplicity(fIspPb, event);
+    fHM->hRecoMultiplicity->Fill(iRecoMult, Event_Weight);
+
+    Double_t iCorrectedMult = CorrectedMultiplicity(fIspPb, event);
+    fHM->hCorrectedMultiplicity->Fill(iCorrectedMult, Event_Weight);
+
+    Int_t iGenMult = 0;
+    Int_t iSubeMult = 0;
+    if (fIsMC)
+    {
+        iGenMult = GenMultiplicity(fIsMC, event);
+        fHM->hGenMultiplicity->Fill(iGenMult, Event_Weight);
+
+        iSubeMult = SubEventMultiplicity(fIsMC, fIspPb, event);
+        fHM->hSubEventMultiplicity->Fill(iSubeMult, Event_Weight);
+    }
+    Double_t iMultiplicity;
+    if (fMultiplicityType == 0)
+    {
+        iMultiplicity = (Double_t)iRecoMult;
+    }
+    else if (fMultiplicityType == 1)
+    {
+        iMultiplicity = iGenMult;
+    }
+    else if (fMultiplicityType == 2)
+    {
+        iMultiplicity = iCorrectedMult;
+    }
+    else if (fMultiplicityType == 3)
+    {
+        iMultiplicity = iSubeMult;
+    }
+
+    if (fMultiplicityRange[0] < iMultiplicity && iMultiplicity < fMultiplicityRange[1])
+    {
+        fHM->hSelectedMultiplicity->Fill(iMultiplicity, Event_Weight);
+    }
+}
+
+Double_t DiJetAnalysis::DeltaPhi(const Double_t &phi1, const Double_t &phi2)
+{
+    Double_t dPhi = phi1 - phi2;
+    if (dPhi > TMath::Pi())
+    {
+        dPhi = dPhi - 2. * TMath::Pi();
+    }
+    if (dPhi < -TMath::Pi())
+    {
+        dPhi = dPhi + 2. * TMath::Pi();
+    }
+    return dPhi;
+}
+
+void DiJetAnalysis::report()
+{
+}
+
+TList *DiJetAnalysis::getOutputList()
+{
+    TList *outputList = new TList();
+    return outputList;
+}
+
+void DiJetAnalysis::finish()
+{
+    if (fHM)
+    {
+        fHM->writeOutput(fIsMC);
     }
 }

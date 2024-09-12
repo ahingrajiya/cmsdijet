@@ -20,7 +20,9 @@
 
 ClassImp(HistoManagerDiJet)
 
-    HistoManagerDiJet::HistoManagerDiJet() : BaseHistoManager(), fIsMC{kFALSE}, hRecoMultiplicity{nullptr}
+    HistoManagerDiJet::HistoManagerDiJet() : BaseHistoManager(), fIsMC{kFALSE},
+                                             hRecoMultiplicity{nullptr}, hCorrectedMultiplicity{nullptr}, hGenMultiplicity{nullptr}, hSubEventMultiplicity{nullptr},
+                                             hSelectedMultiplicity{nullptr}
 {
     /* Empty*/
 }
@@ -29,16 +31,36 @@ HistoManagerDiJet::~HistoManagerDiJet()
 {
     if (hRecoMultiplicity)
         delete hRecoMultiplicity;
+    if (hCorrectedMultiplicity)
+        delete hCorrectedMultiplicity;
+    if (hGenMultiplicity)
+        delete hGenMultiplicity;
+    if (hSubEventMultiplicity)
+        delete hSubEventMultiplicity;
+    if (hSelectedMultiplicity)
+        delete hSelectedMultiplicity;
 }
 
 void HistoManagerDiJet::init(const Bool_t &isMC)
 {
     hRecoMultiplicity = new TH1D("hRecoMultiplicity", "Reco Multiplicity", 400, 0.0, 400.0);
     hRecoMultiplicity->Sumw2();
+    hCorrectedMultiplicity = new TH1D("hCorrectedMultiplicity", "Corrected Multiplicity", 700, 0.0, 700.0);
+    hCorrectedMultiplicity->Sumw2();
+    hGenMultiplicity = new TH1D("hGenMultiplicity", "Gen Multiplicity", 700, 0.0, 700.0);
+    hGenMultiplicity->Sumw2();
+    hSubEventMultiplicity = new TH1D("hSubEventMultiplicity", "Underlying Event Multiplicity", 700, 0., 700.);
+    hSubEventMultiplicity->Sumw2();
+    hSelectedMultiplicity = new TH1D("hSelectedMultiplicity", "Multiplicity Distribution after selection", 700, 0., 700.);
+    hSelectedMultiplicity->Sumw2();
 }
 
 void HistoManagerDiJet ::writeOutput(const Bool_t &isMC)
 {
 
     hRecoMultiplicity->Write();
+    hCorrectedMultiplicity->Write();
+    hGenMultiplicity->Write();
+    hSubEventMultiplicity->Write();
+    hSelectedMultiplicity->Write();
 }

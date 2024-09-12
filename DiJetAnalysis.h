@@ -59,11 +59,11 @@ public:
     void setIsPbGoing() { fIsPbGoing = kTRUE; }
     ///@brief Set if it is pgoing direction
     void setIspGoing() { fIsPbGoing = kFALSE; }
-    ///@brief Set Pt Hat Range
-    void setPtHatRange(const Double_t &low, const Double_t &hi)
+    ///@brief Set Multiplicity Range
+    void setMultiplicityRange(const Double_t &low, const Double_t &hi)
     {
-        fPtHatRange[0] = low;
-        fPtHatRange[1] = hi;
+        fMultiplicityRange[0] = low;
+        fMultiplicityRange[1] = hi;
     }
     /// @brief Set Center of mass reference frame for pPb
     void setUseCMFrame() { fUseCMFrame = kTRUE; }
@@ -101,6 +101,8 @@ public:
         fTrkEtaRange[0] = low;
         fTrkEtaRange[1] = hi;
     }
+    ///@brief Set which multiplicity type to use for the event selection
+    void setMultiplicityType(const Int_t &multType) { fMultiplicityType = multType; }
 
 private:
     /// @brief Multiplicity calculator
@@ -122,12 +124,23 @@ private:
     /// @param event Event object
     /// @return Returns number of generated tracks in the event for a given Trk Pt and Eta range
     Int_t GenMultiplicity(const Bool_t &isMC, const Event *event);
+    /// @brief Subevent multiplicity calculator for Monte carlo
+    /// @param isMC Subevent multiplicity can only be calculated for MC
+    /// @param ispPb It has to be set to false for PbPb
+    /// @param event Event Object
+    /// @return Subevent multiplicity
+    Int_t SubEventMultiplicity(const Bool_t &isMC, const Bool_t &ispPb, const Event *event);
     /// @brief Event weight calculator
     /// @param ispPb Set to be true if it is pPb dataset. For PbPb dataset it needs is set to be false
     /// @param isMC Weights are usually applied to MonteCarlo Datasets only.
     /// @param event Event object
     /// @return Returns event level weight which has to be applied to every hisotgram
     Double_t EventWeight(const Bool_t &ispPb, Bool_t &isMC, const Event *event);
+    /// @brief Calaulates Delta Phi between two jets
+    /// @param phi1 Jet Phi 1
+    /// @param phi2 Jet Phi 2
+    /// @return returns delta phi between two jets between -pi and pi
+    Double_t DeltaPhi(const Double_t &phi1, const Double_t &phi2);
     /// @brief Process all the events
     /// @param event Event object
     void processEvent(const Event *event);
@@ -141,8 +154,8 @@ private:
     Bool_t fIsMC;
     ///@brief if it is Pb going direction
     Bool_t fIsPbGoing;
-    ///@brief pTHat Range
-    Double_t fPtHatRange[2];
+    ///@brief Multiplicity Range
+    Double_t fMultiplicityRange[2];
     ///@brief Move to Center of Mass Frame
     Bool_t fUseCMFrame;
     ///@brief Eta Boots for pPb
@@ -176,7 +189,17 @@ private:
     ///@brief Tracking efficiency for pPb
     TrkEfficiency2016pPb *fTrkEffpPb;
     ///@brief Tracking efficiency table for PbPb
-    TString fTrkEffTable;
+    std::string fTrkEffTable;
+    ///@brief Which Multiplicity type to use for event selection.
+    /// 0 -> Reco Multiplicity
+    /// 1 -> Gen Multiplicity (Only Applicable for MC)
+    /// 2 -> Efficinecy corrected multiplicity
+    /// 3 -> SubEvent Multiplicity
+    Int_t fMultiplicityType;
+    ///@brief Event counter
+    Int_t fEventCounter;
+
+    Int_t fCycleCounter;
 
     ClassDef(DiJetAnalysis, 0)
 };

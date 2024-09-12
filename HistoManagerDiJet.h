@@ -43,6 +43,10 @@ public:
     void writeOutput(const Bool_t &isMC = kFALSE);
 
     TH1D *hRecoMultiplicity;
+    TH1D *hCorrectedMultiplicity;
+    TH1D *hGenMultiplicity;
+    TH1D *hSubEventMultiplicity;
+    TH1D *hSelectedMultiplicity;
 
 private:
     Bool_t fIsMC;
