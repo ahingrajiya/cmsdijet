@@ -113,8 +113,12 @@ target_link_libraries(${libname} ${ROOT_LIBRARIES})
 
 # Create main executable (to call from the command line)
 add_executable(jetAna jetAna.cxx)
+add_executable(pPbDijetAna pPbDijetAna.cxx)
+
 # Link created libraries
 target_link_libraries(jetAna ${libname})
+target_link_libraries(pPbDijetAna ${libname})
+
 
 # Include directories 
 #target_include_directories(jetAna PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${ROOT_INCLUDE_DIRS})
