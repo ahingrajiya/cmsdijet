@@ -21,7 +21,7 @@
 ClassImp(GenJet)
 
     //________________
-    GenJet::GenJet() : BaseJet{}, fFlavor{0}, fFlavorForB{0}, fPtWeight{0}
+    GenJet::GenJet() : BaseJet{}, fPtWeight{0}
 {
     /* Emtpy */
 }
@@ -31,5 +31,5 @@ void GenJet::print()
 {
     std::cout << "--  Generated jet info  --\n"
               << Form("pT: %5.2f  eta: %3.2f  phi: %3.2f  WTAeta: %3.2f  WTAphi: %3.2f  flavor: %d  flavForB: %d\n",
-                      this->pt(), this->eta(), this->phi(), this->WTAEta(), this->WTAPhi(), this->flavor(), this->flavorForB());
+                      this->pt(), this->eta(), this->phi(), this->WTAEta(), this->WTAPhi());
 }
