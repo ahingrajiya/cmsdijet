@@ -23,10 +23,8 @@
 #pragma link C++ class EventCut + ;
 #pragma link C++ class JetCut + ;
 #pragma link C++ class TrackCut + ;
-#pragma link C++ class JetESRAnalysis + ;
 #pragma link C++ class DiJetAnalysis + ;
 #pragma link C++ class Manager + ;
-#pragma link C++ class HistoManagerJetESR + ;
 #pragma link C++ class HistoManagerDiJet + ;
 #pragma link C++ class TriggerAndSkim + ;
 #pragma link C++ class TrkEff2018PbPb + ;

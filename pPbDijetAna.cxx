@@ -123,7 +123,7 @@ int main(int argc, char *argv[])
     // Initiazlize Track Cuts
 
     TrackCut *trackCut = new TrackCut{};
-    trackCut->setPt(0.5, 1000.);
+    trackCut->setPt(0.4, 1000.);
     trackCut->setEta(-2.4, 2.4);
     trackCut->setPtErr(0.1);
     trackCut->setDXY(3.0);

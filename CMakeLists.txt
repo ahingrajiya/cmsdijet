@@ -39,7 +39,6 @@ add_definitions(${ROOT_CXX_FLAGS})
 
 # List all headers to be used to generate dictionary and added to the library
 set(HEADERS
-        JetESRAnalysis.h
         DiJetAnalysis.h
         Event.h
         Track.h
@@ -51,7 +50,6 @@ set(HEADERS
         BaseHistoManager.h
         BaseJet.h
         BaseTrack.h
-        HistoManagerJetESR.h
         HistoManagerDiJet.h
         Collections.h
         ForestAODReader.h
@@ -69,7 +67,6 @@ set(HEADERS
 
 # List source files
 set(SRC 
-        JetESRAnalysis.cc
         DiJetAnalysis.cc
         Event.cc
         Track.cc
@@ -79,7 +76,6 @@ set(SRC
         BaseReader.cc
         BaseJet.cc
         BaseTrack.cc
-        HistoManagerJetESR.cc
         HistoManagerDiJet.cc
         ForestAODReader.cc
         ForestminiAODReader.cc
@@ -112,11 +108,11 @@ target_link_libraries(${libname} ${ROOT_LIBRARIES})
 #         LIBRARY DESTINATION "${CMAKE_BINARY_DIR}/lib" OPTIONAL)
 
 # Create main executable (to call from the command line)
-add_executable(jetAna jetAna.cxx)
+#add_executable(jetAna jetAna.cxx)
 add_executable(pPbDijetAna pPbDijetAna.cxx)
 
 # Link created libraries
-target_link_libraries(jetAna ${libname})
+#target_link_libraries(jetAna ${libname})
 target_link_libraries(pPbDijetAna ${libname})
 
 
