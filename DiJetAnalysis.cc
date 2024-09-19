@@ -28,7 +28,7 @@ ClassImp(DiJetAnalysis)
     DiJetAnalysis::DiJetAnalysis() : BaseAnalysis(), fDebug{kFALSE}, fUseCentralityWeight{kFALSE}, fHM{nullptr}, fIspPb{kFALSE},
                                      fIsMC{kFALSE}, fDeltaPhi{5. * TMath::Pi() / 6.}, fIsPbGoing{kTRUE}, fUseCMFrame{kFALSE},
                                      fEtaBoost{0.0}, fUseMultiplicityWeight{kFALSE}, fLeadJetPtLow{100.}, fSubLeadJetPtLow{50.}, fNEventsInSample{100000000},
-                                     fIsDiJetFound{kFALSE}, fVerbose{kFALSE}, fMinTrkPt{0.5}, fTrkEffPbPb{nullptr}, fTrkEffpPb{nullptr}, fTrkEffTable{""}, fEventCounter{0}
+                                     fIsDiJetFound{kFALSE}, fVerbose{kFALSE}, fMinTrkPt{0.5}, fTrkEffPbPb{nullptr}, fTrkEffpPb{nullptr}, fTrkEffTable{""}, fEventCounter{0}, fCycleCounter{0}
 {
     fLeadJetEtaRange[0] = {-1.};
     fLeadJetEtaRange[1] = {1.};
@@ -65,19 +65,7 @@ void DiJetAnalysis::init()
     {
         std::cout << "DiJetAnalysis::init  Initializing DiJet Analysis" << std::endl;
     }
-
-    if (fIspPb)
-    {
-        fTrkEffpPb = new TrkEfficiency2016pPb(fTrkEffTable);
-    }
-    else if (!fIspPb)
-    {
-        fTrkEffPbPb = new TrkEff2018PbPb("general", "", false, fTrkEffTable);
-    }
-    else
-    {
-        std::cerr << "Tracking efficiency table not set" << std::endl;
-    }
+    SetUpTrackingEfficiency(fIspPb, fTrkEffTable);
 }
 
 Int_t DiJetAnalysis::RecoMultiplicity(const Bool_t &ispPb, const Event *event)
@@ -101,16 +89,16 @@ Int_t DiJetAnalysis::RecoMultiplicity(const Bool_t &ispPb, const Event *event)
     return iRecoMult;
 }
 
-void DiJetAnalysis::SetUpTrackingEfficiency(const Bool_t &ispPb, const std::string &trackingTable)
+void DiJetAnalysis::SetUpTrackingEfficiency(const Bool_t &ispPb, const std::string &trackingEfficiencyTable)
 {
     if (!ispPb)
     {
-        fTrkEffPbPb = new TrkEff2018PbPb("general", "", false, trackingTable);
+        fTrkEffPbPb = new TrkEff2018PbPb("general", "", false, trackingEfficiencyTable);
     }
 
     else if (ispPb)
     {
-        fTrkEffpPb = new TrkEfficiency2016pPb(trackingTable);
+        fTrkEffpPb = new TrkEfficiency2016pPb(trackingEfficiencyTable);
     }
 
     else
@@ -289,8 +277,8 @@ void DiJetAnalysis::processEvent(const Event *event)
     if (fEventCounter >= 50000)
     {
         fCycleCounter++;
-        std::cout << Form("DiJetAnalysis::processEvent [INFO] Events processed: %d Sample fraction: %3.2f%%",
-                          fCycleCounter * 50000, (Double_t)(fCycleCounter * 50000) / fNEventsInSample)
+        std::cout << Form("DiJetAnalysis::processEvent [INFO] Events processed: %d out of %i. Processed Sample fraction: %3.2f%%",
+                          fCycleCounter * 50000, fNEventsInSample, (Double_t)(fCycleCounter * 50000) * 100. / fNEventsInSample)
                   << std::endl;
         fEventCounter = {0};
     }
@@ -316,7 +304,8 @@ void DiJetAnalysis::processEvent(const Event *event)
         iGenMult = GenMultiplicity(fIsMC, event);
         fHM->hGenMultiplicity->Fill(iGenMult, Event_Weight);
 
-        iSubeMult = SubEventMultiplicity(fIsMC, fIspPb, event);
+        // iSubeMult = SubEventMultiplicity(fIsMC, fIspPb, event);
+        iSubeMult = GenMultiplicity(fIsMC, event);
         fHM->hSubEventMultiplicity->Fill(iSubeMult, Event_Weight);
     }
     Double_t iMultiplicity;
@@ -334,7 +323,14 @@ void DiJetAnalysis::processEvent(const Event *event)
     }
     else if (fMultiplicityType == 3)
     {
-        iMultiplicity = iSubeMult;
+        if (fIspPb)
+        {
+            iMultiplicity = iGenMult;
+        }
+        else if (!fIspPb)
+        {
+            iMultiplicity = iSubeMult;
+        }
     }
 
     if (fMultiplicityRange[0] < iMultiplicity && iMultiplicity < fMultiplicityRange[1])

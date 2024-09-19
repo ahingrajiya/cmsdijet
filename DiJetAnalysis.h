@@ -49,12 +49,14 @@ public:
 
     ///@brief Set debug information
     void setDebug(const Bool_t &debug) { fDebug = debug; }
+    ///@brief Add histogram Manager
+    void addHistoManager(HistoManagerDiJet *hm) { fHM = hm; }
     ///@brief Set DeltaPhi selection for dijet
     void setDeltaPhi(const Double_t &deltaphi) { fDeltaPhi = deltaphi; }
     ///@brief Set if it is pPb dataset or not
     void setIspPb() { fIspPb = kTRUE; }
     ///@brief Set if dataset is MC or not
-    void setIsMC() { fIsMC = kTRUE; }
+    void setIsMC(const Bool_t &isMC) { fIsMC = isMC; }
     ///@brief Set if it is Pbgoing direction
     void setIsPbGoing() { fIsPbGoing = kTRUE; }
     ///@brief Set if it is pgoing direction
@@ -103,6 +105,8 @@ public:
     }
     ///@brief Set which multiplicity type to use for the event selection
     void setMultiplicityType(const Int_t &multType) { fMultiplicityType = multType; }
+    ///@brief Set Tracking efficiency table
+    void setTrackingTable(const std::string &trackingTable) { fTrkEffTable = trackingTable; }
 
 private:
     /// @brief Multiplicity calculator
