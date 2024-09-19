@@ -28,7 +28,7 @@ ClassImp(ForestminiAODReader)
       fUseSkimmingBranch{kTRUE}, fJetCollection{"ak4PFJetAnalyzer"}, fUseJets{kTRUE}, fUseTrackBranch{kFALSE},
       fUseGenTrackBranch{kFALSE}, fHltTree{nullptr}, fSkimTree{nullptr}, fEventTree{nullptr}, fTrkTree{nullptr}, fGenTrkTree{nullptr},
       fJEC{nullptr}, fJECFiles{}, fJEU{nullptr}, fJEUFiles{}, fCollidingSystem{Form("PbPb")}, fCollidingEnergyGeV{5020}, fYearOfDataTaking{2018},
-      fDoJetPtSmearing{kFALSE}, fFixJetArrays{kFALSE}, fEventCut{nullptr}, fJetCut{nullptr}, fRecoJet2GenJetId{}, fGenJet2RecoJet{}, fIsInStore{kFALSE}, fTrackCut{nullptr}
+      fDoJetPtSmearing{kFALSE}, fFixJetArrays{kFALSE}, fEventCut{nullptr}, fJetCut{nullptr}, fRecoJet2GenJetId{}, fGenJet2RecoJet{}, fIsInStore{kFALSE}, fTrackCut{nullptr}, fUseMatchedJets{kFALSE}, fEventsToProcess{-1}
 {
     // Initialize many variables
     clearVariables();
@@ -37,12 +37,11 @@ ClassImp(ForestminiAODReader)
 //_________________
 ForestminiAODReader::ForestminiAODReader(const Char_t *inputStream, const Bool_t &useHltBranch, const Bool_t &useSkimmingBranch,
                                          const Char_t *jetCollection, const Bool_t &useJets, const Bool_t &useTrackBranch,
-                                         const Bool_t &useGenTrackBranch, const Bool_t &isMc, const Bool_t &setStoreLocation)
+                                         const Bool_t &useGenTrackBranch, const Bool_t &isMc, const Bool_t &setStoreLocation, const Bool_t &useMatchedJets)
     : fEvent{nullptr}, fInFileName{inputStream}, fEvents2Read{0}, fEventsProcessed{0}, fIsMc{isMc},
       fUseHltBranch{useHltBranch}, fUseSkimmingBranch{useSkimmingBranch}, fJetCollection{"ak4PFJetAnalyzer"},
       fUseJets{useJets}, fUseGenTrackBranch{useGenTrackBranch},
-      fJEC{nullptr}, fJECFiles{}, fJEU{nullptr}, fJEUFiles{}, fCollidingSystem{Form("PbPb")}, fCollidingEnergyGeV{5020}, fYearOfDataTaking{2018},
-      fDoJetPtSmearing{kFALSE}, fFixJetArrays{kFALSE}, fEventCut{nullptr}, fJetCut{nullptr}, fIsInStore{setStoreLocation}, fTrackCut{nullptr}
+      fJEC{nullptr}, fJECFiles{}, fJEU{nullptr}, fJEUFiles{}, fCollidingSystem{Form("PbPb")}, fCollidingEnergyGeV{5020}, fYearOfDataTaking{2018}, fEventsToProcess{-1}
 {
     // Initialize many variables
     clearVariables();
@@ -178,30 +177,32 @@ void ForestminiAODReader::clearVariables()
     } // for (Short_t i{0}; i<9999; i++)
 
     // Track variables
-    fTrackPt.clear();
-    fTrackEta.clear();
-    fTrackPhi.clear();
-    fTrackPtErr.clear();
-    fTrackDcaXY.clear();
-    fTrackDcaZ.clear();
-    fTrackDcaXYErr.clear();
-    fTrackDcaZErr.clear();
-    fTrackChi2.clear();
-    fTrackNDOF.clear();
-    fTrackPartFlowEcal.clear();
-    fTrackPartFlowHcal.clear();
-    fTrackAlgo.clear();
-    fTrackCharge.clear();
-    fTrackNHits.clear();
-    fTrackNLayers.clear();
-    fTrackHighPurity.clear();
-    fGenTrackPt.clear();
-    fGenTrackEta.clear();
-    fGenTrackPhi.clear();
-    fGenTrackCharge.clear();
-    fGenTrackPid.clear();
-    fGenTrackSube.clear();
-
+    fTrackPt->clear();
+    fTrackEta->clear();
+    fTrackPhi->clear();
+    fTrackPtErr->clear();
+    fTrackDcaXY->clear();
+    fTrackDcaZ->clear();
+    fTrackDcaXYErr->clear();
+    fTrackDcaZErr->clear();
+    fTrackChi2->clear();
+    fTrackNDOF->clear();
+    fTrackPartFlowEcal->clear();
+    fTrackPartFlowHcal->clear();
+    fTrackAlgo->clear();
+    fTrackCharge->clear();
+    fTrackNHits->clear();
+    fTrackNLayers->clear();
+    fTrackHighPurity->clear();
+    if (fIsMc)
+    {
+        fGenTrackPt->clear();
+        fGenTrackEta->clear();
+        fGenTrackPhi->clear();
+        fGenTrackCharge->clear();
+        fGenTrackPid->clear();
+        fGenTrackSube->clear();
+    }
     if (fIsMc)
     {
         fRecoJet2GenJetId.clear();
@@ -465,10 +466,15 @@ Int_t ForestminiAODReader::setupChains()
             if (fIsMc && fUseGenTrackBranch)
                 fGenTrkTree->Add(input.Data());
 
-            fEvents2Read = fEventTree->GetEntries();
+            if (fEventsToProcess == -1)
+            {
+                fEvents2Read = fEventTree->GetEntries();
+            }
+            else
+            {
+                fEvents2Read = fEventsToProcess;
+            }
             std::cout << Form("Total number of events to read: %lld\n", fEvents2Read);
-            Long64_t fEvents2Read2 = fJetTree->GetEntries();
-            std::cout << Form("Total number of events to read2: %lld\n", fEvents2Read2);
         }
         // Assuming that list of files is provided instead of a single file
         else
@@ -534,7 +540,14 @@ Int_t ForestminiAODReader::setupChains()
             } // while ( getline( inputStream, file ) )
 
             std::cout << Form("Total number of files in chain: %d\n", nFiles);
-            fEvents2Read = fEventTree->GetEntries();
+            if (fEventsToProcess == -1)
+            {
+                fEvents2Read = fEventTree->GetEntries();
+            }
+            else
+            {
+                fEvents2Read = fEventsToProcess;
+            }
             std::cout << Form("Total number of events to read: %lld\n", fEvents2Read);
         } // else {   if file list
         returnStatus = 0;
@@ -755,14 +768,8 @@ void ForestminiAODReader::setupBranches()
         fTrkTree->SetBranchStatus("trkDxyErrFirstVtx", 1);
         fTrkTree->SetBranchStatus("trkDzFirstVtx", 1);
         fTrkTree->SetBranchStatus("trkDzErrFirstVtx", 1);
-        fTrkTree->SetBranchStatus("trkNormChi2", 1);
-        fTrkTree->SetBranchStatus("trkCharge", 1);
-        fTrkTree->SetBranchStatus("trkNHits", 1);
-        fTrkTree->SetBranchStatus("trkNLayers", 1);
         fTrkTree->SetBranchStatus("highPurity", 1);
-        fTrkTree->SetBranchStatus("pfEcal", 1);
-        fTrkTree->SetBranchStatus("pfHcal", 1);
-        fTrkTree->SetBranchStatus("trkAlgo", 1);
+        fTrkTree->SetBranchStatus("trkCharge", 1);
 
         fTrkTree->SetBranchAddress("nTrk", &fNTracks);
         fTrkTree->SetBranchAddress("trkPt", &fTrackPt);
@@ -773,13 +780,23 @@ void ForestminiAODReader::setupBranches()
         fTrkTree->SetBranchAddress("trkDxyErrFirstVtx", &fTrackDcaXYErr);
         fTrkTree->SetBranchAddress("trkDzFirstVtx", &fTrackDcaZ);
         fTrkTree->SetBranchAddress("trkDzErrFirstVtx", &fTrackDcaZErr);
-        fTrkTree->SetBranchAddress("trkNormChi2", &fTrackChi2);
-        fTrkTree->SetBranchAddress("trkCharge", &fTrackCharge);
-        fTrkTree->SetBranchAddress("trkNHit", &fTrackNHits);
-        fTrkTree->SetBranchAddress("trkNlayers", &fTrackNLayers);
         fTrkTree->SetBranchAddress("highPurity", &fTrackHighPurity);
-        fTrkTree->SetBranchAddress("pfEcal", &fTrackPartFlowEcal);
-        fTrkTree->SetBranchAddress("pfHcal", &fTrackPartFlowHcal);
+        fTrkTree->SetBranchAddress("trkCharge", &fTrackCharge);
+
+        if (fCollidingSystem == "PbPb")
+        {
+            fTrkTree->SetBranchStatus("trkNormChi2", 1);
+            fTrkTree->SetBranchStatus("trkNHits", 1);
+            fTrkTree->SetBranchStatus("trkNLayers", 1);
+            fTrkTree->SetBranchStatus("pfEcal", 1);
+            fTrkTree->SetBranchStatus("pfHcal", 1);
+            fTrkTree->SetBranchStatus("trkAlgo", 1);
+            fTrkTree->SetBranchAddress("trkNormChi2", &fTrackChi2);
+            fTrkTree->SetBranchAddress("trkNHit", &fTrackNHits);
+            fTrkTree->SetBranchAddress("trkNlayers", &fTrackNLayers);
+            fTrkTree->SetBranchAddress("pfEcal", &fTrackPartFlowEcal);
+            fTrkTree->SetBranchAddress("pfHcal", &fTrackPartFlowHcal);
+        }
     } // if ( fUseTrackBranch )
 
     // Gen particle quantities
@@ -818,15 +835,6 @@ void ForestminiAODReader::readEvent()
     }
 
     // Or one can call the clearVariables() function (will take more time)
-    if (fUseGenTrackBranch && fIsMc)
-    {
-        fGenTrackPt.clear();
-        fGenTrackEta.clear();
-        fGenTrackPhi.clear();
-        fGenTrackCharge.clear();
-        fGenTrackPid.clear();
-        fGenTrackSube.clear();
-    }
 
     if (fEventsProcessed >= fEvents2Read)
     {
@@ -1022,8 +1030,6 @@ Event *ForestminiAODReader::returnEvent()
                 jet->setPhi(fGenJetPhi[iGenJet]);
                 jet->setWTAEta(fGenJetWTAEta[iGenJet]);
                 jet->setWTAPhi(fGenJetWTAPhi[iGenJet]);
-                jet->setFlavor(fRefJetPartonFlavor[fGenJet2RecoJet.at(iGenJet)]);
-                jet->setFlavorForB(fRefJetPartonFlavorForB[fGenJet2RecoJet.at(iGenJet)]);
                 jet->setPtWeight(jetPtWeight(fIsMc, fCollidingSystem.Data(), fYearOfDataTaking, fCollidingEnergyGeV,
                                              fGenJetPt[iGenJet]));
 
@@ -1049,17 +1055,16 @@ Event *ForestminiAODReader::returnEvent()
             // Create a new jet instance
             RecoJet *jet = new RecoJet{};
 
-            if (fIsMc)
+            if (fIsMc && fUseMatchedJets)
             {
                 // Count number of reconstructed jets
                 // with pT > pThat of the event (wrong )
-                if (fRecoJetPt[iJet] > fPtHat)
+                if (fRecoJetPt[iJet] < 0)
                 {
-                    nBadJets++;
+                    delete jet;
+                    continue;
                 }
 
-                // Add index of the matched GenJet
-                jet->setGenJetId(fRecoJet2GenJetId.at(iJet));
             } // if ( fIsMc )
 
             // Reco
@@ -1083,6 +1088,15 @@ Event *ForestminiAODReader::returnEvent()
                 jet->setPtJECCorr(fRecoJetPt[iJet]);
             }
 
+            if (fIsMc)
+            {
+                jet->setRefJetPt(fRefJetPt[iJet]);
+                jet->setRefJetEta(fRefJetEta[iJet]);
+                jet->setRefJetPhi(fRefJetPhi[iJet]);
+                jet->setJetPartonFlavor(fRefJetPartonFlavor[iJet]);
+                jet->setJetPartonFlavorForB(fRefJetPartonFlavorForB[iJet]);
+            }
+
             // jet->print();
 
             // Check fronе-loaded cut
@@ -1098,17 +1112,17 @@ Event *ForestminiAODReader::returnEvent()
 
     if (fUseGenTrackBranch && fIsMc)
     {
-        for (Int_t iGenTrack{0}; iGenTrack < fGenTrackPt.size(); iGenTrack++)
+        for (Int_t iGenTrack{0}; iGenTrack < fGenTrackPt->size(); iGenTrack++)
         {
             GenTrack *track = new GenTrack{};
-            track->setTrackPt(fGenTrackPt.at(iGenTrack));
-            track->setTrackEta(fGenTrackEta.at(iGenTrack));
-            track->setTrackPhi(fGenTrackPhi.at(iGenTrack));
-            track->setTrackChg(fGenTrackCharge.at(iGenTrack));
-            track->setTrackPDGID(fGenTrackPid.at(iGenTrack));
+            track->setTrackPt(fGenTrackPt->at(iGenTrack));
+            track->setTrackEta(fGenTrackEta->at(iGenTrack));
+            track->setTrackPhi(fGenTrackPhi->at(iGenTrack));
+            track->setTrackChg(fGenTrackCharge->at(iGenTrack));
+            track->setTrackPDGID(fGenTrackPid->at(iGenTrack));
             if (fCollidingSystem == "PbPb")
             {
-                track->setTrackSube(fGenTrackSube.at(iGenTrack));
+                track->setTrackSube(fGenTrackSube->at(iGenTrack));
             }
             if (fTrackCut && !fTrackCut->GenPass(track))
             {
@@ -1122,26 +1136,26 @@ Event *ForestminiAODReader::returnEvent()
 
     if (fUseTrackBranch)
     {
-        for (Int_t iTrack{0}; iTrack < fTrackPt.size(); iTrack++)
+        for (Int_t iTrack{0}; iTrack < fTrackPt->size(); iTrack++)
         {
             Track *track = new Track{};
-            track->setTrackPt(fTrackPt.at(iTrack));
-            track->setTrackEta(fTrackEta.at(iTrack));
-            track->setTrackPhi(fTrackPhi.at(iTrack));
-            track->setTrackChg(fTrackCharge.at(iTrack));
-            track->setTrackHighPurity(fTrackHighPurity.at(iTrack));
-            track->setTrackDxy(fTrackDcaXY.at(iTrack));
-            track->setTrackDxyErr(fTrackDcaXYErr.at(iTrack));
-            track->setTrackDz(fTrackDcaZ.at(iTrack));
-            track->setTrackDzErr(fTrackDcaZErr.at(iTrack));
-            track->setTrackPtErr(fTrackPtErr.at(iTrack));
+            track->setTrackPt(fTrackPt->at(iTrack));
+            track->setTrackEta(fTrackEta->at(iTrack));
+            track->setTrackPhi(fTrackPhi->at(iTrack));
+            track->setTrackChg(fTrackCharge->at(iTrack));
+            track->setTrackHighPurity(fTrackHighPurity->at(iTrack));
+            track->setTrackDxy(fTrackDcaXY->at(iTrack));
+            track->setTrackDxyErr(fTrackDcaXYErr->at(iTrack));
+            track->setTrackDz(fTrackDcaZ->at(iTrack));
+            track->setTrackDzErr(fTrackDcaZErr->at(iTrack));
+            track->setTrackPtErr(fTrackPtErr->at(iTrack));
             if (fCollidingSystem == "PbPb")
             {
-                track->setTrackChi2(fTrackChi2.at(iTrack));
-                track->setTrackpfEcal(fTrackPartFlowEcal.at(iTrack));
-                track->setTrackpfHcal(fTrackPartFlowHcal.at(iTrack));
-                track->setTrackNHits(fTrackNHits.at(iTrack));
-                track->setTrackNLayers(fTrackNLayers.at(iTrack));
+                track->setTrackChi2(fTrackChi2->at(iTrack));
+                track->setTrackpfEcal(fTrackPartFlowEcal->at(iTrack));
+                track->setTrackpfHcal(fTrackPartFlowHcal->at(iTrack));
+                track->setTrackNHits(fTrackNHits->at(iTrack));
+                track->setTrackNLayers(fTrackNLayers->at(iTrack));
             }
             if (fTrackCut && !fTrackCut->RecoPass(track))
             {

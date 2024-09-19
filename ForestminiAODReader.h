@@ -43,7 +43,7 @@ public:
                         const Bool_t &useSkimmingBranch = kTRUE, const Char_t *jetCollection = "ak4PFJetAnalyzer",
                         const Bool_t &useJets = kTRUE, const Bool_t &useTrackBranch = kFALSE,
                         const Bool_t &useGenTrackBranch = kFALSE,
-                        const Bool_t &isMc = kFALSE, const Bool_t &setStoreLocation = kFALSE);
+                        const Bool_t &isMc = kFALSE, const Bool_t &setStoreLocation = kFALSE, const Bool_t &useMatchedJets = kFALSE);
     /// @brief Destructor
     virtual ~ForestminiAODReader();
 
@@ -77,7 +77,10 @@ public:
     {
         fUseJets = {kTRUE};
     }
-
+    void useGenTrackBranch()
+    {
+        fUseGenTrackBranch = {kTRUE};
+    }
     void useTrackBranch()
     {
         fUseTrackBranch = {kTRUE};
@@ -134,7 +137,12 @@ public:
     {
         fFixJetArrays = {kTRUE};
     }
-
+    /// @brief Number of events to process. Set it to be -1 to process all events
+    /// @param nEvents number of events to be processed. -1 means all events
+    void eventsToProcess(const Long64_t &nEvents)
+    {
+        fEventsToProcess = {nEvents};
+    }
     /// @brief Return amount of events to read
     Long64_t nEventsTotal() const
     {
@@ -144,6 +152,12 @@ public:
     void setStoreLocation(const Bool_t isInStore)
     {
         fIsInStore = {isInStore};
+    }
+
+    ///@brief Use matched jets
+    void setMatchedJets()
+    {
+        fUseMatchedJets = {kTRUE};
     }
 
 private:
@@ -243,6 +257,8 @@ private:
     Long64_t fEvents2Read;
     /// @brief How many events were processed
     Long64_t fEventsProcessed;
+    ///@brief Events to process
+    Long64_t fEventsToProcess;
 
     /// @brief Is file with MC information
     Bool_t fIsMc;
@@ -258,6 +274,8 @@ private:
     Bool_t fUseTrackBranch;
     /// @brief Switch MC track branch ON
     Bool_t fUseGenTrackBranch;
+    ///@brief Use Matched jets
+    Bool_t fUseMatchedJets;
 
     /// @brief Chain conaining HLT information (used to friend other trees)
     TChain *fHltTree;
@@ -412,56 +430,56 @@ private:
     /// @brief Number of tracks
     Int_t fNTracks;
     /// @brief Track transverse momentum
-    std::vector<Float_t> fTrackPt;
+    std::vector<Float_t> *fTrackPt;
     /// @brief Track pseudorapidity
-    std::vector<Float_t> fTrackEta;
+    std::vector<Float_t> *fTrackEta;
     /// @brief Track azimuthal angle
-    std::vector<Float_t> fTrackPhi;
+    std::vector<Float_t> *fTrackPhi;
     /// @brief Track pT error (uncertainty)
-    std::vector<Float_t> fTrackPtErr;
+    std::vector<Float_t> *fTrackPtErr;
     /// @brief Track distance of closest approach in transverse plane (XY)
-    std::vector<Float_t> fTrackDcaXY;
+    std::vector<Float_t> *fTrackDcaXY;
     /// @brief Track distance of closest approach in beam direction (z)
-    std::vector<Float_t> fTrackDcaZ;
+    std::vector<Float_t> *fTrackDcaZ;
     /// @brief Track distance of closest approach error in transverse plane (XY)
-    std::vector<Float_t> fTrackDcaXYErr;
+    std::vector<Float_t> *fTrackDcaXYErr;
     /// @brief Track distance of closest approach error in beam direction (z)
-    std::vector<Float_t> fTrackDcaZErr;
+    std::vector<Float_t> *fTrackDcaZErr;
     /// @brief Track fitting (reconstruction) chi2
-    std::vector<Float_t> fTrackChi2;
+    std::vector<Float_t> *fTrackChi2;
     /// @brief Track number of degrees of freedom in the fitting
-    std::vector<UChar_t> fTrackNDOF;
+    std::vector<UChar_t> *fTrackNDOF;
     /// @brief Particle flow energy deposited in ECAL from the given track
-    std::vector<Float_t> fTrackPartFlowEcal;
+    std::vector<Float_t> *fTrackPartFlowEcal;
     /// @brief Particle flow energy deposited in HCAL from the given track
-    std::vector<Float_t> fTrackPartFlowHcal;
+    std::vector<Float_t> *fTrackPartFlowHcal;
     /// @brief Track algorithm/step
-    std::vector<UChar_t> fTrackAlgo;
+    std::vector<UChar_t> *fTrackAlgo;
     /// @brief Track charge
-    std::vector<UChar_t> fTrackCharge;
+    std::vector<UChar_t> *fTrackCharge;
     /// @brief Number of hits in the tracker
-    std::vector<UChar_t> fTrackNHits;
+    std::vector<UChar_t> *fTrackNHits;
     /// @brief Number of layers with measurement in the tracker
-    std::vector<UChar_t> fTrackNLayers;
+    std::vector<UChar_t> *fTrackNLayers;
     /// @brief Tracker steps MVA selection
-    std::vector<bool> fTrackHighPurity;
+    std::vector<bool> *fTrackHighPurity;
 
     //
     // Monte Carlo tracks
     //
 
     /// @brief Generated particle transverse momentum
-    std::vector<Float_t> fGenTrackPt;
+    std::vector<Float_t> *fGenTrackPt;
     /// @brief Generated particle pseudorapidity
-    std::vector<Float_t> fGenTrackEta;
+    std::vector<Float_t> *fGenTrackEta;
     /// @brief Generated particle azimuthal angle
-    std::vector<Float_t> fGenTrackPhi;
+    std::vector<Float_t> *fGenTrackPhi;
     /// @brief Generated particle charge
-    std::vector<Int_t> fGenTrackCharge;
+    std::vector<Int_t> *fGenTrackCharge;
     /// @brief Generated particle PID
-    std::vector<Int_t> fGenTrackPid;
+    std::vector<Int_t> *fGenTrackPid;
     /// @brief Generated particle sube (?)
-    std::vector<Int_t> fGenTrackSube;
+    std::vector<Int_t> *fGenTrackSube;
 
     /// @brief Jet Energy Corrector instance
     JetCorrector *fJEC;

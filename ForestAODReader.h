@@ -42,7 +42,7 @@ public:
                   const Bool_t &useHltBranch = kTRUE, const Bool_t &useSkimmingBranch = kTRUE,
                   const Char_t *jetCollection = "ak4PFJetAnalyzer", const Bool_t &useJets = kTRUE,
                   const Bool_t &useTrackBranch = kFALSE, const Bool_t &useGenTrackBranch = kFALSE,
-                  const Bool_t &isMc = kFALSE, const Bool_t &setStoreLocation = kFALSE);
+                  const Bool_t &isMc = kFALSE, const Bool_t &setStoreLocation = kFALSE, const Bool_t &useMatchedJets = kFALSE);
   /// @brief Destructor
   virtual ~ForestAODReader();
 
@@ -70,6 +70,8 @@ public:
   {
     fUseJets = {kTRUE};
   }
+  /// @brief Uswe gen track branch
+  void useGenTrackBranch() { fUseGenTrackBranch = {kTRUE}; }
   /// Turn-on calorimeter jet branch to be read
   void useTrackBranch() { fUseTrackBranch = {kTRUE}; }
 
@@ -79,10 +81,15 @@ public:
   void setCollidingEnergy(const Int_t &ene = 5020) { fCollidingEnergyGeV = {ene}; }
   /// @brief Set year of data taking
   void setYearOfDataTaking(const Int_t &year = 2018) { fYearOfDataTaking = {year}; }
-  /// @brief Set input
-  void setJECFileName(const Char_t *name = "Autumn18_HI_V8_MC_L2Relative_AK4PF.txt") { fJECInputFileName = name; }
+  ///@brief Set Path to jet analysis directory
+  void setPath2JetAnalysis(const Char_t *name = "../") { fJECPath = name; }
+  ///@brief Add JEC files to the list of JEC files
+  void addJECFile(const Char_t *name = "Autumn18_HI_V8_MC_L2Relative_AK4PF") { fJECFiles.push_back(name); }
   /// @brief Apply jet pT-smearing
-  void setJetPtSmearing(const Bool_t &smear = kFALSE) { fDoJetPtSmearing = {smear}; }
+  void setJetPtSmearing(const Bool_t &smear = kFALSE)
+  {
+    fDoJetPtSmearing = {smear};
+  }
   /// @brief Set event cut
   void setEventCut(EventCut *cut) { fEventCut = {cut}; }
   /// @brief Set jet cut
@@ -93,7 +100,14 @@ public:
   void fixJetArrays() { fFixJetArrays = {kTRUE}; }
   ///@brief Set Track Cut
   void setTrackCut(TrackCut *cut) { fTrackCut = {cut}; }
+  ///@brief Set Use Matched Jets
+  void setMatchedJets() { fUseMatchedJets = {kTRUE}; }
 
+  ///@brief Events to process
+  void eventsToProcess(const Long64_t &nEvents)
+  {
+    fEventsToProcess = {nEvents};
+  }
   /// @brief Return amount of events to read
   Long64_t nEventsTotal() const { return fEvents2Read; }
 
@@ -196,6 +210,8 @@ private:
   Long64_t fEvents2Read;
   /// @brief How many events were processed
   Long64_t fEventsProcessed;
+  /// @brief How many events to process
+  Long64_t fEventsToProcess;
 
   /// @brief Is file with MC information
   Bool_t fIsMc;
@@ -207,6 +223,8 @@ private:
 
   /// @brief Switch particle flow jet branch ON
   Bool_t fUseJets;
+  ///@brief Use matched jets (Only applicable for MC)
+  Bool_t fUseMatchedJets;
   /// @brief Switch track branch ON
   Bool_t fUseTrackBranch;
   /// @brief Switch MC track branch ON
@@ -407,24 +425,24 @@ private:
   //
 
   /// @brief Generated particle transverse momentum
-  std::vector<Float_t> fGenTrackPt;
+  std::vector<Float_t> *fGenTrackPt;
   /// @brief Generated particle pseudorapidity
-  std::vector<Float_t> fGenTrackEta;
+  std::vector<Float_t> *fGenTrackEta;
   /// @brief Generated particle azimuthal angle
-  std::vector<Float_t> fGenTrackPhi;
+  std::vector<Float_t> *fGenTrackPhi;
   /// @brief Generated particle charge
-  std::vector<Int_t> fGenTrackCharge;
+  std::vector<Int_t> *fGenTrackCharge;
   /// @brief Generated particle PID
-  std::vector<Int_t> fGenTrackPid;
+  std::vector<Int_t> *fGenTrackPid;
   /// @brief Generated particle sube (?)
-  std::vector<Int_t> fGenTrackSube;
+  std::vector<Int_t> *fGenTrackSube;
 
   /// @brief Jet Energy Corrector instance
   JetCorrector *fJEC;
+  /// @brief Path to jetAnalysis directory
+  TString fJECPath;
   /// @brief List of files with JEC
   std::vector<std::string> fJECFiles;
-  /// @brief
-  TString fJECInputFileName;
   /// @brief Jet Energy Uncertainty instance
   JetUncertainty *fJEU;
   /// @brief List of files with JEU

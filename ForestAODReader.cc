@@ -30,7 +30,7 @@ ClassImp(ForestAODReader)
       fTrkTree{nullptr}, fGenTrkTree{nullptr},
       fJEC{nullptr}, fJECFiles{}, fJEU{nullptr}, fJEUFiles{},
       fCollidingSystem{Form("PbPb")}, fCollidingEnergyGeV{5020}, fYearOfDataTaking{2018}, fDoJetPtSmearing{kFALSE},
-      fFixJetArrays{kFALSE}, fEventCut{nullptr}, fJetCut{nullptr}, fRecoJet2GenJetId{}, fGenJet2RecoJet{}, fTrackCut{nullptr}
+      fFixJetArrays{kFALSE}, fEventCut{nullptr}, fJetCut{nullptr}, fRecoJet2GenJetId{}, fGenJet2RecoJet{}, fTrackCut{nullptr}, fUseMatchedJets{kFALSE}, fEventsToProcess{-1}
 {
     // Initialize many variables
     clearVariables();
@@ -39,13 +39,13 @@ ClassImp(ForestAODReader)
 //_________________
 ForestAODReader::ForestAODReader(const Char_t *inputStream, const Bool_t &useHltBranch, const Bool_t &useSkimmingBranch,
                                  const Char_t *jetCollection, const Bool_t &useJets,
-                                 const Bool_t &useTrackBranch, const Bool_t &useGenTrackBranch, const Bool_t &isMc, const Bool_t &setStoreLocation)
+                                 const Bool_t &useTrackBranch, const Bool_t &useGenTrackBranch, const Bool_t &isMc, const Bool_t &setStoreLocation, const Bool_t &useMatchedJets)
     : fEvent{nullptr}, fInFileName{inputStream}, fEvents2Read{0}, fEventsProcessed{0}, fIsMc{isMc},
       fUseHltBranch{useHltBranch}, fUseSkimmingBranch{useSkimmingBranch}, fJetCollection{"ak4PFJetAnalyzer"},
       fUseJets{useJets}, fUseTrackBranch{useTrackBranch}, fUseGenTrackBranch{useGenTrackBranch},
       fJEC{nullptr}, fJECFiles{}, fJEU{nullptr},
       fJEUFiles{}, fCollidingSystem{Form("PbPb")}, fCollidingEnergyGeV{5020}, fYearOfDataTaking{2018},
-      fDoJetPtSmearing{kFALSE}, fFixJetArrays{kFALSE}, fEventCut{nullptr}, fJetCut{nullptr}, fIsInStore{setStoreLocation}, fTrackCut{nullptr}
+      fDoJetPtSmearing{kFALSE}, fFixJetArrays{kFALSE}, fEventCut{nullptr}, fJetCut{nullptr}, fIsInStore{setStoreLocation}, fTrackCut{nullptr}, fUseMatchedJets{useMatchedJets}, fEventsToProcess{-1}
 {
     // Initialize many variables
     clearVariables();
@@ -198,13 +198,15 @@ void ForestAODReader::clearVariables()
         fTrackNLayers[i] = {0};
         fTrackHighPurity[i] = {kFALSE};
     } // for (Short_t i{0}; i<9999; i++)
-
-    fGenTrackPt.clear();
-    fGenTrackEta.clear();
-    fGenTrackPhi.clear();
-    fGenTrackCharge.clear();
-    fGenTrackPid.clear();
-    fGenTrackSube.clear();
+    if (fIsMc)
+    {
+        fGenTrackPt->clear();
+        fGenTrackEta->clear();
+        fGenTrackPhi->clear();
+        fGenTrackCharge->clear();
+        fGenTrackPid->clear();
+        fGenTrackSube->clear();
+    }
 
     if (fIsMc)
     {
@@ -229,15 +231,35 @@ Int_t ForestAODReader::init()
 //________________
 void ForestAODReader::setupJEC()
 {
+    // If no path to the aux_file
+    if (fJECPath.Length() <= 0)
+    {
+        // Set default values
+        std::cout << "[WARNING] Default path to JEC files will be used" << std::endl;
+        setPath2JetAnalysis();
+    }
+
     if (fJECFiles.empty())
     {
-        if (fJECInputFileName.Length() <= 0)
-        {
-            setJECFileName();
-        }
-        fJECFiles.push_back(Form("/Users/gnigmat/work/cms/soft/jetAnalysis/aux_files/%s_%i/JEC/%s",
-                                 fCollidingSystem.Data(), fCollidingEnergyGeV, fJECInputFileName.Data()));
-        std::cout << Form("Add JEC file: %s\n", fJECFiles.back().c_str());
+        std::cout << "[WARNING] Default JEC file with parameters will be used" << std::endl;
+        addJECFile();
+    }
+
+    std::vector<std::string> tmp;
+    for (UInt_t i{0}; i < fJECFiles.size(); i++)
+    {
+        tmp.push_back(Form("%s/aux_files/%s_%i/JEC/%s",
+                           fJECPath.Data(), fCollidingSystem.Data(),
+                           fCollidingEnergyGeV, fJECFiles.at(i).c_str()));
+    }
+
+    fJECFiles.clear();
+    fJECFiles = tmp;
+
+    std::cout << "JEC files added: " << std::endl;
+    for (UInt_t i{0}; i < fJECFiles.size(); i++)
+    {
+        std::cout << Form("File %i : ", i + 1) << fJECFiles.at(i) << std::endl;
     }
 
     fJEC = new JetCorrector(fJECFiles);
@@ -462,10 +484,16 @@ Int_t ForestAODReader::setupChains()
             if (fIsMc && fUseGenTrackBranch)
                 fGenTrkTree->Add(input.Data());
 
-            fEvents2Read = fEventTree->GetEntries();
+            if (fEventsToProcess == -1)
+            {
+                fEvents2Read = fEventTree->GetEntries();
+            }
+            else
+            {
+                fEvents2Read = fEventsToProcess;
+            }
+
             std::cout << Form("Total number of events to read: %lld\n", fEvents2Read);
-            Long64_t fEvents2Read2 = fJetTree->GetEntries();
-            std::cout << Form("Total number of events to read2: %lld\n", fEvents2Read2);
         }
         // Assuming that list of files is provided instead of a single file
         else
@@ -485,11 +513,10 @@ Int_t ForestAODReader::setupChains()
                 pos = file.find_first_of(" ");
                 if (pos != std::string::npos)
                     file.erase(pos, file.length() - pos);
-                // cout << "DEBUG found [" <<  file << "]" << endl;
+                // std::cout << "DEBUG found [" << file << "]" << std::endl;
 
                 // Check that file is of a correct name
-                if (file.find(".root") != std::string::npos && file.find("Forest") != std::string::npos &&
-                    file.find("AOD") != std::string::npos)
+                if (file.find(".root") != std::string::npos)
                 {
                     // Open file
                     if (fIsInStore)
@@ -526,9 +553,15 @@ Int_t ForestAODReader::setupChains()
                 } // if ( file.find(".root") != std::string::npos && file.find("Forest") != std::string::npos &&
                   // file.find("AOD") != std::string::npos )
             } // while ( getline( inputStream, file ) )
-
+            if (fEventsToProcess == -1)
+            {
+                fEvents2Read = fEventTree->GetEntries();
+            }
+            else
+            {
+                fEvents2Read = fEventsToProcess;
+            }
             std::cout << Form("Total number of files in chain: %d\n", nFiles);
-            fEvents2Read = fEventTree->GetEntries();
             std::cout << Form("Total number of events to read: %lld\n", fEvents2Read);
         } // else {   if file list
         returnStatus = 0;
@@ -560,12 +593,12 @@ void ForestAODReader::setupBranches()
     fEventTree->SetBranchStatus("evt", 1);
     fEventTree->SetBranchStatus("lumi", 1);
     fEventTree->SetBranchStatus("vz", 1);
-    fEventTree->SetBranchStatus("hiBin", 1); // centrality only for PbPb and XeXe
+    // fEventTree->SetBranchStatus("hiBin", 1); // centrality only for PbPb and XeXe
     fEventTree->SetBranchAddress("run", &fRunId);
     fEventTree->SetBranchAddress("evt", &fEventId);
     fEventTree->SetBranchAddress("lumi", &fLumi);
     fEventTree->SetBranchAddress("vz", &fVertexZ);
-    fEventTree->SetBranchAddress("hiBin", &fHiBin);
+    // fEventTree->SetBranchAddress("hiBin", &fHiBin);
 
     if (fIsMc)
     {
@@ -722,15 +755,15 @@ void ForestAODReader::setupBranches()
             fJetTree->SetBranchStatus("refpt", 1);
             fJetTree->SetBranchStatus("refeta", 1);
             fJetTree->SetBranchStatus("refphi", 1);
-            fJetTree->SetBranchStatus("refWTAeta", 1);
-            fJetTree->SetBranchStatus("refWTAphi", 1);
+            // fJetTree->SetBranchStatus("refWTAeta", 1);
+            // fJetTree->SetBranchStatus("refWTAphi", 1);
             fJetTree->SetBranchStatus("refparton_flavor", 1);
             fJetTree->SetBranchStatus("refparton_flavorForB", 1);
             fJetTree->SetBranchAddress("refpt", &fRefJetPt);
             fJetTree->SetBranchAddress("refeta", &fRefJetEta);
             fJetTree->SetBranchAddress("refphi", &fRefJetPhi);
-            fJetTree->SetBranchAddress("refWTAeta", &fRefJetWTAEta);
-            fJetTree->SetBranchAddress("refWTAphi", &fRefJetWTAPhi);
+            // fJetTree->SetBranchAddress("refWTAeta", &fRefJetWTAEta);
+            // fJetTree->SetBranchAddress("refWTAphi", &fRefJetWTAPhi);
             fJetTree->SetBranchAddress("refparton_flavor", &fRefJetPartonFlavor);
             fJetTree->SetBranchAddress("refparton_flavorForB", &fRefJetPartonFlavorForB);
         }
@@ -749,16 +782,8 @@ void ForestAODReader::setupBranches()
         fTrkTree->SetBranchStatus("trkDxyError1", 1);
         fTrkTree->SetBranchStatus("trkDz1", 1);
         fTrkTree->SetBranchStatus("trkDzError1", 1);
-        fTrkTree->SetBranchStatus("trkChi2", 1);
-        fTrkTree->SetBranchStatus("trkNdof", 1);
         fTrkTree->SetBranchStatus("trkCharge", 1);
-        fTrkTree->SetBranchStatus("trыkNHit", 1);
-        fTrkTree->SetBranchStatus("trkNlayer", 1);
         fTrkTree->SetBranchStatus("highPurity", 1);
-        fTrkTree->SetBranchStatus("pfEcal", 1);
-        fTrkTree->SetBranchStatus("pfHcal", 1);
-        fTrkTree->SetBranchStatus("trkMVA", 1);
-        fTrkTree->SetBranchStatus("trkAlgo", 1);
 
         fTrkTree->SetBranchAddress("nTrk", &fNTracks);
         fTrkTree->SetBranchAddress("trkPt", &fTrackPt);
@@ -769,16 +794,29 @@ void ForestAODReader::setupBranches()
         fTrkTree->SetBranchAddress("trkDxyError1", &fTrackDcaXYErr);
         fTrkTree->SetBranchAddress("trkDz1", &fTrackDcaZ);
         fTrkTree->SetBranchAddress("trkDzError1", &fTrackDcaZErr);
-        fTrkTree->SetBranchAddress("trkChi2", &fTrackChi2);
-        fTrkTree->SetBranchAddress("trkNdof", &fTrackNDOF);
-        fTrkTree->SetBranchAddress("trkCharge", &fTrackCharge);
-        fTrkTree->SetBranchAddress("trkNHit", &fTrackNHits);
-        fTrkTree->SetBranchAddress("trkNlayer", &fTrackNLayers);
         fTrkTree->SetBranchAddress("highPurity", &fTrackHighPurity);
-        fTrkTree->SetBranchAddress("pfEcal", &fTrackPartFlowEcal);
-        fTrkTree->SetBranchAddress("pfHcal", &fTrackPartFlowHcal);
-        fTrkTree->SetBranchAddress("trkMVA", &fTrackMVA);
-        fTrkTree->SetBranchAddress("trkAlgo", &fTrackAlgo);
+        fTrkTree->SetBranchAddress("trkCharge", &fTrackCharge);
+
+        if (fCollidingSystem == "PbPb")
+        {
+            fTrkTree->SetBranchStatus("trkChi2", 1);
+            fTrkTree->SetBranchStatus("trkNdof", 1);
+            fTrkTree->SetBranchStatus("trыkNHit", 1);
+            fTrkTree->SetBranchStatus("trkNlayer", 1);
+            fTrkTree->SetBranchStatus("pfEcal", 1);
+            fTrkTree->SetBranchStatus("pfHcal", 1);
+            fTrkTree->SetBranchStatus("trkMVA", 1);
+            fTrkTree->SetBranchStatus("trkAlgo", 1);
+            fTrkTree->SetBranchAddress("trkChi2", &fTrackChi2);
+            fTrkTree->SetBranchAddress("trkNdof", &fTrackNDOF);
+            fTrkTree->SetBranchAddress("trkNHit", &fTrackNHits);
+            fTrkTree->SetBranchAddress("trkNlayer", &fTrackNLayers);
+            fTrkTree->SetBranchAddress("pfEcal", &fTrackPartFlowEcal);
+            fTrkTree->SetBranchAddress("pfHcal", &fTrackPartFlowHcal);
+            fTrkTree->SetBranchAddress("trkMVA", &fTrackMVA);
+            fTrkTree->SetBranchAddress("trkAlgo", &fTrackAlgo);
+        }
+
     } // if ( fUseTrackBranch )
 
     // Gen particle quantities
@@ -817,15 +855,6 @@ void ForestAODReader::readEvent()
     }
 
     // Or one can call the clearVariables() function (will take more time)
-    if (fUseGenTrackBranch && fIsMc)
-    {
-        fGenTrackPt.clear();
-        fGenTrackEta.clear();
-        fGenTrackPhi.clear();
-        fGenTrackCharge.clear();
-        fGenTrackPid.clear();
-        fGenTrackSube.clear();
-    }
 
     if (fEventsProcessed >= fEvents2Read)
     {
@@ -845,7 +874,7 @@ void ForestAODReader::readEvent()
         fGenTrkTree->GetEntry(fEventsProcessed);
     fEventsProcessed++;
 
-    // std::cout << "Events processed: " << fEventsProcessed << std::endl;
+    std::cout << "Events processed: " << fEventsProcessed << std::endl;
 }
 
 //________________
@@ -938,6 +967,8 @@ Event *ForestAODReader::returnEvent()
     fEvent->setLumi(fLumi);
     fEvent->setVz(fVertexZ);
     fEvent->setHiBin(fHiBin);
+    fEvent->setHiBin(100);
+
     if (fIsMc)
     {
         fEvent->setPtHat(fPtHat);
@@ -1011,7 +1042,7 @@ Event *ForestAODReader::returnEvent()
         if (fIsMc && !fEvent->isGenJetCollectionFilled())
         {
 
-            // std::cout << "nGenPFJets: " << fNPFGenJets << std::endl;
+            // std::cout << "nGenPFJets: " << fNGenJets << std::endl;
 
             for (Int_t iGenJet{0}; iGenJet < fNGenJets; iGenJet++)
             {
@@ -1021,8 +1052,6 @@ Event *ForestAODReader::returnEvent()
                 jet->setPhi(fGenJetPhi[iGenJet]);
                 jet->setWTAEta(fGenJetWTAEta[iGenJet]);
                 jet->setWTAPhi(fGenJetWTAPhi[iGenJet]);
-                jet->setFlavor(fRefJetPartonFlavor[fGenJet2RecoJet.at(iGenJet)]);
-                jet->setFlavorForB(fRefJetPartonFlavorForB[fGenJet2RecoJet.at(iGenJet)]);
                 jet->setPtWeight(jetPtWeight(fIsMc, fCollidingSystem.Data(), fYearOfDataTaking, fCollidingEnergyGeV,
                                              fGenJetPt[iGenJet]));
 
@@ -1040,27 +1069,24 @@ Event *ForestAODReader::returnEvent()
 
         // Loop over reconstructed jets
 
-        // std::cout << "nRecoPFJets: " << fNPFRecoJets << std::endl;
-
         for (Int_t iJet{0}; iJet < fNRecoJets; iJet++)
         {
 
             // Create a new jet instance
             RecoJet *jet = new RecoJet{};
 
-            if (fIsMc)
+            if (fIsMc && fUseMatchedJets)
             {
-                // Count number of reconstructed jets
+                // Count number  of reconstructed jets
                 // with pT > pThat of the event (wrong )
-                if (fRecoJetPt[iJet] > fPtHat)
+                if (fRecoJetPt[iJet] < 0)
                 {
-                    nBadJets++;
+                    delete jet;
+                    continue;
                 }
-
                 // Add index of the matched GenJet
-                jet->setGenJetId(fRecoJet2GenJetId.at(iJet));
+                // jet->setGenJetId(fRecoJet2GenJetId.at(iJet));
             } // if ( fIsMc )
-
             // Reco
             jet->setPt(fRawJetPt[iJet]);
             jet->setEta(fRecoJetEta[iJet]);
@@ -1081,6 +1107,14 @@ Event *ForestAODReader::returnEvent()
             { // If no JEC available
                 jet->setPtJECCorr(fRecoJetPt[iJet]);
             }
+            if (fIsMc)
+            {
+                jet->setRefJetPt(fRefJetPt[iJet]);
+                jet->setRefJetEta(fRefJetEta[iJet]);
+                jet->setRefJetPhi(fRefJetPhi[iJet]);
+                jet->setJetPartonFlavor(fRefJetPartonFlavor[iJet]);
+                jet->setJetPartonFlavorForB(fRefJetPartonFlavorForB[iJet]);
+            }
 
             // jet->print();
 
@@ -1097,17 +1131,17 @@ Event *ForestAODReader::returnEvent()
 
     if (fUseGenTrackBranch && fIsMc)
     {
-        for (Int_t iGenTrack{0}; iGenTrack < fGenTrackPt.size(); iGenTrack++)
+        for (Int_t iGenTrack{0}; iGenTrack < fGenTrackPt->size(); iGenTrack++)
         {
             GenTrack *track = new GenTrack{};
-            track->setTrackPt(fGenTrackPt.at(iGenTrack));
-            track->setTrackEta(fGenTrackEta.at(iGenTrack));
-            track->setTrackPhi(fGenTrackPhi.at(iGenTrack));
-            track->setTrackChg(fGenTrackCharge.at(iGenTrack));
-            track->setTrackPDGID(fGenTrackPid.at(iGenTrack));
+            track->setTrackPt(fGenTrackPt->at(iGenTrack));
+            track->setTrackEta(fGenTrackEta->at(iGenTrack));
+            track->setTrackPhi(fGenTrackPhi->at(iGenTrack));
+            track->setTrackChg(fGenTrackCharge->at(iGenTrack));
+            track->setTrackPDGID(fGenTrackPid->at(iGenTrack));
             if (fCollidingSystem == "PbPb")
             {
-                track->setTrackSube(fGenTrackSube.at(iGenTrack));
+                track->setTrackSube(fGenTrackSube->at(iGenTrack));
             }
 
             if (fTrackCut && !fTrackCut->GenPass(track))
