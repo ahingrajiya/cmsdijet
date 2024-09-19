@@ -117,51 +117,51 @@ void JetESRAnalysis::processEvent(const Event *event)
             Double_t eta = (*genJetIter)->eta();
             Double_t phi = (*genJetIter)->phi();
             Double_t flavB{-6};
-            switch ((*genJetIter)->flavorForB())
-            {
-            case -99:
-                flavB = -6;
-                break;
-            case -5:
-                flavB = -5;
-                break;
-            case -4:
-                flavB = -4;
-                break;
-            case -3:
-                flavB = -3;
-                break;
-            case -2:
-                flavB = -2;
-                break;
-            case -1:
-                flavB = -1;
-                break;
-            case 0:
-                flavB = 0;
-                break;
-            case 1:
-                flavB = 1;
-                break;
-            case 2:
-                flavB = 2;
-                break;
-            case 3:
-                flavB = 3;
-                break;
-            case 4:
-                flavB = 4;
-                break;
-            case 5:
-                flavB = 5;
-                break;
-            case 21:
-                flavB = 6;
-                break;
-            default:
-                flavB = -6;
-                break;
-            }
+            /* switch ((*genJetIter)->flavorForB())
+             {
+             case -99:
+                 flavB = -6;
+                 break;
+             case -5:
+                 flavB = -5;
+                 break;
+             case -4:
+                 flavB = -4;
+                 break;
+             case -3:
+                 flavB = -3;
+                 break;
+             case -2:
+                 flavB = -2;
+                 break;
+             case -1:
+                 flavB = -1;
+                 break;
+             case 0:
+                 flavB = 0;
+                 break;
+             case 1:
+                 flavB = 1;
+                 break;
+             case 2:
+                 flavB = 2;
+                 break;
+             case 3:
+                 flavB = 3;
+                 break;
+             case 4:
+                 flavB = 4;
+                 break;
+             case 5:
+                 flavB = 5;
+                 break;
+             case 21:
+                 flavB = 6;
+                 break;
+             default:
+                 flavB = -6;
+                 break;
+             }*/
 
             Double_t genJetPtEtaPhiCent[4]{pt, eta, phi, centrality};
             Double_t genJetPtFlavPtHatCent[4]{pt, flavB, ptHat, centrality};
@@ -237,14 +237,14 @@ void JetESRAnalysis::processEvent(const Event *event)
             fHM->hRecoJetDeltaRPtCent->Fill(deltaRPtCent);
 
             Double_t flavB{-6};
-            if (!(*pfJetIter)->hasMatching())
-            {
-                Double_t tmp[4]{pt, -6., ptHat, centrality};
-                fHM->hRecoJetPtFlavPtHatCentInclusive->Fill(tmp);
-                fHM->hRecoJetPtFlavPtHatCentInclusiveWeighted->Fill(tmp, ptHatW);
-                fHM->hRecoUnmatchedJetPtFlavPtHatCent->Fill(tmp);
-                fHM->hRecoUnmatchedJetPtFlavPtHatCentWeighted->Fill(tmp, ptHatW);
-            }
+            // if (!(*pfJetIter)->hasMatching())
+            // {
+            //     Double_t tmp[4]{pt, -6., ptHat, centrality};
+            //     fHM->hRecoJetPtFlavPtHatCentInclusive->Fill(tmp);
+            //     fHM->hRecoJetPtFlavPtHatCentInclusiveWeighted->Fill(tmp, ptHatW);
+            //     fHM->hRecoUnmatchedJetPtFlavPtHatCent->Fill(tmp);
+            //     fHM->hRecoUnmatchedJetPtFlavPtHatCentWeighted->Fill(tmp, ptHatW);
+            // }
 
             // Fill the information for lead jet (regardless of matching)
             if (currentIndex == leadJetIndex)
@@ -255,72 +255,72 @@ void JetESRAnalysis::processEvent(const Event *event)
             }
 
             // For the JES and other histograms matching is important
-            if (!(*pfJetIter)->hasMatching())
-                continue;
+            // if (!(*pfJetIter)->hasMatching())
+            //     continue;
 
             // Retrieve matched gen jet
-            GenJet *matchedJet = event->genJetCollection()->at((*pfJetIter)->genJetId());
+            /*  GenJet *matchedJet = event->genJetCollection()->at((*pfJetIter->genJetIndex()));
 
-            Double_t genPt = matchedJet->pt();
-            nRefJets[0]++;
-            if (genPt > 20)
-                nRefJets[1]++;
-            if (genPt > 50)
-                nRefJets[2]++;
-            if (genPt > 80)
-                nRefJets[3]++;
-            if (genPt > 120)
-                nRefJets[4]++;
-            Double_t genEta = matchedJet->eta();
-            Double_t genPhi = matchedJet->phi();
-            switch (matchedJet->flavorForB())
-            {
-            case -99:
-                flavB = -6;
-                break;
-            case -5:
-                flavB = -5;
-                break;
-            case -4:
-                flavB = -4;
-                break;
-            case -3:
-                flavB = -3;
-                break;
-            case -2:
-                flavB = -2;
-                break;
-            case -1:
-                flavB = -1;
-                break;
-            case 0:
-                flavB = 0;
-                break;
-            case 1:
-                flavB = 1;
-                break;
-            case 2:
-                flavB = 2;
-                break;
-            case 3:
-                flavB = 3;
-                break;
-            case 4:
-                flavB = 4;
-                break;
-            case 5:
-                flavB = 5;
-                break;
-            case 21:
-                flavB = 6;
-                break;
-            default:
-                flavB = -6;
-                break;
-            }
+              Double_t genPt = matchedJet->pt();
+              nRefJets[0]++;
+              if (genPt > 20)
+                  nRefJets[1]++;
+              if (genPt > 50)
+                  nRefJets[2]++;
+              if (genPt > 80)
+                  nRefJets[3]++;
+              if (genPt > 120)
+                  nRefJets[4]++;
+              Double_t genEta = matchedJet->eta();
+              Double_t genPhi = matchedJet->phi();
+              switch (matchedJet->flavorForB())
+              {
+              case -99:
+                  flavB = -6;
+                  break;
+              case -5:
+                  flavB = -5;
+                  break;
+              case -4:
+                  flavB = -4;
+                  break;
+              case -3:
+                  flavB = -3;
+                  break;
+              case -2:
+                  flavB = -2;
+                  break;
+              case -1:
+                  flavB = -1;
+                  break;
+              case 0:
+                  flavB = 0;
+                  break;
+              case 1:
+                  flavB = 1;
+                  break;
+              case 2:
+                  flavB = 2;
+                  break;
+              case 3:
+                  flavB = 3;
+                  break;
+              case 4:
+                  flavB = 4;
+                  break;
+              case 5:
+                  flavB = 5;
+                  break;
+              case 21:
+                  flavB = 6;
+                  break;
+              default:
+                  flavB = -6;
+                  break;
+              }*/
 
-            Double_t ptRawPtCorrPtGenCent[4] = {ptRaw, pt, genPt, centrality};
-            fHM->hRecoJetRawPtCorrPtGenPtCent->Fill(ptRawPtCorrPtGenCent);
+            // Double_t ptRawPtCorrPtGenCent[4] = {ptRaw, pt, genPt, centrality};
+            // fHM->hRecoJetRawPtCorrPtGenPtCent->Fill(ptRawPtCorrPtGenCent);
 
             fHM->hRecoJetPtEtaPhiCent->Fill(recoJetPtEtaPhiCent);
             fHM->hRecoJetPtEtaPhiCentWeighted->Fill(recoJetPtEtaPhiCent, ptHatW);
@@ -334,28 +334,28 @@ void JetESRAnalysis::processEvent(const Event *event)
             // Ref jets
             //
 
-            Double_t refJetPtEtaPhiCent[4]{genPt, genEta, genPhi, centrality};
-            Double_t refJetPtFlavPtHatCent[4]{genPt, flavB, ptHat, centrality};
-            fHM->hRefJetPtEtaPhiCent->Fill(refJetPtEtaPhiCent);
-            fHM->hRefJetPtEtaPhiCentWeighted->Fill(refJetPtEtaPhiCent, ptHatW);
-            fHM->hRefJetPtFlavPtHatCent->Fill(refJetPtFlavPtHatCent);
-            fHM->hRefJetPtFlavPtHatCentWeighted->Fill(refJetPtFlavPtHatCent, ptHatW);
+            // Double_t refJetPtEtaPhiCent[4]{genPt, genEta, genPhi, centrality};
+            // Double_t refJetPtFlavPtHatCent[4]{genPt, flavB, ptHat, centrality};
+            // fHM->hRefJetPtEtaPhiCent->Fill(refJetPtEtaPhiCent);
+            // fHM->hRefJetPtEtaPhiCentWeighted->Fill(refJetPtEtaPhiCent, ptHatW);
+            // fHM->hRefJetPtFlavPtHatCent->Fill(refJetPtFlavPtHatCent);
+            // fHM->hRefJetPtFlavPtHatCentWeighted->Fill(refJetPtFlavPtHatCent, ptHatW);
 
             //
             // Jet Energy Scale
             //
 
-            Double_t JESraw = ptRaw / genPt;
-            Double_t JES = pt / genPt;
-            Double_t jesPtEtaPhiCent[5]{JES, genPt, genEta, genPhi, centrality};
-            Double_t jesRawPtEtaPhiCent[5]{JESraw, genPt, genEta, genPhi, centrality};
-            Double_t jesPtFlavPtHatCent[5]{JES, genPt, flavB, ptHat, centrality};
-            fHM->hJESPtEtaPhiCent->Fill(jesPtEtaPhiCent);
-            fHM->hJESPtEtaPhiCentWeighted->Fill(jesPtEtaPhiCent, ptHatW);
-            fHM->hJESRawPtFlavPtHatCent->Fill(jesRawPtEtaPhiCent);
-            fHM->hJESRawPtFlavPtHatCentWeighted->Fill(jesRawPtEtaPhiCent, ptHatW);
-            fHM->hJESPtFlavPtHatCent->Fill(jesPtFlavPtHatCent);
-            fHM->hJESPtFlavPtHatCentWeighted->Fill(jesPtFlavPtHatCent, ptHatW);
+            // Double_t JESraw = ptRaw / genPt;
+            // Double_t JES = pt / genPt;
+            // Double_t jesPtEtaPhiCent[5]{JES, genPt, genEta, genPhi, centrality};
+            // Double_t jesRawPtEtaPhiCent[5]{JESraw, genPt, genEta, genPhi, centrality};
+            // Double_t jesPtFlavPtHatCent[5]{JES, genPt, flavB, ptHat, centrality};
+            // fHM->hJESPtEtaPhiCent->Fill(jesPtEtaPhiCent);
+            // fHM->hJESPtEtaPhiCentWeighted->Fill(jesPtEtaPhiCent, ptHatW);
+            // fHM->hJESRawPtFlavPtHatCent->Fill(jesRawPtEtaPhiCent);
+            // fHM->hJESRawPtFlavPtHatCentWeighted->Fill(jesRawPtEtaPhiCent, ptHatW);
+            // fHM->hJESPtFlavPtHatCent->Fill(jesPtFlavPtHatCent);
+            // fHM->hJESPtFlavPtHatCentWeighted->Fill(jesPtFlavPtHatCent, ptHatW);
 
             currentIndex++;
         } // for ( pfJetIter = event->pfJetCollection()->begin();
