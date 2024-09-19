@@ -1131,6 +1131,7 @@ Event *ForestAODReader::returnEvent()
 
     if (fUseGenTrackBranch && fIsMc)
     {
+        Int_t iGenMult = 0;
         for (Int_t iGenTrack{0}; iGenTrack < fGenTrackPt->size(); iGenTrack++)
         {
             GenTrack *track = new GenTrack{};
@@ -1149,8 +1150,10 @@ Event *ForestAODReader::returnEvent()
                 delete track;
                 continue;
             }
+            iGenMult++;
             fEvent->genTrackCollection()->push_back(track);
         }
+        fEvent->setGenMultiplicity(iGenMult);
     }
     Int_t iRecoMult = 0;
     if (fUseTrackBranch)

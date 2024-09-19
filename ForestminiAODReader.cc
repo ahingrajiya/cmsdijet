@@ -42,6 +42,7 @@ ForestminiAODReader::ForestminiAODReader(const Char_t *inputStream, const Bool_t
       fUseHltBranch{useHltBranch}, fUseSkimmingBranch{useSkimmingBranch}, fJetCollection{"ak4PFJetAnalyzer"},
       fUseJets{useJets}, fUseGenTrackBranch{useGenTrackBranch},
       fJEC{nullptr}, fJECFiles{}, fJEU{nullptr}, fJEUFiles{}, fCollidingSystem{Form("PbPb")}, fCollidingEnergyGeV{5020}, fYearOfDataTaking{2018}, fEventsToProcess{-1}
+
 {
     // Initialize many variables
     clearVariables();
@@ -1112,6 +1113,7 @@ Event *ForestminiAODReader::returnEvent()
 
     if (fUseGenTrackBranch && fIsMc)
     {
+        Int_t iGenMult = 0;
         for (Int_t iGenTrack{0}; iGenTrack < fGenTrackPt->size(); iGenTrack++)
         {
             GenTrack *track = new GenTrack{};
@@ -1129,8 +1131,10 @@ Event *ForestminiAODReader::returnEvent()
                 delete track;
                 continue;
             }
+            iGenMult++;
             fEvent->genTrackCollection()->push_back(track);
         }
+        fEvent->setGenMultiplicity(iGenMult);
     }
     Int_t iRecoMult = 0;
 

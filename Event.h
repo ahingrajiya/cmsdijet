@@ -27,7 +27,7 @@ public:
   Event(const UInt_t &runId, const ULong64_t &eventId, const UInt_t &lumi,
         const Float_t &vx, const Float_t &vy, const Float_t &vz,
         const Int_t &hiBin, const Float_t &ptHat,
-        const Float_t &w, const Int_t &nBadJets, const Int_t &mult);
+        const Float_t &w, const Int_t &nBadJets, const Int_t &mult, const Int_t &genMult);
   /// @brief Destructor
   virtual ~Event();
 
@@ -64,6 +64,8 @@ public:
   void setNumberOfOverscaledPFJets(const Int_t &n) { fNBadJets = (UChar_t)n; }
   /// @brief Set reference multiplicity (CMS way)
   void setMultiplicity(const Int_t &mult) { fMult = (UShort_t)mult; }
+  /// @brief Set reference multiplicity (CMS way)
+  void setGenMultiplicity(const Int_t &genMult) { fGenMult = (UShort_t)genMult; }
   /// @brief Set the flag that generated jet collection is filled to true
   void setGenJetCollectionIsFilled() { fGenJetsCollectionIsFilled = kTRUE; }
   /// @brief  Print event information
@@ -95,6 +97,8 @@ public:
   Int_t numberOfOverscaledPFJets() const { return (Int_t)fNBadJets; }
   /// @brief Return reference multiplicity (CMS way)
   Int_t multiplicity() const { return (Int_t)fMult; }
+  /// @brief Return gen multiplicity (CMS way)
+  Int_t genMultiplicity() const { return (Int_t)fGenMult; }
   /// @brief Return if generated jet collection filled
   Bool_t isGenJetCollectionFilled() const { return fGenJetsCollectionIsFilled; }
   /// @brief Return number of particle flow jets
@@ -136,6 +140,8 @@ private:
   UChar_t fNBadJets;
   /// @brief Reference charged track multiplicity (CMS way)
   UShort_t fMult;
+  /// @brief Reference Gen Charged track multiplicity (CMS way)
+  UShort_t fGenMult;
   /// @brief Check if collection of generated jets is filled
   Bool_t fGenJetsCollectionIsFilled;
 
