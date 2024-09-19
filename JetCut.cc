@@ -74,18 +74,6 @@ Bool_t JetCut::pass(const RecoJet *jet)
                           recoR, fConeR, (goodConeR) ? "true" : "false");
     }
 
-    Bool_t goodMatching = kTRUE;
-    if (fMustHaveGenMatching)
-    {
-        goodMatching = jet->hasMatching();
-    }
-
-    if (fVerbose)
-    {
-        std::cout << Form("has matching: \t %s \n",
-                          (goodMatching) ? "true" : "false");
-    }
-
     Bool_t goodEta = (fEta[0] <= jet->eta() &&
                       jet->eta() <= fEta[1]);
     if (fVerbose)
@@ -117,7 +105,7 @@ Bool_t JetCut::pass(const RecoJet *jet)
     //                       fRefFlavorForB[0], jet->refFlavorForB(), fRefFlavorForB[1], ( goodFlavorForB ) ? "true" : "false" );
     // }
 
-    Bool_t isGood = goodPt && goodConeR && goodMatching && goodEta;
+    Bool_t isGood = goodPt && goodConeR && goodEta;
 
     // Bool_t isGood = goodRecoPt && goodRecoConeR && goodMatching &&
     //                       goodRefPt && goodRefConeR && goodFlavorForB;
