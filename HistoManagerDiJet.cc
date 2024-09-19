@@ -43,7 +43,7 @@ HistoManagerDiJet::~HistoManagerDiJet()
 
 void HistoManagerDiJet::init(const Bool_t &isMC)
 {
-    hRecoMultiplicity = new TH1D("hRecoMultiplicity", "Reco Multiplicity", 400, 0.0, 400.0);
+    hRecoMultiplicity = new TH1D("hRecoMultiplicity", "Reco Multiplicity", 700, 0.0, 700.0);
     hRecoMultiplicity->Sumw2();
     hCorrectedMultiplicity = new TH1D("hCorrectedMultiplicity", "Corrected Multiplicity", 700, 0.0, 700.0);
     hCorrectedMultiplicity->Sumw2();
