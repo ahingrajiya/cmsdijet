@@ -874,7 +874,7 @@ void ForestAODReader::readEvent()
         fGenTrkTree->GetEntry(fEventsProcessed);
     fEventsProcessed++;
 
-    std::cout << "Events processed: " << fEventsProcessed << std::endl;
+    // std::cout << "Events processed: " << fEventsProcessed << std::endl;
 }
 
 //________________
@@ -1156,6 +1156,7 @@ Event *ForestAODReader::returnEvent()
         fEvent->setGenMultiplicity(iGenMult);
     }
     Int_t iRecoMult = 0;
+
     if (fUseTrackBranch)
     {
         for (Int_t iTrack{0}; iTrack < fNTracks; iTrack++)
@@ -1191,6 +1192,7 @@ Event *ForestAODReader::returnEvent()
             fEvent->trackCollection()->push_back(track);
         }
     }
+
     fEvent->setMultiplicity(iRecoMult);
     if (fEventCut && !fEventCut->pass(fEvent))
     {
