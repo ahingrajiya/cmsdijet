@@ -26,6 +26,8 @@
 #include "THnSparse.h"
 #include "TProfile.h"
 #include "TMath.h"
+#include "TString.h"
+#include "TDirectory.h"
 
 class HistoManagerDiJet : public BaseHistoManager
 {
@@ -41,15 +43,38 @@ public:
     void setIsMC(const Bool_t &isMC = kTRUE) { fIsMC = isMC; }
     ///@brief Write all historgams to output file
     void writeOutput(const Bool_t &isMC = kFALSE);
+    ///@brief Set Multiplicity bins
+    void setMultiplicityBins(const std::vector<float> &bins) { fMultiplicityBins = bins; }
 
     TH1D *hRecoMultiplicity;
     TH1D *hCorrectedMultiplicity;
     TH1D *hGenMultiplicity;
     TH1D *hSubEventMultiplicity;
     TH1D *hSelectedMultiplicity;
+    TH1D *hPtHat;
+    TH1D *hPtHat_W;
+    TH1D *hHiBin;
+    TH1D *hHiBin_W;
+    TH1D *hVz;
+    TH1D *hVz_W;
+
+    THnSparseD *hMultiplicities;
+    THnSparseD *hMultiplicities_W;
+    THnSparseD *hRecoJets;
+    THnSparseD *hRecoJets_W;
+    THnSparseD *hGenJets;
+    THnSparseD *hGenJets_W;
+    THnSparseD *hLeadingJet;
+    THnSparseD *hSubLeadingJet;
+    THnSparseD *hMultiplicities_DiJet_W;
+
+    THnSparseD *hRecoQuenching_W;
+    THnSparseD *hGenQuenching_W;
 
 private:
     Bool_t fIsMC;
+
+    std::vector<float> fMultiplicityBins;
 
     ClassDef(HistoManagerDiJet, 0)
 };
