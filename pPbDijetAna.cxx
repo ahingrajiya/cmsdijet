@@ -47,6 +47,7 @@ int main(int argc, char *argv[])
     TString JECFileDataName{};
     TString path2JEC = "..";
     Double_t ptHatCut[2]{15., 30.};
+    std::vector<float> multiplicityBins{0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
 
     // Command line arguments
     /*
@@ -109,7 +110,7 @@ int main(int argc, char *argv[])
     eventCut->usePClusterCompatibilityFilter();
     eventCut->usePPAprimaryVertexFilter();
     eventCut->usePhfCoincFilter2Th4();
-    eventCut->setMultiplicty(0, 500);
+    eventCut->setMultiplicty(10, 400);
     if (isMC)
     {
         eventCut->setPtHat(ptHatCut[0], ptHatCut[1]);
@@ -119,6 +120,7 @@ int main(int argc, char *argv[])
     JetCut *jetCut = new JetCut{};
     jetCut->setEta(-3.0, 3.0);
     jetCut->setPt(40., 1000.);
+    // jetCut->setVerbose();
 
     // Initiazlize Track Cuts
 
@@ -130,6 +132,7 @@ int main(int argc, char *argv[])
     trackCut->setDZ(3.0);
     trackCut->setHighPurity();
     trackCut->setCharge();
+    // trackCut->setVerbose();
 
     // Initialize Forest Reader
 
@@ -150,7 +153,10 @@ int main(int argc, char *argv[])
     reader->setPath2JetAnalysis(path2JEC.Data());
     reader->setMatchedJets();
     reader->useGenTrackBranch();
-    reader->eventsToProcess(1000);
+    reader->eventsToProcess(2000);
+    reader->setJetCut(jetCut);
+    reader->setTrackCut(trackCut);
+    reader->setEventCut(eventCut);
 
     if (!isMC)
     {
@@ -165,6 +171,15 @@ int main(int argc, char *argv[])
     analysis->setIspPb();
     analysis->setMultiplicityType(0);
     analysis->setMinTrkPt(1.0);
+    analysis->setDeltaPhi(5 * TMath::Pi() / 6);
+    analysis->setUseCMFrame();
+    analysis->setEtaBoost(etaBoost);
+    analysis->setLeadJetPt(100.);
+    analysis->setSubLeadJetPt(50.);
+    analysis->setLeadJetEtaRange(-1., 1.);
+    analysis->setSubLeadJetEtaRange(-1., 1.);
+    analysis->setNEventsInSample(reader->nEventsTotal());
+    // analysis->setVerbose();
 
     if (isPbGoing)
     {
@@ -173,6 +188,7 @@ int main(int argc, char *argv[])
     analysis->setTrackingTable("../aux_files/pPb_8160/trk_eff_table/Hijing_8TeV_dataBS.root");
     // Initialize Histomanager
     HistoManagerDiJet *hm = new HistoManagerDiJet{};
+    hm->setMultiplicityBins(multiplicityBins);
     hm->setIsMC(isMC);
     hm->init(isMC);
 
