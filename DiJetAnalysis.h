@@ -107,6 +107,10 @@ public:
     void setMultiplicityType(const Int_t &multType) { fMultiplicityType = multType; }
     ///@brief Set Tracking efficiency table
     void setTrackingTable(const std::string &trackingTable) { fTrkEffTable = trackingTable; }
+    /// @brief Multiplicity weight table set up
+    /// @param multWeightTable
+    /// @return returns array of multiplicity weight histograms
+    void setUpMultiplicityWeightTable(const std::string &multWeightTable);
 
 private:
     /// @brief Multiplicity calculator
@@ -140,6 +144,11 @@ private:
     /// @param event Event object
     /// @return Returns event level weight which has to be applied to every hisotgram
     Double_t EventWeight(const Bool_t &ispPb, Bool_t &isMC, const Event *event);
+    /// @brief Multiplicity weights
+    /// @param ispPb
+    /// @param multiplicity
+    /// @return Array of weights for multiplicity ranges
+    Double_t *MultiplicityWeight(const Bool_t &ispPb, const Int_t &multiplicity);
     /// @brief Calaulates Delta Phi between two jets
     /// @param phi1 Jet Phi 1
     /// @param phi2 Jet Phi 2
@@ -148,6 +157,28 @@ private:
     /// @brief Process all the events
     /// @param event Event object
     void processEvent(const Event *event);
+    /// @brief Process Reco Jets
+    /// @param event Event object
+    void processRecoJets(const Event *event, const Double_t &event_Weight, Double_t *multWeight, const Double_t &multiplicityBin);
+    /// @brief Check if all dijet requirements are satisfied
+    /// @param leadJetPt Found leading jet pt
+    /// @param leadJetEta Found leading jet eta
+    /// @param subLeadJetPt Found subleading jet pt
+    /// @param subLeadJetEta Found subleading jet eta
+    /// @return Returns true if all dijet requirements are satisfied
+    Bool_t CheckDijet(const Float_t &leadJetPt, const Float_t &leadJetEta, const Float_t &subLeadJetPt, const Float_t &subLeadJetEta);
+    /// @brief Xj calculator
+    /// @param leadJetPt Leading jet pt
+    /// @param subLeadJetPt Subleading jet pt
+    /// @return Xj value Xj = Suleading jet pt / Leading Jet pt
+    Double_t Asymmetry(const Float_t &leadJetPt, const Float_t &subLeadJetPt);
+    /// @brief  Find Multiplicity Bin
+    /// @param multiplicity
+    /// @return Multiplicity Bin. 1 for 60-120, 2 for 120-185, 3 for 185-250, 4 for 250-400
+    Double_t FindMultiplicityBin(const Int_t &multiplicity);
+    /// @brief Move to Center of Mass Frame
+    /// @param jetEta Jet Eta
+    Float_t MoveToCMFrame(const Float_t &jetEta);
     ///@brief Print debug information
     Bool_t fDebug;
     ///@brief Delta Phi selection for dijet
@@ -192,6 +223,10 @@ private:
     TrkEff2018PbPb *fTrkEffPbPb;
     ///@brief Tracking efficiency for pPb
     TrkEfficiency2016pPb *fTrkEffpPb;
+    /// @brief @brief multiplicity weight for HYDJET
+    std::string fMultWeightTable;
+    ///@brief Multiplicity weight histograms
+    TH1 *fMultiplicityWeight[4];
     ///@brief Tracking efficiency table for PbPb
     std::string fTrkEffTable;
     ///@brief Which Multiplicity type to use for event selection.
