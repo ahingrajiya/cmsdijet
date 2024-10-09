@@ -27,7 +27,11 @@ public:
     /// @brief Default constructor
     TrkEfficiency2016pPb(std::string filePath = "");
     /// @brief Destructor
-    virtual ~TrkEfficiency2016pPb();
+    virtual ~TrkEfficiency2016pPb()
+    {
+        std::cout << "This is destructor " << std::endl;
+        fTrkEffFile->Close();
+    };
     /// @brief Get correction factor for tracking efficiency
     Double_t getCorrection(const Float_t &pt, const Float_t &eta);
 
@@ -70,10 +74,6 @@ inline Double_t TrkEfficiency2016pPb::getCorrection(const Float_t &pt, const Flo
         CorrectionFactor = 1;
 
     return 1. / CorrectionFactor;
-}
-inline TrkEfficiency2016pPb::~TrkEfficiency2016pPb()
-{
-    fTrkEffFile->Close();
 }
 
 #endif
