@@ -62,7 +62,7 @@ Bool_t TrackCut::RecoPass(const Track *track)
         std::cout << Form("Track Pt : %5.2f <= %5.2f <= %5.2f \t %s \n", fTrackPt[0], track->TrkPt(), fTrackPt[1], (goodPt) ? "True" : "False");
     }
 
-    Bool_t goodEta = (fTrackEta[0] <= track->TrkEta() && fTrackEta[1] <= track->TrkEta());
+    Bool_t goodEta = (fTrackEta[0] <= track->TrkEta() && track->TrkEta() <= fTrackEta[1]);
     if (fVerbose)
     {
         std::cout << Form("Track Eta : %5.2f <= %5.2f <= %5.2f \t %s \n", fTrackEta[0], track->TrkEta(), fTrackEta[1], (goodEta) ? "True" : "False");
@@ -159,7 +159,7 @@ Bool_t TrackCut::GenPass(const GenTrack *track)
         std::cout << Form("Track Pt : %5.2f <= %5.2f <= %5.2f \t %s \n", fTrackPt[0], track->TrkPt(), fTrackPt[1], (goodPt) ? "True" : "False");
     }
 
-    Bool_t goodEta = (fTrackEta[0] <= track->TrkEta() && fTrackEta[1] <= track->TrkEta());
+    Bool_t goodEta = (fTrackEta[0] <= track->TrkEta() && track->TrkEta() <= fTrackEta[1]);
     if (fVerbose)
     {
         std::cout << Form("Track Eta : %5.2f <= %5.2f <= %5.2f \t %s \n", fTrackEta[0], track->TrkEta(), fTrackEta[1], (goodEta) ? "True" : "False");
