@@ -153,7 +153,7 @@ int main(int argc, char *argv[])
     reader->setPath2JetAnalysis(path2JEC.Data());
     reader->setMatchedJets();
     reader->useGenTrackBranch();
-    reader->eventsToProcess(2000);
+    reader->eventsToProcess(-1);
     reader->setJetCut(jetCut);
     reader->setTrackCut(trackCut);
     reader->setEventCut(eventCut);

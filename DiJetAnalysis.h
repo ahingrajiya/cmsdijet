@@ -70,7 +70,10 @@ public:
     /// @brief Set Center of mass reference frame for pPb
     void setUseCMFrame() { fUseCMFrame = kTRUE; }
     ///@brief Set Eta Boost
-    void setEtaBoost(const Double_t &boost) { fEtaBoost = boost; }
+    void setEtaBoost(const Double_t &boost)
+    {
+        fEtaBoost = boost;
+    }
     ///@brief Set if to use centrality weight
     void setUseCentralityWeight() { fUseCentralityWeight = kTRUE; }
     ///@brief Set if to use multiplicity weight

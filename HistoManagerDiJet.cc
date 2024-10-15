@@ -109,13 +109,13 @@ void HistoManagerDiJet::init(const Bool_t &isMC)
     int MultBins[5] = {600, 600, 600, 600, nMultiplicityBins};
     Double_t MultMin[5] = {0.0, 0.0, 0.0, 0.0, fMultiplicityBins[0]};
     Double_t MultMax[5] = {600.0, 600.0, 600.0, 600.0, fMultiplicityBins[fMultiplicityBins.size() - 1]};
-    hMultiplicities = new THnSparseD("hMultiplicities", "Multiplicity Distribution", 6, MultBins, MultMin, MultMax);
+    hMultiplicities = new THnSparseD("hMultiplicities", "Multiplicity Distribution", 5, MultBins, MultMin, MultMax);
     // hMultiplicities->GetAxis(4)->Set(fMultiplicityBins.size() - 1, fMultiplicityBins.data());
     hMultiplicities->Sumw2();
-    hMultiplicities_W = new THnSparseD("hMultiplicities_W", "Multiplicity Distribution with Weights", 6, MultBins, MultMin, MultMax);
+    hMultiplicities_W = new THnSparseD("hMultiplicities_W", "Multiplicity Distribution with Weights", 5, MultBins, MultMin, MultMax);
     // hMultiplicities_W->GetAxis(4)->Set(fMultiplicityBins.size() - 1, fMultiplicityBins.data());
     hMultiplicities_W->Sumw2();
-    hMultiplicities_DiJet_W = new THnSparseD("hMultiplicities_DiJet_W", "Multiplicity Distribution with Weights", 6, MultBins, MultMin, MultMax);
+    hMultiplicities_DiJet_W = new THnSparseD("hMultiplicities_DiJet_W", "Multiplicity Distribution with Weights", 5, MultBins, MultMin, MultMax);
     // hMultiplicities_DiJet_W->GetAxis(4)->Set(fMultiplicityBins.size() - 1, fMultiplicityBins.data());
 
     int JetBins[4] = {100, 40, 32, nMultiplicityBins};
