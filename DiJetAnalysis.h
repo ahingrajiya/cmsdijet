@@ -24,6 +24,7 @@
 #include "pPb_TrackingEfficiency/TrkEfficiency2016pPb.h"
 #include "ForestAODReader.h"
 #include "ForestminiAODReader.h"
+#include "TVector2.h"
 
 class DiJetAnalysis : public BaseAnalysis
 {
@@ -72,7 +73,14 @@ public:
     ///@brief Set Eta Boost
     void setEtaBoost(const Double_t &boost)
     {
-        fEtaBoost = boost;
+        if (fIsPbGoing)
+        {
+            fEtaBoost = -boost;
+        }
+        else if (!fIsPbGoing)
+        {
+            fEtaBoost = boost;
+        }
     }
     ///@brief Set if to use centrality weight
     void setUseCentralityWeight() { fUseCentralityWeight = kTRUE; }
@@ -97,7 +105,7 @@ public:
     ///@brief Set if verbose mode is used or not
     void setVerbose() { fVerbose = kTRUE; }
     ///@brief Set Number of events to process
-    void setNEventsInSample(const Int_t &nevents) { fNEventsInSample = nevents; }
+    void setNEventsInSample(const Long64_t &nevents) { fNEventsInSample = nevents; }
     ///@brief Set Track Pt for specific multiplicty calculation
     void setMinTrkPt(const Double_t &mintrkpt) { fMinTrkPt = mintrkpt; }
     ///@brief Set Track Eta Range for specicif multiplicity calculation
@@ -112,8 +120,8 @@ public:
     void setTrackingTable(const std::string &trackingTable) { fTrkEffTable = trackingTable; }
     /// @brief Multiplicity weight table set up
     /// @param multWeightTable
-    /// @return returns array of multiplicity weight histograms
-    void setUpMultiplicityWeightTable(const std::string &multWeightTable);
+    /// @brief Set Multiplicity Weight Table
+    void setMultiplicityWeightTable(const std::string &multWeightTable) { fMultWeightTable = multWeightTable; }
 
 private:
     /// @brief Multiplicity calculator
@@ -182,6 +190,8 @@ private:
     /// @brief Move to Center of Mass Frame
     /// @param jetEta Jet Eta
     Float_t MoveToCMFrame(const Float_t &jetEta);
+    /// @return returns array of multiplicity weight histograms
+    void SetUpMultiplicityWeight(const std::string &multWeightTable);
     ///@brief Print debug information
     Bool_t fDebug;
     ///@brief Delta Phi selection for dijet
@@ -232,6 +242,9 @@ private:
     TH1 *fMultiplicityWeight[4];
     ///@brief Tracking efficiency table for PbPb
     std::string fTrkEffTable;
+    ///@brief Multiplicity Weight file
+    TFile *fMultWeight;
+
     ///@brief Which Multiplicity type to use for event selection.
     /// 0 -> Reco Multiplicity
     /// 1 -> Gen Multiplicity (Only Applicable for MC)

@@ -176,7 +176,16 @@ void ForestminiAODReader::clearVariables()
         } // if (i<100
 
     } // for (Short_t i{0}; i<9999; i++)
-
+    std::cout << fIsMc << std::endl;
+    if (fIsMc)
+    {
+        fGenTrackPt->clear();
+        fGenTrackEta->clear();
+        fGenTrackPhi->clear();
+        fGenTrackCharge->clear();
+        fGenTrackPid->clear();
+        fGenTrackSube->clear();
+    }
     // Track variables
     fTrackPt->clear();
     fTrackEta->clear();
@@ -190,20 +199,11 @@ void ForestminiAODReader::clearVariables()
     fTrackNDOF->clear();
     fTrackPartFlowEcal->clear();
     fTrackPartFlowHcal->clear();
-    fTrackAlgo->clear();
     fTrackCharge->clear();
     fTrackNHits->clear();
     fTrackNLayers->clear();
     fTrackHighPurity->clear();
-    if (fIsMc)
-    {
-        fGenTrackPt->clear();
-        fGenTrackEta->clear();
-        fGenTrackPhi->clear();
-        fGenTrackCharge->clear();
-        fGenTrackPid->clear();
-        fGenTrackSube->clear();
-    }
+
     if (fIsMc)
     {
         fRecoJet2GenJetId.clear();
@@ -227,15 +227,35 @@ Int_t ForestminiAODReader::init()
 //________________
 void ForestminiAODReader::setupJEC()
 {
+    // If no path to the aux_file
+    if (fJECPath.Length() <= 0)
+    {
+        // Set default values
+        std::cout << "[WARNING] Default path to JEC files will be used" << std::endl;
+        setPath2JetAnalysis();
+    }
+
     if (fJECFiles.empty())
     {
-        if (fJECInputFileName.Length() <= 0)
-        {
-            setJECFileName();
-        }
-        fJECFiles.push_back(Form("/Users/gnigmat/work/cms/soft/jetAnalysis/aux_files/%s_%i/JEC/%s",
-                                 fCollidingSystem.Data(), fCollidingEnergyGeV, fJECInputFileName.Data()));
-        std::cout << Form("Add JEC file: %s\n", fJECFiles.back().c_str());
+        std::cout << "[WARNING] Default JEC file with parameters will be used" << std::endl;
+        addJECFile();
+    }
+
+    std::vector<std::string> tmp;
+    for (UInt_t i{0}; i < fJECFiles.size(); i++)
+    {
+        tmp.push_back(Form("%s/aux_files/%s_%i/JEC/%s",
+                           fJECPath.Data(), fCollidingSystem.Data(),
+                           fCollidingEnergyGeV, fJECFiles.at(i).c_str()));
+    }
+
+    fJECFiles.clear();
+    fJECFiles = tmp;
+
+    std::cout << "JEC files added: " << std::endl;
+    for (UInt_t i{0}; i < fJECFiles.size(); i++)
+    {
+        std::cout << Form("File %i : ", i + 1) << fJECFiles.at(i) << std::endl;
     }
 
     fJEC = new JetCorrector(fJECFiles);
@@ -793,8 +813,8 @@ void ForestminiAODReader::setupBranches()
             fTrkTree->SetBranchStatus("pfHcal", 1);
             fTrkTree->SetBranchStatus("trkAlgo", 1);
             fTrkTree->SetBranchAddress("trkNormChi2", &fTrackChi2);
-            fTrkTree->SetBranchAddress("trkNHit", &fTrackNHits);
-            fTrkTree->SetBranchAddress("trkNlayers", &fTrackNLayers);
+            fTrkTree->SetBranchAddress("trkNHits", &fTrackNHits);
+            fTrkTree->SetBranchAddress("trkNLayers", &fTrackNLayers);
             fTrkTree->SetBranchAddress("pfEcal", &fTrackPartFlowEcal);
             fTrkTree->SetBranchAddress("pfHcal", &fTrackPartFlowHcal);
         }
@@ -936,10 +956,10 @@ Event *ForestminiAODReader::returnEvent()
 
     Int_t nBadJets{0};
 
-    if (fFixJetArrays)
-    {
-        fixIndices();
-    }
+    // if (fFixJetArrays)
+    // {
+    //     fixIndices();
+    // }
 
     fEvent = new Event();
 
@@ -953,7 +973,6 @@ Event *ForestminiAODReader::returnEvent()
         fEvent->setPtHat(fPtHat);
         fEvent->setPtHatWeight(fPtHatWeight);
     }
-
     // Fill HLT branch
     if (fUseHltBranch)
     {
@@ -1080,7 +1099,6 @@ Event *ForestminiAODReader::returnEvent()
                 fJEC->SetJetEta(fRecoJetEta[iJet]);
                 fJEC->SetJetPhi(fRecoJetPhi[iJet]);
                 double pTcorr = fJEC->GetCorrectedPT();
-                // std::cout << "pTCorr: " << pTcorr << std::endl;
                 jet->setPtJECCorr(fJEC->GetCorrectedPT());
                 // std::cout << "pTCorr: " << jet->recoJetPtJECCorr() << std::endl;
             }
@@ -1140,8 +1158,10 @@ Event *ForestminiAODReader::returnEvent()
 
     if (fUseTrackBranch)
     {
+
         for (Int_t iTrack{0}; iTrack < fTrackPt->size(); iTrack++)
         {
+
             Track *track = new Track{};
             track->setTrackPt(fTrackPt->at(iTrack));
             track->setTrackEta(fTrackEta->at(iTrack));
@@ -1167,6 +1187,7 @@ Event *ForestminiAODReader::returnEvent()
                 continue;
             }
             iRecoMult++;
+
             fEvent->trackCollection()->push_back(track);
         }
     }

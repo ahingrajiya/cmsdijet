@@ -110,10 +110,13 @@ target_link_libraries(${libname} ${ROOT_LIBRARIES})
 # Create main executable (to call from the command line)
 #add_executable(jetAna jetAna.cxx)
 add_executable(pPbDijetAna pPbDijetAna.cxx)
+add_executable(PbPbDijetAna PbPbDijetAna.cxx)
+
 
 # Link created libraries
 #target_link_libraries(jetAna ${libname})
 target_link_libraries(pPbDijetAna ${libname})
+target_link_libraries(PbPbDijetAna ${libname})
 
 
 # Include directories 

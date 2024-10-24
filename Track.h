@@ -42,7 +42,7 @@ public:
   ///@brief Set Electromagnetic Calorimeter Energy
   void setTrackpfEcal(const Float_t &trkpfEcal) { fTrkpfEcal = {trkpfEcal}; }
   ///@brief Set Number of Hits
-  void setTrackNHits(const UChar_t &trkNHits) { fTrkNHits = {fTrkNHits}; }
+  void setTrackNHits(const UChar_t &trkNHits) { fTrkNHits = {trkNHits}; }
   ///@brief Set Normalized Chi2
   void setTrackChi2(const Float_t &trkNormChi2) { fTrkNormChi2 = {trkNormChi2}; }
   ///@brief Set Number of Layers

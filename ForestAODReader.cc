@@ -132,6 +132,7 @@ void ForestAODReader::clearVariables()
     fHLT_HIPuAK4CaloJet100Eta5p1_v1 = {0};
 
     fHBHENoiseFilterResultRun2Loose = {0};
+    fpVertexFilterCutdz1p0 = {0};
     fHBHENoiseFilterResultRun2Tight = {0};
     fHBHEIsoNoiseFilterResult = {0};
     fCollisionEventSelectionAODv2 = {0};
@@ -151,7 +152,7 @@ void ForestAODReader::clearVariables()
     {
 
         // Jet variables
-        if (i < 100)
+        if (i < 1000)
         {
             fRawJetPt[i] = {0.f};
             fRecoJetPt[i] = {0.f};
@@ -176,7 +177,7 @@ void ForestAODReader::clearVariables()
                 fGenJetWTAPhi[i] = {0.f};
             }
 
-        } // if (i<100
+        } // if (i<100)
 
         // Track variables
         fTrackPt[i] = {0.f};
@@ -686,7 +687,7 @@ void ForestAODReader::setupBranches()
         fSkimTree->SetBranchStatus("HBHENoiseFilterResultRun2Tight", 1);
         fSkimTree->SetBranchStatus("HBHEIsoNoiseFilterResult", 1);
         fSkimTree->SetBranchStatus("collisionEventSelectionAODv2", 1);
-        fSkimTree->SetBranchStatus("phfCoincFilter2Th4", 1);
+        fSkimTree->SetBranchStatus("phfCoincFilter", 1);
         fSkimTree->SetBranchStatus("pPAprimaryVertexFilter", 1);
         fSkimTree->SetBranchStatus("pBeamScrapingFilter", 1);
         fSkimTree->SetBranchStatus("pprimaryVertexFilter", 1);
@@ -696,12 +697,13 @@ void ForestAODReader::setupBranches()
         fSkimTree->SetBranchStatus("pVertexFilterCutE", 1);
         fSkimTree->SetBranchStatus("pVertexFilterCutEandG", 1);
         fSkimTree->SetBranchStatus("pclusterCompatibilityFilter", 1);
+        fSkimTree->SetBranchStatus("pVertexFilterCutdz1p0", 1);
 
         fSkimTree->SetBranchAddress("HBHENoiseFilterResultRun2Loose", &fHBHENoiseFilterResultRun2Loose);
         fSkimTree->SetBranchAddress("HBHENoiseFilterResultRun2Tight", &fHBHENoiseFilterResultRun2Tight);
         fSkimTree->SetBranchAddress("HBHEIsoNoiseFilterResult", &fHBHEIsoNoiseFilterResult);
         fSkimTree->SetBranchAddress("collisionEventSelectionAODv2", &fCollisionEventSelectionAODv2);
-        fSkimTree->SetBranchAddress("phfCoincFilter2Th4", &fPhfCoincFilter2Th4);
+        fSkimTree->SetBranchAddress("phfCoincFilter", &fPhfCoincFilter2Th4);
         fSkimTree->SetBranchAddress("pPAprimaryVertexFilter", &fPPAprimaryVertexFilter);
         fSkimTree->SetBranchAddress("pBeamScrapingFilter", &fPBeamScrapingFilter);
         fSkimTree->SetBranchAddress("pprimaryVertexFilter", &fPprimaryVertexFilter);
@@ -711,6 +713,8 @@ void ForestAODReader::setupBranches()
         fSkimTree->SetBranchAddress("pVertexFilterCutE", &fPVertexFilterCutE);
         fSkimTree->SetBranchAddress("pVertexFilterCutEandG", &fPVertexFilterCutEandG);
         fSkimTree->SetBranchAddress("pclusterCompatibilityFilter", &fPClusterCompatibilityFilter);
+        fSkimTree->SetBranchAddress("pVertexFilterCutdz1p0", &fpVertexFilterCutdz1p0);
+
     } // if ( fUseSkimmingBranch )
 
     // Jet quantities
@@ -874,7 +878,7 @@ void ForestAODReader::readEvent()
         fGenTrkTree->GetEntry(fEventsProcessed);
     fEventsProcessed++;
 
-    // std::cout << "Events processed: " << fEventsProcessed << std::endl;
+    // std::cout << "Events processed:     " << fEventsProcessed - 1 << std::endl;
 }
 
 //________________
@@ -1030,6 +1034,7 @@ Event *ForestAODReader::returnEvent()
         fEvent->trigAndSkim()->setPVertexFilterCutE(fPVertexFilterCutE);
         fEvent->trigAndSkim()->setPVertexFilterCutEandG(fPVertexFilterCutEandG);
         fEvent->trigAndSkim()->setPClusterCompatibilityFilter(fPClusterCompatibilityFilter);
+        fEvent->trigAndSkim()->setpVertexFilterCutdz1p0(fpVertexFilterCutdz1p0);
     }
 
     // fEvent->print();
@@ -1079,7 +1084,7 @@ Event *ForestAODReader::returnEvent()
             {
                 // Count number  of reconstructed jets
                 // with pT > pThat of the event (wrong )
-                if (fRecoJetPt[iJet] < 0)
+                if (fRefJetPt[iJet] < 0)
                 {
                     delete jet;
                     continue;
@@ -1087,6 +1092,18 @@ Event *ForestAODReader::returnEvent()
                 // Add index of the matched GenJet
                 // jet->setGenJetId(fRecoJet2GenJetId.at(iJet));
             } // if ( fIsMc )
+
+            if (fRecoJetTrackMax[iJet] / fRawJetPt[iJet] < 0.01)
+            {
+                delete jet;
+                continue;
+            }
+            if (fRecoJetTrackMax[iJet] / fRawJetPt[iJet] > 0.98)
+            {
+                delete jet;
+                continue;
+            }
+
             // Reco
             jet->setPt(fRawJetPt[iJet]);
             jet->setEta(fRecoJetEta[iJet]);
@@ -1116,7 +1133,10 @@ Event *ForestAODReader::returnEvent()
                 jet->setJetPartonFlavorForB(fRefJetPartonFlavorForB[iJet]);
             }
 
-            // jet->print();
+            // if (fEventsProcessed - 1 == 964)
+            // {
+            //     jet->print();
+            // }
 
             // Check fronе-loaded cut
             if (fJetCut && !fJetCut->pass(jet))
@@ -1194,11 +1214,13 @@ Event *ForestAODReader::returnEvent()
     }
 
     fEvent->setMultiplicity(iRecoMult);
+
     if (fEventCut && !fEventCut->pass(fEvent))
     {
         delete fEvent;
         fEvent = nullptr;
     }
+    // std::cout << fEventsProcessed << iRecoMult << fPtHat << "\n";
 
     return fEvent;
 }

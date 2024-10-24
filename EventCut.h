@@ -95,9 +95,9 @@ public:
     fMultiplicity[1] = hi;
   }
   /// @brief Print information each event
-  void setVerbose(const Bool_t &v)
+  void setVerbose()
   {
-    fVerbose = v;
+    fVerbose = kTRUE;
   }
   // Skim selection criteria
   void usePPrimaryVertexFilter() { fPPrimaryVertexFilter = kTRUE; }
@@ -106,6 +106,7 @@ public:
   void usePhfCoincFilter2Th4() { fPhfCoincFilter2Th4 = kTRUE; }
   void usePPAprimaryVertexFilter() { fPPAprimaryVertexFilter = kTRUE; }
   void usePBeamScrapingFilter() { fPBeamScrapingFilter = kTRUE; }
+  void usePvertexFilterCutdz1p0() { fpVertexFilterCutdz1p0 = kTRUE; }
   void usePClusterCompatibilityFilter() { fPClusterCompatibilityFilter = kTRUE; }
   /// @brief Report information about
   void report();
@@ -150,6 +151,8 @@ private:
   Bool_t fPPAprimaryVertexFilter;
   Bool_t fPBeamScrapingFilter;
   Bool_t fPClusterCompatibilityFilter;
+
+  Bool_t fpVertexFilterCutdz1p0;
 
   /// @brief Number of events passed cut
   Long64_t fEventsPassed;

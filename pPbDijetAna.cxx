@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
     Bool_t useMultWeight{kFALSE};
     Bool_t ispPb{kTRUE};
     Bool_t useCMFrame{kFALSE};
-    Double_t etaBoost{0.465};
+    Double_t etaBoost{0.4654094531};
     TString jetBranchName{"ak4PFJetAnalyzer"};
     TString oFileName{};
     TString JECFileName{};
@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
     eventCut->setVz(-15., 15.);
     eventCut->useHBHENoiseFilterResultRun2Loose();
     eventCut->usePBeamScrapingFilter();
-    eventCut->usePClusterCompatibilityFilter();
+    eventCut->usePvertexFilterCutdz1p0();
     eventCut->usePPAprimaryVertexFilter();
     eventCut->usePhfCoincFilter2Th4();
     eventCut->setMultiplicty(10, 400);
@@ -115,6 +115,7 @@ int main(int argc, char *argv[])
     {
         eventCut->setPtHat(ptHatCut[0], ptHatCut[1]);
     }
+    // eventCut->setVerbose();
 
     // Initialize jet cuts
     JetCut *jetCut = new JetCut{};
@@ -157,11 +158,11 @@ int main(int argc, char *argv[])
     reader->setJetCut(jetCut);
     reader->setTrackCut(trackCut);
     reader->setEventCut(eventCut);
-
     if (!isMC)
     {
         reader->addJECFile(JECFileDataName.Data());
     }
+
     manager->setEventReader(reader);
 
     // Dijet Analysis
@@ -178,7 +179,6 @@ int main(int argc, char *argv[])
     analysis->setSubLeadJetPt(50.);
     analysis->setLeadJetEtaRange(-1., 1.);
     analysis->setSubLeadJetEtaRange(-1., 1.);
-    analysis->setNEventsInSample(reader->nEventsTotal());
     // analysis->setVerbose();
 
     if (isPbGoing)
@@ -195,7 +195,6 @@ int main(int argc, char *argv[])
     analysis->addHistoManager(hm);
     manager->addAnalysis(analysis);
     manager->init();
-
     if (isMC)
     {
         analysis->setNEventsInSample(reader->nEventsTotal());

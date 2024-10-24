@@ -33,6 +33,7 @@ ClassImp(EventCut)
                            fPPAprimaryVertexFilter{kFALSE},
                            fPBeamScrapingFilter{kFALSE},
                            fPClusterCompatibilityFilter{kFALSE},
+                           fpVertexFilterCutdz1p0{kFALSE},
                            fEventsPassed{0}, fEventsFailed{0},
                            fMultiplicity{0, 5000}
 {
@@ -77,7 +78,7 @@ Bool_t EventCut::pass(const Event *ev)
     const Bool_t goodVy = kTRUE;
 
     const Bool_t goodVz = (fVz[0] <= ev->vz()) &&
-                          (ev->vz() < fVz[1]);
+                          (ev->vz() <= fVz[1]);
     if (fVerbose)
     {
         std::cout << Form("vz        : %5.2f <= %5.2f < %5.2f \t %s \n",
@@ -100,8 +101,8 @@ Bool_t EventCut::pass(const Event *ev)
                           fCentVal[0], ev->centrality(), fCentVal[1], (goodCent) ? "true" : "false");
     }
 
-    const Bool_t goodPtHat = (fPtHat[0] <= ev->ptHat()) &&
-                             (ev->ptHat() < fPtHat[1]);
+    const Bool_t goodPtHat = (fPtHat[0] < ev->ptHat()) &&
+                             (ev->ptHat() <= fPtHat[1]);
 
     if (fVerbose)
     {
@@ -152,6 +153,10 @@ Bool_t EventCut::pass(const Event *ev)
     {
         if (ev->trigAndSkim()->pPAprimaryVertexFilter() == 0)
             goodFilters = kFALSE;
+        if (fVerbose)
+        {
+            std::cout << Form("PAPrimaryVertex: %i\n", ev->trigAndSkim()->pPAprimaryVertexFilter());
+        }
     }
     if (fPBeamScrapingFilter)
     {
@@ -163,13 +168,18 @@ Bool_t EventCut::pass(const Event *ev)
         if (ev->trigAndSkim()->pClusterCompatibilityFilter() == 0)
             goodFilters = kFALSE;
     }
+    if (fpVertexFilterCutdz1p0)
+    {
+        if (ev->trigAndSkim()->pVertexFilterCutdz1p0() == 0)
+            goodFilters = kFALSE;
+    }
     if (fVerbose)
     {
         std::cout << Form("Event filters passed: %s\n", (goodFilters) ? "true" : "false");
     }
 
     Bool_t passEvent = goodVx && goodVy && goodVz && goodHiBin &&
-                       goodCent && goodPtHat && goodPtHatWeight && goodMultiplicity;
+                       goodCent && goodPtHat && goodPtHatWeight && goodMultiplicity && goodFilters;
     (passEvent) ? fEventsPassed++ : fEventsFailed++;
 
     return passEvent;

@@ -57,6 +57,10 @@ public:
     TH1D *hHiBin_W;
     TH1D *hVz;
     TH1D *hVz_W;
+    TH1D *hDeltaPhi;
+    TH1D *hXj;
+    TH1I *hNDijetEvent;
+    TH1D *hNEventsInMult;
 
     THnSparseD *hMultiplicities;
     THnSparseD *hMultiplicities_W;

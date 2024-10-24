@@ -101,11 +101,12 @@ public:
     {
         fYearOfDataTaking = {year};
     }
-    /// @brief Set input
-    void setJECFileName(const Char_t *name = "Autumn18_HI_V8_MC_L2Relative_AK4PF.txt")
-    {
-        fJECInputFileName = name;
-    }
+
+    ///@brief Set Path to jet analysis directory
+    void setPath2JetAnalysis(const Char_t *name = "../") { fJECPath = name; }
+    ///@brief Add JEC files to the list of JEC files
+    void addJECFile(const Char_t *name = "Autumn18_HI_V8_MC_L2Relative_AK4PF") { fJECFiles.push_back(name); }
+
     /// @brief Apply jet pT-smearing
     void setJetPtSmearing(const Bool_t &smear = kFALSE)
     {
@@ -123,7 +124,7 @@ public:
     }
 
     /// @brief Set Track cut
-    void setJetCut(TrackCut *cut)
+    void setTrackCut(TrackCut *cut)
     {
         fTrackCut = {cut};
     }
@@ -430,63 +431,61 @@ private:
     /// @brief Number of tracks
     Int_t fNTracks;
     /// @brief Track transverse momentum
-    std::vector<Float_t> *fTrackPt;
+    std::vector<Float_t> *fTrackPt = new std::vector<Float_t>();
     /// @brief Track pseudorapidity
-    std::vector<Float_t> *fTrackEta;
+    std::vector<Float_t> *fTrackEta = new std::vector<Float_t>();
     /// @brief Track azimuthal angle
-    std::vector<Float_t> *fTrackPhi;
+    std::vector<Float_t> *fTrackPhi = new std::vector<Float_t>();
     /// @brief Track pT error (uncertainty)
-    std::vector<Float_t> *fTrackPtErr;
+    std::vector<Float_t> *fTrackPtErr = new std::vector<Float_t>();
     /// @brief Track distance of closest approach in transverse plane (XY)
-    std::vector<Float_t> *fTrackDcaXY;
+    std::vector<Float_t> *fTrackDcaXY = new std::vector<Float_t>();
     /// @brief Track distance of closest approach in beam direction (z)
-    std::vector<Float_t> *fTrackDcaZ;
+    std::vector<Float_t> *fTrackDcaZ = new std::vector<Float_t>();
     /// @brief Track distance of closest approach error in transverse plane (XY)
-    std::vector<Float_t> *fTrackDcaXYErr;
+    std::vector<Float_t> *fTrackDcaXYErr = new std::vector<Float_t>();
     /// @brief Track distance of closest approach error in beam direction (z)
-    std::vector<Float_t> *fTrackDcaZErr;
+    std::vector<Float_t> *fTrackDcaZErr = new std::vector<Float_t>();
     /// @brief Track fitting (reconstruction) chi2
-    std::vector<Float_t> *fTrackChi2;
+    std::vector<Float_t> *fTrackChi2 = new std::vector<Float_t>();
     /// @brief Track number of degrees of freedom in the fitting
-    std::vector<UChar_t> *fTrackNDOF;
+    std::vector<UChar_t> *fTrackNDOF = new std::vector<UChar_t>();
     /// @brief Particle flow energy deposited in ECAL from the given track
-    std::vector<Float_t> *fTrackPartFlowEcal;
+    std::vector<Float_t> *fTrackPartFlowEcal = new std::vector<Float_t>();
     /// @brief Particle flow energy deposited in HCAL from the given track
-    std::vector<Float_t> *fTrackPartFlowHcal;
-    /// @brief Track algorithm/step
-    std::vector<UChar_t> *fTrackAlgo;
+    std::vector<Float_t> *fTrackPartFlowHcal = new std::vector<Float_t>();
     /// @brief Track charge
-    std::vector<UChar_t> *fTrackCharge;
+    std::vector<Char_t> *fTrackCharge = new std::vector<Char_t>();
     /// @brief Number of hits in the tracker
-    std::vector<UChar_t> *fTrackNHits;
+    std::vector<Char_t> *fTrackNHits = new std::vector<Char_t>();
     /// @brief Number of layers with measurement in the tracker
-    std::vector<UChar_t> *fTrackNLayers;
+    std::vector<Char_t> *fTrackNLayers = new std::vector<Char_t>();
     /// @brief Tracker steps MVA selection
-    std::vector<bool> *fTrackHighPurity;
+    std::vector<bool> *fTrackHighPurity = new std::vector<bool>();
 
     //
     // Monte Carlo tracks
     //
 
     /// @brief Generated particle transverse momentum
-    std::vector<Float_t> *fGenTrackPt;
+    std::vector<Float_t> *fGenTrackPt = new std::vector<Float_t>();
     /// @brief Generated particle pseudorapidity
-    std::vector<Float_t> *fGenTrackEta;
+    std::vector<Float_t> *fGenTrackEta = new std::vector<Float_t>();
     /// @brief Generated particle azimuthal angle
-    std::vector<Float_t> *fGenTrackPhi;
+    std::vector<Float_t> *fGenTrackPhi = new std::vector<Float_t>();
     /// @brief Generated particle charge
-    std::vector<Int_t> *fGenTrackCharge;
+    std::vector<Int_t> *fGenTrackCharge = new std::vector<Int_t>();
     /// @brief Generated particle PID
-    std::vector<Int_t> *fGenTrackPid;
+    std::vector<Int_t> *fGenTrackPid = new std::vector<Int_t>();
     /// @brief Generated particle sube (?)
-    std::vector<Int_t> *fGenTrackSube;
+    std::vector<Int_t> *fGenTrackSube = new std::vector<Int_t>();
 
     /// @brief Jet Energy Corrector instance
     JetCorrector *fJEC;
+    ///@brief Path to Jetanalysis directory
+    TString fJECPath;
     /// @brief List of files with JEC
     std::vector<std::string> fJECFiles;
-    /// @brief
-    TString fJECInputFileName;
     /// @brief Jet Energy Uncertainty instance
     JetUncertainty *fJEU;
     /// @brief List of files with JEU

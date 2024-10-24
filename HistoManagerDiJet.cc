@@ -24,7 +24,8 @@ ClassImp(HistoManagerDiJet)
                                              hRecoMultiplicity{nullptr}, hCorrectedMultiplicity{nullptr}, hGenMultiplicity{nullptr}, hSubEventMultiplicity{nullptr},
                                              hSelectedMultiplicity{nullptr}, hMultiplicities{nullptr}, hRecoJets{nullptr}, hMultiplicities_W{nullptr}, hRecoJets_W{nullptr},
                                              hGenJets{nullptr}, hGenJets_W{nullptr}, hLeadingJet{nullptr}, hSubLeadingJet{nullptr}, hPtHat{nullptr}, hPtHat_W{nullptr},
-                                             hHiBin{nullptr}, hHiBin_W{nullptr}, hVz{nullptr}, hVz_W{nullptr}, hMultiplicities_DiJet_W{nullptr}, hRecoQuenching_W{nullptr}, hGenQuenching_W{nullptr}
+                                             hHiBin{nullptr}, hHiBin_W{nullptr}, hVz{nullptr}, hVz_W{nullptr}, hMultiplicities_DiJet_W{nullptr}, hRecoQuenching_W{nullptr}, hGenQuenching_W{nullptr},
+                                             hDeltaPhi{nullptr}, hXj{nullptr}, hNDijetEvent{nullptr}, hNEventsInMult{nullptr}
 
 {
     /* Empty*/
@@ -54,6 +55,14 @@ HistoManagerDiJet::~HistoManagerDiJet()
         delete hVz;
     if (hVz_W)
         delete hVz_W;
+    if (hDeltaPhi)
+        delete hDeltaPhi;
+    if (hXj)
+        delete hXj;
+    if (hNDijetEvent)
+        delete hNDijetEvent;
+    if (hNEventsInMult)
+        delete hNEventsInMult;
 
     if (hMultiplicities)
         delete hMultiplicities;
@@ -105,6 +114,11 @@ void HistoManagerDiJet::init(const Bool_t &isMC)
     hVz->Sumw2();
     hVz_W = new TH1D("hVz_W", "Vz Distribution Weighted", 200, -20.0, 20.0);
     hVz_W->Sumw2();
+    hNEventsInMult = new TH1D("hNEventsInMult", "Number of Events in Multiplicity Bins", 6, 0., 6.);
+    hNEventsInMult->Sumw2();
+
+    hNDijetEvent = new TH1I("hNDijetEvent", "Number of Dijet Events", 2, 0, 2);
+    hNDijetEvent->Sumw2();
 
     int MultBins[5] = {600, 600, 600, 600, nMultiplicityBins};
     Double_t MultMin[5] = {0.0, 0.0, 0.0, 0.0, fMultiplicityBins[0]};
@@ -158,6 +172,9 @@ void HistoManagerDiJet::init(const Bool_t &isMC)
     hGenQuenching_W->GetAxis(0)->Set(QuenchBins[0], XjBins);
     hGenQuenching_W->GetAxis(1)->Set(QuenchBins[1], DphiBins);
     hGenQuenching_W->Sumw2();
+
+    hDeltaPhi = new TH1D("hDeltaPhi", "Delta Phi Distribution", nDphiBins, DphiBins);
+    hXj = new TH1D("hXj", "Xj Distribution", nXjAjBins, XjBins);
 }
 
 void HistoManagerDiJet ::writeOutput(const Bool_t &isMC)
@@ -177,6 +194,7 @@ void HistoManagerDiJet ::writeOutput(const Bool_t &isMC)
     hSelectedMultiplicity->Write();
     hMultiplicities->Write();
     hMultiplicities_W->Write();
+    hNEventsInMult->Write();
 
     gDirectory->cd("..");
     gDirectory->mkdir("Jets");
@@ -193,4 +211,7 @@ void HistoManagerDiJet ::writeOutput(const Bool_t &isMC)
     gDirectory->cd("Quenching");
     hRecoQuenching_W->Write();
     hGenQuenching_W->Write();
+    hDeltaPhi->Write();
+    hXj->Write();
+    hNDijetEvent->Write();
 }
