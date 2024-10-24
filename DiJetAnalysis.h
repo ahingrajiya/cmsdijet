@@ -171,6 +171,9 @@ private:
     /// @brief Process Reco Jets
     /// @param event Event object
     void processRecoJets(const Event *event, const Double_t &event_Weight, Double_t *multWeight, const Double_t &multiplicityBin);
+    /// @brief Process Gen Jets
+    /// @param event Event object
+    void processGenJets(const Event *event, const Double_t &event_Weight, Double_t *multWeight, const Double_t &multiplicityBin);
     /// @brief Check if all dijet requirements are satisfied
     /// @param leadJetPt Found leading jet pt
     /// @param leadJetEta Found leading jet eta
@@ -226,6 +229,8 @@ private:
     Int_t fNEventsInSample;
     ///@brief If Dijet is found
     Bool_t fIsDiJetFound;
+    ///@brief If Gen Dijet is found
+    Bool_t fIsGenDiJetFound;
     ///@brief Histogram Manager
     HistoManagerDiJet *fHM;
     ///@brief Minimum Track Pt Cut for specific multiplicity calculation

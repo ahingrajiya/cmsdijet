@@ -46,20 +46,23 @@ public:
     ///@brief Set Multiplicity bins
     void setMultiplicityBins(const std::vector<float> &bins) { fMultiplicityBins = bins; }
 
-    TH1D *hRecoMultiplicity;
-    TH1D *hCorrectedMultiplicity;
-    TH1D *hGenMultiplicity;
-    TH1D *hSubEventMultiplicity;
-    TH1D *hSelectedMultiplicity;
+    TH1D *hRecoMultiplicity_W;
+    TH1D *hCorrectedMultiplicity_W;
+    TH1D *hGenMultiplicity_W;
+    TH1D *hSubEventMultiplicity_W;
+    TH1D *hSelectedMultiplicity_W;
     TH1D *hPtHat;
     TH1D *hPtHat_W;
     TH1D *hHiBin;
     TH1D *hHiBin_W;
     TH1D *hVz;
     TH1D *hVz_W;
-    TH1D *hDeltaPhi;
-    TH1D *hXj;
+    TH1D *hDeltaPhi_W;
+    TH1D *hGenDeltaPhi_W;
+    TH1D *hXj_W;
+    TH1D *hGenXj_W;
     TH1I *hNDijetEvent;
+    TH1D *hNGenDijetEvent;
     TH1D *hNEventsInMult;
 
     THnSparseD *hMultiplicities;
@@ -68,8 +71,10 @@ public:
     THnSparseD *hRecoJets_W;
     THnSparseD *hGenJets;
     THnSparseD *hGenJets_W;
-    THnSparseD *hLeadingJet;
-    THnSparseD *hSubLeadingJet;
+    THnSparseD *hLeadingJet_W;
+    THnSparseD *hGenLeadingJet_W;
+    THnSparseD *hSubLeadingJet_W;
+    THnSparseD *hGenSubLeadingJet_W;
     THnSparseD *hMultiplicities_DiJet_W;
 
     THnSparseD *hRecoQuenching_W;
