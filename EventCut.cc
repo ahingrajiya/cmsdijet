@@ -131,7 +131,7 @@ Bool_t EventCut::pass(const Event *ev)
     Bool_t goodFilters = kTRUE;
     if (fPPrimaryVertexFilter)
     {
-        if (ev->trigAndSkim()->pPAprimaryVertexFilter() == 0)
+        if (ev->trigAndSkim()->pprimaryVertexFilter() == 0)
             goodFilters = kFALSE;
     }
     if (fHBHENoiseFilterResultRun2Loose)

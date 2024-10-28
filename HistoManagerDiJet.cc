@@ -26,7 +26,8 @@ ClassImp(HistoManagerDiJet)
                                              hGenJets{nullptr}, hGenJets_W{nullptr}, hLeadingJet_W{nullptr}, hSubLeadingJet_W{nullptr}, hPtHat{nullptr}, hPtHat_W{nullptr},
                                              hHiBin{nullptr}, hHiBin_W{nullptr}, hVz{nullptr}, hVz_W{nullptr}, hMultiplicities_DiJet_W{nullptr}, hRecoQuenching_W{nullptr}, hGenQuenching_W{nullptr},
                                              hDeltaPhi_W{nullptr}, hXj_W{nullptr}, hNDijetEvent{nullptr}, hNEventsInMult{nullptr}, hGenLeadingJet_W{nullptr}, hGenSubLeadingJet_W{nullptr}, hGenDeltaPhi_W{nullptr},
-                                             hGenXj_W{nullptr}, hNGenDijetEvent{nullptr}
+                                             hGenXj_W{nullptr}, hNGenDijetEvent{nullptr}, hInJetMultiplicity_W{nullptr}, hGenInJetMultiplicity_W{nullptr}, hLeadPtvsSubLeadPt_W{nullptr},
+                                             hGenLeadPtvsGenSubLeadPt_W{nullptr}
 
 {
     /* Empty*/
@@ -71,6 +72,15 @@ HistoManagerDiJet::~HistoManagerDiJet()
     if (hNEventsInMult)
         delete hNEventsInMult;
 
+    if (hInJetMultiplicity_W)
+        delete hInJetMultiplicity_W;
+    if (hGenInJetMultiplicity_W)
+        delete hGenInJetMultiplicity_W;
+    if (hLeadPtvsSubLeadPt_W)
+        delete hLeadPtvsSubLeadPt_W;
+    if (hGenLeadPtvsGenSubLeadPt_W)
+        delete hGenLeadPtvsGenSubLeadPt_W;
+
     if (hMultiplicities)
         delete hMultiplicities;
     if (hRecoJets)
@@ -113,6 +123,11 @@ void HistoManagerDiJet::init(const Bool_t &isMC)
     hSubEventMultiplicity_W->Sumw2();
     hSelectedMultiplicity_W = new TH1D("hSelectedMultiplicity", "Multiplicity Distribution after selection Weighted", 600, 0., 600.);
     hSelectedMultiplicity_W->Sumw2();
+    hInJetMultiplicity_W = new TH2D("hInJetMultiplicity_W", "Multiplicity in Jets", 30, 0., 30., 600, 0., 600.);
+    hInJetMultiplicity_W->Sumw2();
+    hGenInJetMultiplicity_W = new TH2D("hGenInJetMultiplicity_W", "Gen Multiplicity in Jets", 30, 0., 30., 600, 0., 600.);
+    hGenInJetMultiplicity_W->Sumw2();
+
     hPtHat = new TH1D("hPtHat", "#hat{p_{T}} Distribution", 100, 0.0, 1000.0);
     hPtHat->Sumw2();
     hPtHat_W = new TH1D("hPtHat_W", "#hat{p_{T}} Distribution Weighted", 100, 0.0, 1000.0);
@@ -178,7 +193,6 @@ void HistoManagerDiJet::init(const Bool_t &isMC)
     hGenQuenching_W->GetAxis(0)->Set(QuenchBins[0], XjBins);
     hGenQuenching_W->GetAxis(1)->Set(QuenchBins[1], DphiBins);
     hGenQuenching_W->Sumw2();
-
     hDeltaPhi_W = new TH1D("hDeltaPhi_W", "Delta Phi Distribution Weighted", nDphiBins, DphiBins);
     hDeltaPhi_W->Sumw2();
     hGenDeltaPhi_W = new TH1D("hGenDeltaPhi_W", "Gen Delta Phi Distribution Weighted", nDphiBins, DphiBins);
@@ -187,6 +201,22 @@ void HistoManagerDiJet::init(const Bool_t &isMC)
     hXj_W->Sumw2();
     hGenXj_W = new TH1D("hGenXj_W", "Gen Xj Distribution Weighted", nXjAjBins, XjBins);
     hGenXj_W->Sumw2();
+
+    Float_t MinPt = 50.0;
+    Float_t MaxPt = 1200.0;
+    Float_t PtBinStepSize = 10;
+    const int nLeadSubLeadPtBins = (int)(MaxPt - MinPt) / PtBinStepSize; // number of bins
+    Float_t PtBins[nLeadSubLeadPtBins + 1] = {0.0};
+
+    for (Int_t i{0}; i < nLeadSubLeadPtBins; i++)
+    {
+        PtBins[i] = MinPt + i * PtBinStepSize;
+    }
+
+    hLeadPtvsSubLeadPt_W = new TH2D("hLeadPtvsSubLeadPt_W", "Lead Pt vs SubLead Pt", nLeadSubLeadPtBins, PtBins, nLeadSubLeadPtBins, PtBins);
+    hLeadPtvsSubLeadPt_W->Sumw2();
+    hGenLeadPtvsGenSubLeadPt_W = new TH2D("hGenLeadPtvsGenSubLeadPt_W", "Gen Lead Pt vs Gen SubLead Pt", nLeadSubLeadPtBins, PtBins, nLeadSubLeadPtBins, PtBins);
+    hGenLeadPtvsGenSubLeadPt_W->Sumw2();
 }
 
 void HistoManagerDiJet ::writeOutput(const Bool_t &isMC)
@@ -206,6 +236,8 @@ void HistoManagerDiJet ::writeOutput(const Bool_t &isMC)
     hSelectedMultiplicity_W->Write();
     hMultiplicities->Write();
     hMultiplicities_W->Write();
+    hInJetMultiplicity_W->Write();
+    hGenInJetMultiplicity_W->Write();
     hNEventsInMult->Write();
 
     gDirectory->cd("..");
@@ -220,6 +252,9 @@ void HistoManagerDiJet ::writeOutput(const Bool_t &isMC)
     hGenJets_W->Write();
     hGenLeadingJet_W->Write();
     hGenSubLeadingJet_W->Write();
+
+    hLeadPtvsSubLeadPt_W->Write();
+    hGenLeadPtvsGenSubLeadPt_W->Write();
 
     gDirectory->cd("..");
     gDirectory->mkdir("Quenching");

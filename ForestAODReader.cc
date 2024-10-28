@@ -24,13 +24,11 @@ ClassImp(ForestAODReader)
 
     //_________________
     ForestAODReader::ForestAODReader()
-    : fEvent{nullptr}, fInFileName{nullptr}, fEvents2Read{0}, fEventsProcessed{0}, fIsMc{kFALSE}, fUseHltBranch{kTRUE},
-      fUseSkimmingBranch{kTRUE}, fJetCollection{"ak4PFJetAnalyzer"}, fUseJets{kTRUE}, fUseTrackBranch{kFALSE},
-      fUseGenTrackBranch{kFALSE}, fHltTree{nullptr}, fSkimTree{nullptr}, fEventTree{nullptr},
-      fTrkTree{nullptr}, fGenTrkTree{nullptr},
-      fJEC{nullptr}, fJECFiles{}, fJEU{nullptr}, fJEUFiles{},
-      fCollidingSystem{Form("PbPb")}, fCollidingEnergyGeV{5020}, fYearOfDataTaking{2018}, fDoJetPtSmearing{kFALSE},
-      fFixJetArrays{kFALSE}, fEventCut{nullptr}, fJetCut{nullptr}, fRecoJet2GenJetId{}, fGenJet2RecoJet{}, fTrackCut{nullptr}, fUseMatchedJets{kFALSE}, fEventsToProcess{-1}
+    : fEvent{nullptr}, fInFileName{nullptr}, fEvents2Read{0}, fEventsProcessed{0}, fIsMc{kFALSE}, fUseHltBranch{kFALSE},
+      fUseSkimmingBranch{kFALSE}, fJetCollection{"ak4PFJetAnalyzer"}, fUseJets{kFALSE}, fUseTrackBranch{kFALSE}, fUseGenTrackBranch{kFALSE}, fHltTree{nullptr},
+      fSkimTree{nullptr}, fEventTree{nullptr}, fTrkTree{nullptr}, fGenTrkTree{nullptr}, fJEC{nullptr}, fJECFiles{}, fJEU{nullptr}, fJEUFiles{}, fCollidingSystem{Form("PbPb")},
+      fCollidingEnergyGeV{5020}, fYearOfDataTaking{2018}, fDoJetPtSmearing{kFALSE}, fFixJetArrays{kFALSE}, fEventCut{nullptr}, fJetCut{nullptr}, fRecoJet2GenJetId{}, fGenJet2RecoJet{},
+      fTrackCut{nullptr}, fUseMatchedJets{kFALSE}, fEventsToProcess{-1}
 {
     // Initialize many variables
     clearVariables();

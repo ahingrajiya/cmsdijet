@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
     EventCut *eventCut = new EventCut{};
     eventCut->setVz(-15., 15.);
     eventCut->usePClusterCompatibilityFilter();
-    eventCut->usePPAprimaryVertexFilter();
+    eventCut->usePPrimaryVertexFilter();
     eventCut->usePhfCoincFilter2Th4();
     eventCut->setMultiplicty(0, 10000);
     if (isMC)
@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
 
     JetCut *jetCut = new JetCut{};
     jetCut->setPt(0., 1000.);
-    jetCut->setEta(-5., 5.0);
+    jetCut->setEta(-5., 5.);
 
     // Initialize track cuts
     TrackCut *trackCut = new TrackCut{};

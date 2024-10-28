@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
 
     // Initialize jet cuts
     JetCut *jetCut = new JetCut{};
-    jetCut->setEta(-3.0, 3.0);
+    jetCut->setEta(-5.0, 5.0);
     jetCut->setPt(40., 1000.);
     // jetCut->setVerbose();
 

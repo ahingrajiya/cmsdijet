@@ -24,8 +24,8 @@ ClassImp(ForestminiAODReader)
 
     //_________________
     ForestminiAODReader::ForestminiAODReader()
-    : fEvent{nullptr}, fInFileName{nullptr}, fEvents2Read{0}, fEventsProcessed{0}, fIsMc{kFALSE}, fUseHltBranch{kTRUE},
-      fUseSkimmingBranch{kTRUE}, fJetCollection{"ak4PFJetAnalyzer"}, fUseJets{kTRUE}, fUseTrackBranch{kFALSE},
+    : fEvent{nullptr}, fInFileName{nullptr}, fEvents2Read{0}, fEventsProcessed{0}, fIsMc{kFALSE}, fUseHltBranch{kFALSE},
+      fUseSkimmingBranch{kFALSE}, fJetCollection{"ak4PFJetAnalyzer"}, fUseJets{kFALSE}, fUseTrackBranch{kFALSE},
       fUseGenTrackBranch{kFALSE}, fHltTree{nullptr}, fSkimTree{nullptr}, fEventTree{nullptr}, fTrkTree{nullptr}, fGenTrkTree{nullptr},
       fJEC{nullptr}, fJECFiles{}, fJEU{nullptr}, fJEUFiles{}, fCollidingSystem{Form("PbPb")}, fCollidingEnergyGeV{5020}, fYearOfDataTaking{2018},
       fDoJetPtSmearing{kFALSE}, fFixJetArrays{kFALSE}, fEventCut{nullptr}, fJetCut{nullptr}, fRecoJet2GenJetId{}, fGenJet2RecoJet{}, fIsInStore{kFALSE}, fTrackCut{nullptr}, fUseMatchedJets{kFALSE}, fEventsToProcess{-1}
@@ -693,7 +693,7 @@ void ForestminiAODReader::setupBranches()
         fSkimTree->SetBranchStatus("HBHENoiseFilterResultRun2Tight", 1);
         fSkimTree->SetBranchStatus("HBHEIsoNoiseFilterResult", 1);
         fSkimTree->SetBranchStatus("collisionEventSelectionAODv2", 1);
-        fSkimTree->SetBranchStatus("phfCoincFilter2Th4", 1);
+        fSkimTree->SetBranchStatus("pphfCoincFilter2Th4", 1);
         fSkimTree->SetBranchStatus("pPAprimaryVertexFilter", 1);
         fSkimTree->SetBranchStatus("pBeamScrapingFilter", 1);
         fSkimTree->SetBranchStatus("pprimaryVertexFilter", 1);
@@ -875,7 +875,8 @@ void ForestminiAODReader::readEvent()
         fGenTrkTree->GetEntry(fEventsProcessed);
     fEventsProcessed++;
 
-    // std::cout << "Events processed: " << fEventsProcessed << std::endl;
+    // if (fEventsProcessed > 138100)
+    // std::cout << "Events processed: " << fEventsProcessed - 1 << std::endl;
 }
 
 //________________
@@ -1079,13 +1080,24 @@ Event *ForestminiAODReader::returnEvent()
             {
                 // Count number of reconstructed jets
                 // with pT > pThat of the event (wrong )
-                if (fRecoJetPt[iJet] < 0)
+                if (fRefJetPt[iJet] < 0)
                 {
                     delete jet;
                     continue;
                 }
 
             } // if ( fIsMc )
+
+            if (fRecoJetTrackMax[iJet] / fRawJetPt[iJet] < 0.01)
+            {
+                delete jet;
+                continue;
+            }
+            if (fRecoJetTrackMax[iJet] / fRawJetPt[iJet] > 0.98)
+            {
+                delete jet;
+                continue;
+            }
 
             // Reco
             jet->setPt(fRawJetPt[iJet]);

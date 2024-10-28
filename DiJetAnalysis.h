@@ -123,6 +123,8 @@ public:
     /// @brief Set Multiplicity Weight Table
     void setMultiplicityWeightTable(const std::string &multWeightTable) { fMultWeightTable = multWeightTable; }
 
+    void doInJetMultiplicity() { fDoInJetMult = kTRUE; }
+
 private:
     /// @brief Multiplicity calculator
     /// @param isPPb Set to be true if it is pPb dataset. For PbPb dataset it needs is set to be false
@@ -249,6 +251,8 @@ private:
     std::string fTrkEffTable;
     ///@brief Multiplicity Weight file
     TFile *fMultWeight;
+    ///@brief Do Injet Multiplicity
+    Bool_t fDoInJetMult;
 
     ///@brief Which Multiplicity type to use for event selection.
     /// 0 -> Reco Multiplicity
