@@ -26,7 +26,7 @@ using namespace std;
 
 void usage()
 {
-    std::cout << "./programName inputFileList oFileName isMC isPbGoing ptHatLow ptHatHi \n";
+    std::cout << "./programName inputFileList oFileName isMC isEmbedded isPbGoing ptHatLow ptHatHi \n";
 }
 int main(int argc, char *argv[])
 {
@@ -47,6 +47,7 @@ int main(int argc, char *argv[])
     TString JECFileDataName{};
     TString path2JEC = "..";
     Double_t ptHatCut[2]{15., 30.};
+    Bool_t isEmbedded{kTRUE};
     std::vector<float> multiplicityBins{0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
 
     // Command line arguments
@@ -70,20 +71,35 @@ int main(int argc, char *argv[])
         inFileName = argv[1];
         oFileName = argv[2];
         isMC = atoi(argv[3]);
-        isPbGoing = atoi(argv[4]);
-        ptHatCut[0] = atoi(argv[5]);
-        ptHatCut[1] = atoi(argv[6]);
+        isEmbedded = atoi(argv[4]);
+        isPbGoing = atoi(argv[5]);
+        ptHatCut[0] = atoi(argv[6]);
+        ptHatCut[1] = atoi(argv[7]);
     }
 
     if (isMC)
     {
         if (isPbGoing)
         {
-            JECFileName = "Autumn16_HI_pPb_Pbgoing_Embedded_MC_L2Relative_AK4PF.txt";
+            if (isEmbedded)
+            {
+                JECFileName = "Autumn16_HI_pPb_Pbgoing_Embedded_MC_L2Relative_AK4PF.txt";
+            }
+            else
+            {
+                JECFileName = "Autumn16_HI_pPb_Pbgoing_Unembedded_MC_L2Relative_AK4PF.txt";
+            }
         }
         else
         {
-            JECFileName = "Autumn16_HI_pPb_pgoing_Embedded_MC_L2Relative_AK4PF.txt";
+            if (isEmbedded)
+            {
+                JECFileName = "Autumn16_HI_pPb_pgoing_Embedded_MC_L2Relative_AK4PF.txt";
+            }
+            else
+            {
+                JECFileName = "Autumn16_HI_pPb_pgoing_Unembedded_MC_L2Relative_AK4PF.txt";
+            }
         }
     }
     else
