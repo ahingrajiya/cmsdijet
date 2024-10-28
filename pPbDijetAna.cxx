@@ -179,6 +179,7 @@ int main(int argc, char *argv[])
     analysis->setSubLeadJetPt(50.);
     analysis->setLeadJetEtaRange(-1., 1.);
     analysis->setSubLeadJetEtaRange(-1., 1.);
+    analysis->doInJetMultiplicity();
     // analysis->setVerbose();
 
     if (isPbGoing)
