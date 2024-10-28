@@ -206,9 +206,9 @@ void HistoManagerDiJet::init(const Bool_t &isMC)
     Float_t MaxPt = 1200.0;
     Float_t PtBinStepSize = 10;
     const int nLeadSubLeadPtBins = (int)(MaxPt - MinPt) / PtBinStepSize; // number of bins
-    Float_t PtBins[nLeadSubLeadPtBins + 1] = {0.0};
+    Float_t PtBins[nLeadSubLeadPtBins + 1];
 
-    for (Int_t i{0}; i < nLeadSubLeadPtBins; i++)
+    for (Int_t i{0}; i < nLeadSubLeadPtBins + 1; i++)
     {
         PtBins[i] = MinPt + i * PtBinStepSize;
     }
