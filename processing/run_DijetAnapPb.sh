@@ -7,7 +7,7 @@ cd ${ENV_PATH}
 #Export the CMSSW environment
 eval 'scramv1 runtime -sh'
 
-EXEC_PATH = ${HOME}/private/analysis/CMSSW_13_0_5/src/jetAnalysis/execution_dir
+EXEC_PATH = ${HOME}/private/analysis/CMSSW_13_0_5/src/cmsdijet/execution_dir
 cd ${EXEC_PATH}
 
 input_file_list = $1
