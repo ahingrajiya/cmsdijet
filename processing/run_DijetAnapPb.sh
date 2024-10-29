@@ -13,11 +13,12 @@ cd ${EXEC_PATH}
 input_file_list=$1
 output_file=$2
 ismc=$3
-isPbgoing=$4
-pthatmin=$5
-pthatmax=$6
+isembedded=$4
+isPbgoing=$5
+pthatmin=$6
+pthatmax=$7
 
 
-./pPbDijetAna ${input_file_list} ${output_file} ${ismc} ${isPbgoing} ${pthatmin} ${pthatmax}
+./pPbDijetAna ${input_file_list} ${output_file} ${ismc} ${isembedded} ${isPbgoing} ${pthatmin} ${pthatmax}
 
 
