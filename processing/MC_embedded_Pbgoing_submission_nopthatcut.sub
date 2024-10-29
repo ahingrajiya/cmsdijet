@@ -1,66 +1,66 @@
 universe   = vanilla
 getenv     = True
 executable = run_DijetAnapPb.sh
-+JobFlavour           = "workday"
++JobFlavour           = "longlunch"
 requirements = ((OpSysAndVer =?= "AlmaLinux9") && (CERNEnvironment =?= "qa"))
 RequestCpus = 4
 
 log        = cond/pthat30_emb_Pbgoing_nocut.log
 output     = cond/pthat30_emb_Pbgoing_nocut.out
 error      = cond/pthat30_emb_Pbgoing_nocut.err
-arguments = ../files_input/pPb_8160/MC_embedded/Pbgoing/MC_pthat30_Pbgoing_embedded.txt /eos/user/a/ahingraj/outputs/Emb_nocut_Pbp_30_50.root 1 0 30 50
+arguments = ../files_input/pPb_8160/MC_embedded/Pbgoing/MC_pthat30_Pbgoing_embedded.txt /eos/user/a/ahingraj/outputs/Emb_nocut_Pbp_30_50.root 1 1 1 30 50
 queue
 
 log        = cond/pthat50_emb_Pbgoing_nocut.log
 output     = cond/pthat50_emb_Pbgoing_nocut.out
 error      = cond/pthat50_emb_Pbgoing_nocut.err
-arguments = ../files_input/pPb_8160/MC_embedded/Pbgoing/MC_pthat50_Pbgoing_embedded.txt /eos/user/a/ahingraj/outputs/Emb_nocut_Pbp_50_80.root 1 0 50 80
+arguments = ../files_input/pPb_8160/MC_embedded/Pbgoing/MC_pthat50_Pbgoing_embedded.txt /eos/user/a/ahingraj/outputs/Emb_nocut_Pbp_50_80.root 1 1 1 50 80
 queue
 
 log        = cond/pthat80_emb_Pbgoing_nocut.log
 output     = cond/pthat80_emb_Pbgoing_nocut.out
 error      = cond/pthat80_emb_Pbgoing_nocut.err
-arguments = ../files_input/pPb_8160/MC_embedded/Pbgoing/MC_pthat80_Pbgoing_embedded.txt /eos/user/a/ahingraj/outputs/Emb_nocut_Pbp_80_120.root 1 0 80 120
+arguments = ../files_input/pPb_8160/MC_embedded/Pbgoing/MC_pthat80_Pbgoing_embedded.txt /eos/user/a/ahingraj/outputs/Emb_nocut_Pbp_80_120.root 1 1 1 80 120
 queue
 
 log        = cond/pthat120_emb_Pbgoing_nocut.log
 output     = cond/pthat120_emb_Pbgoing_nocut.out
 error      = cond/pthat120_emb_Pbgoing_nocut.err
-arguments = ../files_input/pPb_8160/MC_embedded/Pbgoing/MC_pthat120_Pbgoing_embedded.txt /eos/user/a/ahingraj/outputs/Emb_nocut_Pbp_120_170.root 1 0 120 170
+arguments = ../files_input/pPb_8160/MC_embedded/Pbgoing/MC_pthat120_Pbgoing_embedded.txt /eos/user/a/ahingraj/outputs/Emb_nocut_Pbp_120_170.root 1 1 1 120 170
 queue
 
 log        = cond/pthat170_emb_Pbgoing_nocut.log
 output     = cond/pthat170_emb_Pbgoing_nocut.out
 error      = cond/pthat170_emb_Pbgoing_nocut.err
-arguments = ../files_input/pPb_8160/MC_embedded/Pbgoing/MC_pthat170_Pbgoing_embedded.txt /eos/user/a/ahingraj/outputs/Emb_nocut_Pbp_170_220.root 1 0 170 220
+arguments = ../files_input/pPb_8160/MC_embedded/Pbgoing/MC_pthat170_Pbgoing_embedded.txt /eos/user/a/ahingraj/outputs/Emb_nocut_Pbp_170_220.root 1 1 1 170 220
 queue
 
 log        = cond/pthat220_emb_Pbgoing_nocut.log
 output     = cond/pthat220_emb_Pbgoing_nocut.out
 error      = cond/pthat220_emb_Pbgoing_nocut.err
-arguments = ../files_input/pPb_8160/MC_embedded/Pbgoing/MC_pthat220_Pbgoing_embedded.txt /eos/user/a/ahingraj/outputs/Emb_nocut_Pbp_220_280.root 1 0 220 280
+arguments = ../files_input/pPb_8160/MC_embedded/Pbgoing/MC_pthat220_Pbgoing_embedded.txt /eos/user/a/ahingraj/outputs/Emb_nocut_Pbp_220_280.root 1 1 1 220 280
 queue
 
 log        = cond/pthat280_emb_Pbgoing_nocut.log
 output     = cond/pthat280_emb_Pbgoing_nocut.out
 error      = cond/pthat280_emb_Pbgoing_nocut.err
-arguments = ../files_input/pPb_8160/MC_embedded/Pbgoing/MC_pthat280_Pbgoing_embedded.txt /eos/user/a/ahingraj/outputs/Emb_nocut_Pbp_280_370.root 1 0 280 370
+arguments = ../files_input/pPb_8160/MC_embedded/Pbgoing/MC_pthat280_Pbgoing_embedded.txt /eos/user/a/ahingraj/outputs/Emb_nocut_Pbp_280_370.root 1 1 1 280 370
 queue
 
 log        = cond/pthat370_emb_Pbgoing_nocut.log
 output     = cond/pthat370_emb_Pbgoing_nocut.out
 error      = cond/pthat370_emb_Pbgoing_nocut.err
-arguments = ../files_input/pPb_8160/MC_embedded/Pbgoing/MC_pthat370_Pbgoing_embedded.txt /eos/user/a/ahingraj/outputs/Emb_nocut_Pbp_370_460.root 1 0 370 460
+arguments = ../files_input/pPb_8160/MC_embedded/Pbgoing/MC_pthat370_Pbgoing_embedded.txt /eos/user/a/ahingraj/outputs/Emb_nocut_Pbp_370_460.root 1 1 1 370 460
 queue
 
 log        = cond/pthat460_emb_Pbgoing_nocut.log
 output     = cond/pthat460_emb_Pbgoing_nocut.out
 error      = cond/pthat460_emb_Pbgoing_nocut.err
-arguments = ../files_input/pPb_8160/MC_embedded/Pbgoing/MC_pthat460_Pbgoing_embedded.txt /eos/user/a/ahingraj/outputs/Emb_nocut_Pbp_460_540.root 1 0 460 540
+arguments = ../files_input/pPb_8160/MC_embedded/Pbgoing/MC_pthat460_Pbgoing_embedded.txt /eos/user/a/ahingraj/outputs/Emb_nocut_Pbp_460_540.root 1 1 1 460 540
 queue
 
 log        = cond/pthat540_emb_Pbgoing_nocut.log
 output     = cond/pthat540_emb_Pbgoing_nocut.out
 error      = cond/pthat540_emb_Pbgoing_nocut.err
-arguments = ../files_input/pPb_8160/MC_embedded/Pbgoing/MC_pthat540_Pbgoing_embedded.txt /eos/user/a/ahingraj/outputs/Emb_nocut_Pbp_540.root 1 0 540 8160
+arguments = ../files_input/pPb_8160/MC_embedded/Pbgoing/MC_pthat540_Pbgoing_embedded.txt /eos/user/a/ahingraj/outputs/Emb_nocut_Pbp_540.root 1 1 1 540 8160
 queue
