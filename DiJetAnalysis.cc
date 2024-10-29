@@ -587,10 +587,10 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
         if (deltaPhi > fDeltaPhi)
         {
 
-            // std::cout << std::endl;
-            // std::cout << Form("LeadPt: %f, LeadEta: %f, SubLeadPt: %f, SubLeadEta: %f, DeltaPhi: %f, Xj: %f, Mult: %i", leadJetPt, leadJetEtaCM, subLeadJetPt, subLeadJetEtaCM, deltaPhi, Xj, event->multiplicity()) << std::endl;
-            // std::cout << "DeltaPhi: " << deltaPhi << " Xj: " << Xj << " Event Weight: " << event_Weight << " Mult Weight 1: " << multWeight[0] << " Mult Weight 2: " << multWeight[1] << std::endl;
-            // std::cout << std::endl;
+            std::cout << std::endl;
+            std::cout << Form("LeadPt: %f, LeadEta: %f, SubLeadPt: %f, SubLeadEta: %f, DeltaPhi: %f, Xj: %f, Mult: %i", leadJetPt, leadJetEtaCM, subLeadJetPt, subLeadJetEtaCM, deltaPhi, Xj, event->multiplicity()) << std::endl;
+            std::cout << "DeltaPhi: " << deltaPhi << " Xj: " << Xj << " Event Weight: " << event_Weight << " Mult Weight 1: " << multWeight[0] << " Mult Weight 2: " << multWeight[1] << std::endl;
+            std::cout << std::endl;
 
             fIsDiJetFound = kTRUE;
             if (fUseMultiplicityWeight)

@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
     eventCut->usePvertexFilterCutdz1p0();
     eventCut->usePPAprimaryVertexFilter();
     eventCut->usePhfCoincFilter2Th4();
-    eventCut->setMultiplicty(10, 400);
+    eventCut->setMultiplicty(0, 400);
     if (isMC)
     {
         eventCut->setPtHat(ptHatCut[0], ptHatCut[1]);
@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
     // Initialize jet cuts
     JetCut *jetCut = new JetCut{};
     jetCut->setEta(-5.0, 5.0);
-    jetCut->setPt(40., 1000.);
+    jetCut->setPt(0., 1000.);
     // jetCut->setVerbose();
 
     // Initiazlize Track Cuts
@@ -184,7 +184,7 @@ int main(int argc, char *argv[])
     // Dijet Analysis
     DiJetAnalysis *analysis = new DiJetAnalysis{};
     analysis->setIsMC(isMC);
-    analysis->setMultiplicityRange(10, 400);
+    analysis->setMultiplicityRange(0, 400);
     analysis->setIspPb();
     analysis->setMultiplicityType(0);
     analysis->setMinTrkPt(1.0);
