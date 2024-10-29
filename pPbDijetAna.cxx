@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
     // Initialize jet cuts
     JetCut *jetCut = new JetCut{};
     jetCut->setEta(-5.0, 5.0);
-    jetCut->setPt(40., 1000.);
+    jetCut->setPt(0., 1000.);
     // jetCut->setVerbose();
 
     // Initiazlize Track Cuts
