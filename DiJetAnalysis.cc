@@ -259,6 +259,7 @@ Double_t DiJetAnalysis::EventWeight(const Bool_t &ispPb, Bool_t &isMC, const Eve
     Double_t eventWeight{1.};
     Double_t vzWeight{1.};
     Double_t ptHat = event->ptHat();
+    std::cout << ptHat << std::endl;
     Double_t vertexZ = event->vz();
     if (isMC && ispPb)
     {
@@ -273,7 +274,7 @@ Double_t DiJetAnalysis::EventWeight(const Bool_t &ispPb, Bool_t &isMC, const Eve
         }
         else if (ptHat > 50. && ptHat <= 80.)
         {
-            ptHat = 1.0016052e-08 * 952554;
+            ptHatWeight = 1.0016052e-08 * 952554;
         }
         else if (ptHat > 80. && ptHat <= 120.)
         {
@@ -315,6 +316,7 @@ Double_t DiJetAnalysis::EventWeight(const Bool_t &ispPb, Bool_t &isMC, const Eve
     }
 
     eventWeight = ptHatWeight * vzWeight;
+    std::cout << ptHatWeight << std::endl;
 
     return eventWeight;
 }
@@ -757,7 +759,7 @@ void DiJetAnalysis::processGenJets(const Event *event, const Double_t &event_Wei
                 fHM->hGenDeltaPhi_W->Fill(deltaPhi, event_Weight);
                 fHM->hGenXj_W->Fill(Xj, event_Weight);
             }
-            fHM->hNDijetEvent->Fill(1);
+            fHM->hNGenDijetEvent->Fill(1);
         }
     }
     if (fIsGenDiJetFound)
