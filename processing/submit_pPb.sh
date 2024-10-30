@@ -96,7 +96,7 @@ echo "${PWD}"
 echo "Input File List : ${input_files_list}"
 
 PD_Number=1
-for filename in ${PWD}${input_files_list}/*.txt; do
+for filename in ${input_files_list}/; do
     echo "Processing file: $(basename $filename)"
     processing/split_files.sh ${input_files_list} $(basename "$filename") $files_per_job
     file_list=$(processing/split_files.sh ${input_files_list} $(basename "$filename") $files_per_job)
