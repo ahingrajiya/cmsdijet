@@ -106,7 +106,7 @@ for filename in ${input_files_list}/*.txt; do
     echo "Submission file with name pPb_${subfile%.*}.sub is Created"
     cat <<EOF > processing/pPb_${subfile%.*}.sub
         universe        = vanilla
-        executable      = ${EXEC_PATH}/processing/run_dijetAna.sh
+        executable      = ${EXEC_PATH}/processing/run_DijetAnapPb.sh
         +JobFlavour     = "longlunch"
         getenv          = True
         requirements    =((OpSysAndVer =?= "AlmaLinux9") && (CERNEnvironment =?= "qa"))
