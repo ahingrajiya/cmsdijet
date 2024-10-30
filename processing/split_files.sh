@@ -27,6 +27,6 @@ fi
 
 split -l $nfiles_per_job "$input_file" "${NEW_DIR}_Split/${input_file%.*}_part_" -d --additional-suffix=.txt
 
-echo "${input_file_path}/${NEW_DIR}_Split/"
+echo "${input_file_path}${NEW_DIR}_Split"
 
 

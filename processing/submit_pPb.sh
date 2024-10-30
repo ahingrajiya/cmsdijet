@@ -83,7 +83,7 @@ if [ "$DataSet" -eq 5 ]; then
         
     elif [ "$isPbgoing" -eq 0 ]; then
         echo "pgoing is selected"
-        sample_prefilx="HM185_pgoing"
+        sample_prefilx="HM250_pgoing"
         input_files_list="${EXEC_PATH}/files_input/pPb_8160/DATA_HM250/pgoing/"
     fi
 fi
@@ -92,16 +92,18 @@ if [ "$DataSet" -gt 6 ]; then
     echo "No Data Set Selected. Use numbers from 1 to 5"
     exit 1
 fi
-echo "${PWD}"
+
 echo "Input File List : ${input_files_list}"
 
 PD_Number=1
-for filename in ${input_files_list}/; do
-    echo "Processing file: $(basename $filename)"
+for filename in ${input_files_list}/*.txt; do
+    echo "Processing file: $(basename "$filename")"
     processing/split_files.sh ${input_files_list} $(basename "$filename") $files_per_job
     file_list=$(processing/split_files.sh ${input_files_list} $(basename "$filename") $files_per_job)
-    echo "File List: ${file_list}"
-    cat <<EOF > pPb_${$(basename "$filename")%.*}.sub
+    echo "Split File List Path: ${file_list}"
+    subfile=$(basename "$filename")
+    echo "${subfile}"
+    cat <<EOF > processing/pPb_${subfile%.*}.sub
         universe = vanilla
         executable = ${EXEC_PATH}/processing/run_dijetAna.sh
         +JobFlavour           = "longlunch"
@@ -110,16 +112,20 @@ for filename in ${input_files_list}/; do
         RequestCpus = 1
         transfer_input_files  = voms_proxy.txt
         environment = "X509_USER_PROXY=voms_proxy.txt"
+	
+	
 EOF
 
     jobid=0
-    for file in ${file_list}; do
-        cat <<EOF >> pPb_${($basename $filename)%.*}.sub
-        arguments = ${file_list}/file ${sample_prefix}_PD${PD_Number}_${jobid}.root 0 0 ${isPbgoing} 0 0
+    for file in ${file_list}/*.txt; do
+	    echo ${file}
+        cat <<EOF >> processing/pPb_${subfile%.*}.sub
+	arguments = ${file_list}/$(basename "$file") ${sample_prefix}_PD${PD_Number}_${jobid}.root 0 0 ${isPbgoing} 0 0
         output = condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.out
         error = condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.err
         log = condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.log
         queue
+
 EOF
         jobid=$((jobid+1))
     done
