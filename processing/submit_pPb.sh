@@ -98,8 +98,8 @@ echo "Input File List : ${input_files_list}"
 PD_Number=1
 for filename in "${PWD}${input_files_list}/*.txt"; do
     echo "Processing file: $(basename $filename)"
-    ${PWD}/processing/split_files.sh "${PWD}${input_files_list}" "$($basename $filename)" "$files_per_job"
-    file_list=$(./split_files.sh "${input_files_list}" "$($basename $filename)" "$files_per_job")
+    ${PWD}/processing/split_files.sh ${PWD}${input_files_list} $($basename $filename) $files_per_job
+    file_list=$(./split_files.sh ${input_files_list} $($basename $filename) $files_per_job)
     cat <<EOF > pPb_${$(basename $filename)%.*}.sub
         universe = vanilla
         executable = ${EXEC_PATH}/run_dijetAna.sh
