@@ -93,10 +93,10 @@ echo "${input_files_list}"
 
 PD_Number=1
 for filename in ${input_files_list}/*; do
-    echo "Processing file: $filename"
-    ./split_files.sh "${input_files_list}" "$filename" "$files_per_job"
-    file_list=$(./split_files.sh "${input_files_list}" "$filename" "$files_per_job")
-    cat <<EOF > pPb_${filename%.*}.sub
+    echo "Processing file: $(basename $filename)"
+    ./split_files.sh "${input_files_list}" "$($basename $filename)" "$files_per_job"
+    file_list=$(./split_files.sh "${input_files_list}" "$($basename $filename)" "$files_per_job")
+    cat <<EOF > pPb_${($basename $filename)%.*}.sub
         universe = vanilla
         executable = ${EXEC_PATH}/run_dijetAna.sh
         +JobFlavour           = "longlunch"
@@ -109,7 +109,7 @@ EOF
 
     jobid = 0
     for file in ${file_list}; do
-        cat <<EOF >> pPb_${filename%.*}.sub
+        cat <<EOF >> pPb_${($basename $filename)%.*}.sub
         arguments = ${file_list}/file ${sample_prefix}_PD${PD_Number}_${jobid}.root 0 0 ${isPbgoing} 0 0
         output = condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.out
         error = condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.err
