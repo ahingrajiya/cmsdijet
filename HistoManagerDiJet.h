@@ -67,7 +67,10 @@ public:
 
     TH2D *hInJetMultiplicity_W;
     TH2D *hGenInJetMultiplicity_W;
+
+    TH2D *hLeadPtvsSubLeadPt;
     TH2D *hLeadPtvsSubLeadPt_W;
+    TH2D *hGenLeadPtvsGenSubLeadPt;
     TH2D *hGenLeadPtvsGenSubLeadPt_W;
 
     THnSparseD *hMultiplicities;

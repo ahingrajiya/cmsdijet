@@ -27,7 +27,7 @@ ClassImp(HistoManagerDiJet)
                                              hHiBin{nullptr}, hHiBin_W{nullptr}, hVz{nullptr}, hVz_W{nullptr}, hMultiplicities_DiJet_W{nullptr}, hRecoQuenching_W{nullptr}, hGenQuenching_W{nullptr},
                                              hDeltaPhi_W{nullptr}, hXj_W{nullptr}, hNDijetEvent{nullptr}, hNEventsInMult{nullptr}, hGenLeadingJet_W{nullptr}, hGenSubLeadingJet_W{nullptr}, hGenDeltaPhi_W{nullptr},
                                              hGenXj_W{nullptr}, hNGenDijetEvent{nullptr}, hInJetMultiplicity_W{nullptr}, hGenInJetMultiplicity_W{nullptr}, hLeadPtvsSubLeadPt_W{nullptr},
-                                             hGenLeadPtvsGenSubLeadPt_W{nullptr}
+                                             hGenLeadPtvsGenSubLeadPt_W{nullptr}, hGenLeadPtvsGenSubLeadPt{nullptr}, hLeadPtvsSubLeadPt{nullptr}
 
 {
     /* Empty*/
@@ -76,6 +76,11 @@ HistoManagerDiJet::~HistoManagerDiJet()
         delete hInJetMultiplicity_W;
     if (hGenInJetMultiplicity_W)
         delete hGenInJetMultiplicity_W;
+
+    if (hLeadPtvsSubLeadPt)
+        delete hLeadPtvsSubLeadPt;
+    if (hGenLeadPtvsGenSubLeadPt)
+        delete hGenLeadPtvsGenSubLeadPt;
     if (hLeadPtvsSubLeadPt_W)
         delete hLeadPtvsSubLeadPt_W;
     if (hGenLeadPtvsGenSubLeadPt_W)
@@ -213,9 +218,14 @@ void HistoManagerDiJet::init(const Bool_t &isMC)
         PtBins[i] = MinPt + i * PtBinStepSize;
     }
 
-    hLeadPtvsSubLeadPt_W = new TH2D("hLeadPtvsSubLeadPt_W", "Lead Pt vs SubLead Pt", nLeadSubLeadPtBins, PtBins, nLeadSubLeadPtBins, PtBins);
+    hLeadPtvsSubLeadPt = new TH2D("hLeadPtvsSubLeadPt", "Lead Pt vs SubLead Pt", nLeadSubLeadPtBins, PtBins, nLeadSubLeadPtBins, PtBins);
+    hLeadPtvsSubLeadPt->Sumw2();
+    hLeadPtvsSubLeadPt_W = new TH2D("hLeadPtvsSubLeadPt_W", "Lead Pt vs SubLead Pt Weighted", nLeadSubLeadPtBins, PtBins, nLeadSubLeadPtBins, PtBins);
     hLeadPtvsSubLeadPt_W->Sumw2();
-    hGenLeadPtvsGenSubLeadPt_W = new TH2D("hGenLeadPtvsGenSubLeadPt_W", "Gen Lead Pt vs Gen SubLead Pt", nLeadSubLeadPtBins, PtBins, nLeadSubLeadPtBins, PtBins);
+
+    hGenLeadPtvsGenSubLeadPt = new TH2D("hGenLeadPtvsGenSubLeadPt", "Gen Lead Pt vs Gen SubLead Pt", nLeadSubLeadPtBins, PtBins, nLeadSubLeadPtBins, PtBins);
+    hGenLeadPtvsGenSubLeadPt->Sumw2();
+    hGenLeadPtvsGenSubLeadPt_W = new TH2D("hGenLeadPtvsGenSubLeadPt_W", "Gen Lead Pt vs Gen SubLead Pt Weighted", nLeadSubLeadPtBins, PtBins, nLeadSubLeadPtBins, PtBins);
     hGenLeadPtvsGenSubLeadPt_W->Sumw2();
 }
 
@@ -253,7 +263,9 @@ void HistoManagerDiJet ::writeOutput(const Bool_t &isMC)
     hGenLeadingJet_W->Write();
     hGenSubLeadingJet_W->Write();
 
+    hLeadPtvsSubLeadPt->Write();
     hLeadPtvsSubLeadPt_W->Write();
+    hGenLeadPtvsGenSubLeadPt->Write();
     hGenLeadPtvsGenSubLeadPt_W->Write();
 
     gDirectory->cd("..");
