@@ -1,10 +1,14 @@
 #! /bin/bash
 CMS_PATH=${HOME}/private/analysis/CMSSW_13_0_5/src
+# CMS_PATH=${HOME}/analysis/jetAnalysis/
+
 cd ${CMS_PATH}
-eval 'cmsenv'
+# eval 'cmsenv'
 
 #Change the path to the CMSSW_13_0_5 directory
 EXEC_PATH=${HOME}/private/analysis/CMSSW_13_0_5/src/cmsdijet
+# EXEC_PATH=${HOME}/analysis/jetAnalysis/
+
 cd ${EXEC_PATH}
 
 mkdir -p "executions_dir"
@@ -61,7 +65,7 @@ if [ "$DataSet" -eq 4 ]; then
     if [ "$isPbgoing" -eq 1 ]; then
         echo "Pbgoing is selected"
         sample_prefilx="HM185_Pbgoing"
-        input_files_list="${EXEC_PATH}/files_input/pPb_8160/DATA_HM185/Pbgoing/"
+        input_files_list="/files_input/pPb_8160/DATA_HM185/Pbgoing"
         
     elif [ "$isPbgoing" -eq 0 ]; then
         echo "pgoing is selected"
@@ -88,13 +92,13 @@ if [ "$DataSet" -gt 6 ]; then
     echo "No Data Set Selected. Use numbers from 1 to 5"
     exit 1
 fi
-
-echo "${input_files_list}"
+echo "${PWD}"
+echo "Input File List : ${input_files_list}"
 
 PD_Number=1
-for filename in ${input_files_list}/*; do
+for filename in "${PWD}${input_files_list}/*.txt"; do
     echo "Processing file: $(basename $filename)"
-    ./split_files.sh "${input_files_list}" "$($basename $filename)" "$files_per_job"
+    .${PWD}/processing/split_files.sh "${PWD}${input_files_list}" "$($basename $filename)" "$files_per_job"
     file_list=$(./split_files.sh "${input_files_list}" "$($basename $filename)" "$files_per_job")
     cat <<EOF > pPb_${($basename $filename)%.*}.sub
         universe = vanilla
