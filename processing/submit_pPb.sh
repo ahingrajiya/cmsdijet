@@ -92,7 +92,7 @@ fi
 PD_Number=1
 for filename in ${input_files_list}/*; do
     echo "Processing file: $filename"
-    file_list=$(./splt_files.sh "${input_files_list}" "$filename" "$files_per_job")
+    file_list=$(./split_files.sh "${input_files_list}" "$filename" "$files_per_job")
     cat <<EOF > pPb_${filename%.*}.sub
         universe = vanilla
         executable = ${EXEC_PATH}/run_dijetAna.sh
