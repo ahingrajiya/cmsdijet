@@ -95,43 +95,46 @@ fi
 
 echo "Input File List : ${input_files_list}"
 
+mkdir -p processing/condor/logs
+
 PD_Number=1
 for filename in ${input_files_list}/*.txt; do
     echo "Processing file: $(basename "$filename")"
     processing/split_files.sh ${input_files_list} $(basename "$filename") $files_per_job
     file_list=$(processing/split_files.sh ${input_files_list} $(basename "$filename") $files_per_job)
-    echo "Split File List Path: ${file_list}"
     subfile=$(basename "$filename")
-    echo "${subfile}"
+    echo "Submission file with name pPb_${subfile%.*}.sub is Created"
     cat <<EOF > processing/pPb_${subfile%.*}.sub
-        universe = vanilla
-        executable = ${EXEC_PATH}/processing/run_dijetAna.sh
-        +JobFlavour           = "longlunch"
-        getenv     = True
-        requirements =((OpSysAndVer =?= "AlmaLinux9") && (CERNEnvironment =?= "qa"))
-        RequestCpus = 1
+        universe        = vanilla
+        executable      = ${EXEC_PATH}/processing/run_dijetAna.sh
+        +JobFlavour     = "longlunch"
+        getenv          = True
+        requirements    =((OpSysAndVer =?= "AlmaLinux9") && (CERNEnvironment =?= "qa"))
+        RequestCpus     = 1
         transfer_input_files  = voms_proxy.txt
-        environment = "X509_USER_PROXY=voms_proxy.txt"
+        environment     = "X509_USER_PROXY=voms_proxy.txt"
 	
 	
 EOF
 
     jobid=0
     for file in ${file_list}/*.txt; do
-	    echo ${file}
         cat <<EOF >> processing/pPb_${subfile%.*}.sub
-	arguments = ${file_list}/$(basename "$file") ${sample_prefix}_PD${PD_Number}_${jobid}.root 0 0 ${isPbgoing} 0 0
-        output = condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.out
-        error = condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.err
-        log = condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.log
+	    arguments   = ${file_list}/$(basename "$file") ${sample_prefix}_PD${PD_Number}_${jobid}.root 0 0 ${isPbgoing} 0 0
+        output      = condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.out
+        error       = condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.err
+        log         = condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.log
         queue
 
 EOF
         jobid=$((jobid+1))
     done
     PD_Number=$((PD_Number+1))
-    # condor_submit pPb_${filename%.*}.sub
+    condor_submit processing/pPb_${subfile%.*}.sub
 done
+
+echo "Create Voms Proxy"
+voms-proxy-init -rfc -voms cms --out voms_proxy.txt --hours 200
 
 
 
