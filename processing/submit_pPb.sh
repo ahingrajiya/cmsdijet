@@ -95,36 +95,38 @@ fi
 echo "${PWD}"
 echo "Input File List : ${input_files_list}"
 
-PD_Number=1
-for filename in "${PWD}${input_files_list}/*.txt"; do
-    echo "Processing file: $(basename $filename)"
-    ${PWD}/processing/split_files.sh ${PWD}${input_files_list} $($basename $filename) $files_per_job
-    file_list=$(./split_files.sh ${input_files_list} $($basename $filename) $files_per_job)
-    cat <<EOF > pPb_${$(basename $filename)%.*}.sub
-        universe = vanilla
-        executable = ${EXEC_PATH}/run_dijetAna.sh
-        +JobFlavour           = "longlunch"
-        getenv     = True
-        requirements =((OpSysAndVer =?= "AlmaLinux9") && (CERNEnvironment =?= "qa"))
-        RequestCpus = 1
-        transfer_input_files  = voms_proxy.txt
-        environment = "X509_USER_PROXY=voms_proxy.txt"
-EOF
+filename in "${PWD}${input_files_list}/*.txt"
+./split_files.sh ${input_files_list} $($basename $filename) $files_per_job
+# PD_Number=1
+# for filename in "${PWD}${input_files_list}/*.txt"; do
+#     echo "Processing file: $(basename $filename)"
+#     ${PWD}/processing/split_files.sh ${PWD}${input_files_list} $($basename $filename) $files_per_job
+#     file_list=$(./split_files.sh ${input_files_list} $($basename $filename) $files_per_job)
+#     cat <<EOF > pPb_${$(basename $filename)%.*}.sub
+#         universe = vanilla
+#         executable = ${EXEC_PATH}/run_dijetAna.sh
+#         +JobFlavour           = "longlunch"
+#         getenv     = True
+#         requirements =((OpSysAndVer =?= "AlmaLinux9") && (CERNEnvironment =?= "qa"))
+#         RequestCpus = 1
+#         transfer_input_files  = voms_proxy.txt
+#         environment = "X509_USER_PROXY=voms_proxy.txt"
+# EOF
 
-    jobid = 0
-    for file in ${file_list}; do
-        cat <<EOF >> pPb_${($basename $filename)%.*}.sub
-        arguments = ${file_list}/file ${sample_prefix}_PD${PD_Number}_${jobid}.root 0 0 ${isPbgoing} 0 0
-        output = condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.out
-        error = condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.err
-        log = condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.log
-        queue
-EOF
-        jobid=$((jobid+1))
-    done
-    PD_Number=$((PD_Number+1))
-    # condor_submit pPb_${filename%.*}.sub
-done
+#     jobid = 0
+#     for file in ${file_list}; do
+#         cat <<EOF >> pPb_${($basename $filename)%.*}.sub
+#         arguments = ${file_list}/file ${sample_prefix}_PD${PD_Number}_${jobid}.root 0 0 ${isPbgoing} 0 0
+#         output = condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.out
+#         error = condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.err
+#         log = condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.log
+#         queue
+# EOF
+#         jobid=$((jobid+1))
+#     done
+#     PD_Number=$((PD_Number+1))
+#     # condor_submit pPb_${filename%.*}.sub
+# done
 
 
 
