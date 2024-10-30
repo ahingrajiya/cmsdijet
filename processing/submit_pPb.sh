@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 CMS_PATH=${HOME}/private/analysis/CMSSW_13_0_5/src
 # CMS_PATH=${HOME}/analysis/jetAnalysis/
 
@@ -95,8 +95,9 @@ fi
 echo "${PWD}"
 echo "Input File List : ${input_files_list}"
 
-filename in "${PWD}${input_files_list}/*.txt"
-./split_files.sh ${input_files_list} $($basename $filename) $files_per_job
+for filename in ${PWD}${input_files_list}/*.txt; do
+ processing/split_files.sh ${PWD}${input_files_list} $(basename "$filename") $files_per_job
+done
 # PD_Number=1
 # for filename in "${PWD}${input_files_list}/*.txt"; do
 #     echo "Processing file: $(basename $filename)"
