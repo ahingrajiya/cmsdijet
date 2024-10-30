@@ -134,7 +134,7 @@ EOF
 done
 
 echo "Create Voms Proxy"
-voms-proxy-init -rfc -voms cms --out voms_proxy.txt --hours 200
+voms-proxy-init -rfc -voms cms --out processing/voms_proxy.txt --hours 200
 
 
 
