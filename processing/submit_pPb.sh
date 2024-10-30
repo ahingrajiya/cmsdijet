@@ -65,7 +65,7 @@ if [ "$DataSet" -eq 4 ]; then
     if [ "$isPbgoing" -eq 1 ]; then
         echo "Pbgoing is selected"
         sample_prefilx="HM185_Pbgoing"
-        input_files_list="/files_input/pPb_8160/DATA_HM185/Pbgoing"
+        input_files_list="${EXEC_PATH}/files_input/pPb_8160/DATA_HM185/Pbgoing"
         
     elif [ "$isPbgoing" -eq 0 ]; then
         echo "pgoing is selected"
@@ -98,7 +98,7 @@ echo "Input File List : ${input_files_list}"
 PD_Number=1
 for filename in ${PWD}${input_files_list}/*.txt; do
     echo "Processing file: $(basename $filename)"
-    processing/split_files.sh ${PWD}${input_files_list} $(basename "$filename") $files_per_job
+    processing/split_files.sh ${input_files_list} $(basename "$filename") $files_per_job
     file_list=$(processing/split_files.sh ${input_files_list} $(basename "$filename") $files_per_job)
     echo "File List: ${file_list}"
     cat <<EOF > pPb_${$(basename "$filename")%.*}.sub
