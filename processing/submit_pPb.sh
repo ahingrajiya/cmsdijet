@@ -120,7 +120,7 @@ EOF
     jobid=0
     for file in ${file_list}/*.txt; do
         cat <<EOF >> processing/pPb_${subfile%.*}.sub
-	    arguments   = ${file_list}/$(basename "$file") ${sample_prefix}_PD${PD_Number}_${jobid}.root 0 0 ${isPbgoing} 0 0
+	    arguments   = ${file_list}/$(basename "$file") /eos/user/a/ahingraj/outputs/MB/${sample_prefix}_PD${PD_Number}_${jobid}.root 0 0 ${isPbgoing} 0 0
         output      = condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.out
         error       = condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.err
         log         = condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.log
