@@ -28,7 +28,7 @@ if [ "$DataSet" -eq 1 ]; then
     fi
 fi
 
-if ["$DataSet" -eq 2]; then
+if [ "$DataSet" -eq 2 ]; then
     echo "Embedded pPb Dataset is selected"
     cd ${EXEC_PATH}/processing
     if [ "$isPbgoing" -eq 1 ]; then
@@ -42,7 +42,7 @@ if ["$DataSet" -eq 2]; then
     fi
 fi
 
-if ["$DataSet" -eq 3]; then
+if [ "$DataSet" -eq 3 ]; then
     echo "MB pPb Dataset is selected"
     if [ "$isPbgoing" -eq 1 ]; then
         echo "Pbgoing is selected"
@@ -56,7 +56,7 @@ if ["$DataSet" -eq 3]; then
     fi
 fi
 
-if ["$DataSet" -eq 4]; then
+if [ "$DataSet" -eq 4 ]; then
     echo "HM185 pPb Dataset is selected"
     if [ "$isPbgoing" -eq 1 ]; then
         echo "Pbgoing is selected"
@@ -70,7 +70,7 @@ if ["$DataSet" -eq 4]; then
     fi
 fi
 
-if ["$DataSet" -eq 5]; then
+if [ "$DataSet" -eq 5 ]; then
     echo "HM185 pPb Dataset is selected"
     if [ "$isPbgoing" -eq 1 ]; then
         echo "Pbgoing is selected"
@@ -84,10 +84,12 @@ if ["$DataSet" -eq 5]; then
     fi
 fi
 
-if ["$DataSet" -gt 6]; then
+if [ "$DataSet" -gt 6 ]; then
     echo "No Data Set Selected. Use numbers from 1 to 5"
     exit 1
 fi
+
+echo "${input_files_list}"
 
 PD_Number=1
 for filename in ${input_files_list}/*; do
