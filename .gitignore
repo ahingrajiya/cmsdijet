@@ -38,3 +38,10 @@
 build/*
 *.txt
 *.list
+
+processing/cond/*
+processing/condor/log/*
+*.log
+*.err
+*.out
+*.sub
