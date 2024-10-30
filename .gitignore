@@ -41,6 +41,7 @@ build/*
 
 processing/cond/*
 processing/condor/log/*
+processing/ahingraj.cc
 *.log
 *.err
 *.out
