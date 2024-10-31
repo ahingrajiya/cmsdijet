@@ -52,11 +52,13 @@ if [ "$DataSet" -eq 3 ]; then
         echo "Pbgoing is selected"
         sample_prefix="MB_Pbgoing"
         input_files_list="${EXEC_PATH}/files_input/pPb_8160/DATA_MB/Pbgoing/"
-        
+        output_path="/eos/user/a/ahingraj/outputs/MB/"
+
     elif [ "$isPbgoing" -eq 0 ]; then
         echo "pgoing is selected"
         sample_prefix="MB_pgoing"
         input_files_list="${EXEC_PATH}/files_input/pPb_8160/DATA_MB/pgoing/"
+        output_path="/eos/user/a/ahingraj/outputs/MB/"
     fi
 fi
 
@@ -66,11 +68,13 @@ if [ "$DataSet" -eq 4 ]; then
         echo "Pbgoing is selected"
         sample_prefix="HM185_Pbgoing"
         input_files_list="${EXEC_PATH}/files_input/pPb_8160/DATA_HM185/Pbgoing"
+        output_path="/eos/user/a/ahingraj/outputs/HM185/"
         
     elif [ "$isPbgoing" -eq 0 ]; then
         echo "pgoing is selected"
         sample_prefix="HM185_pgoing"
         input_files_list="${EXEC_PATH}/files_input/pPb_8160/DATA_HM185/pgoing/"
+        output_path="/eos/user/a/ahingraj/outputs/HM185/"
     fi
 fi
 
@@ -80,11 +84,13 @@ if [ "$DataSet" -eq 5 ]; then
         echo "Pbgoing is selected"
         sample_prefix="HM250_Pbgoing"
         input_files_list="${EXEC_PATH}/files_input/pPb_8160/DATA_HM250/Pbgoing/"
+        output_path="/eos/user/a/ahingraj/outputs/HM250/"
         
     elif [ "$isPbgoing" -eq 0 ]; then
         echo "pgoing is selected"
         sample_prefix="HM250_pgoing"
         input_files_list="${EXEC_PATH}/files_input/pPb_8160/DATA_HM250/pgoing/"
+        output_path="/eos/user/a/ahingraj/outputs/HM250/"
     fi
 fi
 
@@ -120,10 +126,10 @@ EOF
     jobid=0
     for file in ${file_list}/*.txt; do
         cat <<EOF >> processing/pPb_${subfile%.*}.sub
-	arguments   = ${file_list}/$(basename "$file") /eos/user/a/ahingraj/outputs/MB/${sample_prefix}_PD${PD_Number}_${jobid}.root 0 0 ${isPbgoing} 0 0
-        output      = condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.out
-        error       = condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.err
-        log         = condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.log
+	    arguments   = ${file_list}/$(basename "$file") ${output_path}${sample_prefix}_PD${PD_Number}_${jobid}.root 0 0 ${isPbgoing} 0 0
+        output      = processing/condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.out
+        error       = processing/condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.err
+        log         = processing/condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.log
         queue
 
 EOF
