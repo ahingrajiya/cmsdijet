@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
         {
             JECFileName = "Autumn16_HI_pPb_Pbgoing_Embedded_MC_L2Relative_AK4PF.txt";
         }
-        JECFileDataName = "ummer16_23Sep2016HV4_DATA_L2L3Residual_AK4PF.txt";
+        JECFileDataName = "Summer16_23Sep2016HV4_DATA_L2L3Residual_AK4PF.txt";
     }
 
     // Initialize package manager
