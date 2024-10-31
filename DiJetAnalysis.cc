@@ -627,6 +627,7 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
             Double_t SubLeadingJetQuantities[4] = {subLeadJetPt, subLeadJetEtaCM, subLeadJetPhi, multiplicityBin};
             fHM->hLeadingJet_W->Fill(LeadingJetQuantities, event_Weight);
             fHM->hSubLeadingJet_W->Fill(SubLeadingJetQuantities, event_Weight);
+            fHM->hLeadPtvsSubLeadPt->Fill(subLeadJetPt, leadJetPt);
             fHM->hLeadPtvsSubLeadPt_W->Fill(subLeadJetPt, leadJetPt, event_Weight);
         }
     }
@@ -778,6 +779,7 @@ void DiJetAnalysis::processGenJets(const Event *event, const Double_t &event_Wei
             Double_t SubLeadingJetQuantities[4] = {genSubLeadJetPt, genSubLeadJetEtaCM, genSubLeadJetPhi, multiplicityBin};
             fHM->hGenLeadingJet_W->Fill(LeadingJetQuantities, event_Weight);
             fHM->hGenSubLeadingJet_W->Fill(SubLeadingJetQuantities, event_Weight);
+            fHM->hGenLeadPtvsGenSubLeadPt->Fill(genSubLeadJetPt, genLeadJetPt);
             fHM->hGenLeadPtvsGenSubLeadPt_W->Fill(genSubLeadJetPt, genLeadJetPt, event_Weight);
         }
     }
