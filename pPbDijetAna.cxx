@@ -173,7 +173,10 @@ int main(int argc, char *argv[])
     reader->addJECFile(JECFileName.Data());
     reader->setPath2JetAnalysis(path2JEC.Data());
     reader->setMatchedJets();
-    reader->useGenTrackBranch();
+    if (isMC)
+    {
+        reader->useGenTrackBranch();
+    }
     reader->eventsToProcess(-1);
     reader->setJetCut(jetCut);
     reader->setTrackCut(trackCut);

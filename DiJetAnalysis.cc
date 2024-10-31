@@ -259,7 +259,6 @@ Double_t DiJetAnalysis::EventWeight(const Bool_t &ispPb, Bool_t &isMC, const Eve
     Double_t eventWeight{1.};
     Double_t vzWeight{1.};
     Double_t ptHat = event->ptHat();
-    std::cout << ptHat << std::endl;
     Double_t vertexZ = event->vz();
     if (isMC && ispPb)
     {
@@ -316,7 +315,6 @@ Double_t DiJetAnalysis::EventWeight(const Bool_t &ispPb, Bool_t &isMC, const Eve
     }
 
     eventWeight = ptHatWeight * vzWeight;
-    std::cout << ptHatWeight << std::endl;
 
     return eventWeight;
 }
