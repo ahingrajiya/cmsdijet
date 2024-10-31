@@ -223,10 +223,8 @@ int main(int argc, char *argv[])
     analysis->addHistoManager(hm);
     manager->addAnalysis(analysis);
     manager->init();
-    if (isMC)
-    {
-        analysis->setNEventsInSample(reader->nEventsTotal());
-    }
+    analysis->setNEventsInSample(reader->nEventsTotal());
+
     manager->performAnalysis();
     manager->finish();
 

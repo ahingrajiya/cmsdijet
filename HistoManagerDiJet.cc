@@ -210,22 +210,73 @@ void HistoManagerDiJet::init(const Bool_t &isMC)
     Float_t MinPt = 50.0;
     Float_t MaxPt = 1200.0;
     Float_t PtBinStepSize = 10;
-    const int nLeadSubLeadPtBins = (int)(MaxPt - MinPt) / PtBinStepSize; // number of bins
-    Float_t PtBins[nLeadSubLeadPtBins + 1];
+    // const int nLeadSubLeadPtBins = (int)(MaxPt - MinPt) / PtBinStepSize; // number of bins
+    std::vector<Float_t> PtBins;
+    PtBins.push_back(MinPt);
 
-    for (Int_t i{0}; i < nLeadSubLeadPtBins + 1; i++)
+    while (MinPt < MaxPt)
     {
-        PtBins[i] = MinPt + i * PtBinStepSize;
+        if (MinPt < 200)
+        {
+            PtBins.push_back(MinPt + PtBinStepSize);
+            MinPt += PtBinStepSize;
+        }
+        else if (MinPt >= 200 && MinPt < 400)
+        {
+            PtBins.push_back(MinPt + 2 * PtBinStepSize);
+            MinPt += 2 * PtBinStepSize;
+        }
+        else if (MinPt >= 400 && MinPt < 700)
+        {
+            PtBins.push_back(MinPt + 5 * PtBinStepSize);
+            MinPt += 5 * PtBinStepSize;
+        }
+        else if (MinPt >= 700)
+        {
+            PtBins.push_back(MinPt + 10 * PtBinStepSize);
+            MinPt += 10 * PtBinStepSize;
+        }
     }
+    Float_t *LeadPtBins = &PtBins[0];
+    Int_t nLeadPtBins = PtBins.size() - 1;
+    PtBins.clear();
+    MinPt = 50.0;
+    PtBins.push_back(MinPt);
+    while (MinPt < MaxPt)
+    {
+        if (MinPt < 200)
+        {
+            PtBins.push_back(MinPt + PtBinStepSize);
+            MinPt += PtBinStepSize;
+        }
+        else if (MinPt >= 200 && MinPt < 300)
+        {
+            PtBins.push_back(MinPt + 2 * PtBinStepSize);
+            MinPt += 2 * PtBinStepSize;
+        }
+        else if (MinPt >= 300 && MinPt < 600)
+        {
+            PtBins.push_back(MinPt + 5 * PtBinStepSize);
+            MinPt += 5 * PtBinStepSize;
+        }
+        else if (MinPt >= 600)
+        {
+            PtBins.push_back(MinPt + 10 * PtBinStepSize);
+            MinPt += 10 * PtBinStepSize;
+        }
+    }
+    Float_t *SubLeadPtBins = &PtBins[0];
+    Int_t nSubLeadPtBins = PtBins.size() - 1;
+    PtBins.clear();
 
-    hLeadPtvsSubLeadPt = new TH2D("hLeadPtvsSubLeadPt", "Lead Pt vs SubLead Pt", nLeadSubLeadPtBins, PtBins, nLeadSubLeadPtBins, PtBins);
+    hLeadPtvsSubLeadPt = new TH2D("hLeadPtvsSubLeadPt", "Lead Pt vs SubLead Pt", nSubLeadPtBins, SubLeadPtBins, nLeadPtBins, LeadPtBins);
     hLeadPtvsSubLeadPt->Sumw2();
-    hLeadPtvsSubLeadPt_W = new TH2D("hLeadPtvsSubLeadPt_W", "Lead Pt vs SubLead Pt Weighted", nLeadSubLeadPtBins, PtBins, nLeadSubLeadPtBins, PtBins);
+    hLeadPtvsSubLeadPt_W = new TH2D("hLeadPtvsSubLeadPt_W", "Lead Pt vs SubLead Pt Weighted", nSubLeadPtBins, SubLeadPtBins, nLeadPtBins, LeadPtBins);
     hLeadPtvsSubLeadPt_W->Sumw2();
 
-    hGenLeadPtvsGenSubLeadPt = new TH2D("hGenLeadPtvsGenSubLeadPt", "Gen Lead Pt vs Gen SubLead Pt", nLeadSubLeadPtBins, PtBins, nLeadSubLeadPtBins, PtBins);
+    hGenLeadPtvsGenSubLeadPt = new TH2D("hGenLeadPtvsGenSubLeadPt", "Gen Lead Pt vs Gen SubLead Pt", nSubLeadPtBins, SubLeadPtBins, nLeadPtBins, LeadPtBins);
     hGenLeadPtvsGenSubLeadPt->Sumw2();
-    hGenLeadPtvsGenSubLeadPt_W = new TH2D("hGenLeadPtvsGenSubLeadPt_W", "Gen Lead Pt vs Gen SubLead Pt Weighted", nLeadSubLeadPtBins, PtBins, nLeadSubLeadPtBins, PtBins);
+    hGenLeadPtvsGenSubLeadPt_W = new TH2D("hGenLeadPtvsGenSubLeadPt_W", "Gen Lead Pt vs Gen SubLead Pt Weighted", nSubLeadPtBins, SubLeadPtBins, nLeadPtBins, LeadPtBins);
     hGenLeadPtvsGenSubLeadPt_W->Sumw2();
 }
 
