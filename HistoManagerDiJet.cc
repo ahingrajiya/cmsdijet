@@ -207,76 +207,16 @@ void HistoManagerDiJet::init(const Bool_t &isMC)
     hGenXj_W = new TH1D("hGenXj_W", "Gen Xj Distribution Weighted", nXjAjBins, XjBins);
     hGenXj_W->Sumw2();
 
-    Float_t MinPt = 50.0;
-    Float_t MaxPt = 1200.0;
-    Float_t PtBinStepSize = 10;
-    // const int nLeadSubLeadPtBins = (int)(MaxPt - MinPt) / PtBinStepSize; // number of bins
-    std::vector<Float_t> PtBins;
-    PtBins.push_back(MinPt);
-
-    while (MinPt < MaxPt)
-    {
-        if (MinPt < 200)
-        {
-            PtBins.push_back(MinPt + PtBinStepSize);
-            MinPt += PtBinStepSize;
-        }
-        else if (MinPt >= 200 && MinPt < 400)
-        {
-            PtBins.push_back(MinPt + 2 * PtBinStepSize);
-            MinPt += 2 * PtBinStepSize;
-        }
-        else if (MinPt >= 400 && MinPt < 700)
-        {
-            PtBins.push_back(MinPt + 5 * PtBinStepSize);
-            MinPt += 5 * PtBinStepSize;
-        }
-        else if (MinPt >= 700)
-        {
-            PtBins.push_back(MinPt + 10 * PtBinStepSize);
-            MinPt += 10 * PtBinStepSize;
-        }
-    }
-    Float_t *LeadPtBins = &PtBins[0];
-    Int_t nLeadPtBins = PtBins.size() - 1;
-    PtBins.clear();
-    MinPt = 50.0;
-    PtBins.push_back(MinPt);
-    while (MinPt < MaxPt)
-    {
-        if (MinPt < 200)
-        {
-            PtBins.push_back(MinPt + PtBinStepSize);
-            MinPt += PtBinStepSize;
-        }
-        else if (MinPt >= 200 && MinPt < 300)
-        {
-            PtBins.push_back(MinPt + 2 * PtBinStepSize);
-            MinPt += 2 * PtBinStepSize;
-        }
-        else if (MinPt >= 300 && MinPt < 600)
-        {
-            PtBins.push_back(MinPt + 5 * PtBinStepSize);
-            MinPt += 5 * PtBinStepSize;
-        }
-        else if (MinPt >= 600)
-        {
-            PtBins.push_back(MinPt + 10 * PtBinStepSize);
-            MinPt += 10 * PtBinStepSize;
-        }
-    }
-    Float_t *SubLeadPtBins = &PtBins[0];
-    Int_t nSubLeadPtBins = PtBins.size() - 1;
-    PtBins.clear();
-
-    hLeadPtvsSubLeadPt = new TH2D("hLeadPtvsSubLeadPt", "Lead Pt vs SubLead Pt", nSubLeadPtBins, SubLeadPtBins, nLeadPtBins, LeadPtBins);
+    Float_t LeadSubLeadPtBins[] = {50., 60., 70., 80., 90., 100., 110., 120., 130., 140., 150., 160., 170., 180., 190., 200., 220., 240., 260., 280., 300., 350., 400., 450., 500., 600., 700., 1200.};
+    Int_t nLeadSubLeadPtBins = sizeof(LeadSubLeadPtBins) / sizeof(Float_t) - 1;
+    hLeadPtvsSubLeadPt = new TH2D("hLeadPtvsSubLeadPt", "Lead Pt vs SubLead Pt", nLeadSubLeadPtBins, LeadSubLeadPtBins, nLeadSubLeadPtBins, LeadSubLeadPtBins);
     hLeadPtvsSubLeadPt->Sumw2();
-    hLeadPtvsSubLeadPt_W = new TH2D("hLeadPtvsSubLeadPt_W", "Lead Pt vs SubLead Pt Weighted", nSubLeadPtBins, SubLeadPtBins, nLeadPtBins, LeadPtBins);
+    hLeadPtvsSubLeadPt_W = new TH2D("hLeadPtvsSubLeadPt_W", "Lead Pt vs SubLead Pt Weighted", nLeadSubLeadPtBins, LeadSubLeadPtBins, nLeadSubLeadPtBins, LeadSubLeadPtBins);
     hLeadPtvsSubLeadPt_W->Sumw2();
 
-    hGenLeadPtvsGenSubLeadPt = new TH2D("hGenLeadPtvsGenSubLeadPt", "Gen Lead Pt vs Gen SubLead Pt", nSubLeadPtBins, SubLeadPtBins, nLeadPtBins, LeadPtBins);
+    hGenLeadPtvsGenSubLeadPt = new TH2D("hGenLeadPtvsGenSubLeadPt", "Gen Lead Pt vs Gen SubLead Pt", nLeadSubLeadPtBins, LeadSubLeadPtBins, nLeadSubLeadPtBins, LeadSubLeadPtBins);
     hGenLeadPtvsGenSubLeadPt->Sumw2();
-    hGenLeadPtvsGenSubLeadPt_W = new TH2D("hGenLeadPtvsGenSubLeadPt_W", "Gen Lead Pt vs Gen SubLead Pt Weighted", nSubLeadPtBins, SubLeadPtBins, nLeadPtBins, LeadPtBins);
+    hGenLeadPtvsGenSubLeadPt_W = new TH2D("hGenLeadPtvsGenSubLeadPt_W", "Gen Lead Pt vs Gen SubLead Pt Weighted", nLeadSubLeadPtBins, LeadSubLeadPtBins, nLeadSubLeadPtBins, LeadSubLeadPtBins);
     hGenLeadPtvsGenSubLeadPt_W->Sumw2();
 }
 
