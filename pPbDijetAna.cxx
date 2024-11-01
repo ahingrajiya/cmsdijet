@@ -49,6 +49,7 @@ int main(int argc, char *argv[])
     Double_t ptHatCut[2]{15., 30.};
     Bool_t isEmbedded{kTRUE};
     std::vector<float> multiplicityBins{0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
+    std::string path2DijetWeight = "../aux_files/pPb_8160/Dijet_Weight/DijetWeight.root";
 
     // Command line arguments
     /*
@@ -195,6 +196,8 @@ int main(int argc, char *argv[])
     if (isMC && !isEmbedded)
     {
         analysis->setMultiplicityRange(0, 400);
+        analysis->setUseDijetWeight();
+        analysis->setDijetWeightTable(path2DijetWeight);
     }
     analysis->setIspPb();
     analysis->setMultiplicityType(0);
@@ -207,6 +210,7 @@ int main(int argc, char *argv[])
     analysis->setLeadJetEtaRange(-1., 1.);
     analysis->setSubLeadJetEtaRange(-1., 1.);
     analysis->doInJetMultiplicity();
+
     // analysis->setVerbose();
 
     if (isPbGoing)

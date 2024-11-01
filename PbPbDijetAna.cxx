@@ -100,7 +100,10 @@ int main(int argc, char *argv[])
     reader->setIsMc(isMC);
     reader->useSkimmingBranch();
     reader->useTrackBranch();
-    reader->useGenTrackBranch();
+    if (isMC)
+    {
+        reader->useGenTrackBranch();
+    }
     reader->useJets();
     reader->setJetCollectionBranchName(jetBranchName.Data());
     reader->setCollidingEnergy(collEnergyGeV);

@@ -29,7 +29,8 @@ ClassImp(DiJetAnalysis)
                                      fIsMC{kFALSE}, fDeltaPhi{5. * TMath::Pi() / 6.}, fIsPbGoing{kTRUE}, fUseCMFrame{kFALSE},
                                      fEtaBoost{0.0}, fUseMultiplicityWeight{kFALSE}, fLeadJetPtLow{100.}, fSubLeadJetPtLow{50.}, fNEventsInSample{100000000},
                                      fIsDiJetFound{kFALSE}, fIsGenDiJetFound{kFALSE}, fVerbose{kFALSE}, fMinTrkPt{0.5}, fTrkEffPbPb{nullptr}, fTrkEffpPb{nullptr}, fTrkEffTable{""}, fEventCounter{0},
-                                     fCycleCounter{0}, fMultWeightTable{""}, fMultiplicityWeight{nullptr}, fMultWeight{nullptr}, fDoInJetMult{kFALSE}, fMultiplicityType{0}
+                                     fCycleCounter{0}, fMultWeightTable{""}, fMultiplicityWeight{nullptr}, fMultWeight{nullptr}, fDoInJetMult{kFALSE}, fMultiplicityType{0}, fUseDijetWeight{kFALSE},
+                                     fDijetWeightTable{""}, hDijetWeight{nullptr}, fDijetWeightFile{nullptr}
 {
     fLeadJetEtaRange[0] = {-1.};
     fLeadJetEtaRange[1] = {1.};
@@ -69,6 +70,11 @@ DiJetAnalysis::~DiJetAnalysis()
             }
         }
     }
+    if (fUseDijetWeight)
+    {
+        fDijetWeightFile->Close();
+        delete hDijetWeight;
+    }
 }
 
 void DiJetAnalysis::init()
@@ -83,6 +89,11 @@ void DiJetAnalysis::init()
     if (fUseMultiplicityWeight)
     {
         SetUpMultiplicityWeight(fMultWeightTable);
+    }
+
+    if (fUseDijetWeight)
+    {
+        SetUpDijetWeight(fDijetWeightTable);
     }
 }
 
@@ -122,6 +133,19 @@ void DiJetAnalysis::SetUpMultiplicityWeight(const std::string &multWeightTable)
         fMultiplicityWeight[1] = (TH1D *)fMultWeight->Get("mult_120_185");
         // fMultiplicityWeight[2] = (TH1D *)f->Get("mult_185");
         // fMultiplicityWeight[3] = (TH1D *)f->Get("mult_250");
+    }
+}
+
+void DiJetAnalysis::SetUpDijetWeight(const std::string &dijetWeightTable)
+{
+    fDijetWeightFile = TFile::Open(dijetWeightTable.c_str(), "OPEN");
+    if (!fDijetWeightFile)
+    {
+        std::cerr << "Dijet weight table not found" << std::endl;
+    }
+    else
+    {
+        hDijetWeight = (TH2D *)fDijetWeightFile->Get("leadptvsubleadpt_map");
     }
 }
 
@@ -249,6 +273,20 @@ Double_t *DiJetAnalysis::MultiplicityWeight(const Bool_t &ispPb, const Int_t &mu
         weight[1] = 1.;
         weight[2] = 1.;
         weight[3] = 1.;
+    }
+    return weight;
+}
+
+Float_t DiJetAnalysis::DijetWeight(const Bool_t &ispPb, const Double_t &leadPt, const Double_t &subLeadPt)
+{
+    Float_t weight = 1.0;
+    if (ispPb && fIsMC)
+    {
+        weight = hDijetWeight->GetBinContent(hDijetWeight->GetXaxis()->FindBin(subLeadPt), hDijetWeight->GetYaxis()->FindBin(leadPt));
+    }
+    if (weight == 0)
+    {
+        weight = 1.0;
     }
     return weight;
 }
@@ -593,6 +631,7 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
             // std::cout << std::endl;
 
             fIsDiJetFound = kTRUE;
+            Float_t DiJet_Weight = DijetWeight(fIspPb, leadJetPt, subLeadJetPt);
             if (fUseMultiplicityWeight)
             {
                 for (Int_t i = 0; i < 4; i++)
@@ -604,7 +643,7 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
             else
             {
                 fHM->hDeltaPhi_W->Fill(deltaPhi, event_Weight);
-                fHM->hXj_W->Fill(Xj, event_Weight);
+                fHM->hXj_W->Fill(Xj, event_Weight * DiJet_Weight);
             }
             fHM->hNDijetEvent->Fill(1);
         }

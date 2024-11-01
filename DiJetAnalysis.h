@@ -86,6 +86,8 @@ public:
     void setUseCentralityWeight() { fUseCentralityWeight = kTRUE; }
     ///@brief Set if to use multiplicity weight
     void setUseMultiplicityWeigth() { fUseMultiplicityWeight = kTRUE; }
+    ///@brief Set if to use dijet weight
+    void setUseDijetWeight() { fUseDijetWeight = kTRUE; }
     ///@brief Set Leading jet pt selection
     void setLeadJetPt(const Double_t &leadjetpt) { fLeadJetPtLow = leadjetpt; }
     ///@brief Set Sub leading jet pt selection
@@ -119,10 +121,12 @@ public:
     ///@brief Set Tracking efficiency table
     void setTrackingTable(const std::string &trackingTable) { fTrkEffTable = trackingTable; }
     /// @brief Multiplicity weight table set up
-    /// @param multWeightTable
-    /// @brief Set Multiplicity Weight Table
+    /// @param multWeightTable Path to the multiplicity weight table
     void setMultiplicityWeightTable(const std::string &multWeightTable) { fMultWeightTable = multWeightTable; }
-
+    /// @brief Set Dijet weight table
+    /// @param dijetWeightTable Path to the dijet weight table
+    void setDijetWeightTable(const std::string &dijetWeightTable) { fDijetWeightTable = dijetWeightTable; }
+    /// @brief Set if to calculate in jet multiplicity
     void doInJetMultiplicity() { fDoInJetMult = kTRUE; }
 
 private:
@@ -158,10 +162,16 @@ private:
     /// @return Returns event level weight which has to be applied to every hisotgram
     Double_t EventWeight(const Bool_t &ispPb, Bool_t &isMC, const Event *event);
     /// @brief Multiplicity weights
-    /// @param ispPb
-    /// @param multiplicity
+    /// @param ispPb Set to be true if it is pPb dataset. For PbPb dataset it needs is set to be false
+    /// @param multiplicity Multiplicity of the event
     /// @return Array of weights for multiplicity ranges
     Double_t *MultiplicityWeight(const Bool_t &ispPb, const Int_t &multiplicity);
+    /// @brief Dijet weights
+    /// @param ispPb Set to be true if it is pPb dataset. For PbPb dataset it needs is set to be false
+    /// @param leadJetPt Leading jet pt
+    /// @param subLeadJetPt Subleading jet pt
+    /// @return Dijet weight
+    Float_t DijetWeight(const Bool_t &ispPb, const Double_t &leadJetPt, const Double_t &subLeadJetPt);
     /// @brief Calaulates Delta Phi between two jets
     /// @param phi1 Jet Phi 1
     /// @param phi2 Jet Phi 2
@@ -197,6 +207,9 @@ private:
     Float_t MoveToCMFrame(const Float_t &jetEta);
     /// @return returns array of multiplicity weight histograms
     void SetUpMultiplicityWeight(const std::string &multWeightTable);
+    /// @brief Set up Dijet weight table
+    void SetUpDijetWeight(const std::string &dijetWeightTable);
+
     ///@brief Print debug information
     Bool_t fDebug;
     ///@brief Delta Phi selection for dijet
@@ -217,6 +230,8 @@ private:
     Bool_t fUseCentralityWeight;
     ///@brief Use Multipicity weight
     Bool_t fUseMultiplicityWeight;
+    ///@brief Use Dijet Weighting
+    Bool_t fUseDijetWeight;
     ///@brief Leading jet pt cut
     Double_t fLeadJetPtLow;
     ///@brief Subleading jet pt cut
@@ -245,12 +260,18 @@ private:
     TrkEfficiency2016pPb *fTrkEffpPb;
     /// @brief @brief multiplicity weight for HYDJET
     std::string fMultWeightTable;
+    ///@brief Dijet weight table PYTHIA at 8 TeV
+    std::string fDijetWeightTable;
     ///@brief Multiplicity weight histograms
     TH1 *fMultiplicityWeight[4];
+    ///@brief Dijet Weight histograms
+    TH2 *hDijetWeight;
     ///@brief Tracking efficiency table for PbPb
     std::string fTrkEffTable;
     ///@brief Multiplicity Weight file
     TFile *fMultWeight;
+    ///@brief Dijet Weight file
+    TFile *fDijetWeightFile;
     ///@brief Do Injet Multiplicity
     Bool_t fDoInJetMult;
 
