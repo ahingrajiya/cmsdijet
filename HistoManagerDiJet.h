@@ -57,6 +57,7 @@ public:
     TH1D *hHiBin_W;
     TH1D *hVz;
     TH1D *hVz_W;
+    TH1D *hVzWithDijet_W;
     TH1D *hDeltaPhi_W;
     TH1D *hGenDeltaPhi_W;
     TH1D *hXj_W;

@@ -27,7 +27,7 @@ ClassImp(HistoManagerDiJet)
                                              hHiBin{nullptr}, hHiBin_W{nullptr}, hVz{nullptr}, hVz_W{nullptr}, hMultiplicities_DiJet_W{nullptr}, hRecoQuenching_W{nullptr}, hGenQuenching_W{nullptr},
                                              hDeltaPhi_W{nullptr}, hXj_W{nullptr}, hNDijetEvent{nullptr}, hNEventsInMult{nullptr}, hGenLeadingJet_W{nullptr}, hGenSubLeadingJet_W{nullptr}, hGenDeltaPhi_W{nullptr},
                                              hGenXj_W{nullptr}, hNGenDijetEvent{nullptr}, hInJetMultiplicity_W{nullptr}, hGenInJetMultiplicity_W{nullptr}, hLeadPtvsSubLeadPt_W{nullptr},
-                                             hGenLeadPtvsGenSubLeadPt_W{nullptr}, hGenLeadPtvsGenSubLeadPt{nullptr}, hLeadPtvsSubLeadPt{nullptr}
+                                             hGenLeadPtvsGenSubLeadPt_W{nullptr}, hGenLeadPtvsGenSubLeadPt{nullptr}, hLeadPtvsSubLeadPt{nullptr}, hVzWithDijet_W{nullptr}
 
 {
     /* Empty*/
@@ -57,6 +57,8 @@ HistoManagerDiJet::~HistoManagerDiJet()
         delete hVz;
     if (hVz_W)
         delete hVz_W;
+    if (hVzWithDijet_W)
+        delete hVzWithDijet_W;
     if (hDeltaPhi_W)
         delete hDeltaPhi_W;
     if (hXj_W)
@@ -145,6 +147,8 @@ void HistoManagerDiJet::init(const Bool_t &isMC)
     hVz->Sumw2();
     hVz_W = new TH1D("hVz_W", "Vz Distribution Weighted", 200, -20.0, 20.0);
     hVz_W->Sumw2();
+    hVzWithDijet_W = new TH1D("hVzWithDijet_W", "Vz Distribution With Dijet Present Weighted", 200, -20.0, 20.0);
+    hVzWithDijet_W->Sumw2();
     hNEventsInMult = new TH1D("hNEventsInMult", "Number of Events in Multiplicity Bins", 6, 0., 6.);
     hNEventsInMult->Sumw2();
     hNDijetEvent = new TH1I("hNDijetEvent", "Number of Dijet Events", 2, 0, 2);
@@ -230,6 +234,7 @@ void HistoManagerDiJet ::writeOutput(const Bool_t &isMC)
     hHiBin_W->Write();
     hVz->Write();
     hVz_W->Write();
+    hVzWithDijet_W->Write();
     hRecoMultiplicity_W->Write();
     hCorrectedMultiplicity_W->Write();
     hGenMultiplicity_W->Write();

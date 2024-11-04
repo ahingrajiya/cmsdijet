@@ -668,6 +668,7 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
             fHM->hSubLeadingJet_W->Fill(SubLeadingJetQuantities, event_Weight);
             fHM->hLeadPtvsSubLeadPt->Fill(subLeadJetPt, leadJetPt);
             fHM->hLeadPtvsSubLeadPt_W->Fill(subLeadJetPt, leadJetPt, event_Weight);
+            fHM->hVzWithDijet_W->Fill(event->vz(), event_Weight);
         }
     }
 }
