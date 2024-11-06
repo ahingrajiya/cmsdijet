@@ -669,6 +669,13 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
             fHM->hLeadPtvsSubLeadPt->Fill(subLeadJetPt, leadJetPt);
             fHM->hLeadPtvsSubLeadPt_W->Fill(subLeadJetPt, leadJetPt, event_Weight);
             fHM->hVzWithDijet_W->Fill(event->vz(), event_Weight);
+            if (leadJetPt >= 400 && leadJetPt < 450)
+            {
+                if (subLeadJetPt >= 60 && subLeadJetPt <= 70)
+                {
+                    std::cout << "Lead Jet Pt: " << leadJetPt << " SubLead Jet Pt: " << subLeadJetPt << std::endl;
+                }
+            }
         }
     }
 }

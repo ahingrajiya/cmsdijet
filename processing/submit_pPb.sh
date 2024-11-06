@@ -9,6 +9,9 @@ cd ${CMS_PATH}
 EXEC_PATH=${HOME}/private/analysis/CMSSW_13_0_5/src/cmsdijet
 # EXEC_PATH=${HOME}/analysis/jetAnalysis/
 
+cd ${EXEC_PATH}/build
+make
+
 cd ${EXEC_PATH}
 
 mkdir -p "executions_dir"
@@ -117,7 +120,6 @@ for filename in ${input_files_list}/*.txt; do
         getenv          = True
         requirements    =((OpSysAndVer =?= "AlmaLinux9") && (CERNEnvironment =?= "qa"))
         RequestCpus     = 1
-        transfer_input_files  = ${EXEC_PATH}/processing/voms_proxy.txt
         environment     = "X509_USER_PROXY=voms_proxy.txt"
 	
 	
@@ -138,9 +140,6 @@ EOF
     PD_Number=$((PD_Number+1))
     condor_submit processing/pPb_${subfile%.*}.sub
 done
-
-echo "Create Voms Proxy"
-voms-proxy-init -rfc -voms cms --out processing/voms_proxy.txt --hours 200
 
 
 
