@@ -65,7 +65,7 @@ inline Double_t TrkEfficiency2016pPb::getCorrection(const Float_t &pt, const Flo
 {
     if (!checkBound(pt, eta))
     {
-        std::cout << "Track outside |eta|<2.4 or pT < 0 or pT > 500. Returning a correction factor of 0 for this track for now." << std::endl;
+        // std::cout << "Track outside |eta|<2.4 or pT < 0 or pT > 500. Returning a correction factor of 0 for this track for now." << std::endl;
         return 0;
     }
 
