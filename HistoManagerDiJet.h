@@ -60,14 +60,14 @@ public:
     TH1D *hVzWithDijet_W;
     TH1D *hDeltaPhi_W;
     TH1D *hGenDeltaPhi_W;
-    TH1D *hXj_W;
-    TH1D *hGenXj_W;
     TH1I *hNDijetEvent;
     TH1D *hNGenDijetEvent;
     TH1D *hNEventsInMult;
 
     TH2D *hInJetMultiplicity_W;
     TH2D *hGenInJetMultiplicity_W;
+    TH2D *hXj_W;
+    TH2D *hGenXj_W;
 
     TH2D *hLeadPtvsSubLeadPt;
     TH2D *hLeadPtvsSubLeadPt_W;

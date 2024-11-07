@@ -206,9 +206,11 @@ void HistoManagerDiJet::init(const Bool_t &isMC)
     hDeltaPhi_W->Sumw2();
     hGenDeltaPhi_W = new TH1D("hGenDeltaPhi_W", "Gen Delta Phi Distribution Weighted", nDphiBins, DphiBins);
     hGenDeltaPhi_W->Sumw2();
-    hXj_W = new TH1D("hXj_W", "Xj Distribution Weighted", nXjAjBins, XjBins);
+    double multBinArray[fMultiplicityBins.size()];
+    copy(fMultiplicityBins.begin(), fMultiplicityBins.end(), multBinArray);
+    hXj_W = new TH2D("hXj_W", "Xj Distribution Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
     hXj_W->Sumw2();
-    hGenXj_W = new TH1D("hGenXj_W", "Gen Xj Distribution Weighted", nXjAjBins, XjBins);
+    hGenXj_W = new TH2D("hGenXj_W", "Gen Xj Distribution Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
     hGenXj_W->Sumw2();
 
     Float_t LeadSubLeadPtBins[] = {50., 60., 70., 80., 90., 100., 110., 120., 130., 140., 150., 160., 170., 180., 190., 200., 220., 240., 260., 280., 300., 350., 400., 450., 500., 600., 700., 1200.};

@@ -631,7 +631,11 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
             // std::cout << std::endl;
 
             fIsDiJetFound = kTRUE;
-            Float_t DiJet_Weight = DijetWeight(fIspPb, leadJetPt, subLeadJetPt);
+            Float_t DiJet_Weight = 1.0;
+            if (fUseDijetWeight)
+            {
+                DiJet_Weight = DijetWeight(fIspPb, leadJetPt, subLeadJetPt);
+            }
             if (fUseMultiplicityWeight)
             {
                 for (Int_t i = 0; i < 4; i++)
@@ -643,7 +647,7 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
             else
             {
                 fHM->hDeltaPhi_W->Fill(deltaPhi, event_Weight);
-                fHM->hXj_W->Fill(Xj, event_Weight * DiJet_Weight);
+                fHM->hXj_W->Fill(Xj, multiplicityBin, event_Weight * DiJet_Weight);
             }
             fHM->hNDijetEvent->Fill(1);
         }
@@ -669,13 +673,6 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
             fHM->hLeadPtvsSubLeadPt->Fill(subLeadJetPt, leadJetPt);
             fHM->hLeadPtvsSubLeadPt_W->Fill(subLeadJetPt, leadJetPt, event_Weight);
             fHM->hVzWithDijet_W->Fill(event->vz(), event_Weight);
-            if (leadJetPt >= 400 && leadJetPt < 450)
-            {
-                if (subLeadJetPt >= 60 && subLeadJetPt <= 70)
-                {
-                    std::cout << "Lead Jet Pt: " << leadJetPt << " SubLead Jet Pt: " << subLeadJetPt << std::endl;
-                }
-            }
         }
     }
 }
@@ -803,7 +800,7 @@ void DiJetAnalysis::processGenJets(const Event *event, const Double_t &event_Wei
             else
             {
                 fHM->hGenDeltaPhi_W->Fill(deltaPhi, event_Weight);
-                fHM->hGenXj_W->Fill(Xj, event_Weight);
+                fHM->hGenXj_W->Fill(Xj, multiplicityBin, event_Weight);
             }
             fHM->hNGenDijetEvent->Fill(1);
         }
@@ -869,8 +866,12 @@ Float_t DiJetAnalysis::MoveToCMFrame(const Float_t &jetEta)
 
 Double_t DiJetAnalysis::FindMultiplicityBin(const Int_t &multiplicity)
 {
-    Int_t iBin = 0;
-    if (multiplicity <= 60)
+    Int_t iBin = -1;
+    if (multiplicity <= 10)
+    {
+        iBin = 0;
+    }
+    else if (multiplicity > 10 && multiplicity <= 60)
     {
         iBin = 1;
     }
