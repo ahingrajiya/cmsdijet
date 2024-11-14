@@ -527,11 +527,17 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
     }
 
     Float_t leadJetPt = -999.;
+    Float_t leadRefPt = -999.;
     Float_t subLeadJetPt = -999.;
+    Float_t subLeadRefPt = -999.;
     Float_t leadJetEta = -999.;
+    Float_t leadRefEta = -999.;
     Float_t subLeadJetEta = -999.;
+    Float_t subLeadRefEta = -999.;
     Float_t leadJetPhi = -999.;
+    Float_t leadRefPhi = -999.;
     Float_t subLeadJetPhi = -999.;
+    Float_t subLeadRefPhi = -999.;
 
     RecoJetIterator recoJetIterator;
     TrackIterator recoTrackIterator;
@@ -540,6 +546,9 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
         Float_t jetPt = (*recoJetIterator)->ptJECCorr();
         Float_t jetEta = (*recoJetIterator)->eta();
         Float_t jetPhi = (*recoJetIterator)->phi();
+        Float_t refPt = (*recoJetIterator)->RefJetPt();
+        Float_t refEta = (*recoJetIterator)->RefJetEta();
+        Float_t refPhi = (*recoJetIterator)->RefJetPhi();
 
         // std::cout << Form("Jet Pt: %f, Jet Eta: %f, Jet Phi: %f", jetPt, jetEta, jetPhi) << std::endl;
 
@@ -565,18 +574,27 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
         if (jetPt > leadJetPt)
         {
             subLeadJetPt = leadJetPt;
+            subLeadRefPt = leadRefPt;
             subLeadJetEta = leadJetEta;
+            subLeadRefEta = leadRefEta;
             subLeadJetPhi = leadJetPhi;
+            subLeadRefPhi = leadRefPhi;
 
             leadJetPt = jetPt;
+            leadRefPt = refPt;
             leadJetEta = jetEta;
+            leadRefEta = refEta;
             leadJetPhi = jetPhi;
+            leadRefPhi = refPhi;
         }
         else if (jetPt > subLeadJetPt)
         {
             subLeadJetPt = jetPt;
+            subLeadRefPt = refPt;
             subLeadJetEta = jetEta;
+            subLeadRefEta = refEta;
             subLeadJetPhi = jetPhi;
+            subLeadRefPhi = refPhi;
         }
 
         Float_t jetEtaCM = MoveToCMFrame(jetEta);
@@ -604,8 +622,10 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
     if (isDiJet)
     {
         Double_t deltaPhi = TMath::Abs(DeltaPhi(leadJetPhi, subLeadJetPhi));
+        Double_t refDeltaOPhi = TMath::Abs(DeltaPhi(leadRefPhi, subLeadRefPhi));
         // Double_t deltaPhi1 = TVector2::Phi_mpi_pi((Double_t)(leadJetPhi - subLeadJetPhi));
         Double_t Xj = Asymmetry(leadJetPt, subLeadJetPt);
+        Double_t refXj = Asymmetry(leadRefPt, subLeadRefPt);
 
         if (fUseMultiplicityWeight)
         {
@@ -629,6 +649,9 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
             // std::cout << Form("LeadPt: %f, LeadEta: %f, SubLeadPt: %f, SubLeadEta: %f, DeltaPhi: %f, Xj: %f, Mult: %i", leadJetPt, leadJetEtaCM, subLeadJetPt, subLeadJetEtaCM, deltaPhi, Xj, event->multiplicity()) << std::endl;
             // std::cout << "DeltaPhi: " << deltaPhi << " Xj: " << Xj << " Event Weight: " << event_Weight << " Mult Weight 1: " << multWeight[0] << " Mult Weight 2: " << multWeight[1] << std::endl;
             // std::cout << std::endl;
+            TF1 *recoXjWeight = new TF1("recoXjWeight", "pol1", 0, 1);
+            recoXjWeight->SetParameter(0, 7.70069e-01);
+            recoXjWeight->SetParameter(1, 3.10257e-01);
 
             fIsDiJetFound = kTRUE;
             Float_t DiJet_Weight = 1.0;
@@ -647,7 +670,12 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
             else
             {
                 fHM->hDeltaPhi_W->Fill(deltaPhi, event_Weight);
-                fHM->hXj_W->Fill(Xj, multiplicityBin, event_Weight * DiJet_Weight);
+                fHM->hXj_W->Fill(Xj, event_Weight);
+                fHM->hRefXj_W->Fill(refXj, event_Weight);
+
+                Double_t refWeight = recoXjWeight->Eval(Xj);
+                fHM->hXj_DiJetW->Fill(Xj, multiplicityBin, event_Weight * DiJet_Weight);
+                fHM->hRefXj_DiJetW->Fill(refXj, multiplicityBin, event_Weight * refWeight);
             }
             fHM->hNDijetEvent->Fill(1);
         }
