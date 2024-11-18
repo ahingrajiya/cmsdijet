@@ -671,7 +671,7 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
             {
                 fHM->hDeltaPhi_W->Fill(deltaPhi, event_Weight);
                 fHM->hXj_W->Fill(Xj, event_Weight);
-                fHM->hRefXj_W->Fill(refXj, event_Weight);
+                fHM->hRefXj_W->Fill(refXj, multiplicityBin, event_Weight);
 
                 Double_t refWeight = recoXjWeight->Eval(Xj);
                 fHM->hXj_DiJetW->Fill(Xj, multiplicityBin, event_Weight * DiJet_Weight);
