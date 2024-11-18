@@ -678,15 +678,15 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
             else
             {
                 fHM->hDeltaPhi_W->Fill(deltaPhi, event_Weight);
-                fHM->hXj_W->Fill(Xj, event_Weight);
+                fHM->hXj_W->Fill(Xj, multiplicityBin, event_Weight);
+                fHM->hXj_DiJetW->Fill(Xj, multiplicityBin, event_Weight * DiJet_Weight);
+
                 if (fIsMC)
                 {
                     Double_t refWeight = recoXjWeight->Eval(Xj);
                     fHM->hRefXj_W->Fill(refXj, multiplicityBin, event_Weight);
                     fHM->hRefXj_DiJetW->Fill(refXj, multiplicityBin, event_Weight * refWeight);
                 }
-
-                fHM->hXj_DiJetW->Fill(Xj, multiplicityBin, event_Weight * DiJet_Weight);
             }
             fHM->hNDijetEvent->Fill(1);
         }
