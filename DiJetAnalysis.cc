@@ -574,27 +574,36 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
         if (jetPt > leadJetPt)
         {
             subLeadJetPt = leadJetPt;
-            subLeadRefPt = leadRefPt;
             subLeadJetEta = leadJetEta;
-            subLeadRefEta = leadRefEta;
             subLeadJetPhi = leadJetPhi;
-            subLeadRefPhi = leadRefPhi;
-
+            if (fIsMC)
+            {
+                subLeadRefPt = leadRefPt;
+                subLeadRefEta = leadRefEta;
+                subLeadRefPhi = leadRefPhi;
+            }
             leadJetPt = jetPt;
-            leadRefPt = refPt;
             leadJetEta = jetEta;
-            leadRefEta = refEta;
             leadJetPhi = jetPhi;
-            leadRefPhi = refPhi;
+            if (fIsMC)
+            {
+                leadRefEta = refEta;
+                leadRefPhi = refPhi;
+                leadRefPt = refPt;
+            }
         }
         else if (jetPt > subLeadJetPt)
         {
             subLeadJetPt = jetPt;
-            subLeadRefPt = refPt;
             subLeadJetEta = jetEta;
-            subLeadRefEta = refEta;
             subLeadJetPhi = jetPhi;
-            subLeadRefPhi = refPhi;
+
+            if (fIsMC)
+            {
+                subLeadRefPt = refPt;
+                subLeadRefEta = refEta;
+                subLeadRefPhi = refPhi;
+            }
         }
 
         Float_t jetEtaCM = MoveToCMFrame(jetEta);
@@ -622,10 +631,14 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
     if (isDiJet)
     {
         Double_t deltaPhi = TMath::Abs(DeltaPhi(leadJetPhi, subLeadJetPhi));
-        Double_t refDeltaOPhi = TMath::Abs(DeltaPhi(leadRefPhi, subLeadRefPhi));
-        // Double_t deltaPhi1 = TVector2::Phi_mpi_pi((Double_t)(leadJetPhi - subLeadJetPhi));
         Double_t Xj = Asymmetry(leadJetPt, subLeadJetPt);
-        Double_t refXj = Asymmetry(leadRefPt, subLeadRefPt);
+
+        Double_t refXj;
+        if (fIsMC)
+        {
+            Double_t refDeltaPhi = TMath::Abs(DeltaPhi(leadRefPhi, subLeadRefPhi));
+            refXj = Asymmetry(leadRefPt, subLeadRefPt);
+        }
 
         if (fUseMultiplicityWeight)
         {
@@ -644,11 +657,6 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
         }
         if (deltaPhi > fDeltaPhi)
         {
-
-            // std::cout << std::endl;
-            // std::cout << Form("LeadPt: %f, LeadEta: %f, SubLeadPt: %f, SubLeadEta: %f, DeltaPhi: %f, Xj: %f, Mult: %i", leadJetPt, leadJetEtaCM, subLeadJetPt, subLeadJetEtaCM, deltaPhi, Xj, event->multiplicity()) << std::endl;
-            // std::cout << "DeltaPhi: " << deltaPhi << " Xj: " << Xj << " Event Weight: " << event_Weight << " Mult Weight 1: " << multWeight[0] << " Mult Weight 2: " << multWeight[1] << std::endl;
-            // std::cout << std::endl;
             TF1 *recoXjWeight = new TF1("recoXjWeight", "pol1", 0, 1);
             recoXjWeight->SetParameter(0, 7.70069e-01);
             recoXjWeight->SetParameter(1, 3.10257e-01);
@@ -671,11 +679,14 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
             {
                 fHM->hDeltaPhi_W->Fill(deltaPhi, event_Weight);
                 fHM->hXj_W->Fill(Xj, event_Weight);
-                fHM->hRefXj_W->Fill(refXj, multiplicityBin, event_Weight);
+                if (fIsMC)
+                {
+                    Double_t refWeight = recoXjWeight->Eval(Xj);
+                    fHM->hRefXj_W->Fill(refXj, multiplicityBin, event_Weight);
+                    fHM->hRefXj_DiJetW->Fill(refXj, multiplicityBin, event_Weight * refWeight);
+                }
 
-                Double_t refWeight = recoXjWeight->Eval(Xj);
                 fHM->hXj_DiJetW->Fill(Xj, multiplicityBin, event_Weight * DiJet_Weight);
-                fHM->hRefXj_DiJetW->Fill(refXj, multiplicityBin, event_Weight * refWeight);
             }
             fHM->hNDijetEvent->Fill(1);
         }
