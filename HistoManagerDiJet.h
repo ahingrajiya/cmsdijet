@@ -69,7 +69,9 @@ public:
     TH2D *hXj_W;
     TH2D *hXj_DiJetW;
     TH2D *hRefXj_W;
-    TH2D *hRefXj_DiJetW;
+    TH2D *hRefXj_ER_W;
+    TH2D *hRefXj_XjW;
+    TH2D *hRefXj_ER_XjW;
     TH2D *hGenXj_W;
 
     TH2D *hLeadPtvsSubLeadPt;
