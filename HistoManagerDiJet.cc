@@ -28,7 +28,7 @@ ClassImp(HistoManagerDiJet)
                                              hDeltaPhi_W{nullptr}, hXj_W{nullptr}, hNDijetEvent{nullptr}, hNEventsInMult{nullptr}, hGenLeadingJet_W{nullptr}, hGenSubLeadingJet_W{nullptr}, hGenDeltaPhi_W{nullptr},
                                              hGenXj_W{nullptr}, hNGenDijetEvent{nullptr}, hInJetMultiplicity_W{nullptr}, hGenInJetMultiplicity_W{nullptr}, hLeadPtvsSubLeadPt_W{nullptr},
                                              hGenLeadPtvsGenSubLeadPt_W{nullptr}, hGenLeadPtvsGenSubLeadPt{nullptr}, hLeadPtvsSubLeadPt{nullptr}, hVzWithDijet_W{nullptr}, hXj_DiJetW{nullptr}, hRefXj_W{nullptr}, hRefXj_XjW{nullptr},
-                                             hRefXj_ER_W{nullptr}, hRefXj_ER_XjW{nullptr}
+                                             hRefXj_ER_W{nullptr}, hRefXj_ER_XjW{nullptr}, hXj_XjW{nullptr}
 
 {
     /* Empty*/
@@ -84,6 +84,8 @@ HistoManagerDiJet::~HistoManagerDiJet()
         delete hNGenDijetEvent;
     if (hNEventsInMult)
         delete hNEventsInMult;
+    if (hXj_XjW)
+        delete hXj_XjW;
 
     if (hInJetMultiplicity_W)
         delete hInJetMultiplicity_W;
@@ -223,6 +225,8 @@ void HistoManagerDiJet::init(const Bool_t &isMC)
     copy(fMultiplicityBins.begin(), fMultiplicityBins.end(), multBinArray);
     hXj_W = new TH2D("hXj_W", "Xj Distribution Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
     hXj_W->Sumw2();
+    hXj_XjW = new TH2D("hXj_XjW", "Xj Distribution XjWeighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
+    hXj_XjW->Sumw2();
     hXj_DiJetW = new TH2D("hXj_DiJetW", "Xj Distribution DijetWeighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
     hXj_DiJetW->Sumw2();
     hRefXj_W = new TH2D("hRefXj_W", "RefXj Distribution Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
@@ -305,6 +309,7 @@ void HistoManagerDiJet ::writeOutput(const Bool_t &isMC)
     hRecoQuenching_W->Write();
     hDeltaPhi_W->Write();
     hXj_W->Write();
+    hXj_XjW->Write();
     hXj_DiJetW->Write();
     hNDijetEvent->Write();
 
