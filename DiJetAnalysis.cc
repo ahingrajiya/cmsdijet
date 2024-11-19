@@ -658,8 +658,11 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
         if (deltaPhi > fDeltaPhi)
         {
             TF1 *recoXjWeight = new TF1("recoXjWeight", "pol1", 0, 1);
-            recoXjWeight->SetParameter(0, 7.70069e-01);
-            recoXjWeight->SetParameter(1, 3.10257e-01);
+            recoXjWeight->SetParameter(0, 5.48924e-01); // DijetWeighted
+            recoXjWeight->SetParameter(1, 6.18334e-01);
+
+            // recoXjWeight->SetParameter(0, 1.77712e-01); // Only Pthat Weighted
+            // recoXjWeight->SetParameter(1, 1.15217e+00);
 
             fIsDiJetFound = kTRUE;
             Float_t DiJet_Weight = 1.0;
