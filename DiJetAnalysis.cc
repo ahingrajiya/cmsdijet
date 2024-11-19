@@ -692,9 +692,7 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
 
                     if (refXj > 1.0)
                     {
-                        std::cout << refXj << std::endl;
                         refXj = 1. / refXj;
-                        std::cout << refXj << std::endl;
                     }
                     fHM->hRefXj_W->Fill(refXj, multiplicityBin, event_Weight);
                     fHM->hRefXj_XjW->Fill(refXj, multiplicityBin, event_Weight * refWeight);
