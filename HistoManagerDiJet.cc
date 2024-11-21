@@ -27,8 +27,8 @@ ClassImp(HistoManagerDiJet)
                                              hHiBin{nullptr}, hHiBin_W{nullptr}, hVz{nullptr}, hVz_W{nullptr}, hMultiplicities_DiJet_W{nullptr}, hRecoQuenching_W{nullptr}, hGenQuenching_W{nullptr},
                                              hDeltaPhi_W{nullptr}, hXj_W{nullptr}, hNDijetEvent{nullptr}, hNEventsInMult{nullptr}, hGenLeadingJet_W{nullptr}, hGenSubLeadingJet_W{nullptr}, hGenDeltaPhi_W{nullptr},
                                              hGenXj_W{nullptr}, hNGenDijetEvent{nullptr}, hInJetMultiplicity_W{nullptr}, hGenInJetMultiplicity_W{nullptr}, hLeadPtvsSubLeadPt_W{nullptr},
-                                             hGenLeadPtvsGenSubLeadPt_W{nullptr}, hGenLeadPtvsGenSubLeadPt{nullptr}, hLeadPtvsSubLeadPt{nullptr}, hVzWithDijet_W{nullptr}, hXj_DiJetW{nullptr}, hRefXj_W{nullptr}, hRefXj_XjW{nullptr},
-                                             hRefXj_ER_W{nullptr}, hRefXj_ER_XjW{nullptr}, hXj_XjW{nullptr}
+                                             hGenLeadPtvsGenSubLeadPt_W{nullptr}, hGenLeadPtvsGenSubLeadPt{nullptr}, hLeadPtvsSubLeadPt{nullptr}, hVzWithDijet_W{nullptr}, hXj_DiJetW{nullptr}, hRefXj_W{nullptr}, hRefXj_DiJetW{nullptr},
+                                             hRefXj_ER_W{nullptr}, hRefXj_ER_DiJetW{nullptr}, hXj_XjW{nullptr}, hRefLeadPtvsRefSubLeadPt{nullptr}, hRefLeadPtvsRefSubLeadPt_W{nullptr}
 
 {
     /* Empty*/
@@ -68,12 +68,12 @@ HistoManagerDiJet::~HistoManagerDiJet()
         delete hXj_DiJetW;
     if (hRefXj_W)
         delete hRefXj_W;
-    if (hRefXj_XjW)
-        delete hRefXj_XjW;
+    if (hRefXj_DiJetW)
+        delete hRefXj_DiJetW;
     if (hRefXj_ER_W)
         delete hRefXj_ER_W;
-    if (hRefXj_ER_XjW)
-        delete hRefXj_ER_XjW;
+    if (hRefXj_ER_DiJetW)
+        delete hRefXj_ER_DiJetW;
     if (hNDijetEvent)
         delete hNDijetEvent;
     if (hGenDeltaPhi_W)
@@ -100,6 +100,10 @@ HistoManagerDiJet::~HistoManagerDiJet()
         delete hLeadPtvsSubLeadPt_W;
     if (hGenLeadPtvsGenSubLeadPt_W)
         delete hGenLeadPtvsGenSubLeadPt_W;
+    if (hRefLeadPtvsRefSubLeadPt)
+        delete hRefLeadPtvsRefSubLeadPt;
+    if (hRefLeadPtvsRefSubLeadPt_W)
+        delete hRefLeadPtvsRefSubLeadPt_W;
 
     if (hMultiplicities)
         delete hMultiplicities;
@@ -209,6 +213,9 @@ void HistoManagerDiJet::init(const Bool_t &isMC)
     int QuenchBins[5] = {nXjAjBins, nDphiBins, 100, 100, nMultiplicityBins};
     Double_t QuenchMin[5] = {0.0, 0.0, 0.0, 0.0, fMultiplicityBins[0]};
     Double_t QuenchMax[5] = {1.0, TMath::Pi(), 1000.0, 1000.0, fMultiplicityBins[fMultiplicityBins.size() - 1]};
+    double multBinArray[fMultiplicityBins.size()];
+    copy(fMultiplicityBins.begin(), fMultiplicityBins.end(), multBinArray);
+
     hRecoQuenching_W = new THnSparseD("hRecoQuenching_W", "Reco Quenching", 5, QuenchBins, QuenchMin, QuenchMax);
     hRecoQuenching_W->GetAxis(0)->Set(QuenchBins[0], XjBins);
     hRecoQuenching_W->GetAxis(1)->Set(QuenchBins[1], DphiBins);
@@ -221,8 +228,6 @@ void HistoManagerDiJet::init(const Bool_t &isMC)
     hDeltaPhi_W->Sumw2();
     hGenDeltaPhi_W = new TH1D("hGenDeltaPhi_W", "Gen Delta Phi Distribution Weighted", nDphiBins, DphiBins);
     hGenDeltaPhi_W->Sumw2();
-    double multBinArray[fMultiplicityBins.size()];
-    copy(fMultiplicityBins.begin(), fMultiplicityBins.end(), multBinArray);
     hXj_W = new TH2D("hXj_W", "Xj Distribution Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
     hXj_W->Sumw2();
     hXj_XjW = new TH2D("hXj_XjW", "Xj Distribution XjWeighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
@@ -231,12 +236,12 @@ void HistoManagerDiJet::init(const Bool_t &isMC)
     hXj_DiJetW->Sumw2();
     hRefXj_W = new TH2D("hRefXj_W", "RefXj Distribution Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
     hRefXj_W->Sumw2();
-    hRefXj_XjW = new TH2D("hRefXj_XjW", "RefXj Distribution XjWeighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
-    hRefXj_XjW->Sumw2();
+    hRefXj_DiJetW = new TH2D("hRefXj_DiJetW", "RefXj Distribution XjWeighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
+    hRefXj_DiJetW->Sumw2();
     hRefXj_ER_W = new TH2D("hRefXj_ER_W", "RefXj Distribution ER Weighted", nXjAjBins_ER, XjBins_ER, nMultiplicityBins, multBinArray);
     hRefXj_ER_W->Sumw2();
-    hRefXj_ER_XjW = new TH2D("hRefXj_ER_XjW", "RefXj Distribution ER XjWeighted", nXjAjBins_ER, XjBins_ER, nMultiplicityBins, multBinArray);
-    hRefXj_ER_XjW->Sumw2();
+    hRefXj_ER_DiJetW = new TH2D("hRefXj_ER_DiJetW", "RefXj Distribution ER XjWeighted", nXjAjBins_ER, XjBins_ER, nMultiplicityBins, multBinArray);
+    hRefXj_ER_DiJetW->Sumw2();
     hGenXj_W = new TH2D("hGenXj_W", "Gen Xj Distribution Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
     hGenXj_W->Sumw2();
 
@@ -251,6 +256,11 @@ void HistoManagerDiJet::init(const Bool_t &isMC)
     hGenLeadPtvsGenSubLeadPt->Sumw2();
     hGenLeadPtvsGenSubLeadPt_W = new TH2D("hGenLeadPtvsGenSubLeadPt_W", "Gen Lead Pt vs Gen SubLead Pt Weighted", nLeadSubLeadPtBins, LeadSubLeadPtBins, nLeadSubLeadPtBins, LeadSubLeadPtBins);
     hGenLeadPtvsGenSubLeadPt_W->Sumw2();
+
+    hRefLeadPtvsRefSubLeadPt = new TH2D("hRefLeadPtvsRefSubLeadPt", "Ref Lead Pt vs Ref SubLead Pt", nLeadSubLeadPtBins, LeadSubLeadPtBins, nLeadSubLeadPtBins, LeadSubLeadPtBins);
+    hRefLeadPtvsRefSubLeadPt->Sumw2();
+    hRefLeadPtvsRefSubLeadPt_W = new TH2D("hRefLeadPtvsRefSubLeadPt_W", "Ref Lead Pt vs Ref SubLead Pt Weighted", nLeadSubLeadPtBins, LeadSubLeadPtBins, nLeadSubLeadPtBins, LeadSubLeadPtBins);
+    hRefLeadPtvsRefSubLeadPt_W->Sumw2();
 }
 
 void HistoManagerDiJet ::writeOutput(const Bool_t &isMC)
@@ -301,6 +311,8 @@ void HistoManagerDiJet ::writeOutput(const Bool_t &isMC)
     {
         hGenLeadPtvsGenSubLeadPt->Write();
         hGenLeadPtvsGenSubLeadPt_W->Write();
+        hRefLeadPtvsRefSubLeadPt->Write();
+        hRefLeadPtvsRefSubLeadPt_W->Write();
     }
 
     gDirectory->cd("..");
@@ -316,9 +328,9 @@ void HistoManagerDiJet ::writeOutput(const Bool_t &isMC)
     if (fIsMC)
     {
         hRefXj_W->Write();
-        hRefXj_XjW->Write();
+        hRefXj_DiJetW->Write();
         hRefXj_ER_W->Write();
-        hRefXj_ER_XjW->Write();
+        hRefXj_ER_DiJetW->Write();
         hGenQuenching_W->Write();
         hGenDeltaPhi_W->Write();
         hGenXj_W->Write();
