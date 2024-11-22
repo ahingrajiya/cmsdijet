@@ -145,7 +145,8 @@ void DiJetAnalysis::SetUpDijetWeight(const std::string &dijetWeightTable)
     }
     else
     {
-        hDijetWeight = (TH2D *)fDijetWeightFile->Get("leadptvsubleadpt_map");
+        // hDijetWeight = (TH2D *)fDijetWeightFile->Get("leadptvsubleadpt_map");
+        hDijetWeight = (TH2D *)fDijetWeightFile->Get("ref_dijetw");
     }
 }
 
@@ -812,7 +813,7 @@ void DiJetAnalysis::processGenJets(const Event *event, const Double_t &event_Wei
     {
         Double_t deltaPhi = TMath::Abs(DeltaPhi(genLeadJetPhi, genSubLeadJetPhi));
         Double_t Xj = Asymmetry(genLeadJetPt, genSubLeadJetPt);
-
+        Double_t genDiJetW = DijetWeight(fIspPb, genLeadJetPt, genSubLeadJetPt);
         if (fUseMultiplicityWeight)
         {
             for (Int_t i = 0; i < 4; i++)
@@ -846,6 +847,7 @@ void DiJetAnalysis::processGenJets(const Event *event, const Double_t &event_Wei
             {
                 fHM->hGenDeltaPhi_W->Fill(deltaPhi, event_Weight);
                 fHM->hGenXj_W->Fill(Xj, multiplicityBin, event_Weight);
+                fHM->hGenXj_DiJetW->Fill(Xj, multiplicityBin, event_Weight * genDiJetW);
             }
             fHM->hNGenDijetEvent->Fill(1);
         }

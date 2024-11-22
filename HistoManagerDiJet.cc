@@ -28,7 +28,7 @@ ClassImp(HistoManagerDiJet)
                                              hDeltaPhi_W{nullptr}, hXj_W{nullptr}, hNDijetEvent{nullptr}, hNEventsInMult{nullptr}, hGenLeadingJet_W{nullptr}, hGenSubLeadingJet_W{nullptr}, hGenDeltaPhi_W{nullptr},
                                              hGenXj_W{nullptr}, hNGenDijetEvent{nullptr}, hInJetMultiplicity_W{nullptr}, hGenInJetMultiplicity_W{nullptr}, hLeadPtvsSubLeadPt_W{nullptr},
                                              hGenLeadPtvsGenSubLeadPt_W{nullptr}, hGenLeadPtvsGenSubLeadPt{nullptr}, hLeadPtvsSubLeadPt{nullptr}, hVzWithDijet_W{nullptr}, hXj_DiJetW{nullptr}, hRefXj_W{nullptr}, hRefXj_DiJetW{nullptr},
-                                             hRefXj_ER_W{nullptr}, hRefXj_ER_DiJetW{nullptr}, hXj_XjW{nullptr}, hRefLeadPtvsRefSubLeadPt{nullptr}, hRefLeadPtvsRefSubLeadPt_W{nullptr}
+                                             hRefXj_ER_W{nullptr}, hRefXj_ER_DiJetW{nullptr}, hXj_XjW{nullptr}, hRefLeadPtvsRefSubLeadPt{nullptr}, hRefLeadPtvsRefSubLeadPt_W{nullptr}, hGenXj_DiJetW{nullptr}
 
 {
     /* Empty*/
@@ -80,6 +80,8 @@ HistoManagerDiJet::~HistoManagerDiJet()
         delete hGenDeltaPhi_W;
     if (hGenXj_W)
         delete hGenXj_W;
+    if (hGenXj_DiJetW)
+        delete hGenXj_DiJetW;
     if (hNGenDijetEvent)
         delete hNGenDijetEvent;
     if (hNEventsInMult)
@@ -244,6 +246,8 @@ void HistoManagerDiJet::init(const Bool_t &isMC)
     hRefXj_ER_DiJetW->Sumw2();
     hGenXj_W = new TH2D("hGenXj_W", "Gen Xj Distribution Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
     hGenXj_W->Sumw2();
+    hGenXj_DiJetW = new TH2D("hGenXj_DiJetW", "Gen Xj Distribution DijetWeighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
+    hGenXj_DiJetW->Sumw2();
 
     Float_t LeadSubLeadPtBins[] = {50., 60., 70., 80., 90., 100., 110., 120., 130., 140., 150., 160., 170., 180., 190., 200., 220., 240., 260., 280., 300., 350., 400., 450., 500., 600., 700., 1200.};
     Int_t nLeadSubLeadPtBins = sizeof(LeadSubLeadPtBins) / sizeof(Float_t) - 1;
@@ -334,6 +338,7 @@ void HistoManagerDiJet ::writeOutput(const Bool_t &isMC)
         hGenQuenching_W->Write();
         hGenDeltaPhi_W->Write();
         hGenXj_W->Write();
+        hGenXj_DiJetW->Write();
         hNGenDijetEvent->Write();
     }
 }
