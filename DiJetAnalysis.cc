@@ -258,6 +258,7 @@ Int_t DiJetAnalysis::SubEventMultiplicity(const Bool_t &isMC, const Bool_t &ispP
     }
     return iSube;
 }
+
 Double_t *DiJetAnalysis::MultiplicityWeight(const Bool_t &ispPb, const Int_t &multiplicity)
 {
     Double_t *weight = new Double_t[4]{0.0};
@@ -577,29 +578,29 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
             subLeadJetPt = leadJetPt;
             subLeadJetEta = leadJetEta;
             subLeadJetPhi = leadJetPhi;
-            if (fIsMC)
-            {
-                subLeadRefPt = leadRefPt;
-                subLeadRefEta = leadRefEta;
-                subLeadRefPhi = leadRefPhi;
-            }
             leadJetPt = jetPt;
             leadJetEta = jetEta;
             leadJetPhi = jetPhi;
-            if (fIsMC)
-            {
-                leadRefEta = refEta;
-                leadRefPhi = refPhi;
-                leadRefPt = refPt;
-            }
         }
         else if (jetPt > subLeadJetPt)
         {
             subLeadJetPt = jetPt;
             subLeadJetEta = jetEta;
             subLeadJetPhi = jetPhi;
+        }
+        if (fIsMC)
+        {
+            if (refPt > leadJetPt)
+            {
+                subLeadRefPt = leadRefPt;
+                subLeadRefEta = leadRefEta;
+                subLeadRefPhi = leadRefPhi;
 
-            if (fIsMC)
+                leadRefEta = refEta;
+                leadRefPhi = refPhi;
+                leadRefPt = refPt;
+            }
+            else if (refPt > subLeadJetPt)
             {
                 subLeadRefPt = refPt;
                 subLeadRefEta = refEta;
@@ -637,9 +638,10 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
         Double_t Xj = Asymmetry(leadJetPt, subLeadJetPt);
 
         Double_t refXj;
+        Double_t refDeltaPhi;
         if (fIsMC)
         {
-            Double_t refDeltaPhi = TMath::Abs(DeltaPhi(leadRefPhi, subLeadRefPhi));
+            refDeltaPhi = TMath::Abs(DeltaPhi(leadRefPhi, subLeadRefPhi));
             refXj = Asymmetry(leadRefPt, subLeadRefPt);
         }
 
@@ -664,7 +666,7 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
             fIsDiJetFound = kTRUE;
             if (fUseDijetWeight)
             {
-                DiJet_Weight = DijetWeight(fIspPb, leadJetPt, subLeadJetPt);
+                DiJet_Weight = DijetWeight(fIspPb, leadRefPt, subLeadRefPt);
             }
             if (fUseMultiplicityWeight)
             {
