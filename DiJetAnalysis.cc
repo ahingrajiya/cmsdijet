@@ -145,8 +145,8 @@ void DiJetAnalysis::SetUpDijetWeight(const std::string &dijetWeightTable)
     }
     else
     {
-        // hDijetWeight = (TH2D *)fDijetWeightFile->Get("leadptvsubleadpt_map");
-        hDijetWeight = (TH2D *)fDijetWeightFile->Get("ref_dijetw");
+        hDijetWeight = (TH2D *)fDijetWeightFile->Get("leadptvsubleadpt_map");
+        // hDijetWeight = (TH2D *)fDijetWeightFile->Get("ref_dijetw");
     }
 }
 
@@ -666,7 +666,8 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
             fIsDiJetFound = kTRUE;
             if (fUseDijetWeight)
             {
-                DiJet_Weight = DijetWeight(fIspPb, leadRefPt, subLeadRefPt);
+                // DiJet_Weight = DijetWeight(fIspPb, leadRefPt, subLeadRefPt);
+                DiJet_Weight = DijetWeight(fIspPb, leadJetPt, subLeadJetPt);
             }
             if (fUseMultiplicityWeight)
             {
