@@ -232,6 +232,8 @@ private:
     Bool_t fUseMultiplicityWeight;
     ///@brief Use Dijet Weighting
     Bool_t fUseDijetWeight;
+    ///@brief Dijet Weight
+    Float_t fDijetWeight;
     ///@brief Leading jet pt cut
     Double_t fLeadJetPtLow;
     ///@brief Subleading jet pt cut
