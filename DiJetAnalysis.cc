@@ -716,6 +716,10 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
             fHM->hSubLeadingJet_W->Fill(SubLeadingJetQuantities, event_Weight);
             fHM->hLeadPtvsSubLeadPt->Fill(subLeadJetPt, leadJetPt);
             fHM->hLeadPtvsSubLeadPt_W->Fill(subLeadJetPt, leadJetPt, event_Weight);
+            if (leadRefPt < 100)
+            {
+                std::cout << "Before Lead Jet RefPt: " << leadRefPt << " SubLead Jet RefPt: " << subLeadRefPt << std::endl;
+            }
             if (subLeadRefPt > leadRefPt)
             {
                 Double_t tempPt = leadRefPt;
@@ -872,8 +876,8 @@ void DiJetAnalysis::processGenJets(const Event *event, const Double_t &event_Wei
             Double_t SubLeadingJetQuantities[4] = {genSubLeadJetPt, genSubLeadJetEtaCM, genSubLeadJetPhi, multiplicityBin};
             fHM->hGenLeadingJet_W->Fill(LeadingJetQuantities, event_Weight);
             fHM->hGenSubLeadingJet_W->Fill(SubLeadingJetQuantities, event_Weight);
-            fHM->hGenLeadPtvsGenSubLeadPt->Fill(genSubLeadJetPt, genLeadJetPt);
-            fHM->hGenLeadPtvsGenSubLeadPt_W->Fill(genSubLeadJetPt, genLeadJetPt, event_Weight);
+            fHM->hGenLeadPtvsGenSubLeadPt->Fill(genSubLeadJetPt, genLeadJetPt, event_Weight);
+            fHM->hGenLeadPtvsGenSubLeadPt_W->Fill(genSubLeadJetPt, genLeadJetPt, event_Weight * fDijetWeight);
         }
     }
 }
