@@ -718,7 +718,9 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
             fHM->hLeadPtvsSubLeadPt_W->Fill(subLeadJetPt, leadJetPt, event_Weight);
             if (leadRefPt < 100)
             {
+                std::cout << "Before Lead Jet Pt: " << leadJetPt << " SubLead Jet Pt: " << subLeadJetPt << std::endl;
                 std::cout << "Before Lead Jet RefPt: " << leadRefPt << " SubLead Jet RefPt: " << subLeadRefPt << std::endl;
+                std::cout << std::endl;
             }
             if (subLeadRefPt > leadRefPt)
             {
