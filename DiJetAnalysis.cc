@@ -582,13 +582,13 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
             leadJetEta = jetEta;
             leadJetPhi = jetPhi;
 
-            subLeadRefPt = leadRefPt;
-            subLeadRefEta = leadRefEta;
-            subLeadRefPhi = leadRefPhi;
+            // subLeadRefPt = leadRefPt;
+            // subLeadRefEta = leadRefEta;
+            // subLeadRefPhi = leadRefPhi;
 
-            leadRefEta = refEta;
-            leadRefPhi = refPhi;
-            leadRefPt = refPt;
+            // leadRefEta = refEta;
+            // leadRefPhi = refPhi;
+            // leadRefPt = refPt;
         }
         else if (jetPt > subLeadJetPt)
         {
@@ -596,29 +596,29 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
             subLeadJetEta = jetEta;
             subLeadJetPhi = jetPhi;
 
-            subLeadRefPt = refPt;
-            subLeadRefEta = refEta;
-            subLeadRefPhi = refPhi;
+            // subLeadRefPt = refPt;
+            // subLeadRefEta = refEta;
+            // subLeadRefPhi = refPhi;
         }
-        // if (fIsMC)
-        // {
-        //     if (refPt > leadRefPt)
-        //     {
-        //         subLeadRefPt = leadRefPt;
-        //         subLeadRefEta = leadRefEta;
-        //         subLeadRefPhi = leadRefPhi;
+        if (fIsMC)
+        {
+            if (refPt > leadRefPt)
+            {
+                subLeadRefPt = leadRefPt;
+                subLeadRefEta = leadRefEta;
+                subLeadRefPhi = leadRefPhi;
 
-        //         leadRefEta = refEta;
-        //         leadRefPhi = refPhi;
-        //         leadRefPt = refPt;
-        //     }
-        //     else if (refPt > subLeadRefPt)
-        //     {
-        //         subLeadRefPt = refPt;
-        //         subLeadRefEta = refEta;
-        //         subLeadRefPhi = refPhi;
-        //     }
-        // }
+                leadRefEta = refEta;
+                leadRefPhi = refPhi;
+                leadRefPt = refPt;
+            }
+            else if (refPt > subLeadRefPt)
+            {
+                subLeadRefPt = refPt;
+                subLeadRefEta = refEta;
+                subLeadRefPhi = refPhi;
+            }
+        }
 
         Float_t jetEtaCM = MoveToCMFrame(jetEta);
         if (fUseMultiplicityWeight)
@@ -676,7 +676,7 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
             fIsDiJetFound = kTRUE;
             if (fUseDijetWeight)
             {
-                fDijetWeight = DijetWeight(fIspPb, leadJetPt, subLeadJetPt);
+                fDijetWeight = DijetWeight(fIspPb, leadRefPt, subLeadRefPt);
             }
             if (fUseMultiplicityWeight)
             {
