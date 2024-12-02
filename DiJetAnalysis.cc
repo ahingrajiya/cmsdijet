@@ -482,8 +482,9 @@ void DiJetAnalysis::processEvent(const Event *event)
         fHM->hMultiplicities_W->Fill(Multiplicities, Event_Weight);
     }
 
-    processRecoJets(event, Event_Weight, MultWeight, iMultiplicityBin);
     processGenJets(event, Event_Weight, MultWeight, iMultiplicityBin);
+
+    processRecoJets(event, Event_Weight, MultWeight, iMultiplicityBin);
 
     if (fIsDiJetFound)
     {
@@ -672,12 +673,13 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
         }
         if (deltaPhi > fDeltaPhi)
         {
+            // std::cout << fDijetWeight << std::endl;
 
             fIsDiJetFound = kTRUE;
-            if (fUseDijetWeight)
-            {
-                fDijetWeight = DijetWeight(fIspPb, leadRefPt, subLeadRefPt);
-            }
+            // if (fUseDijetWeight)
+            // {
+            //     fDijetWeight = DijetWeight(fIspPb, leadRefPt, subLeadRefPt);
+            // }
             if (fUseMultiplicityWeight)
             {
                 for (Int_t i = 0; i < 4; i++)
@@ -837,6 +839,11 @@ void DiJetAnalysis::processGenJets(const Event *event, const Double_t &event_Wei
     {
         Double_t deltaPhi = TMath::Abs(DeltaPhi(genLeadJetPhi, genSubLeadJetPhi));
         Double_t Xj = Asymmetry(genLeadJetPt, genSubLeadJetPt);
+
+        if (fUseDijetWeight)
+        {
+            fDijetWeight = DijetWeight(fIspPb, genLeadJetPt, genSubLeadJetPt);
+        }
         if (fUseMultiplicityWeight)
         {
             for (Int_t i = 0; i < 4; i++)
