@@ -128,6 +128,8 @@ public:
     void setDijetWeightTable(const std::string &dijetWeightTable) { fDijetWeightTable = dijetWeightTable; }
     /// @brief Set if to calculate in jet multiplicity
     void doInJetMultiplicity() { fDoInJetMult = kTRUE; }
+    ///@brief Set Dijet Weight type
+    void setDijetWeightType(const std::string &dijetWeightType) { fDijetWeightType = dijetWeightType; }
 
 private:
     /// @brief Multiplicity calculator
@@ -171,7 +173,7 @@ private:
     /// @param leadJetPt Leading jet pt
     /// @param subLeadJetPt Subleading jet pt
     /// @return Dijet weight
-    Float_t DijetWeight(const Bool_t &ispPb, const Double_t &leadJetPt, const Double_t &subLeadJetPt);
+    Float_t DijetWeight(const Bool_t &ispPb, const std::string &type, const Double_t &leadJetPt, const Double_t &subLeadJetPt);
     /// @brief Calaulates Delta Phi between two jets
     /// @param phi1 Jet Phi 1
     /// @param phi2 Jet Phi 2
@@ -268,6 +270,10 @@ private:
     TH1 *fMultiplicityWeight[4];
     ///@brief Dijet Weight histograms
     TH2 *hDijetWeight;
+    ///@brief Dijet Weight Ref Histogram
+    TH2 *hDijetWeightRef;
+    ///@brief Dijet Weight Gen Histogram
+    TH2 *hDijetWeightGen;
     ///@brief Tracking efficiency table for PbPb
     std::string fTrkEffTable;
     ///@brief Multiplicity Weight file
@@ -276,6 +282,8 @@ private:
     TFile *fDijetWeightFile;
     ///@brief Do Injet Multiplicity
     Bool_t fDoInJetMult;
+    ///@brief DiJet Weight Type
+    std::string fDijetWeightType;
 
     ///@brief Which Multiplicity type to use for event selection.
     /// 0 -> Reco Multiplicity

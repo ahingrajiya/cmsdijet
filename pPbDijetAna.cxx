@@ -42,6 +42,7 @@ int main(int argc, char *argv[])
     Bool_t useCMFrame{kFALSE};
     Double_t etaBoost{0.4654094531};
     TString jetBranchName{"ak4PFJetAnalyzer"};
+    std::string dijetWeightType{"Ref"};
     TString oFileName{};
     TString JECFileName{};
     TString JECFileDataName{};
@@ -49,7 +50,7 @@ int main(int argc, char *argv[])
     Double_t ptHatCut[2]{15., 30.};
     Bool_t isEmbedded{kTRUE};
     std::vector<float> multiplicityBins{-1.0, 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
-    std::string path2DijetWeight = "../aux_files/pPb_8160/Dijet_Weight/DijetWeightRef.root";
+    std::string path2DijetWeight = "../aux_files/pPb_8160/Dijet_Weight/DijetWeight10.root";
 
     // Command line arguments
     /*
@@ -197,6 +198,7 @@ int main(int argc, char *argv[])
     {
         analysis->setMultiplicityRange(0, 400);
         analysis->setUseDijetWeight();
+        analysis->setDijetWeightType(dijetWeightType);
         analysis->setDijetWeightTable(path2DijetWeight);
     }
     analysis->setIspPb();
