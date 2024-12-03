@@ -298,7 +298,7 @@ Float_t DiJetAnalysis::DijetWeight(const Bool_t &ispPb, const std::string &type,
     }
     else if (ispPb && fIsMC && type == "Gen")
     {
-        weight = hDijetWeightGen->GetBinContent(hDijetWeightRef->GetXaxis()->FindBin(subLeadPt), hDijetWeightRef->GetYaxis()->FindBin(leadPt));
+        weight = hDijetWeightGen->GetBinContent(hDijetWeightGen->GetXaxis()->FindBin(subLeadPt), hDijetWeightGen->GetYaxis()->FindBin(leadPt));
     }
     if (weight == 0)
     {
