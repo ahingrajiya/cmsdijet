@@ -74,6 +74,11 @@ DiJetAnalysis::~DiJetAnalysis()
     {
         fDijetWeightFile->Close();
         delete hDijetWeight;
+        delete hDijetWeightRef;
+        delete hDijetWeightGen;
+        hDijetWeight = nullptr;
+        hDijetWeightRef = nullptr;
+        hDijetWeightGen = nullptr;
     }
 }
 
@@ -147,7 +152,7 @@ void DiJetAnalysis::SetUpDijetWeight(const std::string &dijetWeightTable)
     {
         hDijetWeight = (TH2D *)fDijetWeightFile->Get("leadptvsubleadpt_map");
         hDijetWeightRef = (TH2D *)fDijetWeightFile->Get("leadrefptvsubleadrefpt_map");
-        // hDijetWeightGen = (TH2D *)fDijetWeightFile->Get("gen_dijetw");
+        hDijetWeightGen = (TH2D *)fDijetWeightFile->Get("leadgenptvsubleadgenpt_map");
     }
 }
 
@@ -291,6 +296,10 @@ Float_t DiJetAnalysis::DijetWeight(const Bool_t &ispPb, const std::string &type,
     {
         weight = hDijetWeightRef->GetBinContent(hDijetWeightRef->GetXaxis()->FindBin(subLeadPt), hDijetWeightRef->GetYaxis()->FindBin(leadPt));
     }
+    else if (ispPb && fIsMC && type == "Gen")
+    {
+        weight = hDijetWeightGen->GetBinContent(hDijetWeightRef->GetXaxis()->FindBin(subLeadPt), hDijetWeightRef->GetYaxis()->FindBin(leadPt));
+    }
     if (weight == 0)
     {
         weight = 1.0;
@@ -401,6 +410,35 @@ Double_t DiJetAnalysis::EventWeight(const Bool_t &ispPb, Bool_t &isMC, const Eve
                 Float_t jetPt = (*recoJetIterator)->RefJetPt();
                 Float_t jetEta = (*recoJetIterator)->RefJetEta();
                 Float_t jetPhi = (*recoJetIterator)->RefJetPhi();
+
+                if (fIsMC)
+                {
+                    if (jetPt > leadJetPt)
+                    {
+                        subLeadJetPt = leadJetPt;
+                        subLeadJetEta = leadJetEta;
+                        subLeadJetPhi = leadJetPhi;
+                        leadJetPt = jetPt;
+                        leadJetEta = jetEta;
+                        leadJetPhi = jetPhi;
+                    }
+                    else if (jetPt > subLeadJetPt)
+                    {
+                        subLeadJetPt = jetPt;
+                        subLeadJetEta = jetEta;
+                        subLeadJetPhi = jetPhi;
+                    }
+                }
+            }
+        }
+        else if (fDijetWeightType == "Gen")
+        {
+            GenJetIterator genJetIterator;
+            for (genJetIterator = event->genJetCollection()->begin(); genJetIterator != event->genJetCollection()->end(); genJetIterator++)
+            {
+                Float_t jetPt = (*genJetIterator)->pt();
+                Float_t jetEta = (*genJetIterator)->eta();
+                Float_t jetPhi = (*genJetIterator)->phi();
 
                 if (fIsMC)
                 {
