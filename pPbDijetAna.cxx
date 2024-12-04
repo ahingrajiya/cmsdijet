@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
     Bool_t useCMFrame{kFALSE};
     Double_t etaBoost{0.4654094531};
     TString jetBranchName{"ak4PFJetAnalyzer"};
-    std::string dijetWeightType{"Gen"};
+    std::string dijetWeightType{"Reco"};
     TString oFileName{};
     TString JECFileName{};
     TString JECFileDataName{};
@@ -194,12 +194,15 @@ int main(int argc, char *argv[])
     DiJetAnalysis *analysis = new DiJetAnalysis{};
     analysis->setIsMC(isMC);
     analysis->setMultiplicityRange(10, 400);
-    if (isMC && !isEmbedded)
+    if (isMC)
     {
-        analysis->setMultiplicityRange(0, 400);
         analysis->setUseDijetWeight();
         analysis->setDijetWeightType(dijetWeightType);
         analysis->setDijetWeightTable(path2DijetWeight);
+        if (!isEmbedded)
+        {
+            analysis->setMultiplicityRange(0, 400);
+        }
     }
     analysis->setIspPb();
     analysis->setMultiplicityType(0);
