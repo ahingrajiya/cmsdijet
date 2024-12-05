@@ -610,10 +610,9 @@ void DiJetAnalysis::processEvent(const Event *event)
         Double_t Multiplicities[5] = {(Double_t)iRecoMult, (Double_t)iGenMult, (Double_t)iCorrectedMult, (Double_t)iSubeMult, iMultiplicityBin};
         fHM->hMultiplicities_W->Fill(Multiplicities, Event_Weight);
     }
+    processRecoJets(event, Event_Weight, MultWeight, iMultiplicityBin);
 
     processGenJets(event, Event_Weight, MultWeight, iMultiplicityBin);
-
-    processRecoJets(event, Event_Weight, MultWeight, iMultiplicityBin);
 
     if (fIsDiJetFound)
     {
