@@ -28,7 +28,7 @@ ClassImp(HistoManagerDiJet)
                                              hDeltaPhi_W{nullptr}, hXj_W{nullptr}, hNDijetEvent{nullptr}, hNEventsInMult{nullptr}, hGenLeadingJet_W{nullptr}, hGenSubLeadingJet_W{nullptr}, hGenDeltaPhi_W{nullptr},
                                              hGenXj_W{nullptr}, hNGenDijetEvent{nullptr}, hInJetMultiplicity_W{nullptr}, hGenInJetMultiplicity_W{nullptr}, hLeadPtvsSubLeadPt_W{nullptr},
                                              hGenLeadPtvsGenSubLeadPt_W{nullptr}, hGenLeadPtvsGenSubLeadPt{nullptr}, hLeadPtvsSubLeadPt{nullptr}, hVzWithDijet_W{nullptr}, hXj_DiJetW{nullptr}, hRefXj_W{nullptr}, hRefXj_DiJetW{nullptr},
-                                             hRefXj_ER_W{nullptr}, hRefXj_ER_DiJetW{nullptr}, hXj_XjW{nullptr}, hRefLeadPtvsRefSubLeadPt{nullptr}, hRefLeadPtvsRefSubLeadPt_W{nullptr}, hGenXj_DiJetW{nullptr}
+                                             hRefXj_ER_W{nullptr}, hRefXj_ER_DiJetW{nullptr}, hRefLeadPtvsRefSubLeadPt{nullptr}, hRefLeadPtvsRefSubLeadPt_W{nullptr}, hGenXj_DiJetW{nullptr}
 
 {
     /* Empty*/
@@ -86,8 +86,6 @@ HistoManagerDiJet::~HistoManagerDiJet()
         delete hNGenDijetEvent;
     if (hNEventsInMult)
         delete hNEventsInMult;
-    if (hXj_XjW)
-        delete hXj_XjW;
 
     if (hInJetMultiplicity_W)
         delete hInJetMultiplicity_W;
