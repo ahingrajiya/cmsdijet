@@ -232,8 +232,6 @@ void HistoManagerDiJet::init(const Bool_t &isMC)
     hGenDeltaPhi_W->Sumw2();
     hXj_W = new TH2D("hXj_W", "Xj Distribution Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
     hXj_W->Sumw2();
-    hXj_XjW = new TH2D("hXj_XjW", "Xj Distribution XjWeighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
-    hXj_XjW->Sumw2();
     hXj_DiJetW = new TH2D("hXj_DiJetW", "Xj Distribution DijetWeighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
     hXj_DiJetW->Sumw2();
     hRefXj_W = new TH2D("hRefXj_W", "RefXj Distribution Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
@@ -325,7 +323,6 @@ void HistoManagerDiJet ::writeOutput(const Bool_t &isMC)
     hRecoQuenching_W->Write();
     hDeltaPhi_W->Write();
     hXj_W->Write();
-    hXj_XjW->Write();
     hXj_DiJetW->Write();
     hNDijetEvent->Write();
 

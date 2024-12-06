@@ -128,7 +128,7 @@ int main(int argc, char *argv[])
     eventCut->usePvertexFilterCutdz1p0();
     eventCut->usePPAprimaryVertexFilter();
     eventCut->usePhfCoincFilter2Th4();
-    eventCut->setMultiplicty(10, 185);
+    eventCut->setMultiplicty(10, 250);
     if (isMC && !isEmbedded)
     {
         eventCut->setMultiplicty(0, 400);

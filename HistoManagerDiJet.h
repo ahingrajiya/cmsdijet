@@ -67,7 +67,6 @@ public:
     TH2D *hInJetMultiplicity_W;
     TH2D *hGenInJetMultiplicity_W;
     TH2D *hXj_W;
-    TH2D *hXj_XjW;
     TH2D *hXj_DiJetW;
     TH2D *hRefXj_W;
     TH2D *hRefXj_ER_W;
