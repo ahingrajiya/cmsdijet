@@ -916,7 +916,7 @@ void DiJetAnalysis::processGenJets(const Event *event, const Double_t &event_Wei
         Float_t genJetEta = (*genJetIterator)->eta();
         Float_t genJetPhi = (*genJetIterator)->phi();
 
-        // std::cout << Form("Jet Pt: %f, Jet Eta: %f, Jet Phi: %f", jetPt, jetEta, jetPhi) << std::endl;
+        std::cout << Form("Jet Pt: %f, Jet Eta: %f, Jet Phi: %f", genJetPt, genJetEta, genJetPhi) << std::endl;
 
         if (genJetPt > genLeadJetPt)
         {
