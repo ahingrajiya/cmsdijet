@@ -876,7 +876,7 @@ void ForestAODReader::readEvent()
         fGenTrkTree->GetEntry(fEventsProcessed);
     fEventsProcessed++;
     // if (fEventsProcessed > 700000)
-    //     std::cout << "Events processed:     " << fEventsProcessed - 1 << std::endl;
+    std::cout << "Events processed:     " << fEventsProcessed - 1 << std::endl;
 }
 
 //________________
