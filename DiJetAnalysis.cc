@@ -487,10 +487,6 @@ Double_t DiJetAnalysis::EventWeight(const Bool_t &ispPb, Bool_t &isMC, const Eve
                     }
                 }
             }
-            if (leadJetPt < 70)
-            {
-                std::cout << "Gen Lead Jet Pt: " << leadJetPt << std::endl;
-            }
 
             fDijetWeight = DijetWeight(fIspPb, fDijetWeightType, leadJetPt, subLeadJetPt);
         }
@@ -977,6 +973,10 @@ void DiJetAnalysis::processGenJets(const Event *event, const Double_t &event_Wei
     }
     if (fIsDiJetFound)
     {
+        if (genLeadJetPt < 70)
+        {
+            std::cout << "Gen Lead Jet Pt: " << genLeadJetPt << std::endl;
+        }
         fHM->hGenLeadPtvsGenSubLeadPt->Fill(genSubLeadJetPt, genLeadJetPt, event_Weight);
         fHM->hGenLeadPtvsGenSubLeadPt_W->Fill(genSubLeadJetPt, genLeadJetPt, event_Weight * fDijetWeight);
         fHM->hGenLeadingVsGenSubLeading_WO_DiJet_W->Fill(genSubLeadJetPt, genLeadJetPt, event_Weight);
