@@ -975,7 +975,9 @@ void DiJetAnalysis::processGenJets(const Event *event, const Double_t &event_Wei
     {
         if (genLeadJetPt < 70)
         {
+            std::cout << "==========================================================================" << std::endl;
             std::cout << "Gen Lead Jet Pt: " << genLeadJetPt << std::endl;
+            std::cout << "==========================================================================" << std::endl;
         }
         fHM->hGenLeadPtvsGenSubLeadPt->Fill(genSubLeadJetPt, genLeadJetPt, event_Weight);
         fHM->hGenLeadPtvsGenSubLeadPt_W->Fill(genSubLeadJetPt, genLeadJetPt, event_Weight * fDijetWeight);
