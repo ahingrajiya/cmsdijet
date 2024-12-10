@@ -1045,7 +1045,7 @@ Event *ForestAODReader::returnEvent()
         if (fIsMc && !fEvent->isGenJetCollectionFilled())
         {
 
-            // std::cout << "nGenPFJets: " << fNGenJets << std::endl;
+            std::cout << "nGenPFJets: " << fNGenJets << std::endl;
 
             for (Int_t iGenJet{0}; iGenJet < fNGenJets; iGenJet++)
             {
