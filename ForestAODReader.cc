@@ -969,7 +969,7 @@ Event *ForestAODReader::returnEvent()
     fEvent->setLumi(fLumi);
     fEvent->setVz(fVertexZ);
     fEvent->setHiBin(fHiBin);
-    fEvent->setHiBin(100);
+    // fEvent->setHiBin(100);
 
     if (fIsMc)
     {
@@ -1063,7 +1063,9 @@ Event *ForestAODReader::returnEvent()
                     delete jet;
                     continue;
                 }
+                std::cout << jet->pt() << std::endl;
                 fEvent->genJetCollection()->push_back(jet);
+
             } // for (Int_t iGenJet{0}; iGenJet<fNPFGenJets; iGenJet++)
 
             // Projection from filling the collection several times
