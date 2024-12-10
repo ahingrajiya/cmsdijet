@@ -410,6 +410,7 @@ Double_t DiJetAnalysis::EventWeight(const Bool_t &ispPb, Bool_t &isMC, const Eve
             if (deltaPhi > fDeltaPhi)
             {
                 recoDijetPass = kTRUE;
+                // std::cout << "Reco Lead Jet Pt: " << leadJetPt << std::endl;
             }
         }
         if (fDijetWeightType == "Reco" && recoDijetPass)
@@ -486,6 +487,11 @@ Double_t DiJetAnalysis::EventWeight(const Bool_t &ispPb, Bool_t &isMC, const Eve
                     }
                 }
             }
+            if (leadJetPt < 70)
+            {
+                std::cout << "Gen Lead Jet Pt: " << leadJetPt << std::endl;
+            }
+
             fDijetWeight = DijetWeight(fIspPb, fDijetWeightType, leadJetPt, subLeadJetPt);
         }
     }
@@ -777,11 +783,7 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
             fHM->hRecoJets_W->Fill(JetQuantities, event_Weight);
         }
     }
-    if (leadRefPt != leadMatchedJetPt)
-    {
-        std::cout << Form("Ref Lead Pt : %f, Ref SubLead Pt : %f", leadRefPt, subLeadRefPt) << std::endl;
-        std::cout << Form("Matched Ref Pt : %f, Matched SubLead Pt : %f", leadMatchedJetPt, subLeadMatchedJetPt) << std::endl;
-    }
+
     Float_t leadJetEtaCM = MoveToCMFrame(leadJetEta);
     Float_t subLeadJetEtaCM = MoveToCMFrame(subLeadJetEta);
     Bool_t isDiJet = CheckDijet(leadJetPt, leadJetEtaCM, subLeadJetPt, subLeadJetEtaCM);
