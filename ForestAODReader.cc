@@ -876,7 +876,7 @@ void ForestAODReader::readEvent()
         fGenTrkTree->GetEntry(fEventsProcessed);
     fEventsProcessed++;
     // if (fEventsProcessed > 700000)
-    std::cout << "Events processed:     " << fEventsProcessed - 1 << std::endl;
+    // std::cout << "Events processed:     " << fEventsProcessed - 1 << std::endl;
 }
 
 //________________
@@ -1045,8 +1045,6 @@ Event *ForestAODReader::returnEvent()
         if (fIsMc && !fEvent->isGenJetCollectionFilled())
         {
 
-            std::cout << "nGenPFJets: " << fNGenJets << std::endl;
-
             for (Int_t iGenJet{0}; iGenJet < fNGenJets; iGenJet++)
             {
                 GenJet *jet = new GenJet{};
@@ -1057,8 +1055,6 @@ Event *ForestAODReader::returnEvent()
                 jet->setWTAPhi(fGenJetWTAPhi[iGenJet]);
                 jet->setPtWeight(jetPtWeight(fIsMc, fCollidingSystem.Data(), fYearOfDataTaking, fCollidingEnergyGeV,
                                              fGenJetPt[iGenJet]));
-
-                std::cout << jet->pt() << std::endl;
 
                 if (fJetCut && !fJetCut->pass(jet))
                 {

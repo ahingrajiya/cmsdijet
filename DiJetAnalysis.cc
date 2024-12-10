@@ -916,8 +916,6 @@ void DiJetAnalysis::processGenJets(const Event *event, const Double_t &event_Wei
         Float_t genJetEta = (*genJetIterator)->eta();
         Float_t genJetPhi = (*genJetIterator)->phi();
 
-        std::cout << Form("Jet Pt: %f, Jet Eta: %f, Jet Phi: %f", genJetPt, genJetEta, genJetPhi) << std::endl;
-
         if (genJetPt > genLeadJetPt)
         {
             genSubLeadJetPt = genLeadJetPt;
@@ -973,12 +971,6 @@ void DiJetAnalysis::processGenJets(const Event *event, const Double_t &event_Wei
     }
     if (fIsDiJetFound)
     {
-        if (genLeadJetPt < 70)
-        {
-            std::cout << "==========================================================================" << std::endl;
-            std::cout << "Gen Lead Jet Pt: " << genLeadJetPt << std::endl;
-            std::cout << "==========================================================================" << std::endl;
-        }
         fHM->hGenLeadPtvsGenSubLeadPt->Fill(genSubLeadJetPt, genLeadJetPt, event_Weight);
         fHM->hGenLeadPtvsGenSubLeadPt_W->Fill(genSubLeadJetPt, genLeadJetPt, event_Weight * fDijetWeight);
         fHM->hGenLeadingVsGenSubLeading_WO_DiJet_W->Fill(genSubLeadJetPt, genLeadJetPt, event_Weight);
