@@ -957,10 +957,10 @@ Event *ForestAODReader::returnEvent()
 
     Int_t nBadJets{0};
 
-    if (fFixJetArrays)
-    {
-        fixIndices();
-    }
+    // if (fFixJetArrays)
+    // {
+    //     fixIndices();
+    // }
 
     fEvent = new Event();
 
@@ -1058,12 +1058,13 @@ Event *ForestAODReader::returnEvent()
                 jet->setPtWeight(jetPtWeight(fIsMc, fCollidingSystem.Data(), fYearOfDataTaking, fCollidingEnergyGeV,
                                              fGenJetPt[iGenJet]));
 
+                std::cout << jet->pt() << std::endl;
+
                 if (fJetCut && !fJetCut->pass(jet))
                 {
                     delete jet;
                     continue;
                 }
-                std::cout << jet->pt() << std::endl;
                 fEvent->genJetCollection()->push_back(jet);
 
             } // for (Int_t iGenJet{0}; iGenJet<fNPFGenJets; iGenJet++)
