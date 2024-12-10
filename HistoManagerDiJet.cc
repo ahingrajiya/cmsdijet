@@ -29,7 +29,7 @@ ClassImp(HistoManagerDiJet)
                                              hGenXj_W{nullptr}, hNGenDijetEvent{nullptr}, hInJetMultiplicity_W{nullptr}, hGenInJetMultiplicity_W{nullptr}, hLeadPtvsSubLeadPt_W{nullptr},
                                              hGenLeadPtvsGenSubLeadPt_W{nullptr}, hGenLeadPtvsGenSubLeadPt{nullptr}, hLeadPtvsSubLeadPt{nullptr}, hVzWithDijet_W{nullptr}, hXj_DiJetW{nullptr}, hRefXj_W{nullptr}, hRefXj_DiJetW{nullptr},
                                              hRefXj_ER_W{nullptr}, hRefXj_ER_DiJetW{nullptr}, hRefLeadPtvsRefSubLeadPt{nullptr}, hRefLeadPtvsRefSubLeadPt_W{nullptr}, hGenXj_DiJetW{nullptr}, hRecoJES_W{nullptr}, hRefJES_W{nullptr},
-                                             hRefLeadingJet_W{nullptr}, hRefSubLeadingJet_W{nullptr}, hGenLeadingVsGenSubLeading_WO_DiJet_W{nullptr}
+                                             hRefLeadingJet_W{nullptr}, hRefSubLeadingJet_W{nullptr}, hGenLeadingVsGenSubLeading_WO_DiJet_W{nullptr}, hRefLeadingVsRefSubLeadingMatched_W{nullptr}
 
 {
     /* Empty*/
@@ -138,6 +138,8 @@ HistoManagerDiJet::~HistoManagerDiJet()
         delete hRefSubLeadingJet_W;
     if (hGenLeadingVsGenSubLeading_WO_DiJet_W)
         delete hGenLeadingVsGenSubLeading_WO_DiJet_W;
+    if (hRefLeadingVsRefSubLeadingMatched_W)
+        delete hRefLeadingVsRefSubLeadingMatched_W;
     if (hRecoQuenching_W)
         delete hRecoQuenching_W;
     if (hGenQuenching_W)
@@ -219,6 +221,7 @@ void HistoManagerDiJet::init(const Bool_t &isMC)
     hRefSubLeadingJet_W->Sumw2();
 
     hGenLeadingVsGenSubLeading_WO_DiJet_W = new TH2D("hGenLeadingVsGenSubLeading_WO_DiJet_W", "Gen Leading vs Gen SubLeading Jet", 100, 0., 1000., 100, 0., 1000.);
+    hRefLeadingVsRefSubLeadingMatched_W = new TH2D("hRefLeadingVsRefSubLeadingMatched_W", "Ref Leading vs Ref SubLeading Jet", 100, 0., 1000., 100, 0., 1000.);
 
     const int nDphiBins = 30; // number of bins
     double DphiBins[nDphiBins + 1] = {0.0, TMath::Pi() / 5., TMath::Pi() / 3., (3. / 7.) * TMath::Pi(), TMath::Pi() / 2., (4. / 7.) * TMath::Pi(), (3. / 5.) * TMath::Pi(), 1.93731547, 1.98967535, 2.04203522, 2.0943951, 2.14675498, 2.19911486, 2.25147474, 2.30383461, 2.35619449, 2.40855437, 2.46091425, 2.51327412, 2.565634, 2.61799388, 2.67035376, 2.72271363, 2.77507351, 2.82743339, 2.87979327, 2.93215314, 2.98451302, 3.0368729, 3.08923278, TMath::Pi()};
@@ -340,6 +343,7 @@ void HistoManagerDiJet ::writeOutput(const Bool_t &isMC)
         hRefLeadPtvsRefSubLeadPt->Write();
         hRefLeadPtvsRefSubLeadPt_W->Write();
         hGenLeadingVsGenSubLeading_WO_DiJet_W->Write();
+        hRefLeadingVsRefSubLeadingMatched_W->Write();
     }
 
     gDirectory->cd("..");

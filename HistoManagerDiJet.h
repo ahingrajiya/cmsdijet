@@ -101,6 +101,7 @@ public:
     THnSparseD *hMultiplicities_DiJet_W;
 
     TH2D *hGenLeadingVsGenSubLeading_WO_DiJet_W;
+    TH2D *hRefLeadingVsRefSubLeadingMatched_W;
 
     THnSparseD *hRecoQuenching_W;
     THnSparseD *hGenQuenching_W;
