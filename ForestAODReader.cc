@@ -1090,7 +1090,6 @@ Event *ForestAODReader::returnEvent()
                 // Add index of the matched GenJet
                 // jet->setGenJetId(fRecoJet2GenJetId.at(iJet));
             } // if ( fIsMc )
-
             if (fRecoJetTrackMax[iJet] / fRawJetPt[iJet] < 0.01)
             {
                 delete jet;

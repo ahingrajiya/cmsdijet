@@ -82,6 +82,9 @@ public:
     TH2D *hGenLeadPtvsGenSubLeadPt;
     TH2D *hGenLeadPtvsGenSubLeadPt_W;
 
+    TH2D *hRecoJES_W;
+    TH2D *hRefJES_W;
+
     THnSparseD *hMultiplicities;
     THnSparseD *hMultiplicities_W;
     THnSparseD *hRecoJets;
@@ -90,9 +93,14 @@ public:
     THnSparseD *hGenJets_W;
     THnSparseD *hLeadingJet_W;
     THnSparseD *hGenLeadingJet_W;
+    THnSparseD *hRefLeadingJet_W;
+
     THnSparseD *hSubLeadingJet_W;
     THnSparseD *hGenSubLeadingJet_W;
+    THnSparseD *hRefSubLeadingJet_W;
     THnSparseD *hMultiplicities_DiJet_W;
+
+    TH2D *hGenLeadingVsGenSubLeading_WO_DiJet_W;
 
     THnSparseD *hRecoQuenching_W;
     THnSparseD *hGenQuenching_W;

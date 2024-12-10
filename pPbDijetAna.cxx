@@ -174,7 +174,7 @@ int main(int argc, char *argv[])
     reader->setYearOfDataTaking(collYear);
     reader->addJECFile(JECFileName.Data());
     reader->setPath2JetAnalysis(path2JEC.Data());
-    reader->setMatchedJets();
+    // reader->setMatchedJets();
     if (isMC)
     {
         reader->useGenTrackBranch();
