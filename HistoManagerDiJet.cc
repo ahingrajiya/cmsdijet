@@ -272,14 +272,16 @@ void HistoManagerDiJet::init(const Bool_t &isMC)
     hLeadPtvsSubLeadPt_W = new TH2D("hLeadPtvsSubLeadPt_W", "Lead Pt vs SubLead Pt Weighted", nLeadSubLeadPtBins, LeadSubLeadPtBins, nLeadSubLeadPtBins, LeadSubLeadPtBins);
     hLeadPtvsSubLeadPt_W->Sumw2();
 
-    hGenLeadPtvsGenSubLeadPt = new TH2D("hGenLeadPtvsGenSubLeadPt", "Gen Lead Pt vs Gen SubLead Pt", nLeadSubLeadPtBins, LeadSubLeadPtBins, nLeadSubLeadPtBins, LeadSubLeadPtBins);
+    Float_t GenLeadSubLeadPtBins[] = {50., 55., 60., 65., 70., 75., 80., 85., 90., 95., 100., 105., 110., 115., 120., 125., 130., 135., 140., 145., 150., 155., 160., 165., 170., 175., 180., 185., 190., 195., 200., 210., 220., 230., 240., 250., 260., 270., 280., 290., 300., 325., 350., 375., 400., 425., 450., 475., 500., 550., 600., 650., 700., 1200.};
+    Int_t nGenLeadSubLeadPtBins = sizeof(GenLeadSubLeadPtBins) / sizeof(Float_t) - 1;
+    hGenLeadPtvsGenSubLeadPt = new TH2D("hGenLeadPtvsGenSubLeadPt", "Gen Lead Pt vs Gen SubLead Pt", nGenLeadSubLeadPtBins, GenLeadSubLeadPtBins, nGenLeadSubLeadPtBins, GenLeadSubLeadPtBins);
     hGenLeadPtvsGenSubLeadPt->Sumw2();
-    hGenLeadPtvsGenSubLeadPt_W = new TH2D("hGenLeadPtvsGenSubLeadPt_W", "Gen Lead Pt vs Gen SubLead Pt Weighted", nLeadSubLeadPtBins, LeadSubLeadPtBins, nLeadSubLeadPtBins, LeadSubLeadPtBins);
+    hGenLeadPtvsGenSubLeadPt_W = new TH2D("hGenLeadPtvsGenSubLeadPt_W", "Gen Lead Pt vs Gen SubLead Pt Weighted", nGenLeadSubLeadPtBins, GenLeadSubLeadPtBins, nGenLeadSubLeadPtBins, GenLeadSubLeadPtBins);
     hGenLeadPtvsGenSubLeadPt_W->Sumw2();
 
-    hRefLeadPtvsRefSubLeadPt = new TH2D("hRefLeadPtvsRefSubLeadPt", "Ref Lead Pt vs Ref SubLead Pt", nLeadSubLeadPtBins, LeadSubLeadPtBins, nLeadSubLeadPtBins, LeadSubLeadPtBins);
+    hRefLeadPtvsRefSubLeadPt = new TH2D("hRefLeadPtvsRefSubLeadPt", "Ref Lead Pt vs Ref SubLead Pt", nGenLeadSubLeadPtBins, GenLeadSubLeadPtBins, nGenLeadSubLeadPtBins, GenLeadSubLeadPtBins);
     hRefLeadPtvsRefSubLeadPt->Sumw2();
-    hRefLeadPtvsRefSubLeadPt_W = new TH2D("hRefLeadPtvsRefSubLeadPt_W", "Ref Lead Pt vs Ref SubLead Pt Weighted", nLeadSubLeadPtBins, LeadSubLeadPtBins, nLeadSubLeadPtBins, LeadSubLeadPtBins);
+    hRefLeadPtvsRefSubLeadPt_W = new TH2D("hRefLeadPtvsRefSubLeadPt_W", "Ref Lead Pt vs Ref SubLead Pt Weighted", nGenLeadSubLeadPtBins, GenLeadSubLeadPtBins, nGenLeadSubLeadPtBins, GenLeadSubLeadPtBins);
     hRefLeadPtvsRefSubLeadPt_W->Sumw2();
 
     hRecoJES_W = new TH2D("hRecoJES_W", "Reco JES Weighted", 200, 0.0, 5.0, 200, 0.0, 1000.0);
