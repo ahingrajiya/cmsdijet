@@ -296,7 +296,7 @@ Float_t DiJetAnalysis::DijetWeight(const Bool_t &ispPb, const std::string &type,
     {
         weight = hDijetWeightRef->GetBinContent(hDijetWeightRef->GetXaxis()->FindBin(subLeadPt), hDijetWeightRef->GetYaxis()->FindBin(leadPt));
     }
-    else if (ispPb && fIsMC && type == "Gen")
+    if (ispPb && fIsMC && type == "Reco")
     {
         weight = hDijetWeightGen->GetBinContent(hDijetWeightGen->GetXaxis()->FindBin(subLeadPt), hDijetWeightGen->GetYaxis()->FindBin(leadPt));
     }
@@ -453,7 +453,7 @@ Double_t DiJetAnalysis::EventWeight(const Bool_t &ispPb, Bool_t &isMC, const Eve
             }
             fDijetWeight = DijetWeight(fIspPb, fDijetWeightType, leadJetPt, subLeadJetPt);
         }
-        else if (fDijetWeightType == "Gen" && recoDijetPass)
+        if (fDijetWeightType == "Gen" && recoDijetPass)
         {
             leadJetPt = -999.;
             subLeadJetPt = -999.;
@@ -784,10 +784,49 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
     Float_t subLeadJetEtaCM = MoveToCMFrame(subLeadJetEta);
     Bool_t isDiJet = CheckDijet(leadJetPt, leadJetEtaCM, subLeadJetPt, subLeadJetEtaCM);
 
+    if (leadJetPt > 100.0 && subLeadJetPt > 50.)
+    {
+        Double_t LeadSLeadJets[7] = {leadJetPt, leadJetEtaCM, leadJetPhi, subLeadJetPt, subLeadJetEtaCM, subLeadJetPhi, multiplicityBin};
+        fHM->hLeadSubLeadJets->Fill(LeadSLeadJets);
+        fHM->hLeadSubLeadJets_W->Fill(LeadSLeadJets, event_Weight);
+        if (fIsMC)
+        {
+            if (subLeadRefPt < leadRefPt)
+            {
+                Double_t LeadSLeadRefJets[7] = {leadRefPt, MoveToCMFrame(leadRefEta), leadRefPhi, subLeadRefPt, MoveToCMFrame(subLeadRefEta), subLeadRefPhi, multiplicityBin};
+                fHM->hRefLeadRefSubLeadJets->Fill(LeadSLeadRefJets);
+                fHM->hRefLeadRefSubLeadJets_W->Fill(LeadSLeadRefJets, event_Weight);
+            }
+            else if (subLeadRefPt > leadRefPt)
+            {
+                Double_t LeadSLeadRefJets[7] = {subLeadRefPt, MoveToCMFrame(subLeadRefEta), subLeadRefPhi, leadRefPt, MoveToCMFrame(leadRefEta), leadRefPhi, multiplicityBin};
+                fHM->hRefLeadRefSubLeadJets->Fill(LeadSLeadRefJets);
+                fHM->hRefLeadRefSubLeadJets_W->Fill(LeadSLeadRefJets, event_Weight);
+            }
+        }
+    }
+
     if (isDiJet)
     {
+        Double_t LeadSLeadJetsMidRapidity[7] = {leadJetPt, leadJetEtaCM, leadJetPhi, subLeadJetPt, subLeadJetEtaCM, subLeadJetPhi, multiplicityBin};
+        fHM->hLeadSubLeadJets_MidRapidity_W->Fill(LeadSLeadJetsMidRapidity, event_Weight);
+        if (fIsMC)
+        {
+            if (subLeadRefPt < leadRefPt)
+            {
+                Double_t LeadSLeadRefJetsMidRapidity[7] = {leadRefPt, MoveToCMFrame(leadRefEta), leadRefPhi, subLeadRefPt, MoveToCMFrame(subLeadRefEta), subLeadRefPhi, multiplicityBin};
+                fHM->hRefLeadRefSubLeadJets_MidRapidity_W->Fill(LeadSLeadRefJetsMidRapidity, event_Weight);
+            }
+            else if (subLeadRefPt > leadRefPt)
+            {
+                Double_t LeadSLeadRefJetsMidRapidity[7] = {subLeadRefPt, MoveToCMFrame(subLeadRefEta), subLeadRefPhi, leadRefPt, MoveToCMFrame(leadRefEta), leadRefPhi, multiplicityBin};
+                fHM->hRefLeadRefSubLeadJets_MidRapidity_W->Fill(LeadSLeadRefJetsMidRapidity, event_Weight);
+            }
+        }
         Double_t deltaPhi = TMath::Abs(DeltaPhi(leadJetPhi, subLeadJetPhi));
         Double_t Xj = Asymmetry(leadJetPt, subLeadJetPt);
+
+        fHM->hDeltaPhi_W->Fill(deltaPhi, event_Weight);
 
         Double_t refXj;
         Double_t refDeltaPhi;
@@ -821,12 +860,12 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
                 for (Int_t i = 0; i < 4; i++)
                 {
                     fHM->hDeltaPhi_W->Fill(deltaPhi, event_Weight * multWeight[i]);
-                    fHM->hXj_W->Fill(Xj, event_Weight * multWeight[i]);
+                    fHM->hXj_W->Fill(Xj, multiplicityBin, event_Weight * multWeight[i]);
                 }
             }
             else
             {
-                fHM->hDeltaPhi_W->Fill(deltaPhi, event_Weight);
+                fHM->hDeltaPhi_WithDiJet_W->Fill(deltaPhi, event_Weight);
                 fHM->hXj_W->Fill(Xj, multiplicityBin, event_Weight);
                 fHM->hXj_DiJetW->Fill(Xj, multiplicityBin, event_Weight * fDijetWeight);
 
@@ -860,25 +899,46 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
         }
         else
         {
+            Double_t LeadSLeadJetsWithDijet[7] = {leadJetPt, leadJetEtaCM, leadJetPhi, subLeadJetPt, subLeadJetEtaCM, subLeadJetPhi, multiplicityBin};
+            fHM->hLeadSubLeadJets_WithDijet_W->Fill(LeadSLeadJetsWithDijet, event_Weight);
+            if (fIsMC)
+            {
+                if (subLeadRefPt < leadRefPt)
+                {
+                    Double_t LeadSLeadRefJetsWithDijet[7] = {leadRefPt, MoveToCMFrame(leadRefEta), leadRefPhi, subLeadRefPt, MoveToCMFrame(subLeadRefEta), subLeadRefPhi, multiplicityBin};
+                    fHM->hRefLeadRefSubLeadJets_WithDijet_W->Fill(LeadSLeadRefJetsWithDijet, event_Weight);
+                }
+                else if (subLeadRefPt > leadRefPt)
+                {
+
+                    Double_t LeadSLeadRefJetsWithDijet[7] = {subLeadRefPt, MoveToCMFrame(subLeadRefEta), subLeadRefPhi, leadRefPt, MoveToCMFrame(leadRefEta), leadRefPhi, multiplicityBin};
+                    fHM->hRefLeadRefSubLeadJets_WithDijet_W->Fill(LeadSLeadRefJetsWithDijet, event_Weight);
+                }
+            }
+
             Double_t LeadingJetQuantities[4] = {leadJetPt, leadJetEtaCM, leadJetPhi, multiplicityBin};
             Double_t SubLeadingJetQuantities[4] = {subLeadJetPt, subLeadJetEtaCM, subLeadJetPhi, multiplicityBin};
             fHM->hLeadingJet_W->Fill(LeadingJetQuantities, event_Weight);
             fHM->hSubLeadingJet_W->Fill(SubLeadingJetQuantities, event_Weight);
-            fHM->hLeadPtvsSubLeadPt->Fill(subLeadJetPt, leadJetPt);
-            fHM->hLeadPtvsSubLeadPt_W->Fill(subLeadJetPt, leadJetPt, event_Weight);
+
+            fHM->hLeadPtvsSubLeadPt_PtHatW->Fill(subLeadJetPt, leadJetPt, event_Weight);
+            fHM->hLeadPtvsSubLeadPt_DiJetW->Fill(subLeadJetPt, leadJetPt, event_Weight * fDijetWeight);
             fHM->hVzWithDijet_W->Fill(event->vz(), event_Weight);
+
             if (subLeadRefPt > leadRefPt)
             {
                 Double_t tempPt = leadRefPt;
                 leadRefPt = subLeadRefPt;
                 subLeadRefPt = tempPt;
             }
-            fHM->hRefLeadPtvsRefSubLeadPt->Fill(subLeadRefPt, leadRefPt, event_Weight);
-            fHM->hRefLeadPtvsRefSubLeadPt_W->Fill(subLeadRefPt, leadRefPt, event_Weight * fDijetWeight);
             Double_t RefLeadingJetQuantities[4] = {leadRefPt, leadRefEta, leadRefPhi, multiplicityBin};
             Double_t RefSubLeadingJetQuantities[4] = {subLeadRefPt, subLeadRefEta, subLeadRefPhi, multiplicityBin};
             fHM->hRefLeadingJet_W->Fill(RefLeadingJetQuantities, event_Weight);
             fHM->hRefSubLeadingJet_W->Fill(RefSubLeadingJetQuantities, event_Weight);
+
+            fHM->hRefLeadPtvsRefSubLeadPt_PtHatW->Fill(subLeadRefPt, leadRefPt, event_Weight);
+            fHM->hRefLeadPtvsRefSubLeadPt_DiJetW->Fill(subLeadRefPt, leadRefPt, event_Weight * fDijetWeight);
+
             if (subLeadMatchedJetPt > leadMatchedJetPt)
             {
                 Double_t tempPt = leadMatchedJetPt;
@@ -971,18 +1031,29 @@ void DiJetAnalysis::processGenJets(const Event *event, const Double_t &event_Wei
     }
     if (fIsDiJetFound)
     {
-        fHM->hGenLeadPtvsGenSubLeadPt->Fill(genSubLeadJetPt, genLeadJetPt, event_Weight);
-        fHM->hGenLeadPtvsGenSubLeadPt_W->Fill(genSubLeadJetPt, genLeadJetPt, event_Weight * fDijetWeight);
-        fHM->hGenLeadingVsGenSubLeading_WO_DiJet_W->Fill(genSubLeadJetPt, genLeadJetPt, event_Weight);
+        fHM->hGenLeadPtvsGenSubLeadPt_PtHatW->Fill(genSubLeadJetPt, genLeadJetPt, event_Weight);
+        fHM->hGenLeadPtvsGenSubLeadPt_DiJetW->Fill(genSubLeadJetPt, genLeadJetPt, event_Weight * fDijetWeight);
     }
+
     Float_t genLeadJetEtaCM = MoveToCMFrame(genLeadJetEta);
     Float_t genSubLeadJetEtaCM = MoveToCMFrame(genSubLeadJetEta);
     Bool_t isGenDiJet = CheckDijet(genLeadJetPt, genLeadJetEtaCM, genSubLeadJetPt, genSubLeadJetEtaCM);
 
+    if (genLeadJetPt > 100. && genSubLeadJetPt > 50.)
+    {
+        Double_t LeadSLeadGenJets[7] = {genLeadJetPt, genLeadJetEtaCM, genLeadJetPhi, genSubLeadJetPt, genSubLeadJetEtaCM, genSubLeadJetPhi, multiplicityBin};
+        fHM->hGenLeadGenSubLeadJets->Fill(LeadSLeadGenJets);
+        fHM->hGenLeadGenSubLeadJets_W->Fill(LeadSLeadGenJets, event_Weight);
+    }
+
     if (isGenDiJet)
     {
+
+        Double_t LeadSLeadGenJetsMidRapidity[7] = {genLeadJetPt, genLeadJetEtaCM, genLeadJetPhi, genSubLeadJetPt, genSubLeadJetEtaCM, genSubLeadJetPhi, multiplicityBin};
+        fHM->hGenLeadGenSubLeadJets_MidRapidity_W->Fill(LeadSLeadGenJetsMidRapidity, event_Weight);
         Double_t deltaPhi = TMath::Abs(DeltaPhi(genLeadJetPhi, genSubLeadJetPhi));
         Double_t Xj = Asymmetry(genLeadJetPt, genSubLeadJetPt);
+        fHM->hGenDeltaPhi_W->Fill(deltaPhi, event_Weight);
 
         if (fUseMultiplicityWeight)
         {
@@ -1006,13 +1077,13 @@ void DiJetAnalysis::processGenJets(const Event *event, const Double_t &event_Wei
             {
                 for (Int_t i = 0; i < 4; i++)
                 {
-                    fHM->hGenDeltaPhi_W->Fill(deltaPhi, event_Weight * multWeight[i]);
-                    fHM->hGenXj_W->Fill(Xj, event_Weight * multWeight[i]);
+                    fHM->hGenDeltaPhi_WithDiJet_W->Fill(deltaPhi, event_Weight * multWeight[i]);
+                    fHM->hGenXj_W->Fill(Xj, multiplicityBin, event_Weight * multWeight[i]);
                 }
             }
             else
             {
-                fHM->hGenDeltaPhi_W->Fill(deltaPhi, event_Weight);
+                fHM->hGenDeltaPhi_WithDiJet_W->Fill(deltaPhi, event_Weight);
                 fHM->hGenXj_W->Fill(Xj, multiplicityBin, event_Weight);
                 fHM->hGenXj_DiJetW->Fill(Xj, multiplicityBin, event_Weight * fDijetWeight);
             }
@@ -1037,6 +1108,8 @@ void DiJetAnalysis::processGenJets(const Event *event, const Double_t &event_Wei
             Double_t SubLeadingJetQuantities[4] = {genSubLeadJetPt, genSubLeadJetEtaCM, genSubLeadJetPhi, multiplicityBin};
             fHM->hGenLeadingJet_W->Fill(LeadingJetQuantities, event_Weight);
             fHM->hGenSubLeadingJet_W->Fill(SubLeadingJetQuantities, event_Weight);
+            Double_t LeadSLeadJetsWithDijet[7] = {genLeadJetPt, genLeadJetEtaCM, genLeadJetPhi, genSubLeadJetPt, genSubLeadJetEtaCM, genSubLeadJetPhi, multiplicityBin};
+            fHM->hGenLeadGenSubLeadJets_WithDijet_W->Fill(LeadSLeadJetsWithDijet, event_Weight);
         }
     }
 }

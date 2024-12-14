@@ -59,7 +59,9 @@ public:
     TH1D *hVz_W;
     TH1D *hVzWithDijet_W;
     TH1D *hDeltaPhi_W;
+    TH1D *hDeltaPhi_WithDiJet_W;
     TH1D *hGenDeltaPhi_W;
+    TH1D *hGenDeltaPhi_WithDiJet_W;
     TH1I *hNDijetEvent;
     TH1D *hNGenDijetEvent;
     TH1D *hNEventsInMult;
@@ -75,22 +77,37 @@ public:
     TH2D *hGenXj_W;
     TH2D *hGenXj_DiJetW;
 
-    TH2D *hLeadPtvsSubLeadPt;
-    TH2D *hLeadPtvsSubLeadPt_W;
-    TH2D *hRefLeadPtvsRefSubLeadPt;
-    TH2D *hRefLeadPtvsRefSubLeadPt_W;
-    TH2D *hGenLeadPtvsGenSubLeadPt;
-    TH2D *hGenLeadPtvsGenSubLeadPt_W;
+    TH2D *hLeadPtvsSubLeadPt_DiJetW;
+    TH2D *hLeadPtvsSubLeadPt_PtHatW;
+    TH2D *hRefLeadPtvsRefSubLeadPt_DiJetW;
+    TH2D *hRefLeadPtvsRefSubLeadPt_PtHatW;
+    TH2D *hGenLeadPtvsGenSubLeadPt_DiJetW;
+    TH2D *hGenLeadPtvsGenSubLeadPt_PtHatW;
+
+    THnSparseD *hLeadSubLeadJets;
+    THnSparseD *hLeadSubLeadJets_W;
+    THnSparseD *hRefLeadRefSubLeadJets;
+    THnSparseD *hRefLeadRefSubLeadJets_W;
+    THnSparseD *hGenLeadGenSubLeadJets;
+    THnSparseD *hGenLeadGenSubLeadJets_W;
+    THnSparseD *hLeadSubLeadJets_MidRapidity_W;
+    THnSparseD *hGenLeadGenSubLeadJets_MidRapidity_W;
+    THnSparseD *hRefLeadRefSubLeadJets_MidRapidity_W;
+    THnSparseD *hLeadSubLeadJets_WithDijet_W;
+    THnSparseD *hGenLeadGenSubLeadJets_WithDijet_W;
+    THnSparseD *hRefLeadRefSubLeadJets_WithDijet_W;
 
     TH2D *hRecoJES_W;
     TH2D *hRefJES_W;
 
     THnSparseD *hMultiplicities;
     THnSparseD *hMultiplicities_W;
+
     THnSparseD *hRecoJets;
     THnSparseD *hRecoJets_W;
     THnSparseD *hGenJets;
     THnSparseD *hGenJets_W;
+
     THnSparseD *hLeadingJet_W;
     THnSparseD *hGenLeadingJet_W;
     THnSparseD *hRefLeadingJet_W;
