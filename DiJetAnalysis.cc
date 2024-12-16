@@ -539,9 +539,17 @@ void DiJetAnalysis::processEvent(const Event *event)
     fHM->hHiBin_W->Fill(event->hiBin(), Event_Weight);
 
     Double_t iVertexZ = event->vz();
-    if (fIspPb && fUseCMFrame && !fIsPbGoing)
+
+    if (fIspPb && fUseCMFrame)
     {
-        iVertexZ = -iVertexZ;
+        if (!fIsMC && !fIsPbGoing)
+        {
+            iVertexZ = -iVertexZ;
+        }
+        else if (fIsMC && fIsPbGoing)
+        {
+            iVertexZ = -iVertexZ;
+        }
     }
     fHM->hVz->Fill(iVertexZ);
     fHM->hVz_W->Fill(iVertexZ, Event_Weight * fDijetWeight);
