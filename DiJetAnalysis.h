@@ -73,13 +73,27 @@ public:
     ///@brief Set Eta Boost
     void setEtaBoost(const Double_t &boost)
     {
-        if (fIsPbGoing)
+        if (!fIsMC)
         {
-            fEtaBoost = -boost;
+            if (fIsPbGoing)
+            {
+                fEtaBoost = -boost;
+            }
+            else if (!fIsPbGoing)
+            {
+                fEtaBoost = boost;
+            }
         }
-        else if (!fIsPbGoing)
+        else if (fIsMC)
         {
-            fEtaBoost = boost;
+            if (fIsPbGoing)
+            {
+                fEtaBoost = boost;
+            }
+            else if (!fIsPbGoing)
+            {
+                fEtaBoost = -boost;
+            }
         }
     }
     ///@brief Set if to use centrality weight

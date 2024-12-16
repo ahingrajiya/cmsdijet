@@ -193,6 +193,15 @@ int main(int argc, char *argv[])
     // Dijet Analysis
     DiJetAnalysis *analysis = new DiJetAnalysis{};
     analysis->setIsMC(isMC);
+    analysis->setIspPb();
+    if (isPbGoing)
+    {
+        analysis->setIsPbGoing();
+    }
+    else if (!isPbGoing)
+    {
+        analysis->setIspGoing();
+    }
     analysis->setMultiplicityRange(10, 400);
     if (isMC)
     {
@@ -204,7 +213,6 @@ int main(int argc, char *argv[])
             analysis->setMultiplicityRange(0, 400);
         }
     }
-    analysis->setIspPb();
     analysis->setMultiplicityType(0);
     analysis->setMinTrkPt(1.0);
     analysis->setDeltaPhi(5 * TMath::Pi() / 6);
@@ -218,10 +226,6 @@ int main(int argc, char *argv[])
 
     // analysis->setVerbose();
 
-    if (isPbGoing)
-    {
-        analysis->setIsPbGoing();
-    }
     analysis->setTrackingTable("../aux_files/pPb_8160/trk_eff_table/Hijing_8TeV_dataBS.root");
     // Initialize Histomanager
     HistoManagerDiJet *hm = new HistoManagerDiJet{};

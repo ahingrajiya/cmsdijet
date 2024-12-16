@@ -26,7 +26,7 @@
 ClassImp(DiJetAnalysis)
 
     DiJetAnalysis::DiJetAnalysis() : BaseAnalysis(), fDebug{kFALSE}, fUseCentralityWeight{kFALSE}, fHM{nullptr}, fIspPb{kFALSE},
-                                     fIsMC{kFALSE}, fDeltaPhi{5. * TMath::Pi() / 6.}, fIsPbGoing{kTRUE}, fUseCMFrame{kFALSE},
+                                     fIsMC{kFALSE}, fDeltaPhi{5. * TMath::Pi() / 6.}, fIsPbGoing{kFALSE}, fUseCMFrame{kFALSE},
                                      fEtaBoost{0.0}, fUseMultiplicityWeight{kFALSE}, fLeadJetPtLow{100.}, fSubLeadJetPtLow{50.}, fNEventsInSample{100000000},
                                      fIsDiJetFound{kFALSE}, fIsGenDiJetFound{kFALSE}, fVerbose{kFALSE}, fMinTrkPt{0.5}, fTrkEffPbPb{nullptr}, fTrkEffpPb{nullptr}, fTrkEffTable{""}, fEventCounter{0},
                                      fCycleCounter{0}, fMultWeightTable{""}, fMultiplicityWeight{nullptr}, fMultWeight{nullptr}, fDoInJetMult{kFALSE}, fMultiplicityType{0}, fUseDijetWeight{kFALSE},
@@ -1128,14 +1128,14 @@ Float_t DiJetAnalysis::MoveToCMFrame(const Float_t &jetEta)
 
         if (fIsMC)
         {
-            if (!fIsPbGoing)
+            if (fIsPbGoing)
             {
                 jetEtaCM = -jetEtaCM;
             }
         }
         else if (!fIsMC)
         {
-            if (fIsPbGoing)
+            if (!fIsPbGoing)
             {
                 jetEtaCM = -jetEtaCM;
             }
