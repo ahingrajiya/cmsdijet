@@ -253,7 +253,7 @@ void HistoManagerDiJet::init(const Bool_t &isMC)
 
     int LeadSLeadJetBins[7] = {100, 50, 32, 100, 50, 32, nMultiplicityBins};
     Double_t LeadSLeadJetMin[7] = {0.0, -5.0, -TMath::Pi(), 0.0, -5.0, -TMath::Pi(), fMultiplicityBins[0]};
-    Double_t LeadSLeadJetMax[7] = {1000.0, 5.0, TMath::Pi(), 0.0, -5.0, -TMath::Pi(), fMultiplicityBins[fMultiplicityBins.size() - 1]};
+    Double_t LeadSLeadJetMax[7] = {1000.0, 5.0, TMath::Pi(), 1000.0, 5.0, TMath::Pi(), fMultiplicityBins[fMultiplicityBins.size() - 1]};
     hGenLeadingVsGenSubLeading_WO_DiJet_W = new TH2D("hGenLeadingVsGenSubLeading_WO_DiJet_W", "Gen Leading vs Gen SubLeading Jet", 100, 0., 1000., 100, 0., 1000.);
     hGenLeadingVsGenSubLeading_WO_DiJet_W->Sumw2();
     hRefLeadingVsRefSubLeadingMatched_W = new TH2D("hRefLeadingVsRefSubLeadingMatched_W", "Ref Leading vs Ref SubLeading Jet", 100, 0., 1000., 100, 0., 1000.);
