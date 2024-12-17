@@ -151,8 +151,8 @@ void DiJetAnalysis::SetUpDijetWeight(const std::string &dijetWeightTable)
     else
     {
         hDijetWeight = (TH2D *)fDijetWeightFile->Get("leadptvsubleadpt_map");
-        hDijetWeightRef = (TH2D *)fDijetWeightFile->Get("leadrefptvsubleadrefpt_map");
-        hDijetWeightGen = (TH2D *)fDijetWeightFile->Get("leadgenptvsubleadgenpt_map");
+        // hDijetWeightRef = (TH2D *)fDijetWeightFile->Get("leadrefptvsubleadrefpt_map");
+        // hDijetWeightGen = (TH2D *)fDijetWeightFile->Get("leadgenptvsubleadgenpt_map");
     }
 }
 
@@ -294,11 +294,11 @@ Float_t DiJetAnalysis::DijetWeight(const Bool_t &ispPb, const std::string &type,
     }
     else if (ispPb && fIsMC && type == "Ref")
     {
-        weight = hDijetWeightRef->GetBinContent(hDijetWeightRef->GetXaxis()->FindBin(subLeadPt), hDijetWeightRef->GetYaxis()->FindBin(leadPt));
+        // weight = hDijetWeightRef->GetBinContent(hDijetWeightRef->GetXaxis()->FindBin(subLeadPt), hDijetWeightRef->GetYaxis()->FindBin(leadPt));
     }
     if (ispPb && fIsMC && type == "Reco")
     {
-        weight = hDijetWeightGen->GetBinContent(hDijetWeightGen->GetXaxis()->FindBin(subLeadPt), hDijetWeightGen->GetYaxis()->FindBin(leadPt));
+        // weight = hDijetWeightGen->GetBinContent(hDijetWeightGen->GetXaxis()->FindBin(subLeadPt), hDijetWeightGen->GetYaxis()->FindBin(leadPt));
     }
     if (weight == 0)
     {
@@ -416,6 +416,7 @@ Double_t DiJetAnalysis::EventWeight(const Bool_t &ispPb, Bool_t &isMC, const Eve
         if (fDijetWeightType == "Reco" && recoDijetPass)
         {
             fDijetWeight = DijetWeight(fIspPb, fDijetWeightType, leadJetPt, subLeadJetPt);
+            // std::cout << "Dijet Weight: " << fDijetWeight << std::endl;
         }
         else if (fDijetWeightType == "Ref" && recoDijetPass)
         {
