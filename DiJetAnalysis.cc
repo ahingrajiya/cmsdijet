@@ -863,6 +863,9 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
         }
         if (deltaPhi > fDeltaPhi)
         {
+            // std::cout << "Reco Lead : " << leadJetPt << "Reco SLead : " << subLeadJetPt << std::endl;
+            // std::cout << "Ref Lead : " << leadRefPt << "Ref SLead : " << subLeadRefPt << std::endl;
+            // std::cout << "Ref Matched Lead : " << leadMatchedJetPt << "Ref Matched SLead :  " << subLeadMatchedJetPt << std::endl;
 
             fIsDiJetFound = kTRUE;
             if (fUseMultiplicityWeight)
@@ -1041,6 +1044,9 @@ void DiJetAnalysis::processGenJets(const Event *event, const Double_t &event_Wei
     }
     if (fIsDiJetFound)
     {
+        // std::cout << "Gen Lead : " << genLeadJetPt << "Gen SLead : " << genSubLeadJetPt << std::endl;
+        // std::cout << std::endl;
+
         fHM->hGenLeadPtvsGenSubLeadPt_PtHatW->Fill(genSubLeadJetPt, genLeadJetPt, event_Weight);
         fHM->hGenLeadPtvsGenSubLeadPt_DiJetW->Fill(genSubLeadJetPt, genLeadJetPt, event_Weight * fDijetWeight);
     }

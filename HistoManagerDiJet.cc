@@ -329,7 +329,7 @@ void HistoManagerDiJet::init(const Bool_t &isMC)
     hGenXj_DiJetW = new TH2D("hGenXj_DiJetW", "Gen Xj Distribution DijetWeighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
     hGenXj_DiJetW->Sumw2();
 
-    Float_t LeadSubLeadPtBins[] = {50., 55., 60., 65., 70., 75., 80., 85., 90., 95., 100., 105., 110., 115., 120., 125., 130., 135., 140., 145., 150., 155., 160., 165., 170., 175., 180., 185., 190., 195., 200., 210., 220., 230., 240., 250., 260., 270., 280., 290., 300., 325., 350., 375., 400., 425., 450., 475., 500., 550., 600., 650., 700., 1800.};
+    Float_t LeadSubLeadPtBins[] = {50., 55., 60., 65., 70., 75., 80., 90., 100., 110., 120., 130., 145., 160., 175., 195., 215., 235., 260., 285., 315., 345., 380., 420, 460., 500., 550., 600., 700., 900., 1200., 1600., 2000.};
     Int_t nLeadSubLeadPtBins = sizeof(LeadSubLeadPtBins) / sizeof(Float_t) - 1;
     hLeadPtvsSubLeadPt_PtHatW = new TH2D("hLeadPtvsSubLeadPt_PtHatW", "Lead Pt vs SubLead Pt", nLeadSubLeadPtBins, LeadSubLeadPtBins, nLeadSubLeadPtBins, LeadSubLeadPtBins);
     hLeadPtvsSubLeadPt_PtHatW->Sumw2();
