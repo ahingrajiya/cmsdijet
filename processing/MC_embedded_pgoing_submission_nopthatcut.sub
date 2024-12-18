@@ -8,59 +8,59 @@ RequestCpus = 4
 log        = cond/pthat30_emb_pgoing_nocut.log
 output     = cond/pthat30_emb_pgoing_nocut.out
 error      = cond/pthat30_emb_pgoing_nocut.err
-arguments = ../files_input/pPb_8160/MC_embedded/pgoing/MC_pthat30_pgoing_embedded.txt /eos/user/a/ahingraj/outputs/Emb_nocut_pPb_30_50.root 1 1 0 30 50
+arguments = ../files_input/pPb_8160/MC_embedded/pgoing/MC_pthat30_pgoing_embedded.txt /eos/user/a/ahingraj/outputs/Embedded/Emb_nocut_pPb_30_50.root 1 1 0 30 50
 queue
 
 log        = cond/pthat50_emb_pgoing_nocut.log
 output     = cond/pthat50_emb_pgoing_nocut.out
 error      = cond/pthat50_emb_pgoing_nocut.err
-arguments = ../files_input/pPb_8160/MC_embedded/pgoing/MC_pthat50_pgoing_embedded.txt /eos/user/a/ahingraj/outputs/Emb_nocut_pPb_50_80.root 1 1 0 50 80
+arguments = ../files_input/pPb_8160/MC_embedded/pgoing/MC_pthat50_pgoing_embedded.txt /eos/user/a/ahingraj/outputs/Embedded/Emb_nocut_pPb_50_80.root 1 1 0 50 80
 queue
 
 log        = cond/pthat80_emb_pgoing_nocut.log
 output     = cond/pthat80_emb_pgoing_nocut.out
 error      = cond/pthat80_emb_pgoing_nocut.err
-arguments = ../files_input/pPb_8160/MC_embedded/pgoing/MC_pthat80_pgoing_embedded.txt /eos/user/a/ahingraj/outputs/Emb_nocut_pPb_80_120.root 1 1 0 80 120
+arguments = ../files_input/pPb_8160/MC_embedded/pgoing/MC_pthat80_pgoing_embedded.txt /eos/user/a/ahingraj/outputs/Embedded/Emb_nocut_pPb_80_120.root 1 1 0 80 120
 queue
 
 log        = cond/pthat120_emb_pgoing_nocut.log
 output     = cond/pthat120_emb_pgoing_nocut.out
 error      = cond/pthat120_emb_pgoing_nocut.err
-arguments = ../files_input/pPb_8160/MC_embedded/pgoing/MC_pthat120_pgoing_embedded.txt /eos/user/a/ahingraj/outputs/Emb_nocut_pPb_120_170.root 1 1 0 120 170 
+arguments = ../files_input/pPb_8160/MC_embedded/pgoing/MC_pthat120_pgoing_embedded.txt /eos/user/a/ahingraj/outputs/Embedded/Emb_nocut_pPb_120_170.root 1 1 0 120 170 
 queue
 
 log        = cond/pthat170_emb_pgoing_nocut.log
 output     = cond/pthat170_emb_pgoing_nocut.out
 error      = cond/pthat170_emb_pgoing_nocut.err
-arguments = ../files_input/pPb_8160/MC_embedded/pgoing/MC_pthat170_pgoing_embedded.txt /eos/user/a/ahingraj/outputs/Emb_nocut_pPb_170_220.root 1 1 0 170 220
+arguments = ../files_input/pPb_8160/MC_embedded/pgoing/MC_pthat170_pgoing_embedded.txt /eos/user/a/ahingraj/outputs/Embedded/Emb_nocut_pPb_170_220.root 1 1 0 170 220
 queue
 
 log        = cond/pthat220_emb_pgoing_nocut.log
 output     = cond/pthat220_emb_pgoing_nocut.out
 error      = cond/pthat220_emb_pgoing_nocut.err
-arguments = ../files_input/pPb_8160/MC_embedded/pgoing/MC_pthat220_pgoing_embedded.txt /eos/user/a/ahingraj/outputs/Emb_nocut_pPb_220_280.root 1 1 0 220 280
+arguments = ../files_input/pPb_8160/MC_embedded/pgoing/MC_pthat220_pgoing_embedded.txt /eos/user/a/ahingraj/outputs/Embedded/Emb_nocut_pPb_220_280.root 1 1 0 220 280
 queue
 
 log        = cond/pthat280_emb_pgoing_nocut.log
 output     = cond/pthat280_emb_pgoing_nocut.out
 error      = cond/pthat280_emb_pgoing_nocut.err
-arguments = ../files_input/pPb_8160/MC_embedded/pgoing/MC_pthat280_pgoing_embedded.txt /eos/user/a/ahingraj/outputs/Emb_nocut_pPb_280_370.root 1 1 0 280 370
+arguments = ../files_input/pPb_8160/MC_embedded/pgoing/MC_pthat280_pgoing_embedded.txt /eos/user/a/ahingraj/outputs/Embedded/Emb_nocut_pPb_280_370.root 1 1 0 280 370
 queue
 
 log        = cond/pthat370_emb_pgoing_nocut.log
 output     = cond/pthat370_emb_pgoing_nocut.out
 error      = cond/pthat370_emb_pgoing_nocut.err
-arguments = ../files_input/pPb_8160/MC_embedded/pgoing/MC_pthat370_pgoing_embedded.txt /eos/user/a/ahingraj/outputs/Emb_nocut_pPb_370_460.root 1 1 0 370 460
+arguments = ../files_input/pPb_8160/MC_embedded/pgoing/MC_pthat370_pgoing_embedded.txt /eos/user/a/ahingraj/outputs/Embedded/Emb_nocut_pPb_370_460.root 1 1 0 370 460
 queue
 
 log        = cond/pthat460_emb_pgoing_nocut.log
 output     = cond/pthat460_emb_pgoing_nocut.out
 error      = cond/pthat460_emb_pgoing_nocut.err
-arguments = ../files_input/pPb_8160/MC_embedded/pgoing/MC_pthat460_pgoing_embedded.txt /eos/user/a/ahingraj/outputs/Emb_nocut_pPb_460_540.root 1 1 0 460 540
+arguments = ../files_input/pPb_8160/MC_embedded/pgoing/MC_pthat460_pgoing_embedded.txt /eos/user/a/ahingraj/outputs/Embedded/Emb_nocut_pPb_460_540.root 1 1 0 460 540
 queue
 
 log        = cond/pthat540_emb_pgoing_nocut.log
 output     = cond/pthat540_emb_pgoing_nocut.out
 error      = cond/pthat540_emb_pgoing_nocut.err
-arguments = ../files_input/pPb_8160/MC_embedded/pgoing/MC_pthat540_pgoing_embedded.txt /eos/user/a/ahingraj/outputs/Emb_nocut_pPb_540.root 1 1 0 540 8160
+arguments = ../files_input/pPb_8160/MC_embedded/pgoing/MC_pthat540_pgoing_embedded.txt /eos/user/a/ahingraj/outputs/Embedded/Emb_nocut_pPb_540.root 1 1 0 540 8160
 queue
