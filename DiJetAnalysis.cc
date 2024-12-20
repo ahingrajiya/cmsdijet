@@ -632,7 +632,10 @@ void DiJetAnalysis::processEvent(const Event *event)
     }
     processRecoJets(event, Event_Weight, MultWeight, iMultiplicityBin);
 
-    processGenJets(event, Event_Weight, MultWeight, iMultiplicityBin);
+    if (fIsMC)
+    {
+        processGenJets(event, Event_Weight, MultWeight, iMultiplicityBin);
+    }
 
     if (fIsDiJetFound)
     {

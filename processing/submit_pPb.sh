@@ -9,17 +9,20 @@ cd ${CMS_PATH}
 EXEC_PATH=${HOME}/private/analysis/CMSSW_13_0_5/src/cmsdijet
 # EXEC_PATH=${HOME}/analysis/jetAnalysis/
 
-cd ${EXEC_PATH}/build
-make
-
-cd ${EXEC_PATH}
-
-mkdir -p "executions_dir"
-cp -r "$EXEC_PATH/build/pPbDijetAna" "executions_dir"
-
 DataSet=$1
 isPbgoing=$2
 files_per_job=$3
+doBuild=$4
+
+if [ "$doBuild" -eq 1 ]; then
+    echo "Building the code"
+    cd ${EXEC_PATH}/build
+    make
+    cd ${EXEC_PATH}
+    mkdir -p "executions_dir"
+    cp -r "$EXEC_PATH/build/pPbDijetAna" "executions_dir"
+fi
+
 
 if [ "$DataSet" -eq 1 ]; then
     echo "Unembedded pPb Datasset is selected"
