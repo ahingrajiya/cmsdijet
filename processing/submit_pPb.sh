@@ -23,7 +23,6 @@ if [ "$doBuild" -eq 1 ]; then
     cp -r "$EXEC_PATH/build/pPbDijetAna" "executions_dir"
 fi
 
-
 if [ "$DataSet" -eq 1 ]; then
     echo "Unembedded pPb Datasset is selected"
     cd ${EXEC_PATH}/processing
