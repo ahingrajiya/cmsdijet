@@ -823,6 +823,8 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
     {
         Double_t LeadSLeadJetsMidRapidity[7] = {leadJetPt, leadJetEtaCM, leadJetPhi, subLeadJetPt, subLeadJetEtaCM, subLeadJetPhi, multiplicityBin};
         fHM->hLeadSubLeadJets_MidRapidity_W->Fill(LeadSLeadJetsMidRapidity, event_Weight);
+        // std::cout << "Reco Lead : " << leadJetPt << "Reco SLead : " << subLeadJetPt << std::endl;
+
         if (fIsMC)
         {
             if (subLeadRefPt < leadRefPt)
@@ -866,7 +868,6 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
         }
         if (deltaPhi > fDeltaPhi)
         {
-            // std::cout << "Reco Lead : " << leadJetPt << "Reco SLead : " << subLeadJetPt << std::endl;
             // std::cout << "Ref Lead : " << leadRefPt << "Ref SLead : " << subLeadRefPt << std::endl;
             // std::cout << "Ref Matched Lead : " << leadMatchedJetPt << "Ref Matched SLead :  " << subLeadMatchedJetPt << std::endl;
 

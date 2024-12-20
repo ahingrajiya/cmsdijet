@@ -1101,6 +1101,8 @@ Event *ForestAODReader::returnEvent()
             }
 
             // Reco
+            // std::cout << "RawPt : " << fRawJetPt[iJet] << std::endl;
+
             jet->setPt(fRawJetPt[iJet]);
             jet->setEta(fRecoJetEta[iJet]);
             jet->setPhi(fRecoJetPhi[iJet]);
