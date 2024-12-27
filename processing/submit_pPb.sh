@@ -53,7 +53,7 @@ fi
 
 if [ "$DataSet" -eq 3 ]; then
     echo "MB pPb Dataset is selected"
-    cd ${EXEC_PATH}/processing
+    cd ${EXEC_PATH}
     if [ "$isPbgoing" -eq 1 ]; then
         echo "Pbgoing is selected"
         sample_prefix="MB_Pbgoing"
@@ -70,7 +70,7 @@ fi
 
 if [ "$DataSet" -eq 4 ]; then
     echo "HM185 pPb Dataset is selected"
-    cd ${EXEC_PATH}/processing
+    cd ${EXEC_PATH}
     if [ "$isPbgoing" -eq 1 ]; then
         echo "Pbgoing is selected"
         sample_prefix="HM185_Pbgoing"
@@ -87,7 +87,7 @@ fi
 
 if [ "$DataSet" -eq 5 ]; then
     echo "HM185 pPb Dataset is selected"
-    cd ${EXEC_PATH}/processing
+    cd ${EXEC_PATH}
     if [ "$isPbgoing" -eq 1 ]; then
         echo "Pbgoing is selected"
         sample_prefix="HM250_Pbgoing"
@@ -109,7 +109,7 @@ fi
 
 echo "Input File List : ${input_files_list}"
 
-mkdir -p /condor/logs
+mkdir -p processing/condor/logs
 
 PD_Number=1
 for filename in ${input_files_list}/*.txt; do
