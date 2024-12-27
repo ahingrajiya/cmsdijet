@@ -111,6 +111,7 @@ mkdir -p processing/condor/logs
 PD_Number=1
 for filename in ${input_files_list}/*.txt; do
     echo "Processing file: $(basename "$filename")"
+    echo "$PWD"
     processing/split_files.sh ${input_files_list} $(basename "$filename") $files_per_job
     file_list=$(processing/split_files.sh ${input_files_list} $(basename "$filename") $files_per_job)
     subfile=$(basename "$filename")
