@@ -205,9 +205,9 @@ int main(int argc, char *argv[])
     analysis->setMultiplicityRange(10, 400);
     if (isMC)
     {
-        analysis->setUseDijetWeight();
-        analysis->setDijetWeightType(dijetWeightType);
-        analysis->setDijetWeightTable(path2DijetWeight);
+        // analysis->setUseDijetWeight();
+        // analysis->setDijetWeightType(dijetWeightType);
+        // analysis->setDijetWeightTable(path2DijetWeight);
         if (!isEmbedded)
         {
             analysis->setMultiplicityRange(0, 400);
