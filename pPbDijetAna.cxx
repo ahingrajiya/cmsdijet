@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
     Bool_t ispPb{kTRUE};
     Bool_t useCMFrame{kFALSE};
     Double_t etaBoost{0.4654094531};
-    TString jetBranchName{"ak4PFJetAnalyzer"};
+    TString jetBranchName{"akCs4PFJetAnalyzer"};
     std::string dijetWeightType{"Gen"};
     TString oFileName{};
     TString JECFileName{};
@@ -115,7 +115,7 @@ int main(int argc, char *argv[])
             JECFileName = "Autumn16_HI_pPb_Pbgoing_Embedded_MC_L2Relative_AK4PF.txt";
         }
         JECFileDataName = "Summer16_23Sep2016HV4_DATA_L2L3Residual_AK4PF.txt";
-    }
+        }
 
     // Initialize package manager
     Manager *manager = new Manager{};

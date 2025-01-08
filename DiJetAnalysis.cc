@@ -376,6 +376,8 @@ Double_t DiJetAnalysis::EventWeight(const Bool_t &ispPb, Bool_t &isMC, const Eve
         Float_t subLeadJetEta = -999.;
         Float_t leadJetPhi = -999.;
         Float_t subLeadJetPhi = -999.;
+        Bool_t recoLeadJetID = kFALSE;
+        Bool_t recoSubLeadJetID = kFALSE;
         Bool_t recoDijetPass = kFALSE;
 
         RecoJetIterator recoJetIterator;
@@ -384,26 +386,30 @@ Double_t DiJetAnalysis::EventWeight(const Bool_t &ispPb, Bool_t &isMC, const Eve
             Float_t jetPt = (*recoJetIterator)->ptJECCorr();
             Float_t jetEta = (*recoJetIterator)->eta();
             Float_t jetPhi = (*recoJetIterator)->phi();
+            Bool_t jetID = (*recoJetIterator)->JetID();
             if (jetPt > leadJetPt)
             {
                 subLeadJetPt = leadJetPt;
                 subLeadJetEta = leadJetEta;
                 subLeadJetPhi = leadJetPhi;
+                recoSubLeadJetID = recoLeadJetID;
                 leadJetPt = jetPt;
                 leadJetEta = jetEta;
                 leadJetPhi = jetPhi;
+                recoLeadJetID = jetID;
             }
             else if (jetPt > subLeadJetPt)
             {
                 subLeadJetPt = jetPt;
                 subLeadJetEta = jetEta;
                 subLeadJetPhi = jetPhi;
+                recoSubLeadJetID = jetID;
             }
         }
 
         Float_t leadJetEtaCM = MoveToCMFrame(leadJetEta);
         Float_t subLeadJetEtaCM = MoveToCMFrame(subLeadJetEta);
-        Bool_t isDiJet = CheckDijet(leadJetPt, leadJetEtaCM, subLeadJetPt, subLeadJetEtaCM);
+        Bool_t isDiJet = CheckDijet(leadJetPt, leadJetEtaCM, subLeadJetPt, subLeadJetEtaCM, recoLeadJetID, recoSubLeadJetID);
         if (isDiJet)
         {
             Double_t deltaPhi = TMath::Abs(DeltaPhi(leadJetPhi, subLeadJetPhi));
@@ -694,6 +700,8 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
     Float_t subLeadRefPhi = -999.;
     Float_t leadMatchedJetPt = -999.;
     Float_t subLeadMatchedJetPt = -999.;
+    Bool_t leadJetID = kFALSE;
+    Bool_t subLeadJetID = kFALSE;
 
     RecoJetIterator recoJetIterator;
     TrackIterator recoTrackIterator;
@@ -702,6 +710,7 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
         Float_t jetPt = (*recoJetIterator)->ptJECCorr();
         Float_t jetEta = (*recoJetIterator)->eta();
         Float_t jetPhi = (*recoJetIterator)->phi();
+        Bool_t jetID = (*recoJetIterator)->JetID();
         Float_t refPt = (*recoJetIterator)->RefJetPt();
         Float_t refEta = (*recoJetIterator)->RefJetEta();
         Float_t refPhi = (*recoJetIterator)->RefJetPhi();
@@ -739,9 +748,11 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
             subLeadJetPt = leadJetPt;
             subLeadJetEta = leadJetEta;
             subLeadJetPhi = leadJetPhi;
+            subLeadJetID = leadJetID;
             leadJetPt = jetPt;
             leadJetEta = jetEta;
             leadJetPhi = jetPhi;
+            leadJetID = jetID;
             subLeadMatchedJetPt = leadMatchedJetPt;
             leadMatchedJetPt = refPt;
         }
@@ -750,6 +761,7 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
             subLeadJetPt = jetPt;
             subLeadJetEta = jetEta;
             subLeadJetPhi = jetPhi;
+            subLeadJetID = jetID;
             subLeadMatchedJetPt = refPt;
         }
 
@@ -795,7 +807,7 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
 
     Float_t leadJetEtaCM = MoveToCMFrame(leadJetEta);
     Float_t subLeadJetEtaCM = MoveToCMFrame(subLeadJetEta);
-    Bool_t isDiJet = CheckDijet(leadJetPt, leadJetEtaCM, subLeadJetPt, subLeadJetEtaCM);
+    Bool_t isDiJet = CheckDijet(leadJetPt, leadJetEtaCM, subLeadJetPt, subLeadJetEtaCM, leadJetID, subLeadJetID);
 
     if (leadJetPt > 100.0 && subLeadJetPt > 50.)
     {
@@ -823,7 +835,6 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
     {
         Double_t LeadSLeadJetsMidRapidity[7] = {leadJetPt, leadJetEtaCM, leadJetPhi, subLeadJetPt, subLeadJetEtaCM, subLeadJetPhi, multiplicityBin};
         fHM->hLeadSubLeadJets_MidRapidity_W->Fill(LeadSLeadJetsMidRapidity, event_Weight);
-        // std::cout << "Reco Lead : " << leadJetPt << "Reco SLead : " << subLeadJetPt << std::endl;
 
         if (fIsMC)
         {
@@ -872,6 +883,11 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
             // std::cout << "Ref Matched Lead : " << leadMatchedJetPt << "Ref Matched SLead :  " << subLeadMatchedJetPt << std::endl;
 
             fIsDiJetFound = kTRUE;
+            std::cout << multiplicityBin << std::endl;
+            std::cout << Xj << std::endl;
+            std::cout << "Reco Lead : " << leadJetPt << " Reco SLead : " << subLeadJetPt << std::endl;
+            std::cout << "Reco Lead Eta : " << leadJetEtaCM << " Reco SLead Eta : " << subLeadJetEtaCM << std::endl;
+            std::cout << "Delta Phi : " << deltaPhi << std::endl;
             if (fUseMultiplicityWeight)
             {
                 for (Int_t i = 0; i < 4; i++)
@@ -1057,7 +1073,7 @@ void DiJetAnalysis::processGenJets(const Event *event, const Double_t &event_Wei
 
     Float_t genLeadJetEtaCM = MoveToCMFrame(genLeadJetEta);
     Float_t genSubLeadJetEtaCM = MoveToCMFrame(genSubLeadJetEta);
-    Bool_t isGenDiJet = CheckDijet(genLeadJetPt, genLeadJetEtaCM, genSubLeadJetPt, genSubLeadJetEtaCM);
+    Bool_t isGenDiJet = CheckDijet(genLeadJetPt, genLeadJetEtaCM, genSubLeadJetPt, genSubLeadJetEtaCM, kTRUE, kTRUE);
 
     if (genLeadJetPt > 100. && genSubLeadJetPt > 50.)
     {
@@ -1199,7 +1215,7 @@ Double_t DiJetAnalysis::FindMultiplicityBin(const Int_t &multiplicity)
     return (Double_t)iBin;
 }
 
-Bool_t DiJetAnalysis::CheckDijet(const Float_t &leadpt, const Float_t &leadeta, const Float_t &subleadpt, const Float_t &subleadeta)
+Bool_t DiJetAnalysis::CheckDijet(const Float_t &leadpt, const Float_t &leadeta, const Float_t &subleadpt, const Float_t &subleadeta, const Bool_t &leadID, const Bool_t &subleadID)
 {
     Bool_t isDijetPt = kFALSE;
     if (leadpt > fLeadJetPtLow && subleadpt > fSubLeadJetPtLow)
@@ -1228,8 +1244,17 @@ Bool_t DiJetAnalysis::CheckDijet(const Float_t &leadpt, const Float_t &leadeta, 
         }
         isDijetSubLeadEta = kTRUE;
     }
+    Bool_t isDijetID = kFALSE;
+    if (leadID && subleadID)
+    {
+        if (fVerbose)
+        {
+            std::cout << Form("DiJet ID Requirement Satisfied. Lead Jet ID : %i , Sub Lead Jet ID : %i ", leadID, subleadID) << std::endl;
+        }
+        isDijetID = kTRUE;
+    }
 
-    return (isDijetPt && isDijetLeadEta && isDijetSubLeadEta);
+    return (isDijetPt && isDijetLeadEta && isDijetSubLeadEta && isDijetID);
 }
 
 void DiJetAnalysis::report()

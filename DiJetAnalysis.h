@@ -207,8 +207,10 @@ private:
     /// @param leadJetEta Found leading jet eta
     /// @param subLeadJetPt Found subleading jet pt
     /// @param subLeadJetEta Found subleading jet eta
+    /// @param leadID Leading jet ID
+    /// @param subLeadID Subleading jet ID
     /// @return Returns true if all dijet requirements are satisfied
-    Bool_t CheckDijet(const Float_t &leadJetPt, const Float_t &leadJetEta, const Float_t &subLeadJetPt, const Float_t &subLeadJetEta);
+    Bool_t CheckDijet(const Float_t &leadJetPt, const Float_t &leadJetEta, const Float_t &subLeadJetPt, const Float_t &subLeadJetEta, const Bool_t &leadID, const Bool_t &subLeadID);
     /// @brief Xj calculator
     /// @param leadJetPt Leading jet pt
     /// @param subLeadJetPt Subleading jet pt

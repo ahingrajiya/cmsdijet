@@ -44,6 +44,8 @@ public:
   void setJetPartonFlavor(const Int_t &flavor) { fJetPartonFlavor = {flavor}; }
   ///@brief Set Ref Parton FlavorForB
   void setJetPartonFlavorForB(const Int_t &flavor) { fJetPartonFlavorForB = {flavor}; }
+  ///@brief Set Jet ID
+  void setJetID(const Bool_t &id) { fJetID = {id}; }
   /// @brief Print parameters of the given jet
   void print();
 
@@ -70,6 +72,8 @@ public:
   Int_t JetPartonFlavor() const { return fJetPartonFlavor; }
   ///@brief Ref Parton FlavorForB
   Int_t JetPartonFlavorForB() const { return fJetPartonFlavorForB; }
+  ///@brief Return if Jet ID Passed
+  Bool_t JetID() const { return fJetID; }
 
 private:
   /// @brief Transverse momentum after JEC
@@ -86,6 +90,8 @@ private:
   /// -1 - antid, 0 - unknown, 1 - d, 2 - u, 3 - s, 4 - c, 5 - b,
   /// 21 - gluon, -99 for non-matched to RecoJet)
   Int_t fJetPartonFlavorForB;
+  /// @brief Jet ID
+  Bool_t fJetID;
 
   ClassDef(RecoJet, 1)
 };

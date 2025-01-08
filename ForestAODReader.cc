@@ -875,8 +875,8 @@ void ForestAODReader::readEvent()
     if (fUseGenTrackBranch)
         fGenTrkTree->GetEntry(fEventsProcessed);
     fEventsProcessed++;
-    // if (fEventsProcessed > 700000)
-    // std::cout << "Events processed:     " << fEventsProcessed - 1 << std::endl;
+    // if (fEventsProcessed - 1 == 25794)
+    // std::cout << "Events processed: " << fEventsProcessed - 1 << std::endl;
 }
 
 //________________
@@ -1089,19 +1089,13 @@ Event *ForestAODReader::returnEvent()
                 // Add index of the matched GenJet
                 // jet->setGenJetId(fRecoJet2GenJetId.at(iJet));
             } // if ( fIsMc )
-            if (fRecoJetTrackMax[iJet] / fRawJetPt[iJet] < 0.01)
+
+            if (fRecoJetTrackMax[iJet] / fRawJetPt[iJet] < 0.01 || fRecoJetTrackMax[iJet] / fRawJetPt[iJet] > 0.98)
             {
-                delete jet;
-                continue;
-            }
-            if (fRecoJetTrackMax[iJet] / fRawJetPt[iJet] > 0.98)
-            {
-                delete jet;
-                continue;
+                jet->setJetID(kFALSE);
             }
 
             // Reco
-            // std::cout << "RawPt : " << fRawJetPt[iJet] << std::endl;
 
             jet->setPt(fRawJetPt[iJet]);
             jet->setEta(fRecoJetEta[iJet]);
@@ -1131,10 +1125,10 @@ Event *ForestAODReader::returnEvent()
                 jet->setJetPartonFlavorForB(fRefJetPartonFlavorForB[iJet]);
             }
 
-            // if (fEventsProcessed - 1 == 964)
-            // {
-            // jet->print();
-            // }
+            if (fEventsProcessed - 1 == 25794)
+            {
+                jet->print();
+            }
 
             // Check fronе-loaded cut
             if (fJetCut && !fJetCut->pass(jet))

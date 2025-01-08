@@ -21,7 +21,7 @@
 ClassImp(RecoJet)
 
     //________________
-    RecoJet::RecoJet() : BaseJet{}, fPtJECCorr{0}, fRefJetPt{0}, fRefJetEta{0}, fRefJetPhi{0}, fJetPartonFlavor{0}, fJetPartonFlavorForB{0}
+    RecoJet::RecoJet() : BaseJet{}, fPtJECCorr{0}, fRefJetPt{0}, fRefJetEta{0}, fRefJetPhi{0}, fJetPartonFlavor{0}, fJetPartonFlavorForB{0}, fJetID{kTRUE}
 {
     /* Empty */
 }
@@ -30,6 +30,6 @@ ClassImp(RecoJet)
 void RecoJet::print()
 {
     std::cout << Form("--  Reconstructed jet info  --\n")
-              << Form("pT: %5.2f  eta: %3.2f  phi: %3.2f  pTcorr: %5.2f  WTAeta: %3.2f  WTAphi: %3.2f  GenJetId: %d\n",
-                      this->pt(), this->eta(), this->phi(), fPtJECCorr, this->WTAEta(), this->WTAPhi());
+              << Form("pT: %5.2f  eta: %3.2f  phi: %3.2f  pTcorr: %5.2f  WTAeta: %3.2f  WTAphi: %3.2f  JetId: %d\n",
+                      this->pt(), this->eta(), this->phi(), fPtJECCorr, this->WTAEta(), this->WTAPhi(), this->JetID());
 }
