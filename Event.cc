@@ -40,7 +40,7 @@ Event::Event(const UInt_t &runId, const ULong64_t &eventId, const UInt_t &lumi,
                                                                                                                             fVx{vx}, fVy{vy}, fVz{vz},
                                                                                                                             fHiBin{(Short_t)hiBin}, fPtHat{ptHat}, fPtHatWeight{w},
                                                                                                                             fNBadJets{(UChar_t)nBadJets},
-                                                                                                                            fMult{(UShort_t)mult}, fGenMult{(UShort_t)genMult}, fEventNumber{eveNumber}, fGenJetsCollectionIsFilled{kFALSE}, fEventNumber{eveNumber}
+                                                                                                                            fMult{(UShort_t)mult}, fGenMult{(UShort_t)genMult}, fGenJetsCollectionIsFilled{kFALSE}, fEventNumber{eveNumber}
 {
 
     // Create new collections
