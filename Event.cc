@@ -35,12 +35,12 @@ Event::Event() : TObject(), fRunId{0}, fEventId{0}, fLumi{0},
 Event::Event(const UInt_t &runId, const ULong64_t &eventId, const UInt_t &lumi,
              const Float_t &vx, const Float_t &vy, const Float_t &vz,
              const Int_t &hiBin, const Float_t &ptHat,
-             const Float_t &w, const Int_t &nBadJets, const Int_t &mult, const Int_t &genMult) : TObject(),
-                                                                                                 fRunId{runId}, fEventId{eventId}, fLumi{lumi},
-                                                                                                 fVx{vx}, fVy{vy}, fVz{vz},
-                                                                                                 fHiBin{(Short_t)hiBin}, fPtHat{ptHat}, fPtHatWeight{w},
-                                                                                                 fNBadJets{(UChar_t)nBadJets},
-                                                                                                 fMult{(UShort_t)mult}, fGenMult{(UShort_t)genMult}, fGenJetsCollectionIsFilled{kFALSE}
+             const Float_t &w, const Int_t &nBadJets, const Int_t &mult, const Int_t &genMult, const Long64_t &eveNumber) : TObject(),
+                                                                                                                            fRunId{runId}, fEventId{eventId}, fLumi{lumi},
+                                                                                                                            fVx{vx}, fVy{vy}, fVz{vz},
+                                                                                                                            fHiBin{(Short_t)hiBin}, fPtHat{ptHat}, fPtHatWeight{w},
+                                                                                                                            fNBadJets{(UChar_t)nBadJets},
+                                                                                                                            fMult{(UShort_t)mult}, fGenMult{(UShort_t)genMult}, fGenJetsCollectionIsFilled{kFALSE}, fEventNumber{eveNumber}
 {
 
     // Create new collections

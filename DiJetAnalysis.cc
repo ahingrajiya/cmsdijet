@@ -881,13 +881,17 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
         {
             // std::cout << "Ref Lead : " << leadRefPt << "Ref SLead : " << subLeadRefPt << std::endl;
             // std::cout << "Ref Matched Lead : " << leadMatchedJetPt << "Ref Matched SLead :  " << subLeadMatchedJetPt << std::endl;
+            // std::cout << "Lead Jet Pt: " << leadJetPt << " SubLead Jet Pt: " << subLeadJetPt << std::endl;
+            // std::cout << "Lead Jet Eta: " << leadJetEtaCM << " SubLead Jet Eta: " << subLeadJetEtaCM << std::endl;
+            // std::cout << "Xj : " << Xj << " Delta Phi : " << deltaPhi << std::endl;
+            // std::cout << "Event Number : " << event->eventNumber() << std::endl;
+            // std::cout << "Event Number : " << event->eventNumber() << std::endl;
+            // std::cout << "Xj : " << Xj << " Delta Phi : " << deltaPhi << std::endl;
+            // std::cout << "Lead Jet Pt: " << leadJetPt << " SubLead Jet Pt: " << subLeadJetPt << std::endl;
+            // std::cout << "Lead Jet Eta: " << leadJetEtaCM << " SubLead Jet Eta: " << subLeadJetEtaCM << std::endl;
+            // std::cout << "Lead Jet Phi: " << leadJetPhi << " SubLead Jet Phi: " << subLeadJetPhi << std::endl;
 
             fIsDiJetFound = kTRUE;
-            std::cout << multiplicityBin << std::endl;
-            std::cout << Xj << std::endl;
-            std::cout << "Reco Lead : " << leadJetPt << " Reco SLead : " << subLeadJetPt << std::endl;
-            std::cout << "Reco Lead Eta : " << leadJetEtaCM << " Reco SLead Eta : " << subLeadJetEtaCM << std::endl;
-            std::cout << "Delta Phi : " << deltaPhi << std::endl;
             if (fUseMultiplicityWeight)
             {
                 for (Int_t i = 0; i < 4; i++)

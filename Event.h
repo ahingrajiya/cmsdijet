@@ -27,7 +27,7 @@ public:
   Event(const UInt_t &runId, const ULong64_t &eventId, const UInt_t &lumi,
         const Float_t &vx, const Float_t &vy, const Float_t &vz,
         const Int_t &hiBin, const Float_t &ptHat,
-        const Float_t &w, const Int_t &nBadJets, const Int_t &mult, const Int_t &genMult);
+        const Float_t &w, const Int_t &nBadJets, const Int_t &mult, const Int_t &genMult, const Long64_t &eveNumber);
   /// @brief Destructor
   virtual ~Event();
 
@@ -68,6 +68,8 @@ public:
   void setGenMultiplicity(const Int_t &genMult) { fGenMult = (UShort_t)genMult; }
   /// @brief Set the flag that generated jet collection is filled to true
   void setGenJetCollectionIsFilled() { fGenJetsCollectionIsFilled = kTRUE; }
+  /// @brief Set event number in the process
+  void setEventNumber(const Long64_t &eventNumber) { fEventNumber = eventNumber; }
   /// @brief  Print event information
   void print();
 
@@ -105,6 +107,8 @@ public:
   UInt_t numberOfRecoJets() const { return this->recoJetCollection()->size(); }
   /// @brief Return number of generated jets
   UInt_t numberOfGenJets() const { return this->genJetCollection()->size(); }
+  /// @brief Return event number in the process
+  Long64_t eventNumber() const { return fEventNumber; }
 
   /// @brief Return pointer to a collection of tracks
   TrackCollection *trackCollection() const { return fTrackCollection; }
@@ -144,6 +148,8 @@ private:
   UShort_t fGenMult;
   /// @brief Check if collection of generated jets is filled
   Bool_t fGenJetsCollectionIsFilled;
+  ///@brief Event number in the process
+  Long64_t fEventNumber;
 
   /// @brief Reco jet collection
   RecoJetCollection *fRecoJetCollection;

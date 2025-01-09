@@ -963,6 +963,7 @@ Event *ForestAODReader::returnEvent()
     // }
 
     fEvent = new Event();
+    fEvent->setEventNumber(fEventsProcessed - 1);
 
     fEvent->setRunId(fRunId);
     fEvent->setEventId(fEventId);
