@@ -21,7 +21,7 @@
 //________________
 Event::Event() : TObject(), fRunId{0}, fEventId{0}, fLumi{0},
                  fVx{0}, fVy{0}, fVz{0}, fHiBin{-1}, fPtHat{-1}, fPtHatWeight{-1},
-                 fNBadJets{0}, fMult{0}, fGenMult{0},
+                 fNBadJets{0}, fMult{0}, fGenMult{0}, fEventNumber{0},
                  fGenJetsCollectionIsFilled{kFALSE}
 {
     fRecoJetCollection = new RecoJetCollection{};
@@ -40,7 +40,7 @@ Event::Event(const UInt_t &runId, const ULong64_t &eventId, const UInt_t &lumi,
                                                                                                                             fVx{vx}, fVy{vy}, fVz{vz},
                                                                                                                             fHiBin{(Short_t)hiBin}, fPtHat{ptHat}, fPtHatWeight{w},
                                                                                                                             fNBadJets{(UChar_t)nBadJets},
-                                                                                                                            fMult{(UShort_t)mult}, fGenMult{(UShort_t)genMult}, fGenJetsCollectionIsFilled{kFALSE}, fEventNumber{eveNumber}
+                                                                                                                            fMult{(UShort_t)mult}, fGenMult{(UShort_t)genMult}, fEventNumber{eveNumber}, fGenJetsCollectionIsFilled{kFALSE}, fEventNumber{eveNumber}
 {
 
     // Create new collections
