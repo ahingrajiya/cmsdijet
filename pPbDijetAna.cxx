@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
     Bool_t useCMFrame{kFALSE};
     Double_t etaBoost{0.4654094531};
     TString jetBranchName{"akCs4PFJetAnalyzer"};
-    std::string dijetWeightType{"Gen"};
+    std::string dijetWeightType{"Reco"};
     TString oFileName{};
     TString JECFileName{};
     TString JECFileDataName{};
@@ -115,7 +115,7 @@ int main(int argc, char *argv[])
             JECFileName = "Autumn16_HI_pPb_Pbgoing_Embedded_MC_L2Relative_AK4PF.txt";
         }
         JECFileDataName = "Summer16_23Sep2016HV4_DATA_L2L3Residual_AK4PF.txt";
-        }
+    }
 
     // Initialize package manager
     Manager *manager = new Manager{};
@@ -205,9 +205,9 @@ int main(int argc, char *argv[])
     analysis->setMultiplicityRange(10, 400);
     if (isMC)
     {
-        // analysis->setUseDijetWeight();
-        // analysis->setDijetWeightType(dijetWeightType);
-        // analysis->setDijetWeightTable(path2DijetWeight);
+        analysis->setUseDijetWeight();
+        analysis->setDijetWeightType(dijetWeightType);
+        analysis->setDijetWeightTable(path2DijetWeight);
         if (!isEmbedded)
         {
             analysis->setMultiplicityRange(0, 400);
