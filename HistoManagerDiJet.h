@@ -38,51 +38,55 @@ public:
     virtual ~HistoManagerDiJet();
 
     ///@brief Initialize Histograms
-    void init(const Bool_t &isMC = kFALSE);
+    void init();
     ///@brief Use MC histograms
-    void setIsMC(const Bool_t &isMC = kTRUE) { fIsMC = isMC; }
+    void setIsMC(const Bool_t &isMC) { fIsMC = isMC; }
+    ///@brief Projection histograms
+    void projectHistograms();
     ///@brief Write all historgams to output file
-    void writeOutput(const Bool_t &isMC = kFALSE);
+    void writeOutput();
     ///@brief Set Multiplicity bins
     void setMultiplicityBins(const std::vector<float> &bins) { fMultiplicityBins = bins; }
 
-    TH1D *hRecoMultiplicity_W;
-    TH1D *hCorrectedMultiplicity_W;
-    TH1D *hGenMultiplicity_W;
-    TH1D *hSubEventMultiplicity_W;
-    TH1D *hSelectedMultiplicity_W;
     TH1D *hPtHat;
     TH1D *hPtHat_W;
     TH1D *hHiBin;
     TH1D *hHiBin_W;
     TH1D *hVz;
     TH1D *hVz_W;
-    TH1D *hVzWithDijet_W;
-    TH1D *hDeltaPhi_W;
-    TH1D *hDeltaPhi_WithDiJet_W;
-    TH1D *hGenDeltaPhi_W;
-    TH1D *hGenDeltaPhi_WithDiJet_W;
-    TH1I *hNDijetEvent;
-    TH1D *hNGenDijetEvent;
     TH1D *hNEventsInMult;
+    TH1D *hRecoMultiplicity_W;
+    TH1D *hCorrectedMultiplicity_W;
+    TH1D *hGenMultiplicity_W;
+    TH1D *hSubEventMultiplicity_W;
+    TH1D *hSelectedMultiplicity_W;
 
     TH2D *hInJetMultiplicity_W;
     TH2D *hGenInJetMultiplicity_W;
-    TH2D *hXj_W;
-    TH2D *hXj_DiJetW;
-    TH2D *hRefXj_W;
-    TH2D *hRefXj_ER_W;
-    TH2D *hRefXj_DiJetW;
-    TH2D *hRefXj_ER_DiJetW;
-    TH2D *hGenXj_W;
-    TH2D *hGenXj_DiJetW;
 
-    TH2D *hLeadPtvsSubLeadPt_DiJetW;
-    TH2D *hLeadPtvsSubLeadPt_PtHatW;
-    TH2D *hRefLeadPtvsRefSubLeadPt_DiJetW;
-    TH2D *hRefLeadPtvsRefSubLeadPt_PtHatW;
-    TH2D *hGenLeadPtvsGenSubLeadPt_DiJetW;
-    TH2D *hGenLeadPtvsGenSubLeadPt_PtHatW;
+    THnSparseD *hMultiplicities;
+    THnSparseD *hMultiplicities_W;
+    THnSparseD *hMultiplicities_DiJet_W;
+
+    THnSparseD *hInclusiveUncorrectedRecoJets;
+    THnSparseD *hInclusiveUncorrectedRecoJets_W;
+    THnSparseD *hInclusiveRecoJetsLabFrame;
+    THnSparseD *hInclusiveRecoJetsLabFrame_W;
+    THnSparseD *hInclusiveRecoJetsCMFrame;
+    THnSparseD *hInclusiveRecoJetsCMFrame_W;
+    THnSparseD *hSelectedInclusiveRecoJetsMidRapidity_W;
+
+    THnSparseD *hInclusiveRefJetsLabFrame;
+    THnSparseD *hInclusiveRefJetsLabFrame_W;
+    THnSparseD *hInclusiveRefJetsCMFrame;
+    THnSparseD *hInclusiveRefJetsCMFrame_W;
+    THnSparseD *hSelectedInclusiveRefJetsMidRapidity_W;
+
+    THnSparseD *hInclusiveGenJetsLabFrame;
+    THnSparseD *hInclusiveGenJetsLabFrame_W;
+    THnSparseD *hInclusiveGenJetsCMFrame;
+    THnSparseD *hInclusiveGenJetsCMFrame_W;
+    THnSparseD *hSelectedInclusiveGenJetsMidRapidity_W;
 
     THnSparseD *hLeadSubLeadJets;
     THnSparseD *hLeadSubLeadJets_W;
@@ -97,38 +101,96 @@ public:
     THnSparseD *hGenLeadGenSubLeadJets_WithDijet_W;
     THnSparseD *hRefLeadRefSubLeadJets_WithDijet_W;
 
+    TH2D *hLeadPtvsSubLeadPt_DiJetW;
+    TH2D *hLeadPtvsSubLeadPt_PtHatW;
+    TH2D *hRefLeadPtvsRefSubLeadPt_DiJetW;
+    TH2D *hRefLeadPtvsRefSubLeadPt_PtHatW;
+    TH2D *hGenLeadPtvsGenSubLeadPt_DiJetW;
+    TH2D *hGenLeadPtvsGenSubLeadPt_PtHatW;
+
+    TH2D *hInclusiveRecoJetPtVsEtaLabFrame_W;
+    TH2D *hInclusiveRecoJetPtVsEtaCMFrame_W;
+    TH2D *hInclusiveUnCorrectedRecoPtVsEtaLabFrame_W;
+    TH2D *hInclusiveUnCorrectedRecoPtVsEtaCMFrame_W;
+
     TH2D *hRecoJES_W;
     TH2D *hRefJES_W;
-
-    THnSparseD *hMultiplicities;
-    THnSparseD *hMultiplicities_W;
-
-    THnSparseD *hRecoJets;
-    THnSparseD *hRecoJets_W;
-    THnSparseD *hGenJets;
-    THnSparseD *hGenJets_W;
-
-    THnSparseD *hLeadingJet_W;
-    THnSparseD *hGenLeadingJet_W;
-    THnSparseD *hRefLeadingJet_W;
-
-    THnSparseD *hSubLeadingJet_W;
-    THnSparseD *hGenSubLeadingJet_W;
-    THnSparseD *hRefSubLeadingJet_W;
-    THnSparseD *hMultiplicities_DiJet_W;
 
     TH2D *hGenLeadingVsGenSubLeading_WO_DiJet_W;
     TH2D *hRefLeadingVsRefSubLeadingMatched_W;
 
     THnSparseD *hRecoQuenching_W;
     THnSparseD *hGenQuenching_W;
+    TH2D *hXj_W;
+    TH2D *hXj_DiJetW;
+    TH2D *hRefXj_W;
+    TH2D *hRefXj_ER_W;
+    TH2D *hRefXj_DiJetW;
+    TH2D *hRefXj_ER_DiJetW;
+    TH2D *hGenXj_W;
+    TH2D *hGenXj_DiJetW;
+    TH1D *hVzWithDijet_W;
+    TH1D *hDeltaPhi_W;
+    TH1D *hDeltaPhi_WithDiJet_W;
+    TH1D *hGenDeltaPhi_W;
+    TH1D *hGenDeltaPhi_WithDiJet_W;
+    TH1I *hNDijetEvent;
+    TH1D *hNGenDijetEvent;
+
+    // Projection Histograms
+    TH1D *hInclusiveRecoJetPt;
+    TH1D *hInclusiveRecoJetPt_W;
+    TH1D *hSelectedInclusiveRecoJetPt_MidRapidity_W;
+    TH1D *hInclusiveRecoJetEtaCMFrame;
+    TH1D *hInclusiveRecoJetEtaCMFrame_W;
+    TH1D *hInclusiveRecoJetEtaLabFrame;
+    TH1D *hInclusiveRecoJetEtaLabFrame_W;
+    TH1D *hSelectedInclusiveRecoJetEtaMidRapidity_W;
+
+    TH1D *hInclusiveGenJetPt;
+    TH1D *hInclusiveGenJetPt_W;
+    TH1D *hSelectedInclusiveGenJetPt_MidRapidity_W;
+    TH1D *hInclusiveGenJetEtaCMFrame;
+    TH1D *hInclusiveGenJetEtaCMFrame_W;
+    TH1D *hInclusiveGenJetEtaLabFrame;
+    TH1D *hInclusiveGenJetEtaLabFrame_W;
+    TH1D *hSelectedInclusiveGenJetEtaMidRapidity_W;
+
+    TH1D *hInclusiveRefJetPt;
+    TH1D *hInclusiveRefJetPt_W;
+    TH1D *hSelectedInclusiveRefJetPt_MidRapidity_W;
+
+    TH1D *hLeadingRecoJetPt;
+    TH1D *hLeadingRecoJetPt_W;
+    TH1D *hSubLeadingRecoJetPt;
+    TH1D *hSubLeadingRecoJetPt_W;
+    TH1D *hLeadingGenJetPt;
+    TH1D *hLeadingGenJetPt_W;
+    TH1D *hSubLeadingGenJetPt;
+    TH1D *hSubLeadingGenJetPt_W;
+    TH1D *hLeadingRefJetPt;
+    TH1D *hLeadingRefJetPt_W;
+    TH1D *hSubLeadingRefJetPt;
+    TH1D *hSubLeadingRefJetPt_W;
+
+    TH1D *hLeadingRecoJetPtWithDijet_W;
+    TH1D *hLeadingGenJetPtWithDijet_W;
+    TH1D *hLeadingRefJetPtWithDijet_W;
+    TH1D *hSubLeadingRecoJetPtWithDijet_W;
+    TH1D *hSubLeadingGenJetPtWithDijet_W;
+    TH1D *hSubLeadingRefJetPtWithDijet_W;
+
+    TH1D *hXj_Projection_W[5];
+    TH1D *hXj_Projection_DiJetW[5];
+    TH1D *hGenXj_Projection_W[5];
+    TH1D *hGenXj_Projection_DiJetW[5];
 
 private:
     Bool_t fIsMC;
 
     std::vector<float> fMultiplicityBins;
 
-    ClassDef(HistoManagerDiJet, 0)
+    ClassDef(HistoManagerDiJet, 1)
 };
 
 #endif

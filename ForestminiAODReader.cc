@@ -28,7 +28,8 @@ ClassImp(ForestminiAODReader)
       fUseSkimmingBranch{kFALSE}, fJetCollection{"ak4PFJetAnalyzer"}, fUseJets{kFALSE}, fUseTrackBranch{kFALSE},
       fUseGenTrackBranch{kFALSE}, fHltTree{nullptr}, fSkimTree{nullptr}, fEventTree{nullptr}, fTrkTree{nullptr}, fGenTrkTree{nullptr},
       fJEC{nullptr}, fJECFiles{}, fJEU{nullptr}, fJEUFiles{}, fCollidingSystem{Form("PbPb")}, fCollidingEnergyGeV{5020}, fYearOfDataTaking{2018},
-      fDoJetPtSmearing{kFALSE}, fFixJetArrays{kFALSE}, fEventCut{nullptr}, fJetCut{nullptr}, fRecoJet2GenJetId{}, fGenJet2RecoJet{}, fIsInStore{kFALSE}, fTrackCut{nullptr}, fUseMatchedJets{kFALSE}, fEventsToProcess{-1}
+      fDoJetPtSmearing{kFALSE}, fFixJetArrays{kFALSE}, fEventCut{nullptr}, fJetCut{nullptr}, fRecoJet2GenJetId{}, fGenJet2RecoJet{}, fIsInStore{kFALSE}, fTrackCut{nullptr},
+      fUseMatchedJets{kFALSE}, fEventsToProcess{-1}, fUseJetID{kFALSE}, fJetIDType{0}
 {
     // Initialize many variables
     clearVariables();
@@ -41,7 +42,8 @@ ForestminiAODReader::ForestminiAODReader(const Char_t *inputStream, const Bool_t
     : fEvent{nullptr}, fInFileName{inputStream}, fEvents2Read{0}, fEventsProcessed{0}, fIsMc{isMc},
       fUseHltBranch{useHltBranch}, fUseSkimmingBranch{useSkimmingBranch}, fJetCollection{"ak4PFJetAnalyzer"},
       fUseJets{useJets}, fUseGenTrackBranch{useGenTrackBranch},
-      fJEC{nullptr}, fJECFiles{}, fJEU{nullptr}, fJEUFiles{}, fCollidingSystem{Form("PbPb")}, fCollidingEnergyGeV{5020}, fYearOfDataTaking{2018}, fEventsToProcess{-1}
+      fJEC{nullptr}, fJECFiles{}, fJEU{nullptr}, fJEUFiles{}, fCollidingSystem{Form("PbPb")}, fCollidingEnergyGeV{5020}, fYearOfDataTaking{2018}, fEventsToProcess{-1},
+      fUseJetID{kFALSE}, fJetIDType{0}
 
 {
     // Initialize many variables
@@ -148,7 +150,7 @@ void ForestminiAODReader::clearVariables()
     {
 
         // Jet variables
-        if (i < 100)
+        if (i < 1000)
         {
             fRawJetPt[i] = {0.f};
             fRecoJetPt[i] = {0.f};
@@ -157,6 +159,16 @@ void ForestminiAODReader::clearVariables()
             fRecoJetWTAEta[i] = {0.f};
             fRecoJetWTAPhi[i] = {0.f};
             fRecoJetTrackMax[i] = {0.f};
+            fRecoPfNHF[i] = {0.f};
+            fRecoPfNEF[i] = {0.f};
+            fRecoPfCHF[i] = {0.f};
+            fRecoPfMUF[i] = {0.f};
+            fRecoPfCEF[i] = {0.f};
+            fRecoPfCHM[i] = {0};
+            fRecoPfCEM[i] = {0};
+            fRecoPfNHM[i] = {0};
+            fRecoPfNEM[i] = {0};
+            fRecoPfMUM[i] = {0};
             if (fIsMc)
             {
                 fRefJetPt[i] = {0.f};
@@ -403,7 +415,56 @@ Float_t ForestminiAODReader::eventWeight(const Bool_t &isMC, const Bool_t &use_c
     totalweight = evtweight * multweight * vzweight * multefficiency * jetefficiency;
     return totalweight;
 }
+Bool_t ForestminiAODReader::JetIDType1(const Float_t &trackMaxPt, const Float_t &jetRawPt)
+{
+    Bool_t jetID = kTRUE;
+    if (trackMaxPt / jetRawPt < 0.01 || trackMaxPt / jetRawPt > 0.98)
+    {
+        jetID = kFALSE;
+    }
+    return jetID;
+}
 
+Bool_t ForestminiAODReader::JetIDType2(const Float_t &jtNHF, const Float_t &jtNEF, const Float_t &jtCHF, const Float_t &jtMUF, const Float_t &jtCEF,
+                                       const Int_t &jtCHM, const Int_t &jtCEM, const Int_t &jtNHM, const Int_t &jtNEM, const Int_t &jtMUM, const float_t &jetEta)
+{
+    Bool_t jetID = kTRUE;
+    Int_t ChargedMult = jtCHM + jtCEM + jtMUM;
+    Int_t NeutralMult = jtNHM + jtNEM;
+    Int_t NConst = ChargedMult + NeutralMult;
+    Float_t chemFracCut = 0.9; // Magic Number provided by the JetMET group
+    Float_t nhFracCut = 0.9;   // Magic Number provided by the JetMET group
+
+    if (fabs(jetEta) <= 2.7)
+    {
+        if (jtNHF >= nhFracCut || jtNEF >= nhFracCut || NConst <= 1 || jtMUF >= 0.8)
+        {
+            jetID = kFALSE;
+        }
+        if (fabs(jetEta) <= 2.4)
+        {
+            if (jtCHF <= 0. || ChargedMult <= 0 || jtCEF >= chemFracCut)
+            {
+                jetID = kFALSE;
+            }
+        }
+    }
+    else if (fabs(jetEta) > 2.7 && fabs(jetEta) <= 3.0)
+    {
+        if (jtNEF <= 0.01 || jtNEF >= 0.98 || NeutralMult <= 2)
+        {
+            jetID = kFALSE;
+        }
+    }
+    else if (fabs(jetEta) > 3.0)
+    {
+        if (jtNEF >= 0.9 || NeutralMult <= 10)
+        {
+            jetID = kFALSE;
+        }
+    }
+    return jetID;
+}
 //_________________
 void ForestminiAODReader::finish()
 {
@@ -742,6 +803,29 @@ void ForestminiAODReader::setupBranches()
         fJetTree->SetBranchAddress("WTAeta", &fRecoJetWTAEta);
         fJetTree->SetBranchAddress("WTAphi", &fRecoJetWTAPhi);
 
+        if (fUseJetID && fJetIDType == 2)
+        {
+            fJetTree->SetBranchStatus("jtPfNHF", 1);
+            fJetTree->SetBranchStatus("jtPfNEF", 1);
+            fJetTree->SetBranchStatus("jtPfCHF", 1);
+            fJetTree->SetBranchStatus("jtPfMUF", 1);
+            fJetTree->SetBranchStatus("jtPfCEF", 1);
+            fJetTree->SetBranchStatus("jtPfCHM", 1);
+            fJetTree->SetBranchStatus("jtPfCEM", 1);
+            fJetTree->SetBranchStatus("jtPfNHM", 1);
+            fJetTree->SetBranchStatus("jtPfNEM", 1);
+            fJetTree->SetBranchStatus("jtPfMUM", 1);
+            fJetTree->SetBranchAddress("jtPfNHF", &fRecoPfNHF);
+            fJetTree->SetBranchAddress("jtPfNEF", &fRecoPfNEF);
+            fJetTree->SetBranchAddress("jtPfCHF", &fRecoPfCHF);
+            fJetTree->SetBranchAddress("jtPfMUF", &fRecoPfMUF);
+            fJetTree->SetBranchAddress("jtPfCEF", &fRecoPfCEF);
+            fJetTree->SetBranchAddress("jtPfCHM", &fRecoPfCHM);
+            fJetTree->SetBranchAddress("jtPfCEM", &fRecoPfCEM);
+            fJetTree->SetBranchAddress("jtPfNHM", &fRecoPfNHM);
+            fJetTree->SetBranchAddress("jtPfNEM", &fRecoPfNEM);
+            fJetTree->SetBranchAddress("jtPfMUM", &fRecoPfMUM);
+        }
         // Gen jet quantities
         if (fIsMc)
         {
@@ -1088,15 +1172,23 @@ Event *ForestminiAODReader::returnEvent()
 
             } // if ( fIsMc )
 
-            if (fRecoJetTrackMax[iJet] / fRawJetPt[iJet] < 0.01)
+            if (fUseJetID)
             {
-                delete jet;
-                continue;
-            }
-            if (fRecoJetTrackMax[iJet] / fRawJetPt[iJet] > 0.98)
-            {
-                delete jet;
-                continue;
+                Bool_t iJetID;
+                if (fJetIDType == 1)
+                {
+                    iJetID = JetIDType1(fRecoJetTrackMax[iJet], fRawJetPt[iJet]);
+                }
+                else if (fJetIDType == 2)
+                {
+                    iJetID = JetIDType2(fRecoPfNHF[iJet], fRecoPfNEF[iJet], fRecoPfCHF[iJet], fRecoPfMUF[iJet], fRecoPfCEF[iJet],
+                                        fRecoPfCHM[iJet], fRecoPfCEM[iJet], fRecoPfNHM[iJet], fRecoPfNEM[iJet], fRecoPfMUM[iJet], fRecoJetEta[iJet]);
+                }
+                else
+                {
+                    std::cerr << "JetID Type is either 1 or 2. Given Jet ID Type number is neither of them" << std::endl;
+                }
+                jet->setJetID(iJetID);
             }
 
             // Reco

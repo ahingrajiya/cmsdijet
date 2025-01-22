@@ -115,6 +115,12 @@ public:
   {
     fIsInStore = {isInStore};
   }
+  /// @brief  Seet to use Jet ID
+  /// @param useJetID True when using JetID selection
+  void setUseJetID() { fUseJetID = {kTRUE}; }
+
+  /// @brief Set Jet ID Type
+  void setJetIDType(const Int_t &jetIDType) { fJetIDType = {jetIDType}; }
 
 private:
   /// @brief Setup input stream (either single file or a list of files)
@@ -177,7 +183,7 @@ private:
   /// @param energy Colliding energy (in GeV)
   /// @param subleadjetpt Leading jet pT
   Float_t subleadJetPtWeight(const Bool_t &isMC, const std::string &system, const Int_t &year,
-                             const Int_t &energy, const Float_t &subleadjetpt);
+                             const Int_t &energy, const Float_t &subleadjetpt) const;
   /// @brief Jet smearing resolution effect
   /// @param isMC True for MC and false for Data
   /// @param system Colliding system (pp, pPb or PbPb)
@@ -198,6 +204,27 @@ private:
   /// @param reco Is reco track
   Float_t trkEtaMixWeight(const Bool_t &isMC, const std::string &system, const Int_t &year,
                           const Int_t &energy, const Float_t &trketa, const Bool_t &reco) const;
+
+  /// @brief ppJetID Functions
+  /// @param jtNHF Neutral Hadron Fraction
+  /// @param jtNEF Neutral EM Fraction
+  /// @param jtCHF Charged Hadron Fraction
+  /// @param jtMUF Muon Fraction
+  /// @param jtCEF Charged EM Fraction
+  /// @param jtCHM Charged Hadron Multiplicity
+  /// @param jtCEM Charged EM Multiplicity
+  /// @param jtNHM Neutral Hadron Multiplicity
+  /// @param jtNEM Neutral EM Multiplicity
+  /// @param jtMUM Muon Multiplicity
+  /// @param jetEta Jet Eta
+  /// @return Return True if jet passes the ID
+  Bool_t JetIDType2(const Float_t &jtNHF, const Float_t &jtNEF, const Float_t &jtCHF, const Float_t &jtMUF, const Float_t &jtCEF,
+                    const Int_t &jtCHM, const Int_t &jtCEM, const Int_t &jtNHM, const Int_t &jtNEM, const Int_t &jtMUM, const Float_t &jetEta);
+
+  /// @brief PbPbJetID Functions
+  /// @param jetTrackMax pt track in the jet
+  /// @param jetRawPt raw jet pt
+  Bool_t JetIDType1(const Float_t &jetTrackMax, const Float_t &jetRawPt);
 
   /// @brief Event with jets and other variables
   Event *fEvent;
@@ -344,6 +371,26 @@ private:
   Float_t fRecoJetWTAPhi[1000];
   /// @brief Track with maximum pT in reconstructed jet
   Float_t fRecoJetTrackMax[1000];
+  /// @brief Neutron hadron fraction in the jet
+  Float_t fRecoPfNHF[1000];
+  /// @brief Neutron EM fraction in the jet
+  Float_t fRecoPfNEF[1000];
+  ///@brief Charged hadron fraction in the jet
+  Float_t fRecoPfCHF[1000];
+  ///@brief Charged mu fraction in the jet
+  Float_t fRecoPfMUF[1000];
+  ///@brief Charged EM fraction in the jet
+  Float_t fRecoPfCEF[1000];
+  /// @brief Charged hadron multiplicity in the jet
+  Int_t fRecoPfCHM[1000];
+  /// @brief Charged EM multiplicity in the jet
+  Int_t fRecoPfCEM[1000];
+  /// @brief Neutron hadron multiplicity in the jet
+  Int_t fRecoPfNHM[1000];
+  /// @brief Neutron EM multiplicity in the jet
+  Int_t fRecoPfNEM[1000];
+  /// @brief Muon multiplicity in the jet
+  Int_t fRecoPfMUM[1000];
 
   /// @brief Transverse momentum of generated jet that was matched with
   /// reconstructed jet
@@ -457,10 +504,8 @@ private:
   Int_t fYearOfDataTaking;
   /// @brief Apply jet pT-smearing
   Bool_t fDoJetPtSmearing;
-
   /// @brief Fix indices
   Bool_t fFixJetArrays;
-
   /// @brief Event cut
   EventCut *fEventCut;
   /// @brief Jet cut
@@ -468,6 +513,12 @@ private:
   ///@brief Track cut
   TrackCut *fTrackCut;
 
+  ///@brief Use Jet ID cut
+  Bool_t fUseJetID;
+  ///@brief Jet ID Type
+  /// 1 = Track Max and Track Min cut
+  /// 2 = pp Jet ID Cuts provided by CMS
+  Int_t fJetIDType;
   /// @brief Vector that contains indices of generated jets that matched to the
   /// reconsructed jet (should be of the reco/red size)
   std::vector<Int_t> fRecoJet2GenJetId;

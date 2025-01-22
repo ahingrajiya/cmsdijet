@@ -174,6 +174,8 @@ int main(int argc, char *argv[])
     reader->setYearOfDataTaking(collYear);
     reader->addJECFile(JECFileName.Data());
     reader->setPath2JetAnalysis(path2JEC.Data());
+    reader->setUseJetID();
+    reader->setJetIDType(2);
     // reader->setMatchedJets();
     if (isMC)
     {
@@ -220,8 +222,8 @@ int main(int argc, char *argv[])
     analysis->setEtaBoost(etaBoost);
     analysis->setLeadJetPt(100.);
     analysis->setSubLeadJetPt(50.);
-    analysis->setLeadJetEtaRange(-2.1, 1.1);
-    analysis->setSubLeadJetEtaRange(-2.1, 1.1);
+    analysis->setLeadJetEtaRange(-1.6, 1.6);
+    analysis->setSubLeadJetEtaRange(-1.6, 1.6);
     analysis->doInJetMultiplicity();
 
     // analysis->setVerbose();
@@ -231,7 +233,7 @@ int main(int argc, char *argv[])
     HistoManagerDiJet *hm = new HistoManagerDiJet{};
     hm->setMultiplicityBins(multiplicityBins);
     hm->setIsMC(isMC);
-    hm->init(isMC);
+    hm->init();
 
     analysis->addHistoManager(hm);
     manager->addAnalysis(analysis);
@@ -242,6 +244,7 @@ int main(int argc, char *argv[])
     manager->finish();
 
     TFile *oFile = new TFile(oFileName, "RECREATE");
+    hm->projectHistograms();
     hm->writeOutput();
     oFile->Close();
 

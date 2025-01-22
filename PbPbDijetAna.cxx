@@ -149,7 +149,8 @@ int main(int argc, char *argv[])
     manager->finish();
 
     TFile *oFile = new TFile(oFileName, "RECREATE");
-    hm->writeOutput(isMC);
+    hm->projectHistograms();
+    hm->writeOutput();
     oFile->Close();
 
     return 0;

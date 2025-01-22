@@ -223,7 +223,10 @@ private:
     /// @brief Move to Center of Mass Frame
     /// @param jetEta Jet Eta
     Float_t MoveToCMFrame(const Float_t &jetEta);
-    /// @return returns array of multiplicity weight histograms
+    /// @brief Move to Lab Frame
+    /// @param jetEta Jet Eta
+    Float_t MoveToLabFrame(const Float_t &jetEta);
+    /// @brief Sets Up array of multiplicity weight histograms
     void SetUpMultiplicityWeight(const std::string &multWeightTable);
     /// @brief Set up Dijet weight table
     void SetUpDijetWeight(const std::string &dijetWeightTable);
