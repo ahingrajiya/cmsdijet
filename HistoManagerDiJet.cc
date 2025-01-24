@@ -397,13 +397,13 @@ void HistoManagerDiJet::init()
         hSelectedInclusiveRefJetsMidRapidity_W = new THnSparseD("hSelectedInclusiveRefJetsMidRapidity_W", "Inclusive Ref Jets (JetPt > 50.0) MidRapidity Weighted", 4, JetBins, JetMin, JetMax);
         hSelectedInclusiveRefJetsMidRapidity_W->Sumw2();
     }
-    hInclusiveRecoJetPtVsEtaCMFrame_W = new TH2D("hInclusiveRecoJetPtVsEtaCMFrame_W", "Inclusive Reco Jet Pt vs Eta in CM Frame Weighted", 200, 0., 1000., 100, -5., 5.);
+    hInclusiveRecoJetPtVsEtaCMFrame_W = new TH2D("hInclusiveRecoJetPtVsEtaCMFrame_W", "Inclusive Reco Jet Pt vs Eta in CM Frame Weighted", 100, -5., 5., 200, 0., 1000.);
     hInclusiveRecoJetPtVsEtaCMFrame_W->Sumw2();
-    hInclusiveRecoJetPtVsEtaLabFrame_W = new TH2D("hInclusiveRecoJetPtVsEtaLabFrame_W", "Inclusive Reco Jet Pt vs Eta in Lab Frame Weighted", 200, 0., 1000., 100, -5., 5.);
+    hInclusiveRecoJetPtVsEtaLabFrame_W = new TH2D("hInclusiveRecoJetPtVsEtaLabFrame_W", "Inclusive Reco Jet Pt vs Eta in Lab Frame Weighted", 100, -5., 5., 200, 0., 1000.);
     hInclusiveRecoJetPtVsEtaLabFrame_W->Sumw2();
-    hInclusiveUnCorrectedRecoPtVsEtaCMFrame_W = new TH2D("hInclusiveUnCorrectedRecoPtVsEtaCMFrame_W", "Inclusive Uncorrected Reco Jet Pt vs Eta in CM Frame Weighted", 200, 0., 1000., 100, -5., 5.);
+    hInclusiveUnCorrectedRecoPtVsEtaCMFrame_W = new TH2D("hInclusiveUnCorrectedRecoPtVsEtaCMFrame_W", "Inclusive Uncorrected Reco Jet Pt vs Eta in CM Frame Weighted", 100, -5., 5., 200, 0., 1000.);
     hInclusiveUnCorrectedRecoPtVsEtaCMFrame_W->Sumw2();
-    hInclusiveUnCorrectedRecoPtVsEtaLabFrame_W = new TH2D("hInclusiveUnCorrectedRecoPtVsEtaLabFrame_W", "Inclusive Uncorrected Reco Jet Pt vs Eta in Lab Frame Weighted", 200, 0., 1000., 100, -5., 5.);
+    hInclusiveUnCorrectedRecoPtVsEtaLabFrame_W = new TH2D("hInclusiveUnCorrectedRecoPtVsEtaLabFrame_W", "Inclusive Uncorrected Reco Jet Pt vs Eta in Lab Frame Weighted", 100, -5., 5., 200, 0., 1000.);
     hInclusiveUnCorrectedRecoPtVsEtaLabFrame_W->Sumw2();
 
     int LeadSLeadJetBins[7] = {200, 100, 64, 200, 100, 64, nMultiplicityBins};

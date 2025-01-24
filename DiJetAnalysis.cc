@@ -810,7 +810,7 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
             {
                 Double_t JetQuantities[4] = {jetPt, jetEtaCM, jetPhi, (Double_t)i + 1};
                 Double_t JetQuantitiesLab[4] = {jetPt, MoveToLabFrame(jetEta), jetPhi, (Double_t)i + 1};
-                Double_t UnCorrJetQuantities[4] = {rawPt, jetEta, jetPhi, (Double_t)i + 1};
+                Double_t UnCorrJetQuantities[4] = {rawPt, jetEtaCM, jetPhi, (Double_t)i + 1};
 
                 fHM->hInclusiveRecoJetsCMFrame->Fill(JetQuantities);
                 fHM->hInclusiveRecoJetsCMFrame_W->Fill(JetQuantities, event_Weight * multWeight[i]);
@@ -822,10 +822,13 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
                 fHM->hInclusiveRecoJetsLabFrame_W->Fill(JetQuantitiesLab, event_Weight * multWeight[i]);
                 fHM->hInclusiveUncorrectedRecoJets->Fill(UnCorrJetQuantities);
                 fHM->hInclusiveUncorrectedRecoJets_W->Fill(UnCorrJetQuantities, event_Weight * multWeight[i]);
-                fHM->hInclusiveUnCorrectedRecoPtVsEtaCMFrame_W->Fill(jetEtaCM, rawPt, event_Weight * multWeight[i]);
-                fHM->hInclusiveUnCorrectedRecoPtVsEtaLabFrame_W->Fill(MoveToLabFrame(jetEta), rawPt, event_Weight * multWeight[i]);
-                fHM->hInclusiveRecoJetPtVsEtaCMFrame_W->Fill(jetEtaCM, jetPt, event_Weight * multWeight[i]);
-                fHM->hInclusiveRecoJetPtVsEtaLabFrame_W->Fill(MoveToLabFrame(jetEta), jetPt, event_Weight * multWeight[i]);
+                if (rawPt > 50.)
+                {
+                    fHM->hInclusiveUnCorrectedRecoPtVsEtaCMFrame_W->Fill(jetEtaCM, rawPt, event_Weight * multWeight[i]);
+                    fHM->hInclusiveUnCorrectedRecoPtVsEtaLabFrame_W->Fill(MoveToLabFrame(jetEta), rawPt, event_Weight * multWeight[i]);
+                    fHM->hInclusiveRecoJetPtVsEtaCMFrame_W->Fill(jetEtaCM, jetPt, event_Weight * multWeight[i]);
+                    fHM->hInclusiveRecoJetPtVsEtaLabFrame_W->Fill(MoveToLabFrame(jetEta), jetPt, event_Weight * multWeight[i]);
+                }
                 if (fIsMC)
                 {
                     Double_t RefJetQuantities[4] = {refPt, MoveToCMFrame(refEta), refPhi, (Double_t)i + 1};
