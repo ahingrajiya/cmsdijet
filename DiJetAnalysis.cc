@@ -1025,26 +1025,26 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
                 for (Int_t i = 0; i < 4; i++)
                 {
                     fHM->hDeltaPhi_W->Fill(deltaPhi, event_Weight * multWeight[i]);
-                    fHM->hXj_W->Fill(Xj, multiplicityBin, event_Weight * multWeight[i]);
+                    fHM->hMultVsXj_W->Fill(Xj, multiplicityBin, event_Weight * multWeight[i]);
                 }
             }
             else
             {
                 fHM->hDeltaPhi_WithDiJet_W->Fill(deltaPhi, event_Weight);
-                fHM->hXj_W->Fill(Xj, multiplicityBin, event_Weight);
-                fHM->hXj_DiJetW->Fill(Xj, multiplicityBin, event_Weight * fDijetWeight);
+                fHM->hMultVsXj_W->Fill(Xj, multiplicityBin, event_Weight);
+                fHM->hMultVsXj_DiJetW->Fill(Xj, multiplicityBin, event_Weight * fDijetWeight);
 
                 if (fIsMC)
                 {
-                    fHM->hRefXj_ER_W->Fill(refXj, multiplicityBin, event_Weight);
-                    fHM->hRefXj_ER_DiJetW->Fill(refXj, multiplicityBin, event_Weight * fDijetWeight);
+                    fHM->hMultVsRefXj_ER_W->Fill(refXj, multiplicityBin, event_Weight);
+                    fHM->hMultVsRefXj_ER_DiJetW->Fill(refXj, multiplicityBin, event_Weight * fDijetWeight);
 
                     if (refXj > 1.0)
                     {
                         refXj = 1. / refXj;
                     }
-                    fHM->hRefXj_W->Fill(refXj, multiplicityBin, event_Weight);
-                    fHM->hRefXj_DiJetW->Fill(refXj, multiplicityBin, event_Weight * fDijetWeight);
+                    fHM->hMultVsRefXj_W->Fill(refXj, multiplicityBin, event_Weight);
+                    fHM->hMultVsRefXj_DiJetW->Fill(refXj, multiplicityBin, event_Weight * fDijetWeight);
                 }
             }
             fHM->hNDijetEvent->Fill(1);
@@ -1195,6 +1195,10 @@ void DiJetAnalysis::processGenJets(const Event *event, const Double_t &event_Wei
                 fHM->hInclusiveGenJetsCMFrame_W->Fill(JetQuantities, event_Weight * multWeight[i]);
                 fHM->hInclusiveGenJetsLabFrame->Fill(JetQuantitiesLab);
                 fHM->hInclusiveGenJetsLabFrame_W->Fill(JetQuantitiesLab, event_Weight * multWeight[i]);
+                if (genJetPt > 50.0 && TMath::Abs(genJetEtaCM) < 1.6)
+                {
+                    fHM->hSelectedInclusiveGenJetsMidRapidity_W->Fill(JetQuantities, event_Weight * multWeight[i]);
+                }
             }
         }
         else
@@ -1205,6 +1209,10 @@ void DiJetAnalysis::processGenJets(const Event *event, const Double_t &event_Wei
             fHM->hInclusiveGenJetsCMFrame_W->Fill(JetQuantities, event_Weight);
             fHM->hInclusiveGenJetsLabFrame->Fill(JetQuantitiesLab);
             fHM->hInclusiveGenJetsLabFrame_W->Fill(JetQuantitiesLab, event_Weight);
+            if (genJetPt > 50.0 && TMath::Abs(genJetEtaCM) < 1.6)
+            {
+                fHM->hSelectedInclusiveGenJetsMidRapidity_W->Fill(JetQuantities, event_Weight);
+            }
         }
     }
     if (fIsDiJetFound)
@@ -1282,14 +1290,14 @@ void DiJetAnalysis::processGenJets(const Event *event, const Double_t &event_Wei
                 for (Int_t i = 0; i < 4; i++)
                 {
                     fHM->hGenDeltaPhi_WithDiJet_W->Fill(deltaPhi, event_Weight * multWeight[i]);
-                    fHM->hGenXj_W->Fill(Xj, multiplicityBin, event_Weight * multWeight[i]);
+                    fHM->hMultVsGenXj_W->Fill(Xj, multiplicityBin, event_Weight * multWeight[i]);
                 }
             }
             else
             {
                 fHM->hGenDeltaPhi_WithDiJet_W->Fill(deltaPhi, event_Weight);
-                fHM->hGenXj_W->Fill(Xj, multiplicityBin, event_Weight);
-                fHM->hGenXj_DiJetW->Fill(Xj, multiplicityBin, event_Weight * fDijetWeight);
+                fHM->hMultVsGenXj_W->Fill(Xj, multiplicityBin, event_Weight);
+                fHM->hMultVsGenXj_DiJetW->Fill(Xj, multiplicityBin, event_Weight * fDijetWeight);
             }
             fHM->hNGenDijetEvent->Fill(1);
         }

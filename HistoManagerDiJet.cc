@@ -24,10 +24,10 @@ ClassImp(HistoManagerDiJet)
                                              hRecoMultiplicity_W{nullptr}, hCorrectedMultiplicity_W{nullptr}, hGenMultiplicity_W{nullptr}, hSubEventMultiplicity_W{nullptr},
                                              hSelectedMultiplicity_W{nullptr}, hMultiplicities{nullptr}, hMultiplicities_W{nullptr}, hPtHat{nullptr}, hPtHat_W{nullptr},
                                              hHiBin{nullptr}, hHiBin_W{nullptr}, hVz{nullptr}, hVz_W{nullptr}, hMultiplicities_DiJet_W{nullptr}, hRecoQuenching_W{nullptr}, hGenQuenching_W{nullptr},
-                                             hDeltaPhi_W{nullptr}, hXj_W{nullptr}, hNDijetEvent{nullptr}, hNEventsInMult{nullptr}, hGenDeltaPhi_W{nullptr},
-                                             hGenXj_W{nullptr}, hNGenDijetEvent{nullptr}, hInJetMultiplicity_W{nullptr}, hGenInJetMultiplicity_W{nullptr}, hLeadSubLeadJets{nullptr},
-                                             hGenLeadGenSubLeadJets{nullptr}, hGenLeadGenSubLeadJets_W{nullptr}, hLeadSubLeadJets_W{nullptr}, hVzWithDijet_W{nullptr}, hXj_DiJetW{nullptr}, hRefXj_W{nullptr}, hRefXj_DiJetW{nullptr},
-                                             hRefXj_ER_W{nullptr}, hRefXj_ER_DiJetW{nullptr}, hRefLeadRefSubLeadJets{nullptr}, hRefLeadRefSubLeadJets_W{nullptr}, hGenXj_DiJetW{nullptr}, hRecoJES_W{nullptr}, hRefJES_W{nullptr},
+                                             hDeltaPhi_W{nullptr}, hMultVsXj_W{nullptr}, hNDijetEvent{nullptr}, hNEventsInMult{nullptr}, hGenDeltaPhi_W{nullptr},
+                                             hMultVsGenXj_W{nullptr}, hNGenDijetEvent{nullptr}, hInJetMultiplicity_W{nullptr}, hGenInJetMultiplicity_W{nullptr}, hLeadSubLeadJets{nullptr},
+                                             hGenLeadGenSubLeadJets{nullptr}, hGenLeadGenSubLeadJets_W{nullptr}, hLeadSubLeadJets_W{nullptr}, hVzWithDijet_W{nullptr}, hMultVsXj_DiJetW{nullptr}, hMultVsRefXj_W{nullptr}, hMultVsRefXj_DiJetW{nullptr},
+                                             hMultVsRefXj_ER_W{nullptr}, hMultVsRefXj_ER_DiJetW{nullptr}, hRefLeadRefSubLeadJets{nullptr}, hRefLeadRefSubLeadJets_W{nullptr}, hMultVsGenXj_DiJetW{nullptr}, hRecoJES_W{nullptr}, hRefJES_W{nullptr},
                                              hGenLeadingVsGenSubLeading_WO_DiJet_W{nullptr}, hRefLeadingVsRefSubLeadingMatched_W{nullptr}, hLeadPtvsSubLeadPt_DiJetW{nullptr},
                                              hRefLeadPtvsRefSubLeadPt_DiJetW{nullptr}, hLeadSubLeadJets_MidRapidity_W{nullptr}, hGenLeadGenSubLeadJets_MidRapidity_W{nullptr}, hRefLeadRefSubLeadJets_MidRapidity_W{nullptr},
                                              hGenLeadPtvsGenSubLeadPt_DiJetW{nullptr}, hLeadSubLeadJets_WithDijet_W{nullptr}, hGenLeadGenSubLeadJets_WithDijet_W{nullptr}, hRefLeadRefSubLeadJets_WithDijet_W{nullptr},
@@ -43,7 +43,7 @@ ClassImp(HistoManagerDiJet)
                                              hLeadingRecoJetPtWithDijet_W{nullptr}, hSubLeadingRecoJetPtWithDijet_W{nullptr}, hLeadingGenJetPtWithDijet_W{nullptr}, hSubLeadingGenJetPtWithDijet_W{nullptr}, hXj_Projection_W{nullptr}, hXj_Projection_DiJetW{nullptr},
                                              hGenXj_Projection_W{nullptr}, hGenXj_Projection_DiJetW{nullptr}, hInclusiveRefJetPt{nullptr}, hInclusiveRefJetPt_W{nullptr}, hInclusiveRefJetsCMFrame{nullptr}, hInclusiveRefJetsCMFrame_W{nullptr}, hInclusiveRefJetsLabFrame{nullptr}, hInclusiveRefJetsLabFrame_W{nullptr},
                                              hSelectedInclusiveRefJetsMidRapidity_W{nullptr}, hSelectedInclusiveRefJetPt_MidRapidity_W{nullptr}, hLeadingRefJetPt{nullptr}, hLeadingRefJetPt_W{nullptr}, hSubLeadingRefJetPt{nullptr}, hSubLeadingRefJetPt_W{nullptr},
-                                             hLeadingRefJetPtWithDijet_W{nullptr}, hSubLeadingRefJetPtWithDijet_W{nullptr}
+                                             hLeadingRefJetPtWithDijet_W{nullptr}, hSubLeadingRefJetPtWithDijet_W{nullptr}, hXj_C0_W{nullptr}, hXj_C0_DiJetW{nullptr}, hGenXj_C0_W{nullptr}, hGenXj_C0_DiJetW{nullptr}
 {
     /* Empty*/
 }
@@ -76,26 +76,26 @@ HistoManagerDiJet::~HistoManagerDiJet()
         delete hVzWithDijet_W;
     if (hDeltaPhi_W)
         delete hDeltaPhi_W;
-    if (hXj_W)
-        delete hXj_W;
-    if (hXj_DiJetW)
-        delete hXj_DiJetW;
-    if (hRefXj_W)
-        delete hRefXj_W;
-    if (hRefXj_DiJetW)
-        delete hRefXj_DiJetW;
-    if (hRefXj_ER_W)
-        delete hRefXj_ER_W;
-    if (hRefXj_ER_DiJetW)
-        delete hRefXj_ER_DiJetW;
+    if (hMultVsXj_W)
+        delete hMultVsXj_W;
+    if (hMultVsXj_DiJetW)
+        delete hMultVsXj_DiJetW;
+    if (hMultVsRefXj_W)
+        delete hMultVsRefXj_W;
+    if (hMultVsRefXj_DiJetW)
+        delete hMultVsRefXj_DiJetW;
+    if (hMultVsRefXj_ER_W)
+        delete hMultVsRefXj_ER_W;
+    if (hMultVsRefXj_ER_DiJetW)
+        delete hMultVsRefXj_ER_DiJetW;
     if (hNDijetEvent)
         delete hNDijetEvent;
     if (hGenDeltaPhi_W)
         delete hGenDeltaPhi_W;
-    if (hGenXj_W)
-        delete hGenXj_W;
-    if (hGenXj_DiJetW)
-        delete hGenXj_DiJetW;
+    if (hMultVsGenXj_W)
+        delete hMultVsGenXj_W;
+    if (hMultVsGenXj_DiJetW)
+        delete hMultVsGenXj_DiJetW;
     if (hNGenDijetEvent)
         delete hNGenDijetEvent;
     if (hNEventsInMult)
@@ -290,6 +290,15 @@ HistoManagerDiJet::~HistoManagerDiJet()
     if (hSubLeadingRefJetPtWithDijet_W)
         delete hSubLeadingRefJetPtWithDijet_W;
 
+    if (hXj_C0_DiJetW)
+        delete hXj_C0_DiJetW;
+    if (hXj_C0_W)
+        delete hXj_C0_W;
+    if (hGenXj_C0_DiJetW)
+        delete hGenXj_C0_DiJetW;
+    if (hGenXj_C0_W)
+        delete hGenXj_C0_W;
+
     for (Int_t i = 0; i < 5; i++)
     {
         if (hXj_Projection_W[i])
@@ -466,10 +475,10 @@ void HistoManagerDiJet::init()
     hDeltaPhi_W->Sumw2();
     hDeltaPhi_WithDiJet_W = new TH1D("hDeltaPhi_WithDiJet_W", "Delta Phi Distribution With Dijet Present Weighted", nDphiBins, DphiBins);
     hDeltaPhi_WithDiJet_W->Sumw2();
-    hXj_W = new TH2D("hXj_W", "Xj Distribution Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
-    hXj_W->Sumw2();
-    hXj_DiJetW = new TH2D("hXj_DiJetW", "Xj Distribution DijetWeighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
-    hXj_DiJetW->Sumw2();
+    hMultVsXj_W = new TH2D("hMultVsXj_W", "Xj Distribution Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
+    hMultVsXj_W->Sumw2();
+    hMultVsXj_DiJetW = new TH2D("hMultVsXj_DiJetW", "Xj Distribution DijetWeighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
+    hMultVsXj_DiJetW->Sumw2();
 
     if (fIsMC)
     {
@@ -481,18 +490,18 @@ void HistoManagerDiJet::init()
         hGenDeltaPhi_W->Sumw2();
         hGenDeltaPhi_WithDiJet_W = new TH1D("hGenDeltaPhi_WithDiJet_W", "Gen Delta Phi Distribution With Dijet Present Weighted", nDphiBins, DphiBins);
         hGenDeltaPhi_WithDiJet_W->Sumw2();
-        hRefXj_W = new TH2D("hRefXj_W", "RefXj Distribution Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
-        hRefXj_W->Sumw2();
-        hRefXj_DiJetW = new TH2D("hRefXj_DiJetW", "RefXj Distribution XjWeighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
-        hRefXj_DiJetW->Sumw2();
-        hRefXj_ER_W = new TH2D("hRefXj_ER_W", "RefXj Distribution ER Weighted", nXjAjBins_ER, XjBins_ER, nMultiplicityBins, multBinArray);
-        hRefXj_ER_W->Sumw2();
-        hRefXj_ER_DiJetW = new TH2D("hRefXj_ER_DiJetW", "RefXj Distribution ER XjWeighted", nXjAjBins_ER, XjBins_ER, nMultiplicityBins, multBinArray);
-        hRefXj_ER_DiJetW->Sumw2();
-        hGenXj_W = new TH2D("hGenXj_W", "Gen Xj Distribution Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
-        hGenXj_W->Sumw2();
-        hGenXj_DiJetW = new TH2D("hGenXj_DiJetW", "Gen Xj Distribution DijetWeighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
-        hGenXj_DiJetW->Sumw2();
+        hMultVsRefXj_W = new TH2D("hRefXj_W", "RefXj Distribution Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
+        hMultVsRefXj_W->Sumw2();
+        hMultVsRefXj_DiJetW = new TH2D("hRefXj_DiJetW", "RefXj Distribution XjWeighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
+        hMultVsRefXj_DiJetW->Sumw2();
+        hMultVsRefXj_ER_W = new TH2D("hRefXj_ER_W", "RefXj Distribution ER Weighted", nXjAjBins_ER, XjBins_ER, nMultiplicityBins, multBinArray);
+        hMultVsRefXj_ER_W->Sumw2();
+        hMultVsRefXj_ER_DiJetW = new TH2D("hRefXj_ER_DiJetW", "RefXj Distribution ER XjWeighted", nXjAjBins_ER, XjBins_ER, nMultiplicityBins, multBinArray);
+        hMultVsRefXj_ER_DiJetW->Sumw2();
+        hMultVsGenXj_W = new TH2D("hGenXj_W", "Gen Xj Distribution Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
+        hMultVsGenXj_W->Sumw2();
+        hMultVsGenXj_DiJetW = new TH2D("hGenXj_DiJetW", "Gen Xj Distribution DijetWeighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
+        hMultVsGenXj_DiJetW->Sumw2();
     }
     Float_t LeadSubLeadPtBins[] = {50., 60., 70., 80., 90., 100., 110., 120., 130., 140., 150., 160., 170., 180., 190., 200., 220., 240., 260., 280., 300., 350., 400., 450., 500., 600., 700., 1200.};
     Int_t nLeadSubLeadPtBins = sizeof(LeadSubLeadPtBins) / sizeof(Float_t) - 1;
@@ -710,20 +719,43 @@ void HistoManagerDiJet::projectHistograms()
         hSubLeadingRefJetPtWithDijet_W = (TH1D *)iProjection->Clone("hSubLeadingRefJetPtWithDijet_W");
         hSubLeadingRefJetPtWithDijet_W->SetTitle("SubLeading Ref Jet Pt With Dijet Present Weighted");
         delete iProjection;
+
+        iProjection = hMultVsXj_W->ProjectionX();
+        hXj_C0_W = (TH1D *)iProjection->Clone("hXj_C0_W");
+        hXj_C0_W->SetTitle("Xj Projection C0 Weighted");
+        delete iProjection;
+
+        iProjection = hMultVsXj_DiJetW->ProjectionX();
+        hXj_C0_DiJetW = (TH1D *)iProjection->Clone("hXj_C0_DiJetW");
+        hXj_C0_DiJetW->SetTitle("Xj Projection C0 Dijet Weighted");
+        delete iProjection;
+
+        if (fIsMC)
+        {
+            iProjection = hMultVsGenXj_W->ProjectionX();
+            hGenXj_C0_W = (TH1D *)iProjection->Clone("hGenXj_C0_W");
+            hGenXj_C0_W->SetTitle("Gen Xj Projection C0 Weighted");
+            delete iProjection;
+
+            iProjection = hMultVsGenXj_DiJetW->ProjectionX();
+            hGenXj_C0_DiJetW = (TH1D *)iProjection->Clone("hGenXj_C0_DiJetW");
+            hGenXj_C0_DiJetW->SetTitle("Gen Xj Projection C0 Dijet Weighted");
+            delete iProjection;
+        }
     }
 
     for (Int_t i = 0; i < 5; i++)
     {
-        hXj_Projection_W[i] = hXj_W->ProjectionX(Form("hXj_C%i_W", i), i + 1, i + 1);
-        hXj_Projection_W[i]->SetTitle(Form("Xj Projection C%i Weighted", i));
-        hXj_Projection_DiJetW[i] = hXj_DiJetW->ProjectionX(Form("hXj_C%i_DiJetW", i), i + 1, i + 1);
-        hXj_Projection_DiJetW[i]->SetTitle(Form("Xj Projection C%i Dijet Weighted", i));
+        hXj_Projection_W[i] = hMultVsXj_W->ProjectionX(Form("hXj_C%i_W", i + 1), hMultVsXj_W->GetYaxis()->FindBin(i + 1), hMultVsXj_W->GetYaxis()->FindBin(i + 1));
+        hXj_Projection_W[i]->SetTitle(Form("Xj Projection C%i Weighted", i + 1));
+        hXj_Projection_DiJetW[i] = hMultVsXj_DiJetW->ProjectionX(Form("hXj_C%i_DiJetW", i + 1), hMultVsXj_DiJetW->GetYaxis()->FindBin(i + 1), hMultVsXj_DiJetW->GetYaxis()->FindBin(i + 1));
+        hXj_Projection_DiJetW[i]->SetTitle(Form("Xj Projection C%i Dijet Weighted", i + 1));
         if (fIsMC)
         {
-            hGenXj_Projection_W[i] = hGenXj_W->ProjectionX(Form("hGenXj_C%i_W", i), i + 1, i + 1);
-            hGenXj_Projection_W[i]->SetTitle(Form("Gen Xj Projection C%i Weighted", i));
-            hGenXj_Projection_DiJetW[i] = hGenXj_DiJetW->ProjectionX(Form("hGenXj_C%i_DiJetW", i), i + 1, i + 1);
-            hGenXj_Projection_DiJetW[i]->SetTitle(Form("Gen Xj Projection C%i Dijet Weighted", i));
+            hGenXj_Projection_W[i] = hMultVsGenXj_W->ProjectionX(Form("hGenXj_C%i_W", i + 1), hMultVsGenXj_W->GetYaxis()->FindBin(i + 1), hMultVsGenXj_W->GetYaxis()->FindBin(i + 1));
+            hGenXj_Projection_W[i]->SetTitle(Form("Gen Xj Projection C%i Weighted", i + 1));
+            hGenXj_Projection_DiJetW[i] = hMultVsGenXj_DiJetW->ProjectionX(Form("hGenXj_C%i_DiJetW", i + 1), hMultVsGenXj_DiJetW->GetYaxis()->FindBin(i + 1), hMultVsGenXj_DiJetW->GetYaxis()->FindBin(i + 1));
+            hGenXj_Projection_DiJetW[i]->SetTitle(Form("Gen Xj Projection C%i Dijet Weighted", i + 1));
         }
     }
 }
@@ -819,21 +851,21 @@ void HistoManagerDiJet ::writeOutput()
     hRecoQuenching_W->Write();
     hDeltaPhi_W->Write();
     hDeltaPhi_WithDiJet_W->Write();
-    hXj_W->Write();
-    hXj_DiJetW->Write();
+    hMultVsXj_W->Write();
+    hMultVsXj_DiJetW->Write();
     hNDijetEvent->Write();
 
     if (fIsMC)
     {
-        hRefXj_W->Write();
-        hRefXj_DiJetW->Write();
-        hRefXj_ER_W->Write();
-        hRefXj_ER_DiJetW->Write();
+        hMultVsRefXj_W->Write();
+        hMultVsRefXj_DiJetW->Write();
+        hMultVsRefXj_ER_W->Write();
+        hMultVsRefXj_ER_DiJetW->Write();
         hGenQuenching_W->Write();
         hGenDeltaPhi_W->Write();
         hGenDeltaPhi_WithDiJet_W->Write();
-        hGenXj_W->Write();
-        hGenXj_DiJetW->Write();
+        hMultVsGenXj_W->Write();
+        hMultVsGenXj_DiJetW->Write();
         hNGenDijetEvent->Write();
     }
 
@@ -879,6 +911,13 @@ void HistoManagerDiJet ::writeOutput()
         hSubLeadingRefJetPt_W->Write();
         hLeadingRefJetPtWithDijet_W->Write();
         hSubLeadingRefJetPtWithDijet_W->Write();
+    }
+    hXj_C0_W->Write();
+    hXj_C0_DiJetW->Write();
+    if (fIsMC)
+    {
+        hGenXj_C0_W->Write();
+        hGenXj_C0_DiJetW->Write();
     }
     for (Int_t i = 0; i < 5; i++)
     {

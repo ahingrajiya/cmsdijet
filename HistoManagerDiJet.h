@@ -121,14 +121,14 @@ public:
 
     THnSparseD *hRecoQuenching_W;
     THnSparseD *hGenQuenching_W;
-    TH2D *hXj_W;
-    TH2D *hXj_DiJetW;
-    TH2D *hRefXj_W;
-    TH2D *hRefXj_ER_W;
-    TH2D *hRefXj_DiJetW;
-    TH2D *hRefXj_ER_DiJetW;
-    TH2D *hGenXj_W;
-    TH2D *hGenXj_DiJetW;
+    TH2D *hMultVsXj_W;
+    TH2D *hMultVsXj_DiJetW;
+    TH2D *hMultVsRefXj_W;
+    TH2D *hMultVsRefXj_ER_W;
+    TH2D *hMultVsRefXj_DiJetW;
+    TH2D *hMultVsRefXj_ER_DiJetW;
+    TH2D *hMultVsGenXj_W;
+    TH2D *hMultVsGenXj_DiJetW;
     TH1D *hVzWithDijet_W;
     TH1D *hDeltaPhi_W;
     TH1D *hDeltaPhi_WithDiJet_W;
@@ -180,6 +180,10 @@ public:
     TH1D *hSubLeadingGenJetPtWithDijet_W;
     TH1D *hSubLeadingRefJetPtWithDijet_W;
 
+    TH1D *hXj_C0_W;
+    TH1D *hXj_C0_DiJetW;
+    TH1D *hGenXj_C0_W;
+    TH1D *hGenXj_C0_DiJetW;
     TH1D *hXj_Projection_W[5];
     TH1D *hXj_Projection_DiJetW[5];
     TH1D *hGenXj_Projection_W[5];
