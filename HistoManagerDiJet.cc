@@ -366,9 +366,9 @@ void HistoManagerDiJet::init()
     hMultiplicities_DiJet_W = new THnSparseD("hMultiplicities_DiJet_W", "Multiplicity Distribution with Weights", 5, MultBins, MultMin, MultMax);
     hMultiplicities_DiJet_W->Sumw2();
 
-    int JetBins[4] = {200, 100, 64, nMultiplicityBins};
-    Double_t JetMin[4] = {0.0, -5.0, -TMath::Pi(), fMultiplicityBins[0]};
-    Double_t JetMax[4] = {1000.0, 5.0, TMath::Pi(), fMultiplicityBins[fMultiplicityBins.size() - 1]};
+    int JetBins[4] = {200, 52, 64, nMultiplicityBins};
+    Double_t JetMin[4] = {0.0, -5.2, -TMath::Pi(), fMultiplicityBins[0]};
+    Double_t JetMax[4] = {1000.0, 5.2, TMath::Pi(), fMultiplicityBins[fMultiplicityBins.size() - 1]};
     hInclusiveUncorrectedRecoJets = new THnSparseD("hInclusiveUncorrectedRecoJets", "Inclusive Uncorrected Reco Jets", 4, JetBins, JetMin, JetMax);
     hInclusiveUncorrectedRecoJets->Sumw2();
     hInclusiveUncorrectedRecoJets_W = new THnSparseD("hInclusiveUncorrectedRecoJets_W", "Inclusive Uncorrected Reco Jets Weighted", 4, JetBins, JetMin, JetMax);
@@ -719,29 +719,28 @@ void HistoManagerDiJet::projectHistograms()
         hSubLeadingRefJetPtWithDijet_W = (TH1D *)iProjection->Clone("hSubLeadingRefJetPtWithDijet_W");
         hSubLeadingRefJetPtWithDijet_W->SetTitle("SubLeading Ref Jet Pt With Dijet Present Weighted");
         delete iProjection;
+    }
+    iProjection = hMultVsXj_W->ProjectionX();
+    hXj_C0_W = (TH1D *)iProjection->Clone("hXj_C0_W");
+    hXj_C0_W->SetTitle("Xj Projection C0 Weighted");
+    delete iProjection;
 
-        iProjection = hMultVsXj_W->ProjectionX();
-        hXj_C0_W = (TH1D *)iProjection->Clone("hXj_C0_W");
-        hXj_C0_W->SetTitle("Xj Projection C0 Weighted");
+    iProjection = hMultVsXj_DiJetW->ProjectionX();
+    hXj_C0_DiJetW = (TH1D *)iProjection->Clone("hXj_C0_DiJetW");
+    hXj_C0_DiJetW->SetTitle("Xj Projection C0 Dijet Weighted");
+    delete iProjection;
+
+    if (fIsMC)
+    {
+        iProjection = hMultVsGenXj_W->ProjectionX();
+        hGenXj_C0_W = (TH1D *)iProjection->Clone("hGenXj_C0_W");
+        hGenXj_C0_W->SetTitle("Gen Xj Projection C0 Weighted");
         delete iProjection;
 
-        iProjection = hMultVsXj_DiJetW->ProjectionX();
-        hXj_C0_DiJetW = (TH1D *)iProjection->Clone("hXj_C0_DiJetW");
-        hXj_C0_DiJetW->SetTitle("Xj Projection C0 Dijet Weighted");
+        iProjection = hMultVsGenXj_DiJetW->ProjectionX();
+        hGenXj_C0_DiJetW = (TH1D *)iProjection->Clone("hGenXj_C0_DiJetW");
+        hGenXj_C0_DiJetW->SetTitle("Gen Xj Projection C0 Dijet Weighted");
         delete iProjection;
-
-        if (fIsMC)
-        {
-            iProjection = hMultVsGenXj_W->ProjectionX();
-            hGenXj_C0_W = (TH1D *)iProjection->Clone("hGenXj_C0_W");
-            hGenXj_C0_W->SetTitle("Gen Xj Projection C0 Weighted");
-            delete iProjection;
-
-            iProjection = hMultVsGenXj_DiJetW->ProjectionX();
-            hGenXj_C0_DiJetW = (TH1D *)iProjection->Clone("hGenXj_C0_DiJetW");
-            hGenXj_C0_DiJetW->SetTitle("Gen Xj Projection C0 Dijet Weighted");
-            delete iProjection;
-        }
     }
 
     for (Int_t i = 0; i < 5; i++)
