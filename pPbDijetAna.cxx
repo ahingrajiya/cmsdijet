@@ -210,9 +210,9 @@ int main(int argc, char *argv[])
         if (!isEmbedded)
         {
             analysis->setMultiplicityRange(0, 400);
-            analysis->setUseDijetWeight();
-            analysis->setDijetWeightType(dijetWeightType);
-            analysis->setDijetWeightTable(path2DijetWeight);
+            // analysis->setUseDijetWeight();
+            // analysis->setDijetWeightType(dijetWeightType);
+            // analysis->setDijetWeightTable(path2DijetWeight);
         }
     }
     analysis->setMultiplicityType(0);
