@@ -812,7 +812,6 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
                 Double_t JetQuantities[4] = {jetPt, jetEtaCM, jetPhi, (Double_t)i + 1};
                 Double_t JetQuantitiesLab[4] = {jetPt, MoveToLabFrame(jetEta), jetPhi, (Double_t)i + 1};
                 Double_t UnCorrJetQuantities[4] = {rawPt, jetEtaCM, jetPhi, (Double_t)i + 1};
-                std::cout << multWeight[i] << std::endl;
                 fHM->hInclusiveRecoJetsCMFrame->Fill(JetQuantities);
                 fHM->hInclusiveRecoJetsCMFrame_W->Fill(JetQuantities, event_Weight * multWeight[i]);
                 if (jetPt > 50.0 && TMath::Abs(jetEtaCM) < 1.6)
