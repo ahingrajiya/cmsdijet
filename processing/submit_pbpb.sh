@@ -40,7 +40,6 @@ echo "Input File List : ${input_files_list}"
 
 mkdir -p processing/condor/logs
 
-PD_Number=1
 for filename in ${input_files_list}/*.txt; do
     echo "Processing file: $(basename "$filename")"
     echo "$PWD"
@@ -48,10 +47,10 @@ for filename in ${input_files_list}/*.txt; do
     file_list=$(processing/split_files.sh ${input_files_list} $(basename "$filename") $files_per_job)
     subfile=$(basename "$filename")
     echo "Submission file with name PbPb_${subfile%.*}.sub is Created"
-    cat <<EOF > processing/pPb_${subfile%.*}.sub
+    cat <<EOF > processing/PbPb_${subfile%.*}.sub
         universe        = vanilla
-        executable      = ${EXEC_PATH}/processing/run_DijetAnapPb.sh
-        +JobFlavour     = "longlunch"
+        executable      = ${EXEC_PATH}/processing/run_DijetAnaPbPb.sh
+        +JobFlavour     = "workday"
         getenv          = True
         requirements    =((OpSysAndVer =?= "AlmaLinux9") && (CERNEnvironment =?= "qa"))
         RequestCpus     = 2
