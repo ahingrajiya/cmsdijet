@@ -46,7 +46,7 @@ for filename in ${input_files_list}/*.txt; do
     processing/split_files.sh ${input_files_list} $(basename "$filename") $files_per_job
     file_list=$(processing/split_files.sh ${input_files_list} $(basename "$filename") $files_per_job)
     subfile=$(basename "$filename")
-    echo "Submission file with name PbPb_${subfile%.*}.sub is Created"
+    echo "Submission file with name ${PWD}PbPb_${subfile%.*}.sub is Created"
     cat <<EOF > processing/PbPb_${subfile%.*}.sub
         universe        = vanilla
         executable      = ${EXEC_PATH}/processing/run_DijetAnaPbPb.sh
@@ -56,15 +56,17 @@ for filename in ${input_files_list}/*.txt; do
         RequestCpus     = 2
         environment     = "X509_USER_PROXY=voms_proxy.txt"
         transfer_input_files  = voms_proxy.txt	
-EOF
 
+
+EOF
     jobid=0
     for file in ${file_list}/*.txt; do
         cat <<EOF >> processing/PbPb_${subfile%.*}.sub
+        
 	    arguments   = ${file_list}/$(basename "$file") ${output_path}${sample_prefix}_${jobid}.root ${isMC}
-        output      = processing/condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.out
-        error       = processing/condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.err
-        log         = processing/condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.log
+        output      = processing/condor/logs/${sample_prefix}_${jobid}.out
+        error       = processing/condor/logs/${sample_prefix}_${jobid}.err
+        log         = processing/condor/logs/${sample_prefix}_${jobid}.log
         queue
 
 EOF
