@@ -546,8 +546,8 @@ void DiJetAnalysis::processEvent(const Event *event)
 
     fHM->hNEventsInMult->Fill(iMultiplicityBin);
 
-    fHM->hHiBin->Fill(event->hiBin());
-    fHM->hHiBin_W->Fill(event->hiBin(), Event_Weight);
+    fHM->hHiBin->Fill(event->hiBinShifted());
+    fHM->hHiBin_W->Fill(event->hiBinShifted(), Event_Weight);
 
     Double_t iVertexZ = event->vz();
 
@@ -582,6 +582,8 @@ void DiJetAnalysis::processEvent(const Event *event)
         // iSubeMult = SubEventMultiplicity(fIsMC, fIspPb, event);
         iSubeMult = GenMultiplicity(fIsMC, event);
         fHM->hSubEventMultiplicity_W->Fill(iSubeMult, Event_Weight * fDijetWeight);
+
+        // std::cout << iGenMult << "   " << iSubeMult << std::endl;
     }
     Double_t iMultiplicity;
     if (fMultiplicityType == 0)
@@ -630,13 +632,13 @@ void DiJetAnalysis::processEvent(const Event *event)
     {
         for (Int_t i = 0; i < 4; i++)
         {
-            Double_t Multiplicities[5] = {(Double_t)iRecoMult, (Double_t)iGenMult, (Double_t)iCorrectedMult, (Double_t)iSubeMult, (Double_t)i + 1};
+            Double_t Multiplicities[6] = {(Double_t)iRecoMult, (Double_t)iGenMult, (Double_t)iCorrectedMult, (Double_t)iSubeMult, (Double_t)event->hiBinShifted(), (Double_t)i + 1};
             fHM->hMultiplicities_W->Fill(Multiplicities, Event_Weight * MultWeight[i]);
         }
     }
     else
     {
-        Double_t Multiplicities[5] = {(Double_t)iRecoMult, (Double_t)iGenMult, (Double_t)iCorrectedMult, (Double_t)iSubeMult, iMultiplicityBin};
+        Double_t Multiplicities[6] = {(Double_t)iRecoMult, (Double_t)iGenMult, (Double_t)iCorrectedMult, (Double_t)iSubeMult, (Double_t)event->hiBinShifted(), iMultiplicityBin};
         fHM->hMultiplicities_W->Fill(Multiplicities, Event_Weight);
     }
     processRecoJets(event, Event_Weight, MultWeight, iMultiplicityBin);
@@ -652,13 +654,13 @@ void DiJetAnalysis::processEvent(const Event *event)
         {
             for (Int_t i = 0; i < 4; i++)
             {
-                Double_t Multiplicities[5] = {(Double_t)iRecoMult, (Double_t)iGenMult, (Double_t)iCorrectedMult, (Double_t)iSubeMult, (Double_t)i + 1};
+                Double_t Multiplicities[6] = {(Double_t)iRecoMult, (Double_t)iGenMult, (Double_t)iCorrectedMult, (Double_t)iSubeMult, (Double_t)event->hiBinShifted(), (Double_t)i + 1};
                 fHM->hMultiplicities_DiJet_W->Fill(Multiplicities, Event_Weight * MultWeight[i]);
             }
         }
         else
         {
-            Double_t Multiplicities[5] = {(Double_t)iRecoMult, (Double_t)iGenMult, (Double_t)iCorrectedMult, (Double_t)iSubeMult, iMultiplicityBin};
+            Double_t Multiplicities[6] = {(Double_t)iRecoMult, (Double_t)iGenMult, (Double_t)iCorrectedMult, (Double_t)iSubeMult, (Double_t)event->hiBinShifted(), iMultiplicityBin};
             fHM->hMultiplicities_DiJet_W->Fill(Multiplicities, Event_Weight);
         }
     }
@@ -1392,29 +1394,59 @@ Float_t DiJetAnalysis::MoveToLabFrame(const Float_t &jetEta)
 Double_t DiJetAnalysis::FindMultiplicityBin(const Int_t &multiplicity)
 {
     Int_t iBin = -1;
-    if (multiplicity <= 10)
+    if (fIspPb)
     {
-        iBin = 0;
+        if (multiplicity <= 10)
+        {
+            iBin = 0;
+        }
+        else if (multiplicity > 10 && multiplicity <= 60)
+        {
+            iBin = 1;
+        }
+        else if (multiplicity > 60 && multiplicity <= 120)
+        {
+            iBin = 2;
+        }
+        else if (multiplicity > 120 && multiplicity <= 185)
+        {
+            iBin = 3;
+        }
+        else if (multiplicity > 185 && multiplicity <= 250)
+        {
+            iBin = 4;
+        }
+        else if (multiplicity > 250 && multiplicity <= 400)
+        {
+            iBin = 5;
+        }
     }
-    else if (multiplicity > 10 && multiplicity <= 60)
+    else if (!fIspPb)
     {
-        iBin = 1;
-    }
-    else if (multiplicity > 60 && multiplicity <= 120)
-    {
-        iBin = 2;
-    }
-    else if (multiplicity > 120 && multiplicity <= 185)
-    {
-        iBin = 3;
-    }
-    else if (multiplicity > 185 && multiplicity <= 250)
-    {
-        iBin = 4;
-    }
-    else if (multiplicity > 250 && multiplicity <= 400)
-    {
-        iBin = 5;
+        if (multiplicity <= 10)
+        {
+            iBin = 0;
+        }
+        else if (multiplicity > 10 && multiplicity <= 60)
+        {
+            iBin = 1;
+        }
+        else if (multiplicity > 60 && multiplicity <= 120)
+        {
+            iBin = 2;
+        }
+        else if (multiplicity > 120 && multiplicity <= 185)
+        {
+            iBin = 3;
+        }
+        else if (multiplicity > 185 && multiplicity <= 250)
+        {
+            iBin = 4;
+        }
+        else if (multiplicity > 250)
+        {
+            iBin = 5;
+        }
     }
     return (Double_t)iBin;
 }

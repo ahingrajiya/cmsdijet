@@ -104,6 +104,7 @@ int main(int argc, char *argv[])
     {
         reader->setIsMc(isMC);
         reader->useGenTrackBranch();
+        reader->setStoreLocation(kTRUE);
     }
     reader->useSkimmingBranch();
     reader->useTrackBranch();
@@ -146,8 +147,8 @@ int main(int argc, char *argv[])
     analysis->setTrkEtaRange(-2.4, 2.4);
     analysis->setMultiplicityType(2);
     analysis->doInJetMultiplicity();
-    analysis->setMultiplicityWeightTable(path2MultWeight);
-    analysis->setUseMultiplicityWeigth();
+    // analysis->setMultiplicityWeightTable(path2MultWeight);
+    // analysis->setUseMultiplicityWeigth();
     analysis->init();
 
     manager->addAnalysis(analysis);

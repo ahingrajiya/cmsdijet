@@ -963,8 +963,8 @@ void ForestAODReader::readEvent()
         fJetTree->GetEntry(fEventsProcessed);
     if (fUseTrackBranch)
         fTrkTree->GetEntry(fEventsProcessed);
-    // if (fUseGenTrackBranch)
-    //     fGenTrkTree->GetEntry(fEventsProcessed);
+    if (fUseGenTrackBranch)
+        fGenTrkTree->GetEntry(fEventsProcessed);
 
     fEventsProcessed++;
     // if (fEventsProcessed - 1 == 25794)
@@ -1053,7 +1053,6 @@ Event *ForestAODReader::returnEvent()
     // {
     //     fixIndices();
     // }
-    Int_t iCentShift = 0;
     fEvent = new Event();
     fEvent->setEventNumber(fEventsProcessed - 1);
 
@@ -1065,8 +1064,6 @@ Event *ForestAODReader::returnEvent()
     {
         fEvent->setPtHat(fPtHat);
         fEvent->setPtHatWeight(fPtHatWeight);
-        if (fCollidingSystem == "PbPb")
-            iCentShift = 10;
     }
     fEvent->setHiBin(fHiBin);
     // fEvent->setHiBin(100);
@@ -1248,6 +1245,7 @@ Event *ForestAODReader::returnEvent()
     if (fUseGenTrackBranch && fIsMc)
     {
         Int_t iGenMult = 0;
+        // std::cout << fGenTrackPt->size() << "\n";
         for (Int_t iGenTrack{0}; iGenTrack < fGenTrackPt->size(); iGenTrack++)
         {
             GenTrack *track = new GenTrack{};
@@ -1270,6 +1268,7 @@ Event *ForestAODReader::returnEvent()
             fEvent->genTrackCollection()->push_back(track);
         }
         fEvent->setGenMultiplicity(iGenMult);
+        // std::cout << iGenMult << "\n";
     }
     Int_t iRecoMult = 0;
 
