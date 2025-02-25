@@ -55,7 +55,7 @@ for filename in ${input_files_list}/*.txt; do
         requirements    =((OpSysAndVer =?= "AlmaLinux9") && (CERNEnvironment =?= "qa"))
         RequestCpus     = 2
         environment     = "X509_USER_PROXY=voms_proxy.txt"
-        transfer_input_files  = voms_proxy.txt	
+        transfer_input_files  = ${EXEC_PATH}/processing/voms_proxy.txt	
 
 
 EOF
