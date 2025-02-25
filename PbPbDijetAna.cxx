@@ -138,14 +138,13 @@ int main(int argc, char *argv[])
     analysis->setLeadJetEtaRange(-1.6, 1.6);
     analysis->setSubLeadJetEtaRange(-1.6, 1.6);
     analysis->setMultiplicityRange(0., 10000.);
-    analysis->setMultiplicityType(1);
+    analysis->setMultiplicityType(2);
     analysis->setDeltaPhi(5. * TMath::Pi() / 6);
     analysis->setLeadJetPt(100.);
     analysis->setSubLeadJetPt(50.);
     analysis->setTrackingTable("../PbPb_TrackingEfficiencies/");
     analysis->setMinTrkPt(1.0);
     analysis->setTrkEtaRange(-2.4, 2.4);
-    analysis->setMultiplicityType(2);
     analysis->doInJetMultiplicity();
     // analysis->setMultiplicityWeightTable(path2MultWeight);
     // analysis->setUseMultiplicityWeigth();

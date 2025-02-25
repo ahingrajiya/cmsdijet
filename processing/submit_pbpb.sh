@@ -55,14 +55,12 @@ for filename in ${input_files_list}/*.txt; do
         requirements    =((OpSysAndVer =?= "AlmaLinux9") && (CERNEnvironment =?= "qa"))
         RequestCpus     = 2
         environment     = "X509_USER_PROXY=voms_proxy.txt"
-        transfer_input_files  = voms_proxy.txt
-
-	
+        transfer_input_files  = voms_proxy.txt	
 EOF
 
     jobid=0
     for file in ${file_list}/*.txt; do
-        cat <<EOF >> processing/pPb_${subfile%.*}.sub
+        cat <<EOF >> processing/PbPb_${subfile%.*}.sub
 	    arguments   = ${file_list}/$(basename "$file") ${output_path}${sample_prefix}_${jobid}.root ${isMC}
         output      = processing/condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.out
         error       = processing/condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.err
