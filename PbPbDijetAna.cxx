@@ -144,7 +144,7 @@ int main(int argc, char *argv[])
     analysis->setTrackingTable("../PbPb_TrackingEfficiencies/");
     analysis->setMinTrkPt(1.0);
     analysis->setTrkEtaRange(-2.4, 2.4);
-    analysis->setMultiplicityType(1);
+    analysis->setMultiplicityType(2);
     analysis->doInJetMultiplicity();
     analysis->setMultiplicityWeightTable(path2MultWeight);
     analysis->setUseMultiplicityWeigth();
