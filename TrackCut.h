@@ -62,6 +62,8 @@ public:
     void setChi2() { fChi2 = kTRUE; }
     ///@brief Use Nhits cut
     void setNHits() { fNHits = kTRUE; }
+    ///@brief Use MVA and Algo
+    void setMVAAlgo() { fMVAAlgo = kTRUE; }
     ///@brief Set Verbose mode
     void setVerbose() { fVerbose = kTRUE; }
     ///@brief Report all the cuts and pass/fail statistics
@@ -94,6 +96,8 @@ private:
     Bool_t fNHits;
     ///@brief Verbose Mode
     Bool_t fVerbose;
+    ///@brief Use Track MVA and Algo
+    Bool_t fMVAAlgo;
 
     ClassDef(TrackCut, 0)
 };

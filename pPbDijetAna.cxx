@@ -127,7 +127,7 @@ int main(int argc, char *argv[])
     eventCut->usePBeamScrapingFilter();
     eventCut->usePvertexFilterCutdz1p0();
     eventCut->usePPAprimaryVertexFilter();
-    eventCut->usePhfCoincFilter2Th4();
+    eventCut->usePhfCoincFilter();
     eventCut->setMultiplicty(10, 400);
     if (isMC && !isEmbedded)
     {
@@ -163,6 +163,7 @@ int main(int argc, char *argv[])
     if (isMC)
     {
         reader->setIsMc(isMC);
+        reader->useGenTrackBranch();
     }
     // reader->useHltBranch();
     reader->useSkimmingBranch();
@@ -177,10 +178,6 @@ int main(int argc, char *argv[])
     reader->setUseJetID();
     reader->setJetIDType(2);
     // reader->setMatchedJets();
-    if (isMC)
-    {
-        reader->useGenTrackBranch();
-    }
     reader->eventsToProcess(-1);
     reader->setJetCut(jetCut);
     reader->setTrackCut(trackCut);

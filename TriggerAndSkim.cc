@@ -57,6 +57,7 @@ ClassImp(TriggerAndSkim)
                                        fHBHEIsoNoiseFilterResult{0},
                                        fCollisionEventSelectionAODv2{0},
                                        fPhfCoincFilter2Th4{0},
+                                       fPhfCoincFilter{0},
                                        fPPAprimaryVertexFilter{0},
                                        fPBeamScrapingFilter{0},
                                        fPprimaryVertexFilter{0},

@@ -102,8 +102,9 @@ public:
   // Skim selection criteria
   void usePPrimaryVertexFilter() { fPPrimaryVertexFilter = kTRUE; }
   void useHBHENoiseFilterResultRun2Loose() { fHBHENoiseFilterResultRun2Loose = kTRUE; }
-  void useCollisionEventSelectionAODv2() { fCollisionEventSelectionAODc2 = kTRUE; }
+  void useCollisionEventSelectionAODv2() { fCollisionEventSelectionAOD = kTRUE; }
   void usePhfCoincFilter2Th4() { fPhfCoincFilter2Th4 = kTRUE; }
+  void usePhfCoincFilter() { fPhfCoincFilter = kTRUE; }
   void usePPAprimaryVertexFilter() { fPPAprimaryVertexFilter = kTRUE; }
   void usePBeamScrapingFilter() { fPBeamScrapingFilter = kTRUE; }
   void usePvertexFilterCutdz1p0() { fpVertexFilterCutdz1p0 = kTRUE; }
@@ -145,9 +146,9 @@ private:
   // Skim flags
   Bool_t fPPrimaryVertexFilter;
   Bool_t fHBHENoiseFilterResultRun2Loose;
-  Bool_t fCollisionEventSelectionAODc2;
+  Bool_t fCollisionEventSelectionAOD;
   Bool_t fPhfCoincFilter2Th4;
-
+  Bool_t fPhfCoincFilter;
   Bool_t fPPAprimaryVertexFilter;
   Bool_t fPBeamScrapingFilter;
   Bool_t fPClusterCompatibilityFilter;

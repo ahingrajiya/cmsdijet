@@ -525,6 +525,7 @@ void DiJetAnalysis::processEvent(const Event *event)
                   << std::endl;
         fEventCounter = {0};
     }
+    // std::cout << "Event Counter : " << event->eventNumber() << std::endl;
 
     if (!fHM)
     {
@@ -725,8 +726,8 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
             refPhi = (*recoJetIterator)->RefJetPhi();
         }
 
-        // std::cout << Form("Jet Pt: %f, Jet Eta: %f, Jet Phi: %f", jetPt, jetEta, jetPhi) << std::endl;
-        // std::cout << Form("Ref Pt: %f, Ref Eta: %f, Ref Phi: %f", refPt, refEta, refPhi) << std::endl;
+        std::cout << Form("Jet Pt: %f, Jet Eta: %f, Jet Phi: %f", jetPt, jetEta, jetPhi) << std::endl;
+        std::cout << Form("Ref Pt: %f, Ref Eta: %f, Ref Phi: %f", refPt, refEta, refPhi) << std::endl;
 
         if (fIsMC && refPt > 0.0)
         {

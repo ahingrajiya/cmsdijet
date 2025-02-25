@@ -28,8 +28,9 @@ ClassImp(EventCut)
                            fPtHat{-1e9, 1e9}, fPtHatWeight{-1e9, 1e9}, fVerbose{kFALSE},
                            fPPrimaryVertexFilter{kFALSE},
                            fHBHENoiseFilterResultRun2Loose{kFALSE},
-                           fCollisionEventSelectionAODc2{kFALSE},
+                           fCollisionEventSelectionAOD{kFALSE},
                            fPhfCoincFilter2Th4{kFALSE},
+                           fPhfCoincFilter{kFALSE},
                            fPPAprimaryVertexFilter{kFALSE},
                            fPBeamScrapingFilter{kFALSE},
                            fPClusterCompatibilityFilter{kFALSE},
@@ -86,20 +87,20 @@ Bool_t EventCut::pass(const Event *ev)
     }
 
     const Bool_t goodHiBin = (fHiBin[0] <= ev->hiBin()) &&
-                             (ev->hiBin() < fHiBin[1]);
+                             (ev->hiBin() <= fHiBin[1]);
     if (fVerbose)
     {
-        std::cout << Form("hiBin        : %d <= %d < %d \t %s \n",
+        std::cout << Form("hiBin        : %d <= %d <= %d \t %s \n",
                           fHiBin[0], ev->hiBin(), fHiBin[1], (goodHiBin) ? "true" : "false");
     }
-    const Bool_t goodCent = (fCentVal[0] <= ev->centrality()) &&
-                            (ev->centrality() < fCentVal[1]);
+    // const Bool_t goodCent = (fCentVal[0] <= ev->centrality()) &&
+    //                         (ev->centrality() < fCentVal[1]);
 
-    if (fVerbose)
-    {
-        std::cout << Form("centrality   : %5.2f <= %5.2f < %5.2f \t %s \n",
-                          fCentVal[0], ev->centrality(), fCentVal[1], (goodCent) ? "true" : "false");
-    }
+    // if (fVerbose)
+    // {
+    //     std::cout << Form("centrality   : %5.2f <= %5.2f < %5.2f \t %s \n",
+    //                       fCentVal[0], ev->centrality(), fCentVal[1], (goodCent) ? "true" : "false");
+    // }
 
     const Bool_t goodPtHat = (fPtHat[0] < ev->ptHat()) &&
                              (ev->ptHat() <= fPtHat[1]);
@@ -139,14 +140,26 @@ Bool_t EventCut::pass(const Event *ev)
         if (ev->trigAndSkim()->HBHENoiseFilterResultRun2Loose() == 0)
             goodFilters = kFALSE;
     }
-    if (fCollisionEventSelectionAODc2)
+    if (fCollisionEventSelectionAOD)
     {
-        if (ev->trigAndSkim()->collisionEventSelectionAODv2() == 0)
+        if (ev->trigAndSkim()->collisionEventSelectionAOD() == 0)
             goodFilters = kFALSE;
     }
     if (fPhfCoincFilter2Th4)
     {
         if (ev->trigAndSkim()->phfCoincFilter2Th4() == 0)
+            goodFilters = kFALSE;
+    }
+    if (fPhfCoincFilter)
+    {
+        if (ev->trigAndSkim()->phfCoincFilter() == 0) // const Bool_t goodCent = (fCentVal[0] <= ev->centrality()) &&
+                                                      //                         (ev->centrality() < fCentVal[1]);
+
+            // if (fVerbose)
+            // {
+            //     std::cout << Form("centrality   : %5.2f <= %5.2f < %5.2f \t %s \n",
+            //                       fCentVal[0], ev->centrality(), fCentVal[1], (goodCent) ? "true" : "false");
+            // }
             goodFilters = kFALSE;
     }
     if (fPPAprimaryVertexFilter)
@@ -179,7 +192,7 @@ Bool_t EventCut::pass(const Event *ev)
     }
 
     Bool_t passEvent = goodVx && goodVy && goodVz && goodHiBin &&
-                       goodCent && goodPtHat && goodPtHatWeight && goodMultiplicity && goodFilters;
+                       goodPtHat && goodPtHatWeight && goodMultiplicity && goodFilters;
     (passEvent) ? fEventsPassed++ : fEventsFailed++;
 
     return passEvent;

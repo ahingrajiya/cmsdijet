@@ -338,8 +338,9 @@ private:
   Int_t fHBHENoiseFilterResultRun2Loose;
   Int_t fHBHENoiseFilterResultRun2Tight;
   Int_t fHBHEIsoNoiseFilterResult;
-  Int_t fCollisionEventSelectionAODv2;
+  Int_t fCollisionEventSelectionAOD;
   Int_t fPhfCoincFilter2Th4;
+  Int_t fPhfCoincFilter;
   Int_t fPPAprimaryVertexFilter;
   Int_t fPBeamScrapingFilter;
   Int_t fPprimaryVertexFilter;
@@ -432,41 +433,41 @@ private:
   /// @brief Number of tracks
   Int_t fNTracks;
   /// @brief Track transverse momentum
-  Float_t fTrackPt[9999];
+  Float_t fTrackPt[29999];
   /// @brief Track pseudorapidity
-  Float_t fTrackEta[9999];
+  Float_t fTrackEta[29999];
   /// @brief Track azimuthal angle
-  Float_t fTrackPhi[9999];
+  Float_t fTrackPhi[29999];
   /// @brief Track pT error (uncertainty)
-  Float_t fTrackPtErr[9999];
+  Float_t fTrackPtErr[29999];
   /// @brief Track distance of closest approach in transverse plane (XY)
-  Float_t fTrackDcaXY[9999];
+  Float_t fTrackDcaXY[29999];
   /// @brief Track distance of closest approach in beam direction (z)
-  Float_t fTrackDcaZ[9999];
+  Float_t fTrackDcaZ[29999];
   /// @brief Track distance of closest approach error in transverse plane (XY)
-  Float_t fTrackDcaXYErr[9999];
+  Float_t fTrackDcaXYErr[29999];
   /// @brief Track distance of closest approach error in beam direction (z)
-  Float_t fTrackDcaZErr[9999];
+  Float_t fTrackDcaZErr[29999];
   /// @brief Track fitting (reconstruction) chi2
-  Float_t fTrackChi2[9999];
+  Float_t fTrackChi2[29999];
   /// @brief Track number of degrees of freedom in the fitting
-  UChar_t fTrackNDOF[9999];
+  UChar_t fTrackNDOF[29999];
   /// @brief Particle flow energy deposited in ECAL from the given track
-  Float_t fTrackPartFlowEcal[9999];
+  Float_t fTrackPartFlowEcal[29999];
   /// @brief Particle flow energy deposited in HCAL from the given track
-  Float_t fTrackPartFlowHcal[9999];
+  Float_t fTrackPartFlowHcal[29999];
   /// @brief Track MVA for each step
-  Float_t fTrackMVA[9999];
+  Float_t fTrackMVA[29999];
   /// @brief Track algorithm/step
-  UChar_t fTrackAlgo[9999];
+  UChar_t fTrackAlgo[29999];
   /// @brief Track charge
-  Int_t fTrackCharge[9999];
+  Int_t fTrackCharge[29999];
   /// @brief Number of hits in the tracker
-  UChar_t fTrackNHits[9999];
+  UChar_t fTrackNHits[29999];
   /// @brief Number of layers with measurement in the tracker
-  UChar_t fTrackNLayers[9999];
+  UChar_t fTrackNLayers[29999];
   /// @brief Tracker steps MVA selection
-  Bool_t fTrackHighPurity[9999];
+  Bool_t fTrackHighPurity[29999];
 
   //
   // Monte Carlo tracks

@@ -70,6 +70,8 @@ int main(int argc, char *argv[])
     eventCut->usePClusterCompatibilityFilter();
     eventCut->usePPrimaryVertexFilter();
     eventCut->usePhfCoincFilter2Th4();
+    eventCut->useHBHENoiseFilterResultRun2Loose();
+    eventCut->useCollisionEventSelectionAODv2();
     eventCut->setMultiplicty(0, 10000);
     if (isMC)
     {
@@ -94,30 +96,35 @@ int main(int argc, char *argv[])
     trackCut->setNHits();
     trackCut->setChi2();
     trackCut->setCaloMatching();
+    trackCut->setMVAAlgo();
     // trackCut->setVerbose();
 
-    ForestminiAODReader *reader = new ForestminiAODReader{inFileName};
-    reader->setIsMc(isMC);
-    reader->useSkimmingBranch();
-    reader->useTrackBranch();
+    ForestAODReader *reader = new ForestAODReader{inFileName};
     if (isMC)
     {
+        reader->setIsMc(isMC);
         reader->useGenTrackBranch();
     }
+    reader->useSkimmingBranch();
+    reader->useTrackBranch();
     reader->useJets();
     reader->setJetCollectionBranchName(jetBranchName.Data());
     reader->setCollidingEnergy(collEnergyGeV);
     reader->setCollidingSystem(collSystem.Data());
     reader->setYearOfDataTaking(collYear);
+    reader->addJECFile(JECFileName.Data());
+    reader->setPath2JetAnalysis(path2JEC.Data());
+    reader->setUseJetID();
+    reader->setJetIDType(1);
+    reader->eventsToProcess(-1);
     reader->setEventCut(eventCut);
     reader->setJetCut(jetCut);
     reader->setTrackCut(trackCut);
-    reader->setPath2JetAnalysis(path2JEC.Data());
-    reader->addJECFile(JECFileName.Data());
     if (!isMC)
     {
         reader->addJECFile(JECFileDataName.Data());
     }
+    manager->setEventReader(reader);
 
     HistoManagerDiJet *hm = new HistoManagerDiJet{};
     hm->setIsMC(isMC);
@@ -127,8 +134,8 @@ int main(int argc, char *argv[])
     DiJetAnalysis *analysis = new DiJetAnalysis{};
     analysis->addHistoManager(hm);
     analysis->setIsMC(isMC);
-    analysis->setLeadJetEtaRange(-1., 1.);
-    analysis->setSubLeadJetEtaRange(-1., 1.);
+    analysis->setLeadJetEtaRange(-1.6, 1.6);
+    analysis->setSubLeadJetEtaRange(-1.6, 1.6);
     analysis->setMultiplicityRange(0., 10000.);
     analysis->setMultiplicityType(1);
     analysis->setDeltaPhi(5. * TMath::Pi() / 6);
@@ -138,13 +145,14 @@ int main(int argc, char *argv[])
     analysis->setMinTrkPt(1.0);
     analysis->setTrkEtaRange(-2.4, 2.4);
     analysis->setMultiplicityType(1);
+    analysis->doInJetMultiplicity();
     analysis->setMultiplicityWeightTable(path2MultWeight);
     analysis->setUseMultiplicityWeigth();
     analysis->init();
 
-    manager->setEventReader(reader);
     manager->addAnalysis(analysis);
     manager->init();
+    // analysis->setNEventsInSample(reader->nEventsTotal());
     manager->performAnalysis();
     manager->finish();
 

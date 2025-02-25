@@ -56,7 +56,7 @@ Bool_t TrackCut::RecoPass(const Track *track)
         std::cout << "\n----- Reco Track Cut -----\n";
     }
 
-    Bool_t goodPt = (fTrackPt[0] <= track->TrkPt() && track->TrkPt() <= fTrackPt[1]);
+    Bool_t goodPt = (fTrackPt[0] < track->TrkPt() && track->TrkPt() <= fTrackPt[1]);
     if (fVerbose)
     {
         std::cout << Form("Track Pt : %5.2f <= %5.2f <= %5.2f \t %s \n", fTrackPt[0], track->TrkPt(), fTrackPt[1], (goodPt) ? "True" : "False");
@@ -126,7 +126,7 @@ Bool_t TrackCut::RecoPass(const Track *track)
     Bool_t goodChi2 = kTRUE;
     if (fChi2)
     {
-        goodChi2 = (track->TrackChi2() / track->TrackNLayers() < 0.18);
+        goodChi2 = (track->TrackChi2() / track->TrackNDOF() / track->TrackNLayers() < 0.18);
         if (fVerbose)
         {
             std::cout << Form("Track Chi2 : %5.2f < 0.18 \t %s \n", (track->TrackChi2() / track->TrackNLayers()), (goodChi2) ? "True" : "False");
@@ -143,7 +143,19 @@ Bool_t TrackCut::RecoPass(const Track *track)
         }
     }
 
-    Bool_t isGood = goodPt && goodEta && goodPtErr && goodCharge && goodHP && goodCaloMatch && goodDXY && goodDZ && goodNhits && goodChi2;
+    Bool_t goodMVA = kTRUE;
+    if (fMVAAlgo)
+    {
+        if (track->TrackMVA() < 0.98 && track->TrackAlgo() == 6)
+            goodMVA = kFALSE;
+
+        if (fVerbose)
+        {
+            std::cout << Form("Track MVA : %5.2f >= 0.98 and Track Algo : %i != 6 \t %s \n", track->TrackMVA(), track->TrackAlgo(), (goodMVA) ? "True" : "False");
+        }
+    }
+
+    Bool_t isGood = goodPt && goodEta && goodPtErr && goodCharge && goodHP && goodCaloMatch && goodDXY && goodDZ && goodNhits && goodChi2 && goodMVA;
 
     if (fVerbose)
     {

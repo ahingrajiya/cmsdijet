@@ -70,6 +70,7 @@ public:
   void setHBHEIsoNoiseFilterResult(const Int_t &b) { fHBHEIsoNoiseFilterResult = (Char_t)b; }
   void setCollisionEventSelectionAODv2(const Int_t &b) { fCollisionEventSelectionAODv2 = (Char_t)b; }
   void setPhfCoincFilter2Th4(const Int_t &b) { fPhfCoincFilter2Th4 = (Char_t)b; }
+  void setPhfCoincFilter(const Int_t &b) { fPhfCoincFilter = (Char_t)b; }
   void setPPAprimaryVertexFilter(const Int_t &b) { fPPAprimaryVertexFilter = (Char_t)b; }
   void setPBeamScrapingFilter(const Int_t &b) { fPBeamScrapingFilter = (Char_t)b; }
   void setPprimaryVertexFilter(const Int_t &b) { fPprimaryVertexFilter = (Char_t)b; }
@@ -124,8 +125,9 @@ public:
   Int_t HBHENoiseFilterResultRun2Loose() const { return (Int_t)fHBHENoiseFilterResultRun2Loose; }
   Int_t HBHENoiseFilterResultRun2Tight() const { return (Int_t)fHBHENoiseFilterResultRun2Tight; }
   Int_t HBHEIsoNoiseFilterResult() const { return (Int_t)fHBHEIsoNoiseFilterResult; }
-  Int_t collisionEventSelectionAODv2() const { return (Int_t)fCollisionEventSelectionAODv2; }
+  Int_t collisionEventSelectionAOD() const { return (Int_t)fCollisionEventSelectionAODv2; }
   Int_t phfCoincFilter2Th4() const { return (Int_t)fPhfCoincFilter2Th4; }
+  Int_t phfCoincFilter() const { return (Int_t)fPhfCoincFilter; }
   Int_t pPAprimaryVertexFilter() const { return (Int_t)fPPAprimaryVertexFilter; }
   Int_t pBeamScrapingFilter() const { return (Int_t)fPBeamScrapingFilter; }
   Int_t pprimaryVertexFilter() const { return (Int_t)fPprimaryVertexFilter; }
@@ -181,6 +183,7 @@ private:
   Char_t fHBHEIsoNoiseFilterResult;
   Char_t fCollisionEventSelectionAODv2;
   Char_t fPhfCoincFilter2Th4;
+  Char_t fPhfCoincFilter;
   Char_t fPPAprimaryVertexFilter;
   Char_t fPBeamScrapingFilter;
   Char_t fPprimaryVertexFilter;

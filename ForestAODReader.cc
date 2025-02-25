@@ -101,6 +101,8 @@ void ForestAODReader::clearVariables()
     fHLT_HIAK4PFJet30_v1 = {0};
     fHLT_HIAK4PFJet30_v1_Prescl = {0};
     fHLT_HIAK4PFJet40_v1 = {0};
+    fPhfCoincFilter2Th4 = {0};
+
     fHLT_HIAK4PFJet40_v1_Prescl = {0};
     fHLT_HIAK4PFJet60_v1 = {0};
     fHLT_HIAK4PFJet60_v1_Prescl = {0};
@@ -134,8 +136,9 @@ void ForestAODReader::clearVariables()
     fpVertexFilterCutdz1p0 = {0};
     fHBHENoiseFilterResultRun2Tight = {0};
     fHBHEIsoNoiseFilterResult = {0};
-    fCollisionEventSelectionAODv2 = {0};
+    fCollisionEventSelectionAOD = {0};
     fPhfCoincFilter2Th4 = {0};
+    fPhfCoincFilter = {0};
     fPPAprimaryVertexFilter = {0};
     fPBeamScrapingFilter = {0};
     fPprimaryVertexFilter = {0};
@@ -654,12 +657,12 @@ void ForestAODReader::setupBranches()
     fEventTree->SetBranchStatus("evt", 1);
     fEventTree->SetBranchStatus("lumi", 1);
     fEventTree->SetBranchStatus("vz", 1);
-    // fEventTree->SetBranchStatus("hiBin", 1); // centrality only for PbPb and XeXe
+    fEventTree->SetBranchStatus("hiBin", 1); // centrality only for PbPb and XeXe
     fEventTree->SetBranchAddress("run", &fRunId);
     fEventTree->SetBranchAddress("evt", &fEventId);
     fEventTree->SetBranchAddress("lumi", &fLumi);
     fEventTree->SetBranchAddress("vz", &fVertexZ);
-    // fEventTree->SetBranchAddress("hiBin", &fHiBin);
+    fEventTree->SetBranchAddress("hiBin", &fHiBin);
 
     if (fIsMc)
     {
@@ -748,6 +751,7 @@ void ForestAODReader::setupBranches()
         fSkimTree->SetBranchStatus("HBHEIsoNoiseFilterResult", 1);
         fSkimTree->SetBranchStatus("collisionEventSelectionAODv2", 1);
         fSkimTree->SetBranchStatus("phfCoincFilter", 1);
+        fSkimTree->SetBranchStatus("phfCoincFilter2Th4", 1);
         fSkimTree->SetBranchStatus("pPAprimaryVertexFilter", 1);
         fSkimTree->SetBranchStatus("pBeamScrapingFilter", 1);
         fSkimTree->SetBranchStatus("pprimaryVertexFilter", 1);
@@ -762,8 +766,9 @@ void ForestAODReader::setupBranches()
         fSkimTree->SetBranchAddress("HBHENoiseFilterResultRun2Loose", &fHBHENoiseFilterResultRun2Loose);
         fSkimTree->SetBranchAddress("HBHENoiseFilterResultRun2Tight", &fHBHENoiseFilterResultRun2Tight);
         fSkimTree->SetBranchAddress("HBHEIsoNoiseFilterResult", &fHBHEIsoNoiseFilterResult);
-        fSkimTree->SetBranchAddress("collisionEventSelectionAODv2", &fCollisionEventSelectionAODv2);
-        fSkimTree->SetBranchAddress("phfCoincFilter", &fPhfCoincFilter2Th4);
+        fSkimTree->SetBranchAddress("collisionEventSelectionAOD", &fCollisionEventSelectionAOD);
+        fSkimTree->SetBranchAddress("phfCoincFilter", &fPhfCoincFilter);
+        fSkimTree->SetBranchAddress("phfCoincFilter2Th4", &fPhfCoincFilter2Th4);
         fSkimTree->SetBranchAddress("pPAprimaryVertexFilter", &fPPAprimaryVertexFilter);
         fSkimTree->SetBranchAddress("pBeamScrapingFilter", &fPBeamScrapingFilter);
         fSkimTree->SetBranchAddress("pprimaryVertexFilter", &fPprimaryVertexFilter);
@@ -889,7 +894,7 @@ void ForestAODReader::setupBranches()
         {
             fTrkTree->SetBranchStatus("trkChi2", 1);
             fTrkTree->SetBranchStatus("trkNdof", 1);
-            fTrkTree->SetBranchStatus("trыkNHit", 1);
+            fTrkTree->SetBranchStatus("trkNHit", 1);
             fTrkTree->SetBranchStatus("trkNlayer", 1);
             fTrkTree->SetBranchStatus("pfEcal", 1);
             fTrkTree->SetBranchStatus("pfHcal", 1);
@@ -958,8 +963,9 @@ void ForestAODReader::readEvent()
         fJetTree->GetEntry(fEventsProcessed);
     if (fUseTrackBranch)
         fTrkTree->GetEntry(fEventsProcessed);
-    if (fUseGenTrackBranch)
-        fGenTrkTree->GetEntry(fEventsProcessed);
+    // if (fUseGenTrackBranch)
+    //     fGenTrkTree->GetEntry(fEventsProcessed);
+
     fEventsProcessed++;
     // if (fEventsProcessed - 1 == 25794)
     // std::cout << "Events processed: " << fEventsProcessed - 1 << std::endl;
@@ -989,56 +995,56 @@ void ForestAODReader::fixIndices()
                 {
                     fRecoJet2GenJetId.push_back(-1);
                     continue;
-                }
 
+                    for (Int_t iGenJet{0}; iGenJet < fNGenJets; iGenJet++)
+                    {
+                        // Skip Ref and Gen jets that do not match on pT within computational precision
+                        // std::cout << "|Gen pT - Ref pT| = " << TMath::Abs(fPFGenJetPt[iGenJet] - fPFRefJetPt[iRecoJet]) <<
+                        // std::endl;
+
+                        // std::cout << "iGen: " << iGenJet << " genPt: " << fPFGenJetPt[iGenJet] << std::endl;
+                        if (TMath::Abs(fGenJetPt[iGenJet] - fRefJetPt[iRecoJet]) > 2.f * FLT_EPSILON)
+                        {
+                            // If it is the last one
+                            if (iGenJet == (fNGenJets - 1))
+                                fRecoJet2GenJetId.push_back(-1);
+                            continue;
+                        }
+                        else
+                        {
+                            fRefJetEta[iRecoJet] = fGenJetEta[iGenJet];
+                            fRefJetPhi[iRecoJet] = fGenJetPhi[iGenJet];
+                            fRefJetWTAEta[iRecoJet] = fGenJetWTAEta[iGenJet];
+                            fRefJetWTAPhi[iRecoJet] = fGenJetWTAPhi[iGenJet];
+                            fRecoJet2GenJetId.push_back(iGenJet);
+                            break;
+                        }
+                    }
+                } // for (Int_t iRecoJet=0; iRecoJet<fNPFRecoJets; iRecoJet++)
+
+                // Fill the corresponding index in the reco vector and fill the gen
                 for (Int_t iGenJet{0}; iGenJet < fNGenJets; iGenJet++)
                 {
-                    // Skip Ref and Gen jets that do not match on pT within computational precision
-                    // std::cout << "|Gen pT - Ref pT| = " << TMath::Abs(fPFGenJetPt[iGenJet] - fPFRefJetPt[iRecoJet]) <<
-                    // std::endl;
-
-                    // std::cout << "iGen: " << iGenJet << " genPt: " << fPFGenJetPt[iGenJet] << std::endl;
-                    if (TMath::Abs(fGenJetPt[iGenJet] - fRefJetPt[iRecoJet]) > 2.f * FLT_EPSILON)
+                    std::vector<Int_t>::iterator it = std::find(fRecoJet2GenJetId.begin(), fRecoJet2GenJetId.end(), iGenJet);
+                    if (it != fRecoJet2GenJetId.end())
                     {
-                        // If it is the last one
-                        if (iGenJet == (fNGenJets - 1))
-                            fRecoJet2GenJetId.push_back(-1);
-                        continue;
+                        fGenJet2RecoJet.push_back(std::distance(fRecoJet2GenJetId.begin(), it));
                     }
                     else
                     {
-                        fRefJetEta[iRecoJet] = fGenJetEta[iGenJet];
-                        fRefJetPhi[iRecoJet] = fGenJetPhi[iGenJet];
-                        fRefJetWTAEta[iRecoJet] = fGenJetWTAEta[iGenJet];
-                        fRefJetWTAPhi[iRecoJet] = fGenJetWTAPhi[iGenJet];
-                        fRecoJet2GenJetId.push_back(iGenJet);
-                        break;
+                        fGenJet2RecoJet.push_back(-1);
                     }
-                }
-            } // for (Int_t iRecoJet=0; iRecoJet<fNPFRecoJets; iRecoJet++)
-
-            // Fill the corresponding index in the reco vector and fill the gen
-            for (Int_t iGenJet{0}; iGenJet < fNGenJets; iGenJet++)
-            {
-                std::vector<Int_t>::iterator it = std::find(fRecoJet2GenJetId.begin(), fRecoJet2GenJetId.end(), iGenJet);
-                if (it != fRecoJet2GenJetId.end())
-                {
-                    fGenJet2RecoJet.push_back(std::distance(fRecoJet2GenJetId.begin(), it));
-                }
-                else
-                {
-                    fGenJet2RecoJet.push_back(-1);
                 }
             }
         }
     }
 }
-
 //_________________
 Event *ForestAODReader::returnEvent()
 {
 
     // std::cout << "ForestAODReader::returnEvent" << std::endl;
+
     readEvent();
 
     Int_t nBadJets{0};
@@ -1047,7 +1053,7 @@ Event *ForestAODReader::returnEvent()
     // {
     //     fixIndices();
     // }
-
+    Int_t iCentShift = 0;
     fEvent = new Event();
     fEvent->setEventNumber(fEventsProcessed - 1);
 
@@ -1055,15 +1061,15 @@ Event *ForestAODReader::returnEvent()
     fEvent->setEventId(fEventId);
     fEvent->setLumi(fLumi);
     fEvent->setVz(fVertexZ);
-    fEvent->setHiBin(fHiBin);
-    // fEvent->setHiBin(100);
-
     if (fIsMc)
     {
         fEvent->setPtHat(fPtHat);
         fEvent->setPtHatWeight(fPtHatWeight);
+        if (fCollidingSystem == "PbPb")
+            iCentShift = 10;
     }
-
+    fEvent->setHiBin(fHiBin);
+    // fEvent->setHiBin(100);
     // Fill HLT branch
     if (fUseHltBranch)
     {
@@ -1108,8 +1114,9 @@ Event *ForestAODReader::returnEvent()
         fEvent->trigAndSkim()->setHBHENoiseFilterResultRun2Loose(fHBHENoiseFilterResultRun2Loose);
         fEvent->trigAndSkim()->setHBHENoiseFilterResultRun2Tight(fHBHENoiseFilterResultRun2Tight);
         fEvent->trigAndSkim()->setHBHEIsoNoiseFilterResult(fHBHEIsoNoiseFilterResult);
-        fEvent->trigAndSkim()->setCollisionEventSelectionAODv2(fCollisionEventSelectionAODv2);
+        fEvent->trigAndSkim()->setCollisionEventSelectionAODv2(fCollisionEventSelectionAOD);
         fEvent->trigAndSkim()->setPhfCoincFilter2Th4(fPhfCoincFilter2Th4);
+        fEvent->trigAndSkim()->setPhfCoincFilter(fPhfCoincFilter);
         fEvent->trigAndSkim()->setPPAprimaryVertexFilter(fPPAprimaryVertexFilter);
         fEvent->trigAndSkim()->setPBeamScrapingFilter(fPBeamScrapingFilter);
         fEvent->trigAndSkim()->setPprimaryVertexFilter(fPprimaryVertexFilter);
@@ -1121,8 +1128,6 @@ Event *ForestAODReader::returnEvent()
         fEvent->trigAndSkim()->setPClusterCompatibilityFilter(fPClusterCompatibilityFilter);
         fEvent->trigAndSkim()->setpVertexFilterCutdz1p0(fpVertexFilterCutdz1p0);
     }
-
-    // fEvent->print();
 
     // Create particle flow jet instances
     if (fUseJets)
@@ -1311,7 +1316,7 @@ Event *ForestAODReader::returnEvent()
         delete fEvent;
         fEvent = nullptr;
     }
-    // std::cout << fEventsProcessed << iRecoMult << fPtHat << "\n";
+    // std::cout << fEvent << "\n";
 
     return fEvent;
 }
