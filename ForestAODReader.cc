@@ -589,9 +589,13 @@ Int_t ForestAODReader::setupChains()
                         file = "root://xrootd-vanderbilt.sites.opensciencegrid.org/" + file;
                     }
 
-                    std::cout << file << std::endl;
                     // Open file
                     TFile *ftmp = TFile::Open(file.c_str());
+
+                    std::cout << ftmp << std::endl;
+                    std::cout << !ftmp->IsZombie() << std::endl;
+                    std::cout << ftmp->GetNkeys() << std::endl;
+                    std::cout << file.c_str() << std::endl;
 
                     // Check file is not zombie and contains information
                     if (ftmp && !ftmp->IsZombie() && ftmp->GetNkeys())
