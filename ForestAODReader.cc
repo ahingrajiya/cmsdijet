@@ -577,7 +577,7 @@ Int_t ForestAODReader::setupChains()
                 pos = file.find_first_of(" ");
                 if (pos != std::string::npos)
                     file.erase(pos, file.length() - pos);
-                // std::cout << "DEBUG found [" << file << "]" << std::endl;
+                // std::cout << "DEBUG found ["<< file << "]" << std::endl;
 
                 // Check that file is of a correct name
                 if (file.find(".root") != std::string::npos)
@@ -585,7 +585,7 @@ Int_t ForestAODReader::setupChains()
                     // Open file
                     if (fIsInStore)
                     {
-                        file = "root://cmsxrootd.fnal.gov/" + file;
+                        file = "root://xrootd-vanderbilt.sites.opensciencegrid.org/" + file;
                     }
 
                     // Open file
@@ -1126,6 +1126,13 @@ Event *ForestAODReader::returnEvent()
         fEvent->trigAndSkim()->setpVertexFilterCutdz1p0(fpVertexFilterCutdz1p0);
     }
 
+    if (fEventCut && !fEventCut->pass(fEvent))
+    {
+        delete fEvent;
+        fEvent = nullptr;
+        return fEvent;
+    }
+
     // Create particle flow jet instances
     if (fUseJets)
     {
@@ -1310,11 +1317,6 @@ Event *ForestAODReader::returnEvent()
 
     fEvent->setMultiplicity(iRecoMult);
 
-    if (fEventCut && !fEventCut->pass(fEvent))
-    {
-        delete fEvent;
-        fEvent = nullptr;
-    }
     // std::cout << fEvent << "\n";
 
     return fEvent;

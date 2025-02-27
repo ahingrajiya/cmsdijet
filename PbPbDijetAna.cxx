@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
     {
         reader->setIsMc(isMC);
         reader->useGenTrackBranch();
-        reader->setStoreLocation(kTRUE);
+        reader->setStoreLocation(kTRUE)
     }
     reader->useSkimmingBranch();
     reader->useTrackBranch();
@@ -117,7 +117,7 @@ int main(int argc, char *argv[])
     reader->setPath2JetAnalysis(path2JEC.Data());
     reader->setUseJetID();
     reader->setJetIDType(1);
-    reader->eventsToProcess(-1);
+    reader->eventsToProcess(100);
     reader->setEventCut(eventCut);
     reader->setJetCut(jetCut);
     reader->setTrackCut(trackCut);

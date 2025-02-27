@@ -36,7 +36,7 @@ ClassImp(EventCut)
                            fPClusterCompatibilityFilter{kFALSE},
                            fpVertexFilterCutdz1p0{kFALSE},
                            fEventsPassed{0}, fEventsFailed{0},
-                           fMultiplicity{0, 5000}
+                           fMultiplicity{-5000, 5000}
 {
     fLumi[0] = 0;
     fLumi[1] = std::numeric_limits<unsigned int>::max();
