@@ -520,7 +520,7 @@ Int_t ForestAODReader::setupChains()
     std::cout << "\t[DONE]\n";
 
     // Initialize input file name (should switch to const char* processing later)
-    std::cout << fInFileName << std::endl;
+    std::cout << "Input File List : " << fInFileName << std::endl;
     TString input(fInFileName);
 
     // Check input exists
@@ -578,7 +578,7 @@ Int_t ForestAODReader::setupChains()
                 pos = file.find_first_of(" ");
                 if (pos != std::string::npos)
                     file.erase(pos, file.length() - pos);
-                std::cout << "DEBUG found [" << file << "]" << std::endl;
+                // std::cout << "DEBUG found [" << file << "]" << std::endl;
 
                 // Check that file is of a correct name
                 if (file.find(".root") != std::string::npos)
@@ -591,11 +591,6 @@ Int_t ForestAODReader::setupChains()
 
                     // Open file
                     TFile *ftmp = TFile::Open(file.c_str());
-
-                    std::cout << ftmp << std::endl;
-                    std::cout << !ftmp->IsZombie() << std::endl;
-                    std::cout << ftmp->GetNkeys() << std::endl;
-                    std::cout << file.c_str() << std::endl;
 
                     // Check file is not zombie and contains information
                     if (ftmp && !ftmp->IsZombie() && ftmp->GetNkeys())
