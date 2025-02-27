@@ -520,6 +520,7 @@ Int_t ForestAODReader::setupChains()
     std::cout << "\t[DONE]\n";
 
     // Initialize input file name (should switch to const char* processing later)
+    std::cout << fInFileName << std::endl;
     TString input(fInFileName);
 
     // Check input exists
