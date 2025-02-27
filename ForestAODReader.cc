@@ -577,7 +577,7 @@ Int_t ForestAODReader::setupChains()
                 pos = file.find_first_of(" ");
                 if (pos != std::string::npos)
                     file.erase(pos, file.length() - pos);
-                // std::cout << "DEBUG found ["<< file << "]" << std::endl;
+                std::cout << "DEBUG found [" << file << "]" << std::endl;
 
                 // Check that file is of a correct name
                 if (file.find(".root") != std::string::npos)
@@ -588,6 +588,7 @@ Int_t ForestAODReader::setupChains()
                         file = "root://xrootd-vanderbilt.sites.opensciencegrid.org/" + file;
                     }
 
+                    std::cout << file << std::endl;
                     // Open file
                     TFile *ftmp = TFile::Open(file.c_str());
 
