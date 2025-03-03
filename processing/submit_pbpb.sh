@@ -37,7 +37,7 @@ if [ "$DataSet" -eq 2 ]; then
     sample_prefix="PbPb_MinimumBias"
     input_files_list="${EXEC_PATH}/files_input/PbPb5020/DATA_MB/"
     output_path="/eos/user/a/ahingraj/outputs/PH/"
-    isMC=1
+    isMC=0
 fi
 
 if [ "$DataSet" -gt 2 ]; then
