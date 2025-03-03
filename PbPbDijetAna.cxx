@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
     {
         reader->setIsMc(isMC);
         reader->useGenTrackBranch();
-        // reader->setStoreLocation(kTRUE);
+        reader->setStoreLocation(kTRUE);
         reader->setShiftInHiBin(-10);
     }
     reader->useSkimmingBranch();
