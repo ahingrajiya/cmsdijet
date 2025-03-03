@@ -93,6 +93,14 @@ Bool_t EventCut::pass(const Event *ev)
         std::cout << Form("hiBin        : %d <= %d <= %d \t %s \n",
                           fHiBin[0], ev->hiBin(), fHiBin[1], (goodHiBin) ? "true" : "false");
     }
+
+    const Bool_t goodHiBinShifted = (fHiBin[0] <= ev->hiBinWithShift()) &&
+                                    (ev->hiBinWithShift() <= fHiBin[1]);
+    if (fVerbose)
+    {
+        std::cout << Form("hiBin With Shift        : %d <= %d <= %d \t %s \n",
+                          fHiBin[0], ev->hiBinWithShift(), fHiBin[1], (goodHiBin) ? "true" : "false");
+    }
     // const Bool_t goodCent = (fCentVal[0] <= ev->centrality()) &&
     //                         (ev->centrality() < fCentVal[1]);
 
@@ -192,7 +200,7 @@ Bool_t EventCut::pass(const Event *ev)
     }
 
     Bool_t passEvent = goodVx && goodVy && goodVz && goodHiBin &&
-                       goodPtHat && goodPtHatWeight && goodMultiplicity && goodFilters;
+                       goodPtHat && goodPtHatWeight && goodMultiplicity && goodFilters && goodHiBinShifted;
     (passEvent) ? fEventsPassed++ : fEventsFailed++;
 
     return passEvent;

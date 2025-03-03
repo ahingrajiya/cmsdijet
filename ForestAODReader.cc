@@ -28,7 +28,7 @@ ClassImp(ForestAODReader)
       fUseSkimmingBranch{kFALSE}, fJetCollection{"ak4PFJetAnalyzer"}, fUseJets{kFALSE}, fUseTrackBranch{kFALSE}, fUseGenTrackBranch{kFALSE}, fHltTree{nullptr},
       fSkimTree{nullptr}, fEventTree{nullptr}, fTrkTree{nullptr}, fGenTrkTree{nullptr}, fJEC{nullptr}, fJECFiles{}, fJEU{nullptr}, fJEUFiles{}, fCollidingSystem{Form("PbPb")},
       fCollidingEnergyGeV{5020}, fYearOfDataTaking{2018}, fDoJetPtSmearing{kFALSE}, fFixJetArrays{kFALSE}, fEventCut{nullptr}, fJetCut{nullptr}, fRecoJet2GenJetId{}, fGenJet2RecoJet{},
-      fTrackCut{nullptr}, fUseMatchedJets{kFALSE}, fEventsToProcess{-1}, fUseJetID{kFALSE}, fJetIDType{0}
+      fTrackCut{nullptr}, fUseMatchedJets{kFALSE}, fEventsToProcess{-1}, fUseJetID{kFALSE}, fJetIDType{0}, fHiBinShift{0}
 {
     // Initialize many variables
     clearVariables();
@@ -44,7 +44,7 @@ ForestAODReader::ForestAODReader(const Char_t *inputStream, const Bool_t &useHlt
       fJEC{nullptr}, fJECFiles{}, fJEU{nullptr},
       fJEUFiles{}, fCollidingSystem{Form("PbPb")}, fCollidingEnergyGeV{5020}, fYearOfDataTaking{2018},
       fDoJetPtSmearing{kFALSE}, fFixJetArrays{kFALSE}, fEventCut{nullptr}, fJetCut{nullptr}, fIsInStore{setStoreLocation}, fTrackCut{nullptr}, fUseMatchedJets{useMatchedJets}, fEventsToProcess{-1},
-      fUseJetID{kFALSE}, fJetIDType{0}
+      fUseJetID{kFALSE}, fJetIDType{0}, fHiBinShift{0}
 {
     // Initialize many variables
     clearVariables();
@@ -1067,6 +1067,7 @@ Event *ForestAODReader::returnEvent()
         fEvent->setPtHatWeight(fPtHatWeight);
     }
     fEvent->setHiBin(fHiBin);
+    fEvent->setHiBinShifted(fHiBin + fHiBinShift);
     // fEvent->setHiBin(100);
     // Fill HLT branch
     if (fUseHltBranch)

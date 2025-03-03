@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
     eventCut->setMultiplicty(0, 10000);
     if (isMC)
     {
-        eventCut->setPtHat(50., 1000.);
+        eventCut->setPtHat(30., 1000.);
     }
     eventCut->setHiBin(0, 200);
     // eventCut->setVerbose();
@@ -104,7 +104,8 @@ int main(int argc, char *argv[])
     {
         reader->setIsMc(isMC);
         reader->useGenTrackBranch();
-        reader->setStoreLocation(kTRUE);
+        // reader->setStoreLocation(kTRUE);
+        reader->setShiftInHiBin(-10);
     }
     reader->useSkimmingBranch();
     reader->useTrackBranch();
@@ -138,7 +139,7 @@ int main(int argc, char *argv[])
     analysis->setLeadJetEtaRange(-1.6, 1.6);
     analysis->setSubLeadJetEtaRange(-1.6, 1.6);
     analysis->setMultiplicityRange(0., 10000.);
-    analysis->setMultiplicityType(2);
+    analysis->setMultiplicityType(4);
     analysis->setDeltaPhi(5. * TMath::Pi() / 6);
     analysis->setLeadJetPt(100.);
     analysis->setSubLeadJetPt(50.);

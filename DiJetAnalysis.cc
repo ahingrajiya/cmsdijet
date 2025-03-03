@@ -536,7 +536,15 @@ void DiJetAnalysis::processEvent(const Event *event)
 
     fIsDiJetFound = kFALSE;
     fIsGenDiJetFound = kFALSE;
-    Double_t iMultiplicityBin = FindMultiplicityBin(event->multiplicity());
+    Double_t iMultiplicityBin;
+    if (fMultiplicityType != 4)
+    {
+        iMultiplicityBin = FindMultiplicityBin(event->multiplicity());
+    }
+    else if (fMultiplicityType == 4)
+    {
+        iMultiplicityBin = FindMultiplicityBin(event->hiBinWithShift());
+    }
 
     if (fIsMC)
     {
@@ -546,8 +554,8 @@ void DiJetAnalysis::processEvent(const Event *event)
 
     fHM->hNEventsInMult->Fill(iMultiplicityBin);
 
-    fHM->hHiBin->Fill(event->hiBinShifted());
-    fHM->hHiBin_W->Fill(event->hiBinShifted(), Event_Weight);
+    fHM->hHiBin->Fill(event->hiBinWithShift());
+    fHM->hHiBin_W->Fill(event->hiBinWithShift(), Event_Weight);
 
     Double_t iVertexZ = event->vz();
 
@@ -609,9 +617,19 @@ void DiJetAnalysis::processEvent(const Event *event)
             iMultiplicity = (Double_t)iSubeMult;
         }
     }
+    else if (fMultiplicityType == 4)
+    {
+        if (!fIspPb)
+        {
+            iMultiplicity = (Double_t)event->hiBinWithShift();
+        }
+    }
+
+    if (event->hiBinWithShift() < 0)
+        std::cout << "Centrality : " << event->hiBinWithShift() << std::endl;
     Double_t *MultWeight = new Double_t[4];
 
-    if (fUseMultiplicityWeight)
+    if (fUseMultiplicityWeight && fMultiplicityType != 4)
     {
         MultWeight = MultiplicityWeight(fIspPb, iMultiplicity);
     }
@@ -632,13 +650,13 @@ void DiJetAnalysis::processEvent(const Event *event)
     {
         for (Int_t i = 0; i < 4; i++)
         {
-            Double_t Multiplicities[6] = {(Double_t)iRecoMult, (Double_t)iGenMult, (Double_t)iCorrectedMult, (Double_t)iSubeMult, (Double_t)event->hiBinShifted(), (Double_t)i + 1};
+            Double_t Multiplicities[6] = {(Double_t)iRecoMult, (Double_t)iGenMult, (Double_t)iCorrectedMult, (Double_t)iSubeMult, (Double_t)event->hiBinWithShift(), (Double_t)i + 1};
             fHM->hMultiplicities_W->Fill(Multiplicities, Event_Weight * MultWeight[i]);
         }
     }
     else
     {
-        Double_t Multiplicities[6] = {(Double_t)iRecoMult, (Double_t)iGenMult, (Double_t)iCorrectedMult, (Double_t)iSubeMult, (Double_t)event->hiBinShifted(), iMultiplicityBin};
+        Double_t Multiplicities[6] = {(Double_t)iRecoMult, (Double_t)iGenMult, (Double_t)iCorrectedMult, (Double_t)iSubeMult, (Double_t)event->hiBinWithShift(), iMultiplicityBin};
         fHM->hMultiplicities_W->Fill(Multiplicities, Event_Weight);
     }
     processRecoJets(event, Event_Weight, MultWeight, iMultiplicityBin);
@@ -654,13 +672,13 @@ void DiJetAnalysis::processEvent(const Event *event)
         {
             for (Int_t i = 0; i < 4; i++)
             {
-                Double_t Multiplicities[6] = {(Double_t)iRecoMult, (Double_t)iGenMult, (Double_t)iCorrectedMult, (Double_t)iSubeMult, (Double_t)event->hiBinShifted(), (Double_t)i + 1};
+                Double_t Multiplicities[6] = {(Double_t)iRecoMult, (Double_t)iGenMult, (Double_t)iCorrectedMult, (Double_t)iSubeMult, (Double_t)event->hiBinWithShift(), (Double_t)i + 1};
                 fHM->hMultiplicities_DiJet_W->Fill(Multiplicities, Event_Weight * MultWeight[i]);
             }
         }
         else
         {
-            Double_t Multiplicities[6] = {(Double_t)iRecoMult, (Double_t)iGenMult, (Double_t)iCorrectedMult, (Double_t)iSubeMult, (Double_t)event->hiBinShifted(), iMultiplicityBin};
+            Double_t Multiplicities[6] = {(Double_t)iRecoMult, (Double_t)iGenMult, (Double_t)iCorrectedMult, (Double_t)iSubeMult, (Double_t)event->hiBinWithShift(), iMultiplicityBin};
             fHM->hMultiplicities_DiJet_W->Fill(Multiplicities, Event_Weight);
         }
     }
@@ -1423,27 +1441,28 @@ Double_t DiJetAnalysis::FindMultiplicityBin(const Int_t &multiplicity)
     }
     else if (!fIspPb)
     {
-        if (multiplicity <= 10)
+
+        if (multiplicity <= 0)
         {
             iBin = 0;
         }
-        else if (multiplicity > 10 && multiplicity <= 60)
+        else if (multiplicity > 0 && multiplicity <= 20)
         {
             iBin = 1;
         }
-        else if (multiplicity > 60 && multiplicity <= 120)
+        else if (multiplicity > 20 && multiplicity <= 60)
         {
             iBin = 2;
         }
-        else if (multiplicity > 120 && multiplicity <= 185)
+        else if (multiplicity > 60 && multiplicity <= 100)
         {
             iBin = 3;
         }
-        else if (multiplicity > 185 && multiplicity <= 250)
+        else if (multiplicity > 100 && multiplicity <= 160)
         {
             iBin = 4;
         }
-        else if (multiplicity > 250)
+        else if (multiplicity > 160)
         {
             iBin = 5;
         }

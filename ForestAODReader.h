@@ -122,6 +122,9 @@ public:
   /// @brief Set Jet ID Type
   void setJetIDType(const Int_t &jetIDType) { fJetIDType = {jetIDType}; }
 
+  ///@brief Set Shift in HiBin
+  void setShiftInHiBin(const Int_t &shift) { fHiBinShift = {shift}; }
+
 private:
   /// @brief Setup input stream (either single file or a list of files)
   void setInputStream(const Char_t *inputStream) { fInFileName = {inputStream}; }
@@ -291,6 +294,8 @@ private:
   Float_t fVertexZ;
   /// @brief Collision centrality (0-200)
   Int_t fHiBin;
+  /// @brief Collision Centrality Shift
+  Int_t fHiBinShift;
   /// @brief Event weight (prescale from generator level)
   Float_t fPtHatWeight;
   /// @brief ptHat (initial parton pT) - from generator level

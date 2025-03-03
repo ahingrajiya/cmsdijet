@@ -26,7 +26,7 @@ public:
   /// @brief Parametrized constructor
   Event(const UInt_t &runId, const ULong64_t &eventId, const UInt_t &lumi,
         const Float_t &vx, const Float_t &vy, const Float_t &vz,
-        const Int_t &hiBin, const Float_t &ptHat,
+        const Int_t &hiBin, const Int_t &hiBinShifted, const Float_t &ptHat,
         const Float_t &w, const Int_t &nBadJets, const Int_t &mult, const Int_t &genMult, const Long64_t &eveNumber);
   /// @brief Destructor
   virtual ~Event();
@@ -56,6 +56,8 @@ public:
   }
   /// @brief Set centrality bin (0-200)
   void setHiBin(const Int_t &hiBin) { fHiBin = hiBin; }
+  ///@brief Set Shifted Centrality Bin
+  void setHiBinShifted(const Int_t &hiBinShifted) { fHiBinShifted = hiBinShifted; }
   /// @brief Set ptHat
   void setPtHat(const Float_t &ptHat) { fPtHat = ptHat; }
   /// @brief Set event weight
@@ -88,7 +90,7 @@ public:
   /// @brief Return hiBin bin
   Int_t hiBin() const { return (Int_t)fHiBin; }
   /// @brief Return hiBin bin for PYTHIA+HYDJET. This hiBin is -5% shifted to match multiplicity distribution with MB PbPb data
-  Int_t hiBinShifted() const { return (fHiBin - 10); }
+  Int_t hiBinWithShift() const { return (fHiBinShifted); }
   /// @brief Return centrality bin
   Double_t centrality() const { return (fHiBin < 0) ? -5 : 100. - Double_t(200 - fHiBin) * 0.5; }
   /// @brief Return ptHat
@@ -136,6 +138,8 @@ private:
   Float_t fVz;
   /// @brief Centrality bin
   Short_t fHiBin;
+  ///@brief Shifted Centrality Bin
+  Short_t fHiBinShifted;
   /// @brief pthat sclaing
   Float_t fPtHat;
   /// @brief Event weight scaling
