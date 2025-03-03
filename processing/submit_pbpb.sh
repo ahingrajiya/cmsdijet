@@ -31,7 +31,16 @@ if [ "$DataSet" -eq 1 ]; then
     isMC=1
 fi
 
-if [ "$DataSet" -gt 1 ]; then
+if [ "$DataSet" -eq 2 ]; then
+    echo "PbPb MinimumBias Datasset is selected"    
+    cd ${EXEC_PATH}   
+    sample_prefix="PbPb_MinimumBias"
+    input_files_list="${EXEC_PATH}/files_input/PbPb5020/DATA_MB/"
+    output_path="/eos/user/a/ahingraj/outputs/PH/"
+    isMC=1
+fi
+
+if [ "$DataSet" -gt 2 ]; then
     echo "No Data Set Selected. Use numbers from 1 to 5"
     exit 1
 fi
