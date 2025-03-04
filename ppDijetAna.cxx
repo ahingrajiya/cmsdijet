@@ -67,6 +67,9 @@ int main(int argc, char *argv[])
     {
         eventCut->setPtHat(30., 1000.);
     }
+    eventCut->usePPAprimaryVertexFilter();
+    eventCut->usePBeamScrapingFilter();
+    eventCut->useHBHENoiseFilterResultRun2Loose();
     // eventCut->setVerbose();
 
     // Initialize jet cuts
