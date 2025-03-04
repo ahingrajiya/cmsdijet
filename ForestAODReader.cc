@@ -1066,6 +1066,10 @@ Event *ForestAODReader::returnEvent()
         fEvent->setPtHat(fPtHat);
         fEvent->setPtHatWeight(fPtHatWeight);
     }
+    if (fHiBin < 0)
+    {
+        fHiBin = 180;
+    }
     fEvent->setHiBin(fHiBin);
     fEvent->setHiBinShifted(fHiBin + fHiBinShift);
     // fEvent->setHiBin(100);
