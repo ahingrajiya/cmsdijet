@@ -794,25 +794,25 @@ void HistoManagerDiJet ::writeOutput()
     hInclusiveUncorrectedRecoJets_W->Write();
     hInclusiveRecoJetsLabFrame->Write();
     hInclusiveRecoJetsLabFrame_W->Write();
-    hInclusiveRecoJetsCMFrame->Write();
-    hInclusiveRecoJetsCMFrame_W->Write();
+    // hInclusiveRecoJetsCMFrame->Write();
+    // hInclusiveRecoJetsCMFrame_W->Write();
     hSelectedInclusiveRecoJetsMidRapidity_W->Write();
-    hInclusiveRecoJetPtVsEtaLabFrame_W->Write();
-    hInclusiveRecoJetPtVsEtaCMFrame_W->Write();
-    hInclusiveUnCorrectedRecoPtVsEtaLabFrame_W->Write();
-    hInclusiveUnCorrectedRecoPtVsEtaCMFrame_W->Write();
+    // hInclusiveRecoJetPtVsEtaLabFrame_W->Write();
+    // hInclusiveRecoJetPtVsEtaCMFrame_W->Write();
+    // hInclusiveUnCorrectedRecoPtVsEtaLabFrame_W->Write();
+    // hInclusiveUnCorrectedRecoPtVsEtaCMFrame_W->Write();
     if (fIsMC)
     {
         hInclusiveGenJetsLabFrame->Write();
         hInclusiveGenJetsLabFrame_W->Write();
-        hInclusiveGenJetsCMFrame->Write();
-        hInclusiveGenJetsCMFrame_W->Write();
+        // hInclusiveGenJetsCMFrame->Write();
+        // hInclusiveGenJetsCMFrame_W->Write();
         hSelectedInclusiveGenJetsMidRapidity_W->Write();
-        hInclusiveRefJetsCMFrame->Write();
-        hInclusiveRefJetsCMFrame_W->Write();
-        hInclusiveRefJetsLabFrame->Write();
-        hInclusiveRefJetsLabFrame_W->Write();
-        hSelectedInclusiveRefJetsMidRapidity_W->Write();
+        // hInclusiveRefJetsCMFrame->Write();
+        // hInclusiveRefJetsCMFrame_W->Write();
+        // hInclusiveRefJetsLabFrame->Write();
+        // hInclusiveRefJetsLabFrame_W->Write();
+        // hSelectedInclusiveRefJetsMidRapidity_W->Write();
     }
     if (fIsMC)
     {
@@ -824,25 +824,25 @@ void HistoManagerDiJet ::writeOutput()
     hLeadSubLeadJets_W->Write();
     hLeadSubLeadJets_MidRapidity_W->Write();
     hLeadSubLeadJets_WithDijet_W->Write();
-    hLeadPtvsSubLeadPt_PtHatW->Write();
-    hLeadPtvsSubLeadPt_DiJetW->Write();
+    // hLeadPtvsSubLeadPt_PtHatW->Write();
+    // hLeadPtvsSubLeadPt_DiJetW->Write();
 
     if (fIsMC)
     {
         hGenLeadGenSubLeadJets->Write();
         hGenLeadGenSubLeadJets_W->Write();
         hGenLeadGenSubLeadJets_MidRapidity_W->Write();
-        hGenLeadGenSubLeadJets_WithDijet_W->Write();
-        hGenLeadPtvsGenSubLeadPt_PtHatW->Write();
-        hGenLeadPtvsGenSubLeadPt_DiJetW->Write();
-        hRefLeadRefSubLeadJets->Write();
-        hRefLeadRefSubLeadJets_W->Write();
-        hRefLeadRefSubLeadJets_MidRapidity_W->Write();
-        hRefLeadRefSubLeadJets_WithDijet_W->Write();
-        hRefLeadPtvsRefSubLeadPt_PtHatW->Write();
-        hRefLeadPtvsRefSubLeadPt_DiJetW->Write();
-        hGenLeadingVsGenSubLeading_WO_DiJet_W->Write();
-        hRefLeadingVsRefSubLeadingMatched_W->Write();
+        // hGenLeadGenSubLeadJets_WithDijet_W->Write();
+        // hGenLeadPtvsGenSubLeadPt_PtHatW->Write();
+        // hGenLeadPtvsGenSubLeadPt_DiJetW->Write();
+        // hRefLeadRefSubLeadJets->Write();
+        // hRefLeadRefSubLeadJets_W->Write();
+        // hRefLeadRefSubLeadJets_MidRapidity_W->Write();
+        // hRefLeadRefSubLeadJets_WithDijet_W->Write();
+        // hRefLeadPtvsRefSubLeadPt_PtHatW->Write();
+        // hRefLeadPtvsRefSubLeadPt_DiJetW->Write();
+        // hGenLeadingVsGenSubLeading_WO_DiJet_W->Write();
+        // hRefLeadingVsRefSubLeadingMatched_W->Write();
     }
 
     gDirectory->cd("..");
@@ -875,10 +875,10 @@ void HistoManagerDiJet ::writeOutput()
     hInclusiveRecoJetPt->Write();
     hInclusiveRecoJetPt_W->Write();
     hSelectedInclusiveRecoJetPt_MidRapidity_W->Write();
-    hInclusiveRecoJetEtaCMFrame->Write();
-    hInclusiveRecoJetEtaCMFrame_W->Write();
-    hInclusiveRecoJetEtaLabFrame->Write();
-    hInclusiveRecoJetEtaLabFrame_W->Write();
+    // hInclusiveRecoJetEtaCMFrame->Write();
+    // hInclusiveRecoJetEtaCMFrame_W->Write();
+    // hInclusiveRecoJetEtaLabFrame->Write();
+    // hInclusiveRecoJetEtaLabFrame_W->Write();
     hSelectedInclusiveRecoJetEtaMidRapidity_W->Write();
     hLeadingRecoJetPt->Write();
     hLeadingRecoJetPt_W->Write();
@@ -902,15 +902,15 @@ void HistoManagerDiJet ::writeOutput()
         hSubLeadingGenJetPt_W->Write();
         hLeadingGenJetPtWithDijet_W->Write();
         hSubLeadingGenJetPtWithDijet_W->Write();
-        hInclusiveRefJetPt->Write();
-        hInclusiveRefJetPt_W->Write();
-        hSelectedInclusiveRefJetPt_MidRapidity_W->Write();
-        hLeadingRefJetPt->Write();
-        hLeadingRefJetPt_W->Write();
-        hSubLeadingRefJetPt->Write();
-        hSubLeadingRefJetPt_W->Write();
-        hLeadingRefJetPtWithDijet_W->Write();
-        hSubLeadingRefJetPtWithDijet_W->Write();
+        // hInclusiveRefJetPt->Write();
+        // hInclusiveRefJetPt_W->Write();
+        // hSelectedInclusiveRefJetPt_MidRapidity_W->Write();
+        // hLeadingRefJetPt->Write();
+        // hLeadingRefJetPt_W->Write();
+        // hSubLeadingRefJetPt->Write();
+        // hSubLeadingRefJetPt_W->Write();
+        // hLeadingRefJetPtWithDijet_W->Write();
+        // hSubLeadingRefJetPtWithDijet_W->Write();
     }
     hXj_C0_W->Write();
     hXj_C0_DiJetW->Write();
