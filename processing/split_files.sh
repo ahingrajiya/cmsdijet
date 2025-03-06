@@ -16,7 +16,7 @@ NEW_DIR="${input_file%.*}"
 
 mkdir -p "${NEW_DIR}_Split"
 
-rm -f "${NEW_DIR}_Split/*"
+rm -f "${NEW_DIR}_Split/*.txt"
 
 
 
