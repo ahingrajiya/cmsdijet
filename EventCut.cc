@@ -35,6 +35,7 @@ ClassImp(EventCut)
                            fPBeamScrapingFilter{kFALSE},
                            fPClusterCompatibilityFilter{kFALSE},
                            fpVertexFilterCutdz1p0{kFALSE},
+                           fHLT_HIPuAK4CaloJet80Eta5p1_v1{kFALSE},
                            fEventsPassed{0}, fEventsFailed{0},
                            fMultiplicity{-5000, 5000}
 {
@@ -194,13 +195,21 @@ Bool_t EventCut::pass(const Event *ev)
         if (ev->trigAndSkim()->pVertexFilterCutdz1p0() == 0)
             goodFilters = kFALSE;
     }
+    Bool_t goodTrigger = kTRUE;
+    if (fHLT_HIPuAK4CaloJet80Eta5p1_v1)
+    {
+        if (ev->trigAndSkim()->HLT_HIPuAK4CaloJet80Eta5p1_v1() == 0)
+        {
+            goodTrigger = kFALSE;
+        }
+    }
     if (fVerbose)
     {
         std::cout << Form("Event filters passed: %s\n", (goodFilters) ? "true" : "false");
     }
 
     Bool_t passEvent = goodVx && goodVy && goodVz && goodHiBin &&
-                       goodPtHat && goodPtHatWeight && goodMultiplicity && goodFilters && goodHiBinShifted;
+                       goodPtHat && goodPtHatWeight && goodMultiplicity && goodFilters && goodHiBinShifted && goodTrigger;
     (passEvent) ? fEventsPassed++ : fEventsFailed++;
 
     return passEvent;

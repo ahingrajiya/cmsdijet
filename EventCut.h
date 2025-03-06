@@ -109,6 +109,7 @@ public:
   void usePBeamScrapingFilter() { fPBeamScrapingFilter = kTRUE; }
   void usePvertexFilterCutdz1p0() { fpVertexFilterCutdz1p0 = kTRUE; }
   void usePClusterCompatibilityFilter() { fPClusterCompatibilityFilter = kTRUE; }
+  void useHiPu4CaloJet80Eta5p1() { fHLT_HIPuAK4CaloJet80Eta5p1_v1 = kTRUE; }
   /// @brief Report information about
   void report();
   /// @brief Check if evn
@@ -152,6 +153,7 @@ private:
   Bool_t fPPAprimaryVertexFilter;
   Bool_t fPBeamScrapingFilter;
   Bool_t fPClusterCompatibilityFilter;
+  Bool_t fHLT_HIPuAK4CaloJet80Eta5p1_v1;
 
   Bool_t fpVertexFilterCutdz1p0;
 

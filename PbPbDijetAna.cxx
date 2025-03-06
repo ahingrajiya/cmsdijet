@@ -72,6 +72,7 @@ int main(int argc, char *argv[])
     eventCut->usePhfCoincFilter2Th4();
     eventCut->useHBHENoiseFilterResultRun2Loose();
     eventCut->useCollisionEventSelectionAODv2();
+    eventCut->useHiPu4CaloJet80Eta5p1();
     eventCut->setMultiplicty(0, 10000);
     if (isMC)
     {
@@ -110,6 +111,7 @@ int main(int argc, char *argv[])
     reader->useSkimmingBranch();
     reader->useTrackBranch();
     reader->useJets();
+    reader->useHltBranch();
     reader->setJetCollectionBranchName(jetBranchName.Data());
     reader->setCollidingEnergy(collEnergyGeV);
     reader->setCollidingSystem(collSystem.Data());
