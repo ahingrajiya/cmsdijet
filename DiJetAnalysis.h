@@ -48,20 +48,35 @@ public:
     ///@brief Return a list of objects to be written as output
     virtual TList *getOutputList();
 
+    ///@brief Set Multiplicity or Centrality bins
+    void setBins(const std::vector<std::pair<Int_t, Double_t>> &Bins)
+    {
+        for (const auto &[threshold, value] : Bins)
+        {
+            fBins[threshold] = value;
+        }
+    }
     ///@brief Set debug information
-    void setDebug(const Bool_t &debug) { fDebug = debug; }
+    void setDebug(const Bool_t &debug)
+    {
+        fDebug = debug;
+    }
     ///@brief Add histogram Manager
     void addHistoManager(HistoManagerDiJet *hm) { fHM = hm; }
     ///@brief Set DeltaPhi selection for dijet
     void setDeltaPhi(const Double_t &deltaphi) { fDeltaPhi = deltaphi; }
-    ///@brief Set if it is pPb dataset or not
-    void setIspPb() { fIspPb = kTRUE; }
     ///@brief Set if dataset is MC or not
     void setIsMC(const Bool_t &isMC) { fIsMC = isMC; }
     ///@brief Set if it is Pbgoing direction
-    void setIsPbGoing() { fIsPbGoing = kTRUE; }
+    void setIsPbGoing()
+    {
+        fIsPbGoing = kTRUE;
+    }
     ///@brief Set if it is pgoing direction
-    void setIspGoing() { fIsPbGoing = kFALSE; }
+    void setIspGoing()
+    {
+        fIsPbGoing = kFALSE;
+    }
     ///@brief Set Multiplicity Range
     void setMultiplicityRange(const Double_t &low, const Double_t &hi)
     {
@@ -144,44 +159,33 @@ public:
     void doInJetMultiplicity() { fDoInJetMult = kTRUE; }
     ///@brief Set Dijet Weight type
     void setDijetWeightType(const std::string &dijetWeightType) { fDijetWeightType = dijetWeightType; }
+    ///@brief Set colliding system
+    void setCollSystem(const TString &collSystem) { fCollSystem = collSystem; }
 
 private:
     /// @brief Multiplicity calculator
-    /// @param isPPb Set to be true if it is pPb dataset. For PbPb dataset it needs is set to be false
     /// @param event Event object
     /// @return Returns number of tracks in the event for a given Trk Pt and Eta range
-    Int_t RecoMultiplicity(const Bool_t &isPPb, const Event *event);
+    Int_t RecoMultiplicity(const Event *event);
     /// @brief Corrected Multiplicity calculator
-    /// @param isPPb Set to be true if it is pPb dataset. For PbPb dataset it needs is set to be false
     /// @param event Event object
     /// @return Returns number of tracks in given trk pt and eta range with tracking efficiency correction. Correction factor is [1-(fake rate)]/(efficiency)
-    Float_t CorrectedMultiplicity(const Bool_t &isPPb, const Event *event);
+    Float_t CorrectedMultiplicity(const Event *event);
     /// @brief Sets up correct efficiency tables for tracking efficiency correction
-    /// @param ispPb Set to be true if it is pPb dataset. For PbPb dataset it needs is set to be false
     /// @param trackingTable Path to the tracking efficiency correction table with its name included. Table is usually root file with .root extension
-    void SetUpTrackingEfficiency(const Bool_t &ispPb, const std::string &trackingTable);
-    /// @brief Gen Multiplicity calculator
-    /// @param isMC Gen Multiplicity can only be calculated for MonteCarlo dataset. This parameter has to be set true in order to calculate Gen Multiplicity
+    void SetUpTrackingEfficiency(const std::string &trackingTable);
+    /// @brief Gen and Subevent Multiplicity calculator
     /// @param event Event object
-    /// @return Returns number of generated tracks in the event for a given Trk Pt and Eta range
-    Int_t GenMultiplicity(const Bool_t &isMC, const Event *event);
-    /// @brief Subevent multiplicity calculator for Monte carlo
-    /// @param isMC Subevent multiplicity can only be calculated for MC
-    /// @param ispPb It has to be set to false for PbPb
-    /// @param event Event Object
-    /// @return Subevent multiplicity
-    Int_t SubEventMultiplicity(const Bool_t &isMC, const Bool_t &ispPb, const Event *event);
+    /// @return Returns number of generated tracks in the event for a given Trk Pt and Eta range and generated subevent tracks.
+    std::pair<Int_t, Int_t> GenSubeMultiplicity(const Event *event);
     /// @brief Event weight calculator
-    /// @param ispPb Set to be true if it is pPb dataset. For PbPb dataset it needs is set to be false
-    /// @param isMC Weights are usually applied to MonteCarlo Datasets only.
     /// @param event Event object
     /// @return Returns event level weight which has to be applied to every hisotgram
-    Double_t EventWeight(const Bool_t &ispPb, Bool_t &isMC, const Event *event);
+    Double_t EventWeight(const Event *event);
     /// @brief Multiplicity weights
-    /// @param ispPb Set to be true if it is pPb dataset. For PbPb dataset it needs is set to be false
     /// @param multiplicity Multiplicity of the event
     /// @return Array of weights for multiplicity ranges
-    Double_t *MultiplicityWeight(const Bool_t &ispPb, const Int_t &multiplicity);
+    Double_t *MultiplicityWeight(const Int_t &multiplicity);
     /// @brief Dijet weights
     /// @param ispPb Set to be true if it is pPb dataset. For PbPb dataset it needs is set to be false
     /// @param leadJetPt Leading jet pt
@@ -219,7 +223,7 @@ private:
     /// @brief  Find Multiplicity Bin
     /// @param multiplicity
     /// @return Multiplicity Bin. 1 for 60-120, 2 for 120-185, 3 for 185-250, 4 for 250-400
-    Double_t FindMultiplicityBin(const Int_t &multiplicity);
+    Double_t FindBin(const Int_t &multiplicity);
     /// @brief Move to Center of Mass Frame
     /// @param jetEta Jet Eta
     Float_t MoveToCMFrame(const Float_t &jetEta);
@@ -230,6 +234,8 @@ private:
     void SetUpMultiplicityWeight(const std::string &multWeightTable);
     /// @brief Set up Dijet weight table
     void SetUpDijetWeight(const std::string &dijetWeightTable);
+    ///@brief Set up collision system booleans
+    void CollSystem(const TString &collSystem);
 
     ///@brief Print debug information
     Bool_t fDebug;
@@ -237,6 +243,12 @@ private:
     Double_t fDeltaPhi;
     ///@brief If it is pPb dataset
     Bool_t fIspPb;
+    ///@brief If it is pp dataset
+    Bool_t fIspp;
+    ///@brief If it is PbPb dataset
+    Bool_t fIsPbPb;
+    ///@brief Colliding system
+    TString fCollSystem;
     ///@brief If it it MC
     Bool_t fIsMC;
     ///@brief if it is Pb going direction
@@ -314,6 +326,9 @@ private:
     Int_t fEventCounter;
 
     Int_t fCycleCounter;
+
+    ///@brief Holds dynamic multiplicity or centrality bins
+    std::map<Int_t, Double_t> fBins;
 
     ClassDef(DiJetAnalysis, 0)
 };

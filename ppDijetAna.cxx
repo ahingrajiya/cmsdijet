@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
     TString collSystem{"pp"};
     Int_t collYear{2018};
     TString jetBranchName{"ak4PFJetAnalyzer"};
-    std::vector<float> multiplicityBins{0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
+    std::vector<std::pair<Int_t, Double_t>> multiplicityBins = {{10, 0.0}, {60, 1.0}, {120, 2.0}, {185, 3.0}, {400, 4.0}};
 
     if (argc <= 1)
     {
@@ -118,23 +118,25 @@ int main(int argc, char *argv[])
     HistoManagerDiJet *hm = new HistoManagerDiJet{};
     hm->setIsMC(isMC);
     hm->setMultiplicityBins(multiplicityBins);
+    hm->setCollSystem(collSystem);
     hm->init();
 
     // Initialize analysis
     DiJetAnalysis *analysis = new DiJetAnalysis{};
     analysis->addHistoManager(hm);
     analysis->setIsMC(isMC);
-    analysis->setLeadJetEtaRange(-1.6, 1.6);
-    analysis->setSubLeadJetEtaRange(-1.6, 1.6);
+    analysis->setLeadJetEtaRange(-1.5, 1.5);
+    analysis->setSubLeadJetEtaRange(-1.5, 1.5);
     analysis->setMultiplicityRange(0., 10000.);
     analysis->setMultiplicityType(0);
     analysis->setLeadJetPt(100.);
-    analysis->setSubLeadJetPt(50.);
-    analysis->setDeltaPhi(5. * TMath::Pi() / 6);
-    analysis->setTrackingTable("../PbPb_TrackingEfficiencies/");
+    analysis->setSubLeadJetPt(40.);
+    analysis->setDeltaPhi(2. * TMath::Pi() / 3);
     analysis->setMinTrkPt(0.5);
     analysis->setTrkEtaRange(-2.4, 2.4);
     analysis->doInJetMultiplicity();
+    analysis->setBins(multiplicityBins);
+    analysis->setCollSystem(collSystem);
     analysis->init();
 
     manager->addAnalysis(analysis);

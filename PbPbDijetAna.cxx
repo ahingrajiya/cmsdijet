@@ -37,7 +37,9 @@ int main(int argc, char *argv[])
     Bool_t useCentWeight{kFALSE};
     TString jetBranchName{"akCs4PFJetAnalyzer"};
     Double_t ptHatCut[2]{15., 30.};
-    std::vector<float> multiplicityBins{0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
+    // std::vector<std::pair<Int_t, Double_t>> multiplicityBins = {{10, 0.0}, {60, 1.0}, {120, 2.0}, {185, 3.0}, {250, 4.0}, {400, 5.0}};
+    std::vector<std::pair<Int_t, Double_t>> multiplicityBins = {{20, 0.0}, {60, 1.0}, {100, 2.0}, {160, 3.0}, {180, 4.0}, {200, 5.0}};
+
     std::string path2MultWeight = "../aux_files/PbPb_5020/Multiplicity_Weight/mult_weight_1p0.root";
 
     if (argc <= 1)
@@ -72,7 +74,7 @@ int main(int argc, char *argv[])
     eventCut->usePhfCoincFilter2Th4();
     eventCut->useHBHENoiseFilterResultRun2Loose();
     eventCut->useCollisionEventSelectionAODv2();
-    eventCut->useHiPu4CaloJet80Eta5p1();
+    // eventCut->useHiPu4CaloJet80Eta5p1();
     eventCut->setMultiplicty(0, 10000);
     if (isMC)
     {
@@ -80,7 +82,6 @@ int main(int argc, char *argv[])
     }
     eventCut->setHiBin(0, 200);
     // eventCut->setVerbose();
-
     JetCut *jetCut = new JetCut{};
     jetCut->setPt(0., 1000.);
     jetCut->setEta(-5., 5.);
@@ -133,22 +134,25 @@ int main(int argc, char *argv[])
     HistoManagerDiJet *hm = new HistoManagerDiJet{};
     hm->setIsMC(isMC);
     hm->setMultiplicityBins(multiplicityBins);
+    hm->setCollSystem(collSystem);
     hm->init();
 
     DiJetAnalysis *analysis = new DiJetAnalysis{};
     analysis->addHistoManager(hm);
     analysis->setIsMC(isMC);
-    analysis->setLeadJetEtaRange(-1.6, 1.6);
+    analysis->setLeadJetEtaRange(-1.5, 1.5);
     analysis->setSubLeadJetEtaRange(-1.6, 1.6);
     analysis->setMultiplicityRange(0., 10000.);
     analysis->setMultiplicityType(4);
-    analysis->setDeltaPhi(5. * TMath::Pi() / 6);
+    analysis->setDeltaPhi(2. * TMath::Pi() / 3);
     analysis->setLeadJetPt(100.);
-    analysis->setSubLeadJetPt(50.);
+    analysis->setSubLeadJetPt(40.);
     analysis->setTrackingTable("../PbPb_TrackingEfficiencies/");
     analysis->setMinTrkPt(1.0);
     analysis->setTrkEtaRange(-2.4, 2.4);
     analysis->doInJetMultiplicity();
+    analysis->setCollSystem(collSystem);
+    analysis->setBins(multiplicityBins);
     // analysis->setMultiplicityWeightTable(path2MultWeight);
     // analysis->setUseMultiplicityWeigth();
     analysis->init();

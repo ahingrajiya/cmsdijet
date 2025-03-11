@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
     TString path2JEC = "..";
     Double_t ptHatCut[2]{15., 30.};
     Bool_t isEmbedded{kTRUE};
-    std::vector<float> multiplicityBins{-1.0, 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
+    std::vector<std::pair<Int_t, Double_t>> multiplicityBins = {{10, 0.0}, {60, 1.0}, {120, 2.0}, {185, 3.0}, {250, 4.0}, {400, 5.0}};
     std::string path2DijetWeight = "../aux_files/pPb_8160/Dijet_Weight/DijetWeight10_New.root";
 
     // Command line arguments
@@ -192,7 +192,7 @@ int main(int argc, char *argv[])
     // Dijet Analysis
     DiJetAnalysis *analysis = new DiJetAnalysis{};
     analysis->setIsMC(isMC);
-    analysis->setIspPb();
+    analysis->setCollSystem(collSystem);
     if (isPbGoing)
     {
         analysis->setIsPbGoing();
@@ -222,13 +222,14 @@ int main(int argc, char *argv[])
     analysis->setLeadJetEtaRange(-1.6, 1.6);
     analysis->setSubLeadJetEtaRange(-1.6, 1.6);
     analysis->doInJetMultiplicity();
-
+    analysis->setBins(multiplicityBins);
     // analysis->setVerbose();
 
     analysis->setTrackingTable("../aux_files/pPb_8160/trk_eff_table/Hijing_8TeV_dataBS.root");
     // Initialize Histomanager
     HistoManagerDiJet *hm = new HistoManagerDiJet{};
     hm->setMultiplicityBins(multiplicityBins);
+    hm->setCollSystem(collSystem);
     hm->setIsMC(isMC);
     hm->init();
 
@@ -236,6 +237,7 @@ int main(int argc, char *argv[])
     manager->addAnalysis(analysis);
     manager->init();
     analysis->setNEventsInSample(reader->nEventsTotal());
+    analysis->init();
 
     manager->performAnalysis();
     manager->finish();

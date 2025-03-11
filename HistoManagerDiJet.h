@@ -46,7 +46,16 @@ public:
     ///@brief Write all historgams to output file
     void writeOutput();
     ///@brief Set Multiplicity bins
-    void setMultiplicityBins(const std::vector<float> &bins) { fMultiplicityBins = bins; }
+    void setMultiplicityBins(const std::vector<std::pair<Int_t, Double_t>> &bins)
+    {
+        fMultiplicityBins.clear();
+        for (const auto &[threshold, value] : bins)
+        {
+            fMultiplicityBins.push_back(value);
+        }
+    }
+    ///@brief Set Collision System
+    void setCollSystem(const TString &collSystem) { fCollSystem = collSystem; }
 
     TH1D *hPtHat;
     TH1D *hPtHat_W;
@@ -193,6 +202,7 @@ private:
     Bool_t fIsMC;
 
     std::vector<float> fMultiplicityBins;
+    TString fCollSystem;
 
     ClassDef(HistoManagerDiJet, 1)
 };
