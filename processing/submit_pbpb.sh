@@ -62,7 +62,7 @@ for filename in ${input_files_list}/*.txt; do
         +JobFlavour     = "longlunch"
         getenv          = True
         requirements    =((OpSysAndVer =?= "AlmaLinux9") && (CERNEnvironment =?= "qa"))
-        RequestCpus     = 2
+        RequestCpus     = 1
         environment     = "X509_USER_PROXY=${EXEC_PATH}/processing/voms_proxy.txt"
         transfer_input_files  = ${EXEC_PATH}/processing/voms_proxy.txt	
 
