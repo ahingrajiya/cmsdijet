@@ -82,6 +82,18 @@ public:
   void setPClusterCompatibilityFilter(const Int_t &b) { fPClusterCompatibilityFilter = (Char_t)b; }
   void setpVertexFilterCutdz1p0(const Int_t &b) { fpVertexFilterCutdz1p0 = (Char_t)b; }
 
+  void setFilterValues(const std::vector<Int_t> &filterValues)
+  {
+    fFilterValues.clear();
+    fFilterValues.resize(filterValues.size());
+    fFilterValues = filterValues;
+  }
+  void setTriggerValues(const std::vector<Int_t> &triggerValues)
+  {
+    fTriggerValues.clear();
+    fTriggerValues.resize(triggerValues.size());
+    fTriggerValues = triggerValues;
+  }
   //
   // Getters
   //
@@ -140,6 +152,12 @@ public:
   Int_t pClusterCompatibilityFilter() const { return (Int_t)fPClusterCompatibilityFilter; }
   Int_t pVertexFilterCutdz1p0() const { return (Int_t)fpVertexFilterCutdz1p0; }
 
+  std::vector<std::pair<std::string, Int_t>> getTriggerPairs() const
+  {
+    return fTriggerPairs;
+  }
+  std::vector<std::pair<std::string, Int_t>> getFilterPairs() const { return fFilterPairs; }
+
 private:
   // HLT part
 
@@ -194,6 +212,27 @@ private:
   Char_t fPVertexFilterCutEandG;
   Char_t fPClusterCompatibilityFilter;
   Char_t fpVertexFilterCutdz1p0;
+
+  std::vector<std::string> fTriggerNames;
+  std::vector<std::string> fFilterNames;
+
+  std::vector<Int_t> fFilterValues;
+  std::vector<Int_t> fTriggerValues;
+
+  void makeTriggerPairs()
+  {
+
+    fTriggerPairs.clear();
+    fTriggerPairs.resize(fTriggerNames.size());
+
+    for (size_t i = 0; i < fTriggerNames.size(); i++)
+    {
+      fTriggerPairs[i] = (std::make_pair(fTriggerNames[i], fTriggerValues[i]));
+    }
+  }
+
+  std::vector<std::pair<std::string, Int_t>> fTriggerPairs;
+  std::vector<std::pair<std::string, Int_t>> fFilterPairs;
 
   ClassDef(TriggerAndSkim, 0)
 };

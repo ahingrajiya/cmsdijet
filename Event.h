@@ -72,6 +72,11 @@ public:
   void setGenJetCollectionIsFilled() { fGenJetsCollectionIsFilled = kTRUE; }
   /// @brief Set event number in the process
   void setEventNumber(const Long64_t &eventNumber) { fEventNumber = eventNumber; }
+  /// @brief Set trigger name and value
+  void setTriggerNameAndValue(const std::vector<std::pair<std::string, Int_t>> &triggerNameValuePair) { fTriggerNamesAndValues = triggerNameValuePair; }
+  /// @brief Set skim filter name and value
+  void setSkimFilterNameAndValue(const std::vector<std::pair<std::string, Int_t>> &filterNameValuePair) { fSkimFilterNamesAndValues = filterNameValuePair; }
+
   /// @brief  Print event information
   void print();
 
@@ -120,8 +125,10 @@ public:
   RecoJetCollection *recoJetCollection() const { return fRecoJetCollection; }
   /// @brief Return pointer to a collection of generated jets
   GenJetCollection *genJetCollection() const { return fGenJetCollection; }
-  /// @brief Return pointer to a trigger and skimming information
-  TriggerAndSkim *trigAndSkim() const { return fTrigAndSkim; }
+  /// @brief Return trigger name and value vector
+  std::vector<std::pair<std::string, Int_t>> triggerNamesAndValues() const { return fTriggerNamesAndValues; }
+  /// @brief Return skim filter name and value vector
+  std::vector<std::pair<std::string, Int_t>> skimFilterNamesAndValues() const { return fSkimFilterNamesAndValues; }
 
 private:
   /// @brief Run index
@@ -154,6 +161,10 @@ private:
   Bool_t fGenJetsCollectionIsFilled;
   ///@brief Event number in the process
   Long64_t fEventNumber;
+  ///@brief Trigger name and triggervalue vector for event
+  std::vector<std::pair<std::string, Int_t>> fTriggerNamesAndValues;
+  ///@brief Skim filter name and filter value vector for event
+  std::vector<std::pair<std::string, Int_t>> fSkimFilterNamesAndValues;
 
   /// @brief Reco jet collection
   RecoJetCollection *fRecoJetCollection;
@@ -164,9 +175,6 @@ private:
   TrackCollection *fTrackCollection;
   /// @brief MC track collection
   GenTrackCollection *fGenTrackCollection;
-
-  /// @brief Trigger and skimming information
-  TriggerAndSkim *fTrigAndSkim;
 
   ClassDef(Event, 1)
 };

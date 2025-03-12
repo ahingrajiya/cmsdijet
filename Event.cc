@@ -28,7 +28,8 @@ Event::Event() : TObject(), fRunId{0}, fEventId{0}, fLumi{0},
     fGenJetCollection = new GenJetCollection{};
     fTrackCollection = new TrackCollection{};
     fGenTrackCollection = new GenTrackCollection{};
-    fTrigAndSkim = new TriggerAndSkim{};
+    fTriggerNamesAndValues.clear();
+    fSkimFilterNamesAndValues.clear();
 }
 
 //________________
@@ -48,7 +49,8 @@ Event::Event(const UInt_t &runId, const ULong64_t &eventId, const UInt_t &lumi,
     fGenJetCollection = new GenJetCollection{};
     fTrackCollection = new TrackCollection{};
     fGenTrackCollection = new GenTrackCollection{};
-    fTrigAndSkim = new TriggerAndSkim{};
+    fTriggerNamesAndValues.clear();
+    fSkimFilterNamesAndValues.clear();
 }
 
 //________________
@@ -78,9 +80,9 @@ Event::~Event()
     {
         delete *iter;
     }
-    // Clear trigger and skim instance
-    if (fTrigAndSkim)
-        delete fTrigAndSkim;
+    // Clear trigger and skim filter
+    fTriggerNamesAndValues.clear();
+    fSkimFilterNamesAndValues.clear();
 }
 
 //________________

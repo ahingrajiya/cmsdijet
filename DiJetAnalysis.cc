@@ -180,7 +180,7 @@ void DiJetAnalysis::SetUpDijetWeight(const std::string &dijetWeightTable)
 void DiJetAnalysis::SetUpTrackingEfficiency(const std::string &trackingEfficiencyTable)
 {
 
-    std::cout << "Dijet Analysis::SetUpTrackingEfficiency Setting up Tracking EfficiencyT Tables" << std::endl;
+    // std::cout << "Dijet Analysis::SetUpTrackingEfficiency Setting up Tracking EfficiencyT Tables" << std::endl;
     if (fIsPbPb)
     {
         std::cout << "Dijet Analysis::SetUpTrackingEfficiency Setting up Tracking EfficiencyT Tables for PbPb" << std::endl;

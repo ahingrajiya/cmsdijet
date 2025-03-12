@@ -168,6 +168,12 @@ public:
     /// @brief Set Jet ID Type
     void setJetIDType(const Int_t &jetIDType) { fJetIDType = {jetIDType}; }
 
+    ///@brief Set Filter names
+    void setFilters(const std::vector<std::string> &filters) { fFilters = filters; }
+
+    ///@brief Set Trigger names
+    void setTriggers(const std::vector<std::string> &triggers) { fTriggers = triggers; }
+
 private:
     /// @brief Setup input stream (either single file or a list of files)
     void setInputStream(const Char_t *inputStream)
@@ -346,57 +352,13 @@ private:
 
     //
     // Trigger and skimming information
-    //
 
-    Int_t fHLT_HIAK4PFJet15_v1;
-    Int_t fHLT_HIAK4PFJet15_v1_Prescl;
-    Int_t fHLT_HIAK4PFJet30_v1;
-    Int_t fHLT_HIAK4PFJet30_v1_Prescl;
-    Int_t fHLT_HIAK4PFJet40_v1;
-    Int_t fHLT_HIAK4PFJet40_v1_Prescl;
-    Int_t fHLT_HIAK4PFJet60_v1;
-    Int_t fHLT_HIAK4PFJet60_v1_Prescl;
-    Int_t fHLT_HIAK4PFJet80_v1;
-    Int_t fHLT_HIAK4PFJet80_v1_Prescl;
-    Int_t fHLT_HIAK4PFJet120_v1;
-    Int_t fHLT_HIAK4PFJet120_v1_Prescl;
-
-    Int_t fHLT_HIAK8PFJet15_v1;
-    Int_t fHLT_HIAK8PFJet15_v1_Prescl;
-    Int_t fHLT_HIAK8PFJet25_v1;
-    Int_t fHLT_HIAK8PFJet25_v1_Prescl;
-    Int_t fHLT_HIAK8PFJet40_v1;
-    Int_t fHLT_HIAK8PFJet40_v1_Prescl;
-    Int_t fHLT_HIAK8PFJet60_v1;
-    Int_t fHLT_HIAK8PFJet60_v1_Prescl;
-    Int_t fHLT_HIAK8PFJet80_v1;
-    Int_t fHLT_HIAK8PFJet80_v1_Prescl;
-    Int_t fHLT_HIAK8PFJet140_v1;
-    Int_t fHLT_HIAK8PFJet140_v1_Prescl;
-
-    Int_t fHLT_HIPFJet25_v1;
-    Int_t fHLT_HIPFJet25_v1_Prescl;
-    Int_t fHLT_HIPFJet140_v1;
-    Int_t fHLT_HIPFJet140_v1_Prescl;
-
-    Int_t fHLT_HIPuAK4CaloJet80Eta5p1_v1;
-    Int_t fHLT_HIPuAK4CaloJet100Eta5p1_v1;
+    std::vector<std::string> fTriggers;
+    Int_t *fTriggerPointers;
 
     // Skimanalysis part
-    Int_t fHBHENoiseFilterResultRun2Loose;
-    Int_t fHBHENoiseFilterResultRun2Tight;
-    Int_t fHBHEIsoNoiseFilterResult;
-    Int_t fCollisionEventSelectionAODv2;
-    Int_t fPhfCoincFilter2Th4;
-    Int_t fPPAprimaryVertexFilter;
-    Int_t fPBeamScrapingFilter;
-    Int_t fPprimaryVertexFilter;
-    Int_t fPVertexFilterCutG;
-    Int_t fPVertexFilterCutGloose;
-    Int_t fPVertexFilterCutGtight;
-    Int_t fPVertexFilterCutE;
-    Int_t fPVertexFilterCutEandG;
-    Int_t fPClusterCompatibilityFilter;
+    std::vector<std::string> fFilters;
+    Int_t *fFilterPointers;
 
     //
     // Jet information
