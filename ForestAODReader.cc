@@ -537,7 +537,7 @@ Int_t ForestAODReader::setupChains()
                     // Open file
                     if (fIsInStore)
                     {
-                        file = "root://xrootd-vanderbilt.sites.opensciencegrid.org/" + file;
+                        file = "root://cmsxrootd.fnal.gov:1094/" + file;
                     }
 
                     // Open file
