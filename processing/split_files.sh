@@ -25,7 +25,7 @@ if [ $nfiles_per_job -eq 0 ]; then
     nfiles_per_job=1
 fi
 
-split -l $nfiles_per_job "$input_file" "${NEW_DIR}_Split/${input_file%.*}_part_" -d --additional-suffix=.txt
+split -l $nfiles_per_job "$input_file" "${NEW_DIR}_Split/${input_file%.*}_part_" -d -a 4 --additional-suffix=.txt
 
 echo "${input_file_path}${NEW_DIR}_Split"
 

@@ -833,7 +833,7 @@ void ForestAODReader::report()
         {
             report += TString::Format("\tTrigger %i :\t %s\n", i + 1, fTriggers[i].c_str());
         }
-    report += TString::Format("Use Skimming Branch              :\t %i\n", fUseSkimmingBranch);
+    report += TString::Format("Use Skimming Branch             :\t %i\n", fUseSkimmingBranch);
     if (fUseSkimmingBranch)
         for (int i = 0; i < fFilters.size(); i++)
         {
