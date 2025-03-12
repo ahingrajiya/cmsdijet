@@ -70,12 +70,6 @@ int main(int argc, char *argv[])
     // Initialize event cuts
     EventCut *eventCut = new EventCut{};
     eventCut->setVz(-15., 15.);
-    eventCut->usePClusterCompatibilityFilter();
-    eventCut->usePPrimaryVertexFilter();
-    eventCut->usePhfCoincFilter2Th4();
-    eventCut->useHBHENoiseFilterResultRun2Loose();
-    eventCut->useCollisionEventSelectionAODv2();
-    // eventCut->useHiPu4CaloJet80Eta5p1();
     eventCut->setMultiplicty(0, 10000);
     if (isMC)
     {

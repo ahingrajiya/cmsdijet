@@ -839,7 +839,7 @@ void HistoManagerDiJet ::writeOutput()
     hLeadSubLeadJets_W->Write();
     hLeadSubLeadJets_MidRapidity_W->Write();
     hLeadPtvsSubLeadPt_PtHatW->Write();
-    if (fCollSystem == "pPb")
+    if (fCollSystem == "pPb" || fCollSystem == "pp")
     {
         hLeadSubLeadJets_WithDijet_W->Write();
         hLeadPtvsSubLeadPt_DiJetW->Write();
@@ -857,7 +857,7 @@ void HistoManagerDiJet ::writeOutput()
         hRefLeadRefSubLeadJets_MidRapidity_W->Write();
         hRefLeadPtvsRefSubLeadPt_PtHatW->Write();
 
-        if (fCollSystem == "pPb")
+        if (fCollSystem == "pPb" || fCollSystem == "pp")
         {
             hRefLeadRefSubLeadJets_WithDijet_W->Write();
             hRefLeadPtvsRefSubLeadPt_DiJetW->Write();

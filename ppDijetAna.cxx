@@ -68,9 +68,6 @@ int main(int argc, char *argv[])
     {
         eventCut->setPtHat(30., 1000.);
     }
-    eventCut->usePPAprimaryVertexFilter();
-    eventCut->usePBeamScrapingFilter();
-    eventCut->useHBHENoiseFilterResultRun2Loose();
     // eventCut->setVerbose();
 
     // Initialize jet cuts
@@ -97,6 +94,7 @@ int main(int argc, char *argv[])
     reader->useSkimmingBranch();
     reader->useTrackBranch();
     reader->useJets();
+    reader->setFilters(filters);
     reader->setJetCollectionBranchName(jetBranchName.Data());
     reader->setCollidingEnergy(collEnergyGeV);
     reader->setCollidingSystem(collSystem.Data());
@@ -107,6 +105,7 @@ int main(int argc, char *argv[])
     if (!isMC)
     {
         reader->addJECFile(JECFileDataName.Data());
+        reader->setStoreLocation(kTRUE);
     }
     reader->setPath2JetAnalysis(path2JEC.Data());
     reader->setTrackCut(trackCut);

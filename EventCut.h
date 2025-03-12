@@ -99,17 +99,7 @@ public:
   {
     fVerbose = kTRUE;
   }
-  // Skim selection criteria
-  void usePPrimaryVertexFilter() { fPPrimaryVertexFilter = kTRUE; }
-  void useHBHENoiseFilterResultRun2Loose() { fHBHENoiseFilterResultRun2Loose = kTRUE; }
-  void useCollisionEventSelectionAODv2() { fCollisionEventSelectionAOD = kTRUE; }
-  void usePhfCoincFilter2Th4() { fPhfCoincFilter2Th4 = kTRUE; }
-  void usePhfCoincFilter() { fPhfCoincFilter = kTRUE; }
-  void usePPAprimaryVertexFilter() { fPPAprimaryVertexFilter = kTRUE; }
-  void usePBeamScrapingFilter() { fPBeamScrapingFilter = kTRUE; }
-  void usePvertexFilterCutdz1p0() { fpVertexFilterCutdz1p0 = kTRUE; }
-  void usePClusterCompatibilityFilter() { fPClusterCompatibilityFilter = kTRUE; }
-  void useHiPu4CaloJet80Eta5p1() { fHLT_HIPuAK4CaloJet80Eta5p1_v1 = kTRUE; }
+
   /// @brief Report information about
   void report();
   /// @brief Check if evn
@@ -143,19 +133,6 @@ private:
   Bool_t fVerbose;
   /// @brief Multiplicitu cits
   Int_t fMultiplicity[2];
-
-  // Skim flags
-  Bool_t fPPrimaryVertexFilter;
-  Bool_t fHBHENoiseFilterResultRun2Loose;
-  Bool_t fCollisionEventSelectionAOD;
-  Bool_t fPhfCoincFilter2Th4;
-  Bool_t fPhfCoincFilter;
-  Bool_t fPPAprimaryVertexFilter;
-  Bool_t fPBeamScrapingFilter;
-  Bool_t fPClusterCompatibilityFilter;
-  Bool_t fHLT_HIPuAK4CaloJet80Eta5p1_v1;
-
-  Bool_t fpVertexFilterCutdz1p0;
 
   /// @brief Number of events passed cut
   Long64_t fEventsPassed;

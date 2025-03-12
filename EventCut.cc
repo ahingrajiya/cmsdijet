@@ -26,16 +26,6 @@ ClassImp(EventCut)
                            fShiftVx{0}, fShiftVy{0}, fVR{1e9},
                            fHiBin{-1000, 1000}, fCentVal{-1000., 1000.},
                            fPtHat{-1e9, 1e9}, fPtHatWeight{-1e9, 1e9}, fVerbose{kFALSE},
-                           fPPrimaryVertexFilter{kFALSE},
-                           fHBHENoiseFilterResultRun2Loose{kFALSE},
-                           fCollisionEventSelectionAOD{kFALSE},
-                           fPhfCoincFilter2Th4{kFALSE},
-                           fPhfCoincFilter{kFALSE},
-                           fPPAprimaryVertexFilter{kFALSE},
-                           fPBeamScrapingFilter{kFALSE},
-                           fPClusterCompatibilityFilter{kFALSE},
-                           fpVertexFilterCutdz1p0{kFALSE},
-                           fHLT_HIPuAK4CaloJet80Eta5p1_v1{kFALSE},
                            fEventsPassed{0}, fEventsFailed{0},
                            fMultiplicity{-5000, 5000}
 {
