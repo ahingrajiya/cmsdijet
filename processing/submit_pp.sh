@@ -34,7 +34,7 @@ fi
 if [ "$DataSet" -eq 2 ]; then
     echo "ppRef Datasset is selected"    
     cd ${EXEC_PATH}   
-    sample_prefix="PbPb_MinimumBias"
+    sample_prefix="ppRefData"
     input_files_list="${EXEC_PATH}/files_input/pp5020/DATA/"
     output_path="/eos/user/a/ahingraj/outputs/PYTHIA/"
     isMC=0

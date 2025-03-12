@@ -124,11 +124,6 @@ int main(int argc, char *argv[])
     // Initialize event cuts
     EventCut *eventCut = new EventCut{};
     eventCut->setVz(-15., 15.);
-    eventCut->useHBHENoiseFilterResultRun2Loose();
-    eventCut->usePBeamScrapingFilter();
-    eventCut->usePvertexFilterCutdz1p0();
-    eventCut->usePPAprimaryVertexFilter();
-    eventCut->usePhfCoincFilter();
     eventCut->setMultiplicty(10, 400);
     if (isMC && !isEmbedded)
     {
