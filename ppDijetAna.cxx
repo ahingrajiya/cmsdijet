@@ -34,6 +34,7 @@ int main(int argc, char *argv[])
     Int_t collYear{2018};
     TString jetBranchName{"ak4PFJetAnalyzer"};
     std::vector<std::pair<Int_t, Double_t>> multiplicityBins = {{10, 0.0}, {60, 1.0}, {120, 2.0}, {185, 3.0}, {400, 4.0}};
+    std::vector<std::string> filters{"pPAprimaryVertexFilter", "pBeamScrapingFilter", "HBHENoiseFilterResultRun2Loose"};
 
     if (argc <= 1)
     {

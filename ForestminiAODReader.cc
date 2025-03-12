@@ -96,54 +96,8 @@ void ForestminiAODReader::clearVariables()
     fNGenJets = {0};
     fNTracks = {0};
 
-    fHLT_HIAK4PFJet15_v1 = {0};
-    fHLT_HIAK4PFJet15_v1_Prescl = {0};
-    fHLT_HIAK4PFJet30_v1 = {0};
-    fHLT_HIAK4PFJet30_v1_Prescl = {0};
-    fHLT_HIAK4PFJet40_v1 = {0};
-    fHLT_HIAK4PFJet40_v1_Prescl = {0};
-    fHLT_HIAK4PFJet60_v1 = {0};
-    fHLT_HIAK4PFJet60_v1_Prescl = {0};
-    fHLT_HIAK4PFJet80_v1 = {0};
-    fHLT_HIAK4PFJet80_v1_Prescl = {0};
-    fHLT_HIAK4PFJet120_v1 = {0};
-    fHLT_HIAK4PFJet120_v1_Prescl = {0};
-
-    fHLT_HIAK8PFJet15_v1 = {0};
-    fHLT_HIAK8PFJet15_v1_Prescl = {0};
-    fHLT_HIAK8PFJet25_v1 = {0};
-    fHLT_HIAK8PFJet25_v1_Prescl = {0};
-    fHLT_HIAK8PFJet40_v1 = {0};
-    fHLT_HIAK8PFJet40_v1_Prescl = {0};
-    fHLT_HIAK8PFJet60_v1 = {0};
-    fHLT_HIAK8PFJet60_v1_Prescl = {0};
-    fHLT_HIAK8PFJet80_v1 = {0};
-    fHLT_HIAK8PFJet80_v1_Prescl = {0};
-    fHLT_HIAK8PFJet140_v1 = {0};
-    fHLT_HIAK8PFJet140_v1_Prescl = {0};
-
-    fHLT_HIPFJet25_v1 = {0};
-    fHLT_HIPFJet25_v1_Prescl = {0};
-    fHLT_HIPFJet140_v1 = {0};
-    fHLT_HIPFJet140_v1_Prescl = {0};
-
-    fHLT_HIPuAK4CaloJet80Eta5p1_v1 = {0};
-    fHLT_HIPuAK4CaloJet100Eta5p1_v1 = {0};
-
-    fHBHENoiseFilterResultRun2Loose = {0};
-    fHBHENoiseFilterResultRun2Tight = {0};
-    fHBHEIsoNoiseFilterResult = {0};
-    fCollisionEventSelectionAODv2 = {0};
-    fPhfCoincFilter2Th4 = {0};
-    fPPAprimaryVertexFilter = {0};
-    fPBeamScrapingFilter = {0};
-    fPprimaryVertexFilter = {0};
-    fPVertexFilterCutG = {0};
-    fPVertexFilterCutGloose = {0};
-    fPVertexFilterCutGtight = {0};
-    fPVertexFilterCutE = {0};
-    fPVertexFilterCutEandG = {0};
-    fPClusterCompatibilityFilter = {0};
+    fFilters.clear();
+    fTriggers.clear();
 
     // Loop over jets and tracks
     for (Short_t i{0}; i < 9999; i++)
@@ -678,107 +632,51 @@ void ForestminiAODReader::setupBranches()
 
     if (fUseHltBranch)
     {
-        fHltTree->SetBranchStatus("HLT_HIAK4PFJet15_v1", 1);
-        fHltTree->SetBranchStatus("HLT_HIAK4PFJet15_v1_Prescl", 1);
-        fHltTree->SetBranchStatus("HLT_HIAK4PFJet30_v1", 1);
-        fHltTree->SetBranchStatus("HLT_HIAK4PFJet30_v1_Prescl", 1);
-        fHltTree->SetBranchStatus("HLT_HIAK4PFJet40_v1", 1);
-        fHltTree->SetBranchStatus("HLT_HIAK4PFJet40_v1_Prescl", 1);
-        fHltTree->SetBranchStatus("HLT_HIAK4PFJet60_v1", 1);
-        fHltTree->SetBranchStatus("HLT_HIAK4PFJet60_v1_Prescl", 1);
-        fHltTree->SetBranchStatus("HLT_HIAK4PFJet80_v1", 1);
-        fHltTree->SetBranchStatus("HLT_HIAK4PFJet80_v1_Prescl", 1);
-        fHltTree->SetBranchStatus("HLT_HIAK4PFJet120_v1", 1);
-        fHltTree->SetBranchStatus("HLT_HIAK4PFJet120_v1_Prescl", 1);
+        if (fTriggers.empty())
+        {
+            throw std::runtime_error("No HLT filters provided");
+        }
+        // fTriggerPointers.clear();
+        // fTriggerPointers.resize(fTriggers.size());
+        fTriggerPointers = new Int_t[fTriggers.size()];
+        for (size_t i = 0; i < fTriggers.size(); i++)
+        {
 
-        fHltTree->SetBranchStatus("HLT_HIAK8PFJet15_v1", 1);
-        fHltTree->SetBranchStatus("HLT_HIAK8PFJet15_v1_Prescl", 1);
-        fHltTree->SetBranchStatus("HLT_HIAK8PFJet25_v1", 1);
-        fHltTree->SetBranchStatus("HLT_HIAK8PFJet25_v1_Prescl", 1);
-        fHltTree->SetBranchStatus("HLT_HIAK8PFJet40_v1", 1);
-        fHltTree->SetBranchStatus("HLT_HIAK8PFJet40_v1_Prescl", 1);
-        fHltTree->SetBranchStatus("HLT_HIAK8PFJet60_v1", 1);
-        fHltTree->SetBranchStatus("HLT_HIAK8PFJet60_v1_Prescl", 1);
-        fHltTree->SetBranchStatus("HLT_HIAK8PFJet80_v1", 1);
-        fHltTree->SetBranchStatus("HLT_HIAK8PFJet80_v1_Prescl", 1);
-        fHltTree->SetBranchStatus("HLT_HIAK8PFJet140_v1", 1);
-        fHltTree->SetBranchStatus("HLT_HIAK8PFJet140_v1_Prescl", 1);
-
-        fHltTree->SetBranchStatus("HLT_HIPFJet25_v1", 1);
-        fHltTree->SetBranchStatus("HLT_HIPFJet25_v1_Prescl", 1);
-        fHltTree->SetBranchStatus("HLT_HIPFJet140_v1", 1);
-        fHltTree->SetBranchStatus("HLT_HIPFJet140_v1_Prescl", 1);
-
-        fHltTree->SetBranchStatus("HLT_HIPuAK4CaloJet80Eta5p1_v1", 1);
-        fHltTree->SetBranchStatus("HLT_HIPuAK4CaloJet100Eta5p1_v1", 1);
-
-        fHltTree->SetBranchAddress("HLT_HIAK4PFJet15_v1", &fHLT_HIAK4PFJet15_v1);
-        fHltTree->SetBranchAddress("HLT_HIAK4PFJet15_v1_Prescl", &fHLT_HIAK4PFJet15_v1_Prescl);
-        fHltTree->SetBranchAddress("HLT_HIAK4PFJet30_v1", &fHLT_HIAK4PFJet30_v1);
-        fHltTree->SetBranchAddress("HLT_HIAK4PFJet30_v1_Prescl", &fHLT_HIAK4PFJet30_v1_Prescl);
-        fHltTree->SetBranchAddress("HLT_HIAK4PFJet40_v1", &fHLT_HIAK4PFJet40_v1);
-        fHltTree->SetBranchAddress("HLT_HIAK4PFJet40_v1_Prescl", &fHLT_HIAK4PFJet40_v1_Prescl);
-        fHltTree->SetBranchAddress("HLT_HIAK4PFJet60_v1", &fHLT_HIAK4PFJet60_v1);
-        fHltTree->SetBranchAddress("HLT_HIAK4PFJet60_v1_Prescl", &fHLT_HIAK4PFJet60_v1_Prescl);
-        fHltTree->SetBranchAddress("HLT_HIAK4PFJet80_v1", &fHLT_HIAK4PFJet80_v1);
-        fHltTree->SetBranchAddress("HLT_HIAK4PFJet80_v1_Prescl", &fHLT_HIAK4PFJet80_v1_Prescl);
-        fHltTree->SetBranchAddress("HLT_HIAK4PFJet120_v1", &fHLT_HIAK4PFJet120_v1);
-        fHltTree->SetBranchAddress("HLT_HIAK4PFJet120_v1_Prescl", &fHLT_HIAK4PFJet120_v1_Prescl);
-
-        fHltTree->SetBranchAddress("HLT_HIAK8PFJet15_v1", &fHLT_HIAK8PFJet15_v1);
-        fHltTree->SetBranchAddress("HLT_HIAK8PFJet15_v1_Prescl", &fHLT_HIAK8PFJet15_v1_Prescl);
-        fHltTree->SetBranchAddress("HLT_HIAK8PFJet25_v1", &fHLT_HIAK8PFJet25_v1);
-        fHltTree->SetBranchAddress("HLT_HIAK8PFJet25_v1_Prescl", &fHLT_HIAK8PFJet25_v1_Prescl);
-        fHltTree->SetBranchAddress("HLT_HIAK8PFJet40_v1", &fHLT_HIAK8PFJet40_v1);
-        fHltTree->SetBranchAddress("HLT_HIAK8PFJet40_v1_Prescl", &fHLT_HIAK8PFJet40_v1_Prescl);
-        fHltTree->SetBranchAddress("HLT_HIAK8PFJet60_v1", &fHLT_HIAK8PFJet60_v1);
-        fHltTree->SetBranchAddress("HLT_HIAK8PFJet60_v1_Prescl", &fHLT_HIAK8PFJet60_v1_Prescl);
-        fHltTree->SetBranchAddress("HLT_HIAK8PFJet80_v1", &fHLT_HIAK8PFJet80_v1);
-        fHltTree->SetBranchAddress("HLT_HIAK8PFJet80_v1_Prescl", &fHLT_HIAK8PFJet80_v1_Prescl);
-        fHltTree->SetBranchAddress("HLT_HIAK8PFJet140_v1", &fHLT_HIAK8PFJet140_v1);
-        fHltTree->SetBranchAddress("HLT_HIAK8PFJet140_v1_Prescl", &fHLT_HIAK8PFJet140_v1_Prescl);
-
-        fHltTree->SetBranchAddress("HLT_HIPFJet25_v1", &fHLT_HIPFJet25_v1);
-        fHltTree->SetBranchAddress("HLT_HIPFJet25_v1_Prescl", &fHLT_HIPFJet25_v1_Prescl);
-        fHltTree->SetBranchAddress("HLT_HIPFJet140_v1", &fHLT_HIPFJet140_v1);
-        fHltTree->SetBranchAddress("HLT_HIPFJet140_v1_Prescl", &fHLT_HIPFJet140_v1_Prescl);
-
-        fHltTree->SetBranchAddress("HLT_HIPuAK4CaloJet80Eta5p1_v1", &fHLT_HIPuAK4CaloJet80Eta5p1_v1);
-        fHltTree->SetBranchAddress("HLT_HIPuAK4CaloJet100Eta5p1_v1", &fHLT_HIPuAK4CaloJet100Eta5p1_v1);
+            if (fHltTree->GetLeaf(fTriggers[i].c_str()))
+            {
+                fHltTree->SetBranchStatus(fTriggers[i].c_str(), 1);
+                fHltTree->SetBranchAddress(fTriggers[i].c_str(), &fTriggerPointers[i]);
+            }
+            else
+            {
+                throw std::runtime_error("Terminating ! Following HLT trigger was not found in the tree : " + fTriggers[i]);
+            }
+        }
     } // if ( fUseHltBranch )
 
     // Skimming quantities
     if (fUseSkimmingBranch)
     {
-        fSkimTree->SetBranchStatus("HBHENoiseFilterResultRun2Loose", 1);
-        fSkimTree->SetBranchStatus("HBHENoiseFilterResultRun2Tight", 1);
-        fSkimTree->SetBranchStatus("HBHEIsoNoiseFilterResult", 1);
-        fSkimTree->SetBranchStatus("collisionEventSelectionAODv2", 1);
-        fSkimTree->SetBranchStatus("pphfCoincFilter2Th4", 1);
-        fSkimTree->SetBranchStatus("pPAprimaryVertexFilter", 1);
-        fSkimTree->SetBranchStatus("pBeamScrapingFilter", 1);
-        fSkimTree->SetBranchStatus("pprimaryVertexFilter", 1);
-        fSkimTree->SetBranchStatus("pVertexFilterCutG", 1);
-        fSkimTree->SetBranchStatus("pVertexFilterCutGloose", 1);
-        fSkimTree->SetBranchStatus("pVertexFilterCutGtight", 1);
-        fSkimTree->SetBranchStatus("pVertexFilterCutE", 1);
-        fSkimTree->SetBranchStatus("pVertexFilterCutEandG", 1);
-        fSkimTree->SetBranchStatus("pclusterCompatibilityFilter", 1);
+        if (fFilters.empty())
+        {
+            throw std::runtime_error("No skimming filters provided");
+        }
+        fFilterPointers = new Int_t[fFilters.size()];
+        std::memset(fFilterPointers, 0, fFilters.size() * sizeof(Int_t));
 
-        fSkimTree->SetBranchAddress("HBHENoiseFilterResultRun2Loose", &fHBHENoiseFilterResultRun2Loose);
-        fSkimTree->SetBranchAddress("HBHENoiseFilterResultRun2Tight", &fHBHENoiseFilterResultRun2Tight);
-        fSkimTree->SetBranchAddress("HBHEIsoNoiseFilterResult", &fHBHEIsoNoiseFilterResult);
-        fSkimTree->SetBranchAddress("collisionEventSelectionAODv2", &fCollisionEventSelectionAODv2);
-        fSkimTree->SetBranchAddress("pphfCoincFilter2Th4", &fPhfCoincFilter2Th4);
-        fSkimTree->SetBranchAddress("pPAprimaryVertexFilter", &fPPAprimaryVertexFilter);
-        fSkimTree->SetBranchAddress("pBeamScrapingFilter", &fPBeamScrapingFilter);
-        fSkimTree->SetBranchAddress("pprimaryVertexFilter", &fPprimaryVertexFilter);
-        fSkimTree->SetBranchAddress("pVertexFilterCutG", &fPVertexFilterCutG);
-        fSkimTree->SetBranchAddress("pVertexFilterCutGloose", &fPVertexFilterCutGloose);
-        fSkimTree->SetBranchAddress("pVertexFilterCutGtight", &fPVertexFilterCutGtight);
-        fSkimTree->SetBranchAddress("pVertexFilterCutE", &fPVertexFilterCutE);
-        fSkimTree->SetBranchAddress("pVertexFilterCutEandG", &fPVertexFilterCutEandG);
-        fSkimTree->SetBranchAddress("pclusterCompatibilityFilter", &fPClusterCompatibilityFilter);
+        for (size_t i = 0; i < fFilters.size(); i++)
+        {
+
+            if (fSkimTree->GetLeaf(fFilters[i].c_str()))
+            {
+                fSkimTree->SetBranchStatus(fFilters[i].c_str(), 1);
+                fSkimTree->SetBranchAddress(fFilters[i].c_str(), &fFilterPointers[i]);
+            }
+            else
+            {
+                throw std::runtime_error("Terminating ! Following Skim filter was not found in the tree : " + fFilters[i]);
+            }
+        }
     } // if ( fUseSkimmingBranch )
 
     // Jet quantities
@@ -1061,58 +959,26 @@ Event *ForestminiAODReader::returnEvent()
     // Fill HLT branch
     if (fUseHltBranch)
     {
-        fEvent->trigAndSkim()->setHLT_HIAK4PFJet15_v1(fHLT_HIAK4PFJet15_v1);
-        fEvent->trigAndSkim()->setHLT_HIAK4PFJet15_v1_Prescl(fHLT_HIAK4PFJet15_v1_Prescl);
-        fEvent->trigAndSkim()->setHLT_HIAK4PFJet30_v1(fHLT_HIAK4PFJet30_v1);
-        fEvent->trigAndSkim()->setHLT_HIAK4PFJet30_v1_Prescl(fHLT_HIAK4PFJet30_v1_Prescl);
-        fEvent->trigAndSkim()->setHLT_HIAK4PFJet40_v1(fHLT_HIAK4PFJet40_v1);
-        fEvent->trigAndSkim()->setHLT_HIAK4PFJet40_v1_Prescl(fHLT_HIAK4PFJet40_v1_Prescl);
-        fEvent->trigAndSkim()->setHLT_HIAK4PFJet60_v1(fHLT_HIAK4PFJet60_v1);
-        fEvent->trigAndSkim()->setHLT_HIAK4PFJet60_v1_Prescl(fHLT_HIAK4PFJet60_v1_Prescl);
-        fEvent->trigAndSkim()->setHLT_HIAK4PFJet80_v1(fHLT_HIAK4PFJet80_v1);
-        fEvent->trigAndSkim()->setHLT_HIAK4PFJet80_v1_Prescl(fHLT_HIAK4PFJet80_v1_Prescl);
-        fEvent->trigAndSkim()->setHLT_HIAK4PFJet120_v1(fHLT_HIAK4PFJet120_v1);
-        fEvent->trigAndSkim()->setHLT_HIAK4PFJet120_v1_Prescl(fHLT_HIAK4PFJet120_v1_Prescl);
-
-        fEvent->trigAndSkim()->setHLT_HIAK8PFJet15_v1(fHLT_HIAK8PFJet15_v1);
-        fEvent->trigAndSkim()->setHLT_HIAK8PFJet15_v1_Prescl(fHLT_HIAK8PFJet15_v1_Prescl);
-        fEvent->trigAndSkim()->setHLT_HIAK8PFJet25_v1(fHLT_HIAK8PFJet25_v1);
-        fEvent->trigAndSkim()->setHLT_HIAK8PFJet25_v1_Prescl(fHLT_HIAK8PFJet25_v1_Prescl);
-        fEvent->trigAndSkim()->setHLT_HIAK8PFJet40_v1(fHLT_HIAK8PFJet40_v1);
-        fEvent->trigAndSkim()->setHLT_HIAK8PFJet40_v1_Prescl(fHLT_HIAK8PFJet40_v1_Prescl);
-        fEvent->trigAndSkim()->setHLT_HIAK8PFJet60_v1(fHLT_HIAK8PFJet60_v1);
-        fEvent->trigAndSkim()->setHLT_HIAK8PFJet60_v1_Prescl(fHLT_HIAK8PFJet60_v1_Prescl);
-        fEvent->trigAndSkim()->setHLT_HIAK8PFJet80_v1(fHLT_HIAK8PFJet80_v1);
-        fEvent->trigAndSkim()->setHLT_HIAK8PFJet80_v1_Prescl(fHLT_HIAK8PFJet80_v1_Prescl);
-        fEvent->trigAndSkim()->setHLT_HIAK8PFJet140_v1(fHLT_HIAK8PFJet140_v1);
-        fEvent->trigAndSkim()->setHLT_HIAK8PFJet140_v1_Prescl(fHLT_HIAK8PFJet140_v1_Prescl);
-
-        fEvent->trigAndSkim()->setHLT_HIPFJet25_v1(fHLT_HIPFJet25_v1);
-        fEvent->trigAndSkim()->setHLT_HIPFJet25_v1_Prescl(fHLT_HIPFJet25_v1_Prescl);
-        fEvent->trigAndSkim()->setHLT_HIPFJet140_v1(fHLT_HIPFJet140_v1);
-        fEvent->trigAndSkim()->setHLT_HIPFJet140_v1_Prescl(fHLT_HIPFJet140_v1_Prescl);
-
-        fEvent->trigAndSkim()->setHLT_HIPuAK4CaloJet80Eta5p1_v1(fHLT_HIPuAK4CaloJet80Eta5p1_v1);
-        fEvent->trigAndSkim()->setHLT_HIPuAK4CaloJet100Eta5p1_v1(fHLT_HIPuAK4CaloJet100Eta5p1_v1);
+        std::vector<std::pair<std::string, Int_t>> iTriggerPairs;
+        iTriggerPairs.clear();
+        for (size_t i = 0; i < fTriggers.size(); i++)
+        {
+            iTriggerPairs.push_back(std::make_pair(fTriggers[i], fTriggerPointers[i]));
+        }
+        fEvent->setTriggerNameAndValue(iTriggerPairs);
     }
 
     // Fill skimming branch
     if (fUseSkimmingBranch)
     {
-        fEvent->trigAndSkim()->setHBHENoiseFilterResultRun2Loose(fHBHENoiseFilterResultRun2Loose);
-        fEvent->trigAndSkim()->setHBHENoiseFilterResultRun2Tight(fHBHENoiseFilterResultRun2Tight);
-        fEvent->trigAndSkim()->setHBHEIsoNoiseFilterResult(fHBHEIsoNoiseFilterResult);
-        fEvent->trigAndSkim()->setCollisionEventSelectionAODv2(fCollisionEventSelectionAODv2);
-        fEvent->trigAndSkim()->setPhfCoincFilter2Th4(fPhfCoincFilter2Th4);
-        fEvent->trigAndSkim()->setPPAprimaryVertexFilter(fPPAprimaryVertexFilter);
-        fEvent->trigAndSkim()->setPBeamScrapingFilter(fPBeamScrapingFilter);
-        fEvent->trigAndSkim()->setPprimaryVertexFilter(fPprimaryVertexFilter);
-        fEvent->trigAndSkim()->setPVertexFilterCutG(fPVertexFilterCutG);
-        fEvent->trigAndSkim()->setPVertexFilterCutGloose(fPVertexFilterCutGloose);
-        fEvent->trigAndSkim()->setPVertexFilterCutGtight(fPVertexFilterCutGtight);
-        fEvent->trigAndSkim()->setPVertexFilterCutE(fPVertexFilterCutE);
-        fEvent->trigAndSkim()->setPVertexFilterCutEandG(fPVertexFilterCutEandG);
-        fEvent->trigAndSkim()->setPClusterCompatibilityFilter(fPClusterCompatibilityFilter);
+        std::vector<std::pair<std::string, Int_t>> iFilterPairs;
+        iFilterPairs.clear();
+        for (size_t i = 0; i < fFilters.size(); i++)
+        {
+
+            iFilterPairs.push_back(std::make_pair(fFilters[i], fFilterPointers[i]));
+        }
+        fEvent->setSkimFilterNameAndValue(iFilterPairs);
     }
 
     // fEvent->print();

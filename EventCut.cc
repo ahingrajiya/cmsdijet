@@ -102,14 +102,6 @@ Bool_t EventCut::pass(const Event *ev)
         std::cout << Form("hiBin With Shift        : %d <= %d <= %d \t %s \n",
                           fHiBin[0], ev->hiBinWithShift(), fHiBin[1], (goodHiBin) ? "true" : "false");
     }
-    // const Bool_t goodCent = (fCentVal[0] <= ev->centrality()) &&
-    //                         (ev->centrality() < fCentVal[1]);
-
-    // if (fVerbose)
-    // {
-    //     std::cout << Form("centrality   : %5.2f <= %5.2f < %5.2f \t %s \n",
-    //                       fCentVal[0], ev->centrality(), fCentVal[1], (goodCent) ? "true" : "false");
-    // }
 
     const Bool_t goodPtHat = (fPtHat[0] < ev->ptHat()) &&
                              (ev->ptHat() <= fPtHat[1]);
@@ -138,78 +130,36 @@ Bool_t EventCut::pass(const Event *ev)
                           fMultiplicity[0], ev->multiplicity(), fMultiplicity[1], (goodMultiplicity) ? "true" : "false");
     }
 
-    Bool_t goodFilters = kTRUE;
-    if (fPPrimaryVertexFilter)
-    {
-        if (ev->trigAndSkim()->pprimaryVertexFilter() == 0)
-            goodFilters = kFALSE;
-    }
-    if (fHBHENoiseFilterResultRun2Loose)
-    {
-        if (ev->trigAndSkim()->HBHENoiseFilterResultRun2Loose() == 0)
-            goodFilters = kFALSE;
-    }
-    if (fCollisionEventSelectionAOD)
-    {
-        if (ev->trigAndSkim()->collisionEventSelectionAOD() == 0)
-            goodFilters = kFALSE;
-    }
-    if (fPhfCoincFilter2Th4)
-    {
-        if (ev->trigAndSkim()->phfCoincFilter2Th4() == 0)
-            goodFilters = kFALSE;
-    }
-    if (fPhfCoincFilter)
-    {
-        if (ev->trigAndSkim()->phfCoincFilter() == 0) // const Bool_t goodCent = (fCentVal[0] <= ev->centrality()) &&
-                                                      //                         (ev->centrality() < fCentVal[1]);
+    Bool_t goodFilter = kTRUE;
 
-            // if (fVerbose)
-            // {
-            //     std::cout << Form("centrality   : %5.2f <= %5.2f < %5.2f \t %s \n",
-            //                       fCentVal[0], ev->centrality(), fCentVal[1], (goodCent) ? "true" : "false");
-            // }
-            goodFilters = kFALSE;
-    }
-    if (fPPAprimaryVertexFilter)
+    for (size_t i = 0; i < ev->skimFilterNamesAndValues().size(); i++)
     {
-        if (ev->trigAndSkim()->pPAprimaryVertexFilter() == 0)
-            goodFilters = kFALSE;
-        if (fVerbose)
+        if (ev->skimFilterNamesAndValues()[i].second == 0)
         {
-            std::cout << Form("PAPrimaryVertex: %i\n", ev->trigAndSkim()->pPAprimaryVertexFilter());
+            goodFilter = kFALSE;
+            if (fVerbose)
+            {
+                std::cout << Form("Event filter failed: %s\n", ev->skimFilterNamesAndValues()[i].first.c_str());
+            }
+            break;
         }
-    }
-    if (fPBeamScrapingFilter)
-    {
-        if (ev->trigAndSkim()->pBeamScrapingFilter() == 0)
-            goodFilters = kFALSE;
-    }
-    if (fPClusterCompatibilityFilter)
-    {
-        if (ev->trigAndSkim()->pClusterCompatibilityFilter() == 0)
-            goodFilters = kFALSE;
-    }
-    if (fpVertexFilterCutdz1p0)
-    {
-        if (ev->trigAndSkim()->pVertexFilterCutdz1p0() == 0)
-            goodFilters = kFALSE;
     }
     Bool_t goodTrigger = kTRUE;
-    if (fHLT_HIPuAK4CaloJet80Eta5p1_v1)
+    for (size_t i = 0; i < ev->triggerNamesAndValues().size(); i++)
     {
-        if (ev->trigAndSkim()->HLT_HIPuAK4CaloJet80Eta5p1_v1() == 0)
+        if (ev->triggerNamesAndValues()[i].second == 0)
         {
             goodTrigger = kFALSE;
+            if (fVerbose)
+            {
+                std::cout << Form("Event trigger failed: %s\n", ev->triggerNamesAndValues()[i].first.c_str());
+            }
+            break;
         }
-    }
-    if (fVerbose)
-    {
-        std::cout << Form("Event filters passed: %s\n", (goodFilters) ? "true" : "false");
     }
 
     Bool_t passEvent = goodVx && goodVy && goodVz && goodHiBin &&
-                       goodPtHat && goodPtHatWeight && goodMultiplicity && goodFilters && goodHiBinShifted && goodTrigger;
+                       goodPtHat && goodPtHatWeight && goodMultiplicity && goodFilter && goodHiBinShifted && goodTrigger;
     (passEvent) ? fEventsPassed++ : fEventsFailed++;
 
     return passEvent;

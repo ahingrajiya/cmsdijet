@@ -356,9 +356,9 @@ void HistoManagerDiJet::init()
         hNGenDijetEvent->Sumw2();
     }
 
-    int MultBins[6] = {5000, 5000, 5000, 5000, 200, nMultiplicityBins};
+    int MultBins[6] = {5000, 5000, 5000, 5000, 200, nMultiplicityBins + 1};
     Double_t MultMin[6] = {0.0, 0.0, 0.0, 0.0, 0.0, fMultiplicityBins[0]};
-    Double_t MultMax[6] = {5000.0, 5000.0, 5000.0, 5000.0, 200, fMultiplicityBins[fMultiplicityBins.size() - 1]};
+    Double_t MultMax[6] = {5000.0, 5000.0, 5000.0, 5000.0, 200, fMultiplicityBins[fMultiplicityBins.size() - 1] + 1};
     hMultiplicities = new THnSparseD("hMultiplicities", "Multiplicity Distribution", 6, MultBins, MultMin, MultMax);
     hMultiplicities->Sumw2();
     hMultiplicities_W = new THnSparseD("hMultiplicities_W", "Multiplicity Distribution with Weights", 6, MultBins, MultMin, MultMax);
@@ -366,9 +366,9 @@ void HistoManagerDiJet::init()
     hMultiplicities_DiJet_W = new THnSparseD("hMultiplicities_DiJet_W", "Multiplicity Distribution with Dijet Present", 6, MultBins, MultMin, MultMax);
     hMultiplicities_DiJet_W->Sumw2();
 
-    int JetBins[4] = {200, 52, 64, nMultiplicityBins};
+    int JetBins[4] = {200, 52, 64, nMultiplicityBins + 1};
     Double_t JetMin[4] = {0.0, -5.2, -TMath::Pi(), fMultiplicityBins[0]};
-    Double_t JetMax[4] = {1000.0, 5.2, TMath::Pi(), fMultiplicityBins[fMultiplicityBins.size() - 1]};
+    Double_t JetMax[4] = {1000.0, 5.2, TMath::Pi(), fMultiplicityBins[fMultiplicityBins.size() - 1] + 1};
     hInclusiveUncorrectedRecoJets = new THnSparseD("hInclusiveUncorrectedRecoJets", "Inclusive Uncorrected Reco Jets", 4, JetBins, JetMin, JetMax);
     hInclusiveUncorrectedRecoJets->Sumw2();
     hInclusiveUncorrectedRecoJets_W = new THnSparseD("hInclusiveUncorrectedRecoJets_W", "Inclusive Uncorrected Reco Jets Weighted", 4, JetBins, JetMin, JetMax);
@@ -415,9 +415,9 @@ void HistoManagerDiJet::init()
     hInclusiveUnCorrectedRecoPtVsEtaLabFrame_W = new TH2D("hInclusiveUnCorrectedRecoPtVsEtaLabFrame_W", "Inclusive Uncorrected Reco Jet Pt vs Eta in Lab Frame Weighted", 100, -5., 5., 200, 0., 1000.);
     hInclusiveUnCorrectedRecoPtVsEtaLabFrame_W->Sumw2();
 
-    int LeadSLeadJetBins[7] = {200, 100, 64, 200, 100, 64, nMultiplicityBins};
+    int LeadSLeadJetBins[7] = {200, 100, 64, 200, 100, 64, nMultiplicityBins + 1};
     Double_t LeadSLeadJetMin[7] = {0.0, -5.0, -TMath::Pi(), 0.0, -5.0, -TMath::Pi(), fMultiplicityBins[0]};
-    Double_t LeadSLeadJetMax[7] = {1000.0, 5.0, TMath::Pi(), 1000.0, 5.0, TMath::Pi(), fMultiplicityBins[fMultiplicityBins.size() - 1]};
+    Double_t LeadSLeadJetMax[7] = {1000.0, 5.0, TMath::Pi(), 1000.0, 5.0, TMath::Pi(), fMultiplicityBins[fMultiplicityBins.size() - 1] + 1};
 
     hLeadSubLeadJets = new THnSparseD("hLeadSubLeadJets", "Lead vs SubLead Pt", 7, LeadSLeadJetBins, LeadSLeadJetMin, LeadSLeadJetMax);
     hLeadSubLeadJets->Sumw2();
@@ -461,11 +461,12 @@ void HistoManagerDiJet::init()
     const int nXjAjBins_ER = 26; // number of bins
     double XjBins_ER[nXjAjBins_ER + 1] = {0.0, 0.1, 0.2, 0.3, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0, 1.05, 1.1, 1.15, 1.2, 1.25, 1.3, 1.35, 1.4, 1.45, 1.5};
 
-    int QuenchBins[5] = {nXjAjBins, nDphiBins, 100, 100, nMultiplicityBins};
+    int QuenchBins[5] = {nXjAjBins, nDphiBins, 100, 100, nMultiplicityBins + 1};
     Double_t QuenchMin[5] = {0.0, 0.0, 0.0, 0.0, fMultiplicityBins[0]};
-    Double_t QuenchMax[5] = {2.0, TMath::Pi(), 1000.0, 1000.0, fMultiplicityBins[fMultiplicityBins.size() - 1]};
-    double multBinArray[fMultiplicityBins.size()];
+    Double_t QuenchMax[5] = {2.0, TMath::Pi(), 1000.0, 1000.0, fMultiplicityBins[fMultiplicityBins.size() - 1] + 1};
+    double multBinArray[fMultiplicityBins.size() + 1];
     copy(fMultiplicityBins.begin(), fMultiplicityBins.end(), multBinArray);
+    multBinArray[fMultiplicityBins.size()] = fMultiplicityBins[fMultiplicityBins.size() - 1] + 1;
 
     hRecoQuenching_W = new THnSparseD("hRecoQuenching_W", "Reco Quenching", 5, QuenchBins, QuenchMin, QuenchMax);
     hRecoQuenching_W->GetAxis(0)->Set(QuenchBins[0], XjBins);
