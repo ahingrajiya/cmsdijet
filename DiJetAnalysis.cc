@@ -1008,7 +1008,7 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
             refPhi = (*recoJetIterator)->RefJetPhi();
         }
 
-        std::cout << Form("Raw Pt: %f, Jet Pt: %f, Jet Eta: %f, Jet Phi: %f", rawPt, jetPt, jetEta, jetPhi) << std::endl;
+        // std::cout << Form("Raw Pt: %f, Jet Pt: %f, Jet Eta: %f, Jet Phi: %f", rawPt, jetPt, jetEta, jetPhi) << std::endl;
 
         // std::cout << Form("Ref Pt: %f, Ref Eta: %f, Ref Phi: %f", refPt, refEta, refPhi) << std::endl;
 
