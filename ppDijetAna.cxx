@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
     {
 
         JECFileName = "Spring18_ppRef5TeV_V6_MC_L2Relative_AK4PF.txt";
-        JECFileDataName = "Spring18_ppRef5TeV_V6_DATA_L2L3Residual_AK4PF.txtt";
+        JECFileDataName = "Spring18_ppRef5TeV_V6_DATA_L2L3Residual_AK4PF.txt";
     }
 
     // Initialize package manager
