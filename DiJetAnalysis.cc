@@ -173,7 +173,7 @@ void DiJetAnalysis::SetUpDijetWeight(const std::string &dijetWeightTable)
         }
         hDijetWeight = (TH2D *)fDijetWeightFile->Get("leadptvsubleadpt_map");
         // hDijetWeightRef = (TH2D *)fDijetWeightFile->Get("leadrefptvsubleadrefpt_map");
-        hDijetWeightGen = (TH2D *)fDijetWeightFile->Get("leadgenptvsubleadgenpt_map");
+        // hDijetWeightGen = (TH2D *)fDijetWeightFile->Get("leadgenptvsubleadgenpt_map");
     }
 }
 
@@ -352,7 +352,7 @@ Float_t DiJetAnalysis::DijetWeight(const Bool_t &ispPb, const std::string &type,
         std::cerr << "Returning Dijet Weight = 0" << std::endl;
         return 0;
     }
-    if (fIspPb && fIsMC)
+    if (fIsMC)
     {
 
         if (type == "Reco")
@@ -425,7 +425,6 @@ Double_t DiJetAnalysis::EventWeight(const Event *event)
     Double_t vzWeight{1.};
     Double_t ptHat = event->ptHat();
     Double_t vertexZ = event->vz();
-    fDijetWeight = 1.0;
     if (fIsMC && fIspPb)
     {
         // Magic numbers are (cross section x Nevents generated). These are derived manually and fixed
@@ -480,7 +479,22 @@ Double_t DiJetAnalysis::EventWeight(const Event *event)
         ptHatWeight = event->ptHatWeight();
     }
 
-    if (fUseDijetWeight && fIspPb)
+    eventWeight = ptHatWeight * vzWeight;
+    if (fDebug)
+    {
+        std::cout << "PtHat Weight : " << ptHatWeight << std::endl;
+        std::cout << "Vz Weight : " << vzWeight << std::endl;
+        std::cout << "Event Weight = PtHat Weight * Vz Weight = " << eventWeight << std::endl;
+    }
+
+    return eventWeight;
+}
+
+Float_t DiJetAnalysis::DijetWeight(const Event *event)
+{
+    Float_t dijetWeight = 1.0;
+
+    if (fUseDijetWeight)
     {
         Float_t leadJetPt = -999.;
         Float_t subLeadJetPt = -999.;
@@ -533,7 +547,7 @@ Double_t DiJetAnalysis::EventWeight(const Event *event)
         }
         if (fDijetWeightType == "Reco" && recoDijetPass)
         {
-            fDijetWeight = DijetWeight(fIspPb, fDijetWeightType, leadJetPt, subLeadJetPt);
+            dijetWeight = DijetWeight(fIspPb, fDijetWeightType, leadJetPt, subLeadJetPt);
         }
         else if (fDijetWeightType == "Ref" && recoDijetPass)
         {
@@ -569,7 +583,7 @@ Double_t DiJetAnalysis::EventWeight(const Event *event)
                     }
                 }
             }
-            fDijetWeight = DijetWeight(fIspPb, fDijetWeightType, leadJetPt, subLeadJetPt);
+            dijetWeight = DijetWeight(fIspPb, fDijetWeightType, leadJetPt, subLeadJetPt);
         }
         if (fDijetWeightType == "Gen" && recoDijetPass)
         {
@@ -605,20 +619,11 @@ Double_t DiJetAnalysis::EventWeight(const Event *event)
                     }
                 }
             }
-            fDijetWeight = DijetWeight(fIspPb, fDijetWeightType, leadJetPt, subLeadJetPt);
+            dijetWeight = DijetWeight(fIspPb, fDijetWeightType, leadJetPt, subLeadJetPt);
             // std::cout << "Dijet Weight2 : " << fDijetWeight << std::endl;
         }
     }
-
-    eventWeight = ptHatWeight * vzWeight;
-    if (fDebug)
-    {
-        std::cout << "PtHat Weight : " << ptHatWeight << std::endl;
-        std::cout << "Vz Weight : " << vzWeight << std::endl;
-        std::cout << "Event Weight = PtHat Weight * Vz Weight = " << eventWeight << std::endl;
-    }
-
-    return eventWeight;
+    return dijetWeight;
 }
 
 void DiJetAnalysis::CollSystem(const TString &collSystem)
@@ -840,6 +845,15 @@ void DiJetAnalysis::processEvent(const Event *event)
         return;
     }
     Double_t Event_Weight = EventWeight(event);
+
+    if (fUseDijetWeight)
+    {
+        fDijetWeight = DijetWeight(event);
+    }
+    else
+    {
+        fDijetWeight = 1.0;
+    }
 
     fIsDiJetFound = kFALSE;
     fIsGenDiJetFound = kFALSE;

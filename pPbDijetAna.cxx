@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
     TString path2JEC = "..";
     Double_t ptHatCut[2]{15., 30.};
     Bool_t isEmbedded{kTRUE};
-    std::vector<std::pair<Int_t, Double_t>> multiplicityBins = {{10, 0.0}, {60, 1.0}, {120, 2.0}, {185, 3.0}, {250, 4.0}, {400, 5.0}};
+    std::vector<std::pair<Int_t, Double_t>> multiplicityBins = {{0, 0.0}, {10, 1.0}, {60, 2.0}, {120, 3.0}, {185, 4.0}, {250, 5.0}, {400, 6.0}};
     std::string path2DijetWeight = "../aux_files/pPb_8160/Dijet_Weight/DijetWeight10_New.root";
     std::vector<std::string> filters{"pBeamScrapingFilter", "pPAprimaryVertexFilter", "HBHENoiseFilterResultRun2Loose", "phfCoincFilter", "pVertexFilterCutdz1p0"};
 
@@ -233,7 +233,7 @@ int main(int argc, char *argv[])
     manager->addAnalysis(analysis);
     manager->init();
     analysis->setNEventsInSample(reader->nEventsTotal());
-    analysis->init();
+    // analysis->init();
 
     manager->performAnalysis();
     manager->finish();

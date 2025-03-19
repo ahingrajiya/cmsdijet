@@ -236,6 +236,10 @@ private:
     void SetUpDijetWeight(const std::string &dijetWeightTable);
     ///@brief Set up collision system booleans
     void CollSystem(const TString &collSystem);
+    ///@brief Dijet weight calculator
+    ///@param event Event object
+    ///@return Dijet weight
+    Float_t DijetWeight(const Event *event);
 
     ///@brief Print debug information
     Bool_t fDebug;

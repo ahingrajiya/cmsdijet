@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
     TString jetBranchName{"akCs4PFJetAnalyzer"};
     Double_t ptHatCut[2]{15., 30.};
     // std::vector<std::pair<Int_t, Double_t>> multiplicityBins = {{10, 0.0}, {60, 1.0}, {120, 2.0}, {185, 3.0}, {250, 4.0}, {400, 5.0}};
-    std::vector<std::pair<Int_t, Double_t>> multiplicityBins = {{20, 0.0}, {60, 1.0}, {100, 2.0}, {160, 3.0}, {180, 4.0}, {200, 5.0}};
+    std::vector<std::pair<Int_t, Double_t>> multiplicityBins = {{0, 0.0}, {20, 1.0}, {60, 2.0}, {100, 3.0}, {160, 4.0}, {180, 5.0}, {200, 6.0}};
     std::vector<std::string> filters{"collisionEventSelectionAOD", "phfCoincFilter2Th4", "pclusterCompatibilityFilter", "pprimaryVertexFilter", "HBHENoiseFilterResultRun2Loose"};
     std::vector<std::string> triggers{"HLT_HIPuAK4CaloJet80Eta5p1_v1"};
     std::string path2MultWeight = "../aux_files/PbPb_5020/Multiplicity_Weight/mult_weight_1p0.root";
