@@ -173,7 +173,7 @@ void DiJetAnalysis::SetUpDijetWeight(const std::string &dijetWeightTable)
         }
         hDijetWeight = (TH2D *)fDijetWeightFile->Get("leadptvsubleadpt_map");
         // hDijetWeightRef = (TH2D *)fDijetWeightFile->Get("leadrefptvsubleadrefpt_map");
-        // hDijetWeightGen = (TH2D *)fDijetWeightFile->Get("leadgenptvsubleadgenpt_map");
+        hDijetWeightGen = (TH2D *)fDijetWeightFile->Get("leadgenptvsubleadgenpt_map");
     }
 }
 
