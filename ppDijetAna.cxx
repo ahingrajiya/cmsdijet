@@ -131,8 +131,8 @@ int main(int argc, char *argv[])
     analysis->setSubLeadJetEtaRange(-1.5, 1.5);
     analysis->setMultiplicityRange(0., 10000.);
     analysis->setMultiplicityType(0);
-    analysis->setLeadJetPt(100.);
-    analysis->setSubLeadJetPt(40.);
+    analysis->setLeadJetPt(120.);
+    analysis->setSubLeadJetPt(50.);
     analysis->setDeltaPhi(2. * TMath::Pi() / 3);
     analysis->setMinTrkPt(0.5);
     analysis->setTrkEtaRange(-2.4, 2.4);
