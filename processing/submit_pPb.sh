@@ -59,12 +59,16 @@ if [ "$DataSet" -eq 3 ]; then
         sample_prefix="MB_Pbgoing"
         input_files_list="${EXEC_PATH}/files_input/pPb_8160/DATA_MB/Pbgoing/"
         output_path="/eos/user/a/ahingraj/outputs/MB/"
+        isMC=0
+        isEmbedded=0
 
     elif [ "$isPbgoing" -eq 0 ]; then
         echo "pgoing is selected"
         sample_prefix="MB_pgoing"
         input_files_list="${EXEC_PATH}/files_input/pPb_8160/DATA_MB/pgoing/"
         output_path="/eos/user/a/ahingraj/outputs/MB/"
+        isMC=0
+        isEmbedded=0
     fi
 fi
 
@@ -76,29 +80,58 @@ if [ "$DataSet" -eq 4 ]; then
         sample_prefix="HM185_Pbgoing"
         input_files_list="${EXEC_PATH}/files_input/pPb_8160/DATA_HM185/Pbgoing/"
         output_path="/eos/user/a/ahingraj/outputs/HM185/"
+        isMC=0
+        isEmbedded=0
         
     elif [ "$isPbgoing" -eq 0 ]; then
         echo "pgoing is selected"
         sample_prefix="HM185_pgoing"
         input_files_list="${EXEC_PATH}/files_input/pPb_8160/DATA_HM185/pgoing/"
         output_path="/eos/user/a/ahingraj/outputs/HM185/"
+        isMC=0
+        isEmbedded=0
     fi
 fi
 
 if [ "$DataSet" -eq 5 ]; then
-    echo "HM185 pPb Dataset is selected"
+    echo "HM250 pPb Dataset is selected"
     cd ${EXEC_PATH}
     if [ "$isPbgoing" -eq 1 ]; then
         echo "Pbgoing is selected"
         sample_prefix="HM250_Pbgoing"
         input_files_list="${EXEC_PATH}/files_input/pPb_8160/DATA_HM250/Pbgoing/"
         output_path="/eos/user/a/ahingraj/outputs/HM250/"
+        isMC=0
+        isEmbedded=0
         
     elif [ "$isPbgoing" -eq 0 ]; then
         echo "pgoing is selected"
         sample_prefix="HM250_pgoing"
         input_files_list="${EXEC_PATH}/files_input/pPb_8160/DATA_HM250/pgoing/"
         output_path="/eos/user/a/ahingraj/outputs/HM250/"
+        isMC=0
+        isEmbedded=0
+    fi
+fi
+
+if [ "$DataSet" -eq 6 ]; then
+    echo "EPOS pPb Dataset is selected"
+    cd ${EXEC_PATH}
+    if [ "$isPbgoing" -eq 1 ]; then
+        echo "Pbgoing is selected"
+        sample_prefix="EPOS_Pbgoing"
+        input_files_list="${EXEC_PATH}/files_input/pPb_8160/EPOS/Pbgoing"
+        output_path="/eos/user/a/ahingraj/outputs/EPOS/"
+        isMC=1
+        isEmbedded=1
+        
+    elif [ "$isPbgoing" -eq 0 ]; then
+        echo "pgoing is selected"
+        sample_prefix="EPOS_pgoing"
+        input_files_list="${EXEC_PATH}/files_input/pPb_8160/EPOS/pgoing/"
+        output_path="/eos/user/a/ahingraj/outputs/EPOS/"
+        isMC=1
+        isEmbedded=1
     fi
 fi
 
@@ -134,7 +167,7 @@ EOF
     jobid=0
     for file in ${file_list}/*.txt; do
         cat <<EOF >> processing/pPb_${subfile%.*}.sub
-	    arguments   = ${file_list}/$(basename "$file") ${output_path}${sample_prefix}_PD${PD_Number}_${jobid}.root 0 0 ${isPbgoing} 0 0
+	    arguments   = ${file_list}/$(basename "$file") ${output_path}${sample_prefix}_PD${PD_Number}_${jobid}.root $isMC $isEmbedded ${isPbgoing} 0 0
         output      = processing/condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.out
         error       = processing/condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.err
         log         = processing/condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.log
@@ -144,7 +177,7 @@ EOF
         jobid=$((jobid+1))
     done
     PD_Number=$((PD_Number+1))
-    condor_submit processing/pPb_${subfile%.*}.sub
+    # condor_submit processing/pPb_${subfile%.*}.sub
 done
 
 
