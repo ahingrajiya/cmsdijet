@@ -161,6 +161,10 @@ public:
     void setDijetWeightType(const std::string &dijetWeightType) { fDijetWeightType = dijetWeightType; }
     ///@brief Set colliding system
     void setCollSystem(const TString &collSystem) { fCollSystem = collSystem; }
+    ///@brief set underlying event type
+    void setUEType(const std::string &UEType) { fUEType = UEType; }
+    ///@brief set if dataset is only underlying event dataset
+    void setIsOnlyUE(const Bool_t &isUEData) { fOnlyUEData = isUEData; }
 
 private:
     /// @brief Multiplicity calculator
@@ -319,6 +323,10 @@ private:
     Bool_t fDoInJetMult;
     ///@brief DiJet Weight Type
     std::string fDijetWeightType;
+    ///@brief Underlying event
+    std::string fUEType;
+    ///@brief If dataset is only underlying event dataset like EPOS or HYDJET. In this case we do not need ptHat weights
+    Bool_t fOnlyUEData;
 
     ///@brief Which Multiplicity type to use for event selection.
     /// 0 -> Reco Multiplicity

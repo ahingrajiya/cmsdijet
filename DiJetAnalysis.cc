@@ -31,7 +31,7 @@ ClassImp(DiJetAnalysis)
                                      fIsDiJetFound{kFALSE}, fIsGenDiJetFound{kFALSE}, fVerbose{kFALSE}, fMinTrkPt{0.5}, fTrkEffPbPb{nullptr}, fTrkEffpPb{nullptr}, fTrkEffTable{""}, fEventCounter{0},
                                      fCycleCounter{0}, fMultWeightTable{""}, fMultiplicityWeight{nullptr}, fMultWeight{nullptr}, fDoInJetMult{kFALSE}, fMultiplicityType{0}, fUseDijetWeight{kFALSE},
                                      fDijetWeightTable{""}, hDijetWeight{nullptr}, fDijetWeightFile{nullptr}, fDijetWeight{1.0}, hDijetWeightRef{nullptr}, hDijetWeightGen{nullptr}, fDijetWeightType{"Reco"}, fIspp{kFALSE},
-                                     fIsPbPb{kFALSE}, fCollSystem{""}
+                                     fIsPbPb{kFALSE}, fCollSystem{""}, fUEType{""}, fOnlyUEData{kFALSE}
 {
     fLeadJetEtaRange[0] = {-1.};
     fLeadJetEtaRange[1] = {1.};
@@ -190,7 +190,7 @@ void DiJetAnalysis::SetUpTrackingEfficiency(const std::string &trackingEfficienc
     {
         std::cout << "Dijet Analysis::SetUpTrackingEfficiency Setting up Tracking EfficiencyT Tables for pPb" << std::endl;
 
-        fTrkEffpPb = new TrkEfficiency2016pPb(trackingEfficiencyTable);
+        fTrkEffpPb = new TrkEfficiency2016pPb(trackingEfficiencyTable, fUEType);
     }
     else if (fIspp)
     {
@@ -215,7 +215,7 @@ Float_t DiJetAnalysis::CorrectedMultiplicity(const Event *event)
         Double_t trackPt = (*recoIterator)->TrkPt();
         Double_t trackEta = (*recoIterator)->TrkEta();
 
-        Bool_t isGoodTrack = (trackPt > fMinTrkPt && trackEta > fTrkEtaRange[0] && trackEta < fTrkEtaRange[1]);
+        Bool_t isGoodTrack = (trackPt > fMinTrkPt && trackEta >= fTrkEtaRange[0] && trackEta <= fTrkEtaRange[1]);
         if (fDebug)
         {
             Form("%5.2f < Track Pt: %5.2f , %5.2f < Track Eta: %5.2f < %5,2f \t %s \n", fMinTrkPt, trackPt, fTrkEtaRange[0], trackEta, fTrkEtaRange[1], (isGoodTrack) ? "True" : "False");
@@ -417,6 +417,10 @@ Double_t DiJetAnalysis::EventWeight(const Event *event)
             std::cout << "Event Weight is calculated for MonteCarlo Only. MC is set to be FALSE." << std::endl;
             std::cout << "Returning Event Weight = 1" << std::endl;
         }
+        return 1.0;
+    }
+    if (fOnlyUEData)
+    {
         return 1.0;
     }
 

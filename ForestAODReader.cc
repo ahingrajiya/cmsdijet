@@ -609,12 +609,15 @@ void ForestAODReader::setupBranches()
     fEventTree->SetBranchStatus("evt", 1);
     fEventTree->SetBranchStatus("lumi", 1);
     fEventTree->SetBranchStatus("vz", 1);
-    fEventTree->SetBranchStatus("hiBin", 1); // centrality only for PbPb and XeXe
+    if (fCollidingSystem == "PbPb")
+    {
+        fEventTree->SetBranchStatus("hiBin", 1); // centrality only for PbPb and XeXe
+        fEventTree->SetBranchAddress("hiBin", &fHiBin);
+    }
     fEventTree->SetBranchAddress("run", &fRunId);
     fEventTree->SetBranchAddress("evt", &fEventId);
     fEventTree->SetBranchAddress("lumi", &fLumi);
     fEventTree->SetBranchAddress("vz", &fVertexZ);
-    fEventTree->SetBranchAddress("hiBin", &fHiBin);
 
     if (fIsMc)
     {
@@ -680,16 +683,19 @@ void ForestAODReader::setupBranches()
 
         fJetTree->SetBranchStatus("nref", 1);
         fJetTree->SetBranchStatus("rawpt", 1);
-        fJetTree->SetBranchStatus("jtpt", 1);
         fJetTree->SetBranchStatus("trackMax", 1);
         fJetTree->SetBranchStatus("jteta", 1);
         fJetTree->SetBranchStatus("jtphi", 1);
         fJetTree->SetBranchStatus("WTAeta", 1);
         fJetTree->SetBranchStatus("WTAphi", 1);
 
+        if (fCollidingSystem == "pp" || fCollidingSystem == "PbPb")
+        {
+            fJetTree->SetBranchStatus("jtpt", 1);
+            fJetTree->SetBranchAddress("jtpt", &fRecoJetPt);
+        }
         fJetTree->SetBranchAddress("nref", &fNRecoJets);
         fJetTree->SetBranchAddress("rawpt", &fRawJetPt);
-        fJetTree->SetBranchAddress("jtpt", &fRecoJetPt);
         fJetTree->SetBranchAddress("trackMax", &fRecoJetTrackMax);
         fJetTree->SetBranchAddress("jteta", &fRecoJetEta);
         fJetTree->SetBranchAddress("jtphi", &fRecoJetPhi);
@@ -1004,14 +1010,12 @@ Event *ForestAODReader::returnEvent()
         }
         fEvent->setSkimFilterNameAndValue(iFilterPairs);
     }
-
     if (fEventCut && !fEventCut->pass(fEvent))
     {
         delete fEvent;
         fEvent = nullptr;
         return fEvent;
     }
-
     // Create particle flow jet instances
     if (fUseJets)
     {

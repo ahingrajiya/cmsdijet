@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
     std::vector<std::pair<Int_t, Double_t>> multiplicityBins = {{0, 0.0}, {10, 1.0}, {60, 2.0}, {120, 3.0}, {185, 4.0}, {250, 5.0}, {400, 6.0}};
     std::string path2DijetWeight = "../aux_files/pPb_8160/Dijet_Weight/DijetWeight10_New.root";
     std::vector<std::string> filters{"pBeamScrapingFilter", "pPAprimaryVertexFilter", "HBHENoiseFilterResultRun2Loose", "phfCoincFilter", "pVertexFilterCutdz1p0"};
-
+    std::string UEType{"EPOS"};
     // Command line arguments
     /*
     inputFileList               - input file list with forest file paths
@@ -124,11 +124,6 @@ int main(int argc, char *argv[])
     // Initialize event cuts
     EventCut *eventCut = new EventCut{};
     eventCut->setVz(-15., 15.);
-    eventCut->setMultiplicty(10, 400);
-    if (isMC && !isEmbedded)
-    {
-        eventCut->setMultiplicty(0, 400);
-    }
     if (isMC)
     {
         eventCut->setPtHat(ptHatCut[0], ptHatCut[1]);
@@ -178,6 +173,7 @@ int main(int argc, char *argv[])
     reader->setJetCut(jetCut);
     reader->setTrackCut(trackCut);
     reader->setEventCut(eventCut);
+    reader->setFilters(filters);
     if (!isMC)
     {
         reader->addJECFile(JECFileDataName.Data());
@@ -219,9 +215,11 @@ int main(int argc, char *argv[])
     analysis->setSubLeadJetEtaRange(-1.6, 1.6);
     analysis->doInJetMultiplicity();
     analysis->setBins(multiplicityBins);
+    analysis->setUEType(UEType);
+    analysis->setIsOnlyUE(kTRUE);
     // analysis->setVerbose();
 
-    analysis->setTrackingTable("../aux_files/pPb_8160/trk_eff_table/Hijing_8TeV_dataBS.root");
+    analysis->setTrackingTable("../aux_files/pPb_8160/trk_eff_table/pPb_EPOS_2D_efftables.root");
     // Initialize Histomanager
     HistoManagerDiJet *hm = new HistoManagerDiJet{};
     hm->setMultiplicityBins(multiplicityBins);
