@@ -120,7 +120,7 @@ if [ "$DataSet" -eq 6 ]; then
     if [ "$isPbgoing" -eq 1 ]; then
         echo "Pbgoing is selected"
         sample_prefix="EPOS_Pbgoing"
-        input_files_list="${EXEC_PATH}/files_input/pPb_8160/EPOS/Pbgoing"
+        input_files_list="${EXEC_PATH}/files_input/pPb_8160/EPOS/Pbgoing/"
         output_path="/eos/user/a/ahingraj/outputs/EPOS/"
         isMC=1
         isEmbedded=1
