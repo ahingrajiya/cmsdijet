@@ -139,12 +139,12 @@ int main(int argc, char *argv[])
     analysis->doInJetMultiplicity();
     analysis->setBins(multiplicityBins);
     analysis->setCollSystem(collSystem);
-    // if (isMC)
-    // {
-    //     analysis->setUseDijetWeight();
-    //     analysis->setDijetWeightType(dijetWeightType);
-    //     analysis->setDijetWeightTable(path2DijetWeight);
-    // }
+    if (isMC)
+    {
+        analysis->setUseDijetWeight();
+        analysis->setDijetWeightType(dijetWeightType);
+        analysis->setDijetWeightTable(path2DijetWeight);
+    }
 
     manager->addAnalysis(analysis);
     manager->init();
