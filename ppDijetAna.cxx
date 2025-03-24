@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     std::vector<std::pair<Int_t, Double_t>> multiplicityBins = {{10, 0.0}, {60, 1.0}, {120, 2.0}, {185, 3.0}, {400, 4.0}};
     std::vector<std::string> filters{"pPAprimaryVertexFilter", "pBeamScrapingFilter", "HBHENoiseFilterResultRun2Loose"};
     std::string path2DijetWeight = "../aux_files/pp_5020/Dijet_Weight/PYTHIA_DiJetWeight_Table.root";
-    std::string dijetWeightType{"Gen"};
+    std::string dijetWeightType{"Reco"};
 
     if (argc <= 1)
     {
