@@ -42,6 +42,8 @@ int main(int argc, char *argv[])
     std::vector<std::string> filters{"collisionEventSelectionAOD", "phfCoincFilter2Th4", "pclusterCompatibilityFilter", "pprimaryVertexFilter", "HBHENoiseFilterResultRun2Loose"};
     std::vector<std::string> triggers{"HLT_HIPuAK4CaloJet80Eta5p1_v1"};
     std::string path2MultWeight = "../aux_files/PbPb_5020/Multiplicity_Weight/mult_weight_1p0.root";
+    std::string path2DijetWeight = "../aux_files/pp_5020/Dijet_Weight/PYTHIA_DiJetWeight_Table.root";
+    std::string dijetWeightType{"Gen"};
 
     if (argc <= 1)
     {
@@ -137,18 +139,24 @@ int main(int argc, char *argv[])
     analysis->addHistoManager(hm);
     analysis->setIsMC(isMC);
     analysis->setLeadJetEtaRange(-1.5, 1.5);
-    analysis->setSubLeadJetEtaRange(-1.6, 1.6);
+    analysis->setSubLeadJetEtaRange(-1.5, 1.5);
     analysis->setMultiplicityRange(0., 10000.);
     analysis->setMultiplicityType(4);
     analysis->setDeltaPhi(2. * TMath::Pi() / 3);
-    analysis->setLeadJetPt(100.);
-    analysis->setSubLeadJetPt(40.);
+    analysis->setLeadJetPt(120.);
+    analysis->setSubLeadJetPt(50.);
     analysis->setTrackingTable("../PbPb_TrackingEfficiencies/");
     analysis->setMinTrkPt(1.0);
     analysis->setTrkEtaRange(-2.4, 2.4);
     analysis->doInJetMultiplicity();
     analysis->setCollSystem(collSystem);
     analysis->setBins(multiplicityBins);
+    if (isMC)
+    {
+        analysis->setUseDijetWeight();
+        analysis->setDijetWeightType(dijetWeightType);
+        analysis->setDijetWeightTable(path2DijetWeight);
+    }
     // analysis->setMultiplicityWeightTable(path2MultWeight);
     // analysis->setUseMultiplicityWeigth();
     // std::cout << "Here" << std::endl;
