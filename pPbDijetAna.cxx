@@ -216,7 +216,7 @@ int main(int argc, char *argv[])
     analysis->doInJetMultiplicity();
     analysis->setBins(multiplicityBins);
     analysis->setUEType(UEType);
-    analysis->setIsOnlyUE(kTRUE);
+    // analysis->setIsOnlyUE(kTRUE);
     analysis->doTrackingClosure();
     // analysis->setVerbose();
 
