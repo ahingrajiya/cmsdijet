@@ -31,7 +31,7 @@ ClassImp(DiJetAnalysis)
                                      fIsDiJetFound{kFALSE}, fIsGenDiJetFound{kFALSE}, fVerbose{kFALSE}, fMinTrkPt{0.5}, fTrkEffPbPb{nullptr}, fTrkEffpPb{nullptr}, fTrkEffTable{""}, fEventCounter{0},
                                      fCycleCounter{0}, fMultWeightTable{""}, fMultiplicityWeight{nullptr}, fMultWeight{nullptr}, fDoInJetMult{kFALSE}, fMultiplicityType{0}, fUseDijetWeight{kFALSE},
                                      fDijetWeightTable{""}, hDijetWeight{nullptr}, fDijetWeightFile{nullptr}, fDijetWeight{1.0}, hDijetWeightRef{nullptr}, hDijetWeightGen{nullptr}, fDijetWeightType{"Reco"}, fIspp{kFALSE},
-                                     fIsPbPb{kFALSE}, fCollSystem{""}, fUEType{""}, fOnlyUEData{kFALSE}
+                                     fIsPbPb{kFALSE}, fCollSystem{""}, fUEType{""}, fOnlyUEData{kFALSE}, fDoTrackingClosures{kFALSE}
 {
     fLeadJetEtaRange[0] = {-1.};
     fLeadJetEtaRange[1] = {1.};
@@ -202,7 +202,7 @@ void DiJetAnalysis::SetUpTrackingEfficiency(const std::string &trackingEfficienc
     }
 }
 
-Float_t DiJetAnalysis::CorrectedMultiplicity(const Event *event)
+Float_t DiJetAnalysis::CorrectedMultiplicity(const Event *event, const Double_t &eventWeight, const Double_t &multiplicityBin)
 {
     if (fDebug)
     {
@@ -210,6 +210,7 @@ Float_t DiJetAnalysis::CorrectedMultiplicity(const Event *event)
     }
     Float_t iCorrectedMult = 0;
     TrackIterator recoIterator;
+    Float_t iCorrectionFactor = 1.0;
     for (recoIterator = event->trackCollection()->begin(); recoIterator != event->trackCollection()->end(); recoIterator++)
     {
         Double_t trackPt = (*recoIterator)->TrkPt();
@@ -232,7 +233,17 @@ Float_t DiJetAnalysis::CorrectedMultiplicity(const Event *event)
                     return -1;
                 }
                 else
-                    iCorrectedMult += fTrkEffpPb->getCorrection(trackPt, trackEta);
+                {
+                    iCorrectionFactor = fTrkEffpPb->getCorrection(trackPt, trackEta);
+                    iCorrectedMult += iCorrectionFactor;
+                    if (fDoTrackingClosures)
+                    {
+                        fHM->hTrackPtVsEta->Fill(trackEta, trackPt, multiplicityBin);
+                        fHM->hTrackPtVsEta_W->Fill(trackEta, trackPt, multiplicityBin, eventWeight);
+                        fHM->hTrackPtVsEtaCorrected->Fill(trackEta, trackPt, multiplicityBin, iCorrectionFactor);
+                        fHM->hTrackPtVsEtaCorrected_W->Fill(trackEta, trackPt, multiplicityBin, eventWeight * iCorrectionFactor);
+                    }
+                }
             }
             else if (fIsPbPb)
             {
@@ -243,11 +254,29 @@ Float_t DiJetAnalysis::CorrectedMultiplicity(const Event *event)
                     return -1;
                 }
                 else
-                    iCorrectedMult += fTrkEffPbPb->getCorrection(trackPt, trackEta, event->hiBin());
+                {
+                    iCorrectionFactor = fTrkEffPbPb->getCorrection(trackPt, trackEta, event->hiBin());
+                    iCorrectedMult += iCorrectionFactor;
+                    if (fDoTrackingClosures)
+                    {
+                        fHM->hTrackPtVsEta->Fill(trackEta, trackPt, multiplicityBin);
+                        fHM->hTrackPtVsEta_W->Fill(trackEta, trackPt, multiplicityBin, eventWeight);
+                        fHM->hTrackPtVsEtaCorrected->Fill(trackEta, trackPt, multiplicityBin, iCorrectionFactor);
+                        fHM->hTrackPtVsEtaCorrected_W->Fill(trackEta, trackPt, multiplicityBin, eventWeight * iCorrectionFactor);
+                    }
+                }
             }
             else if (fIspp)
             {
+                iCorrectionFactor = 1.0;
                 iCorrectedMult += 1;
+                if (fDoTrackingClosures)
+                {
+                    fHM->hTrackPtVsEta->Fill(trackEta, trackPt, multiplicityBin);
+                    fHM->hTrackPtVsEta_W->Fill(trackEta, trackPt, multiplicityBin, eventWeight);
+                    fHM->hTrackPtVsEtaCorrected->Fill(trackEta, trackPt, multiplicityBin, iCorrectionFactor);
+                    fHM->hTrackPtVsEtaCorrected_W->Fill(trackEta, trackPt, multiplicityBin, eventWeight * iCorrectionFactor);
+                }
             }
         }
     }
@@ -258,7 +287,7 @@ Float_t DiJetAnalysis::CorrectedMultiplicity(const Event *event)
     return iCorrectedMult;
 }
 
-std::pair<Int_t, Int_t> DiJetAnalysis::GenSubeMultiplicity(const Event *event)
+std::pair<Int_t, Int_t> DiJetAnalysis::GenSubeMultiplicity(const Event *event, const Double_t &eventWeight, const Double_t &multiplicityBin)
 {
     if (!fIsMC)
     {
@@ -296,6 +325,11 @@ std::pair<Int_t, Int_t> DiJetAnalysis::GenSubeMultiplicity(const Event *event)
         if (isGoodTrack)
         {
             iGenMult++;
+            if (fDoTrackingClosures)
+            {
+                fHM->hGenTrackPtVsEta->Fill(trackEta, trackPt, multiplicityBin);
+                fHM->hGenTrackPtVsEta_W->Fill(trackEta, trackPt, multiplicityBin, eventWeight);
+            }
             if (fIsPbPb && trackSube > 0)
             {
                 iSubeMult++;
@@ -400,6 +434,10 @@ Float_t DiJetAnalysis::DijetWeight(const Bool_t &ispPb, const std::string &type,
     if (fDebug)
     {
         std::cout << "Dijet Weight : " << weight << std::endl;
+    }
+    if (weight == 0.0)
+    {
+        return 1.0;
     }
     return weight;
 }
@@ -903,13 +941,13 @@ void DiJetAnalysis::processEvent(const Event *event)
     Int_t iRecoMult = event->multiplicity();
     fHM->hRecoMultiplicity_W->Fill(iRecoMult, Event_Weight * fDijetWeight);
 
-    Double_t iCorrectedMult = CorrectedMultiplicity(event);
+    Double_t iCorrectedMult = CorrectedMultiplicity(event, Event_Weight, iMultiplicityBin);
     fHM->hCorrectedMultiplicity_W->Fill(iCorrectedMult, Event_Weight * fDijetWeight);
 
     std::pair<Int_t, Int_t> iGenSubeMult = {0.0, 0.0};
     if (fIsMC)
     {
-        iGenSubeMult = GenSubeMultiplicity(event);
+        iGenSubeMult = GenSubeMultiplicity(event, Event_Weight, iMultiplicityBin);
         fHM->hGenMultiplicity_W->Fill(iGenSubeMult.first, Event_Weight * fDijetWeight);
         fHM->hSubEventMultiplicity_W->Fill(iGenSubeMult.second, Event_Weight * fDijetWeight);
     }

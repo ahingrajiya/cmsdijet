@@ -198,6 +198,13 @@ public:
     TH1D *hGenXj_Projection_W[5];
     TH1D *hGenXj_Projection_DiJetW[5];
 
+    TH3D *hTrackPtVsEta;
+    TH3D *hTrackPtVsEta_W;
+    TH3D *hGenTrackPtVsEta;
+    TH3D *hGenTrackPtVsEta_W;
+    TH3D *hTrackPtVsEtaCorrected;
+    TH3D *hTrackPtVsEtaCorrected_W;
+
 private:
     Bool_t fIsMC;
 
@@ -206,5 +213,4 @@ private:
 
     ClassDef(HistoManagerDiJet, 1)
 };
-
 #endif

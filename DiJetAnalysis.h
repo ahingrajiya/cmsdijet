@@ -165,6 +165,8 @@ public:
     void setUEType(const std::string &UEType) { fUEType = UEType; }
     ///@brief set if dataset is only underlying event dataset
     void setIsOnlyUE(const Bool_t &isUEData) { fOnlyUEData = isUEData; }
+    ///@brief Do tracking closure plots
+    void doTrackingClosure() { fDoTrackingClosures = kTRUE; }
 
 private:
     /// @brief Multiplicity calculator
@@ -173,15 +175,19 @@ private:
     Int_t RecoMultiplicity(const Event *event);
     /// @brief Corrected Multiplicity calculator
     /// @param event Event object
+    /// @param eventWeight Event weight
+    /// @param multiplicityBin Multiplicity bin
     /// @return Returns number of tracks in given trk pt and eta range with tracking efficiency correction. Correction factor is [1-(fake rate)]/(efficiency)
-    Float_t CorrectedMultiplicity(const Event *event);
+    Float_t CorrectedMultiplicity(const Event *event, const Double_t &eventWeight, const Double_t &multiplicityBin);
     /// @brief Sets up correct efficiency tables for tracking efficiency correction
     /// @param trackingTable Path to the tracking efficiency correction table with its name included. Table is usually root file with .root extension
     void SetUpTrackingEfficiency(const std::string &trackingTable);
     /// @brief Gen and Subevent Multiplicity calculator
     /// @param event Event object
+    /// @param eventWeight Event weight
+    /// @param multiplicityBin Multiplicity bin
     /// @return Returns number of generated tracks in the event for a given Trk Pt and Eta range and generated subevent tracks.
-    std::pair<Int_t, Int_t> GenSubeMultiplicity(const Event *event);
+    std::pair<Int_t, Int_t> GenSubeMultiplicity(const Event *event, const Double_t &eventWeight, const Double_t &multiplicityBin);
     /// @brief Event weight calculator
     /// @param event Event object
     /// @return Returns event level weight which has to be applied to every hisotgram
@@ -244,7 +250,6 @@ private:
     ///@param event Event object
     ///@return Dijet weight
     Float_t DijetWeight(const Event *event);
-
     ///@brief Print debug information
     Bool_t fDebug;
     ///@brief Delta Phi selection for dijet
@@ -327,6 +332,8 @@ private:
     std::string fUEType;
     ///@brief If dataset is only underlying event dataset like EPOS or HYDJET. In this case we do not need ptHat weights
     Bool_t fOnlyUEData;
+    ///@brief Do Tracking Closures
+    Bool_t fDoTrackingClosures;
 
     ///@brief Which Multiplicity type to use for event selection.
     /// 0 -> Reco Multiplicity

@@ -43,7 +43,8 @@ ClassImp(HistoManagerDiJet)
                                              hLeadingRecoJetPtWithDijet_W{nullptr}, hSubLeadingRecoJetPtWithDijet_W{nullptr}, hLeadingGenJetPtWithDijet_W{nullptr}, hSubLeadingGenJetPtWithDijet_W{nullptr}, hXj_Projection_W{nullptr}, hXj_Projection_DiJetW{nullptr},
                                              hGenXj_Projection_W{nullptr}, hGenXj_Projection_DiJetW{nullptr}, hInclusiveRefJetPt{nullptr}, hInclusiveRefJetPt_W{nullptr}, hInclusiveRefJetsCMFrame{nullptr}, hInclusiveRefJetsCMFrame_W{nullptr}, hInclusiveRefJetsLabFrame{nullptr}, hInclusiveRefJetsLabFrame_W{nullptr},
                                              hSelectedInclusiveRefJetsMidRapidity_W{nullptr}, hSelectedInclusiveRefJetPt_MidRapidity_W{nullptr}, hLeadingRefJetPt{nullptr}, hLeadingRefJetPt_W{nullptr}, hSubLeadingRefJetPt{nullptr}, hSubLeadingRefJetPt_W{nullptr},
-                                             hLeadingRefJetPtWithDijet_W{nullptr}, hSubLeadingRefJetPtWithDijet_W{nullptr}, hXj_C0_W{nullptr}, hXj_C0_DiJetW{nullptr}, hGenXj_C0_W{nullptr}, hGenXj_C0_DiJetW{nullptr}
+                                             hLeadingRefJetPtWithDijet_W{nullptr}, hSubLeadingRefJetPtWithDijet_W{nullptr}, hXj_C0_W{nullptr}, hXj_C0_DiJetW{nullptr}, hGenXj_C0_W{nullptr}, hGenXj_C0_DiJetW{nullptr}, hTrackPtVsEta{nullptr}, hTrackPtVsEta_W{nullptr}, hTrackPtVsEtaCorrected{nullptr}, hTrackPtVsEtaCorrected_W{nullptr},
+                                             hGenTrackPtVsEta{nullptr}, hGenTrackPtVsEta_W{nullptr}
 {
     /* Empty*/
 }
@@ -290,6 +291,19 @@ HistoManagerDiJet::~HistoManagerDiJet()
     if (hSubLeadingRefJetPtWithDijet_W)
         delete hSubLeadingRefJetPtWithDijet_W;
 
+    if (hGenTrackPtVsEta)
+        delete hGenTrackPtVsEta;
+    if (hGenTrackPtVsEta_W)
+        delete hGenTrackPtVsEta_W;
+    if (hTrackPtVsEta)
+        delete hTrackPtVsEta;
+    if (hTrackPtVsEta_W)
+        delete hTrackPtVsEta_W;
+    if (hTrackPtVsEtaCorrected)
+        delete hTrackPtVsEtaCorrected;
+    if (hTrackPtVsEtaCorrected_W)
+        delete hTrackPtVsEtaCorrected_W;
+
     if (hXj_C0_DiJetW)
         delete hXj_C0_DiJetW;
     if (hXj_C0_W)
@@ -528,6 +542,23 @@ void HistoManagerDiJet::init()
         hRefJES_W = new TH2D("hRefJES_W", "Ref JES Weighted", 200, 0.0, 5.0, 200, 0.0, 1000.0);
         hRefJES_W->Sumw2();
     }
+
+    Double_t trkEtaBins[] = {-2.4, -2.1, -1.8, -1.5, -1.3, -1.1, -0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.1, 1.3, 1.5, 1.8, 2.1, 2.4};
+    Int_t nEtaBins = sizeof(trkEtaBins) / sizeof(Double_t) - 1;
+    Double_t trkPtBins[] = {0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0, 1.2, 1.4, 1.6, 2.0, 2.5, 3.0, 4.0, 5.0, 8.0, 12.0, 30.0, 300.0, 1000.0};
+    Int_t nPtBins = sizeof(trkPtBins) / sizeof(Double_t) - 1;
+    hGenTrackPtVsEta = new TH3D("hGenTrackPtVsEta", "Gen Track Pt vs Eta", nEtaBins, trkEtaBins, nPtBins, trkPtBins, nMultiplicityBins, multBinArray);
+    hGenTrackPtVsEta->Sumw2();
+    hGenTrackPtVsEta_W = new TH3D("hGenTrackPtVsEta_W", "Gen Track Pt vs Eta Weighted", nEtaBins, trkEtaBins, nPtBins, trkPtBins, nMultiplicityBins, multBinArray);
+    hGenTrackPtVsEta_W->Sumw2();
+    hTrackPtVsEta = new TH3D("hRecoTrackPtVsEta", "Reco Track Pt vs Eta", nEtaBins, trkEtaBins, nPtBins, trkPtBins, nMultiplicityBins, multBinArray);
+    hTrackPtVsEta->Sumw2();
+    hTrackPtVsEta_W = new TH3D("hRecoTrackPtVsEta_W", "Reco Track Pt vs Eta Weighted", nEtaBins, trkEtaBins, nPtBins, trkPtBins, nMultiplicityBins, multBinArray);
+    hTrackPtVsEta_W->Sumw2();
+    hTrackPtVsEtaCorrected = new TH3D("hRecoTrackPtVsEtaCorrected", "Reco Track Pt vs Eta Corrected", nEtaBins, trkEtaBins, nPtBins, trkPtBins, nMultiplicityBins, multBinArray);
+    hTrackPtVsEtaCorrected->Sumw2();
+    hTrackPtVsEtaCorrected_W = new TH3D("hRecoTrackPtVsEtaCorrected_W", "Reco Track Pt vs Eta Corrected Weighted", nEtaBins, trkEtaBins, nPtBins, trkPtBins, nMultiplicityBins, multBinArray);
+    hTrackPtVsEtaCorrected_W->Sumw2();
 }
 
 void HistoManagerDiJet::projectHistograms()
@@ -867,6 +898,16 @@ void HistoManagerDiJet ::writeOutput()
             hGenLeadPtvsGenSubLeadPt_DiJetW->Write();
         }
     }
+
+    gDirectory->cd("..");
+    gDirectory->mkdir("Tracks");
+    gDirectory->cd("Tracks");
+    hGenTrackPtVsEta->Write();
+    hGenTrackPtVsEta_W->Write();
+    hTrackPtVsEta->Write();
+    hTrackPtVsEta_W->Write();
+    hTrackPtVsEtaCorrected->Write();
+    hTrackPtVsEtaCorrected_W->Write();
 
     gDirectory->cd("..");
     gDirectory->mkdir("Quenching");
