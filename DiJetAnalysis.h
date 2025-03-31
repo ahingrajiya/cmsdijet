@@ -163,8 +163,6 @@ public:
     void setCollSystem(const TString &collSystem) { fCollSystem = collSystem; }
     ///@brief set underlying event type
     void setUEType(const std::string &UEType) { fUEType = UEType; }
-    ///@brief set if dataset is only underlying event dataset
-    void setIsOnlyUE(const Bool_t &isUEData) { fOnlyUEData = isUEData; }
     ///@brief Do tracking closure plots
     void doTrackingClosure() { fDoTrackingClosures = kTRUE; }
 
@@ -330,8 +328,6 @@ private:
     std::string fDijetWeightType;
     ///@brief Underlying event
     std::string fUEType;
-    ///@brief If dataset is only underlying event dataset like EPOS or HYDJET. In this case we do not need ptHat weights
-    Bool_t fOnlyUEData;
     ///@brief Do Tracking Closures
     Bool_t fDoTrackingClosures;
 

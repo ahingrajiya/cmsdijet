@@ -31,7 +31,7 @@ ClassImp(DiJetAnalysis)
                                      fIsDiJetFound{kFALSE}, fIsGenDiJetFound{kFALSE}, fVerbose{kFALSE}, fMinTrkPt{0.5}, fTrkEffPbPb{nullptr}, fTrkEffpPb{nullptr}, fTrkEffTable{""}, fEventCounter{0},
                                      fCycleCounter{0}, fMultWeightTable{""}, fMultiplicityWeight{nullptr}, fMultWeight{nullptr}, fDoInJetMult{kFALSE}, fMultiplicityType{0}, fUseDijetWeight{kFALSE},
                                      fDijetWeightTable{""}, hDijetWeight{nullptr}, fDijetWeightFile{nullptr}, fDijetWeight{1.0}, hDijetWeightRef{nullptr}, hDijetWeightGen{nullptr}, fDijetWeightType{"Reco"}, fIspp{kFALSE},
-                                     fIsPbPb{kFALSE}, fCollSystem{""}, fUEType{""}, fOnlyUEData{kFALSE}, fDoTrackingClosures{kFALSE}
+                                     fIsPbPb{kFALSE}, fCollSystem{""}, fUEType{""}, fDoTrackingClosures{kFALSE}
 {
     fLeadJetEtaRange[0] = {-1.};
     fLeadJetEtaRange[1] = {1.};
@@ -457,18 +457,19 @@ Double_t DiJetAnalysis::EventWeight(const Event *event)
         }
         return 1.0;
     }
-    if (fOnlyUEData)
-    {
-        return 1.0;
-    }
 
     Double_t ptHatWeight{1.};
     Double_t eventWeight{1.};
     Double_t vzWeight{1.};
     Double_t ptHat = event->ptHat();
     Double_t vertexZ = event->vz();
+    if (ptHat < 0)
+    {
+        return 1.0;
+    }
     if (fIsMC && fIspPb)
     {
+
         // Magic numbers are (cross section x Nevents generated). These are derived manually and fixed
         if (ptHat > 15.0 && ptHat <= 30.)
         {

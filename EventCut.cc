@@ -93,12 +93,13 @@ Bool_t EventCut::pass(const Event *ev)
                           fHiBin[0], ev->hiBinWithShift(), fHiBin[1], (goodHiBin) ? "true" : "false");
     }
 
-    const Bool_t goodPtHat = (fPtHat[0] < ev->ptHat()) &&
-                             (ev->ptHat() <= fPtHat[1]);
+    const Bool_t goodPtHat = ((fPtHat[0] < ev->ptHat()) &&
+                              (ev->ptHat() <= fPtHat[1])) ||
+                             (ev->ptHat() < 0);
 
     if (fVerbose)
     {
-        std::cout << Form("ptHat        : %9.2f <= %9.2f < %9.2f \t %s \n",
+        std::cout << Form("ptHat        : %9.2f <= %9.2f < %9.2f or ptHat < 0 \t %s \n",
                           fPtHat[0], ev->ptHat(), fPtHat[1], (goodPtHat) ? "true" : "false");
     }
 

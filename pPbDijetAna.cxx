@@ -168,7 +168,6 @@ int main(int argc, char *argv[])
     reader->setPath2JetAnalysis(path2JEC.Data());
     reader->setUseJetID();
     reader->setJetIDType(2);
-    // reader->setMatchedJets();
     reader->eventsToProcess(-1);
     reader->setJetCut(jetCut);
     reader->setTrackCut(trackCut);
@@ -209,18 +208,16 @@ int main(int argc, char *argv[])
     analysis->setDeltaPhi(5 * TMath::Pi() / 6);
     analysis->setUseCMFrame();
     analysis->setEtaBoost(etaBoost);
-    analysis->setLeadJetPt(120.);
+    analysis->setLeadJetPt(100.);
     analysis->setSubLeadJetPt(50.);
-    analysis->setLeadJetEtaRange(-1.6, 1.6);
-    analysis->setSubLeadJetEtaRange(-1.6, 1.6);
+    analysis->setLeadJetEtaRange(-1., 1.);
+    analysis->setSubLeadJetEtaRange(-1., 1.);
     analysis->doInJetMultiplicity();
     analysis->setBins(multiplicityBins);
     analysis->setUEType(UEType);
-    // analysis->setIsOnlyUE(kTRUE);
     analysis->doTrackingClosure();
-    // analysis->setVerbose();
-
     analysis->setTrackingTable("../aux_files/pPb_8160/trk_eff_table/pPb_EPOS_2D_efftables.root");
+
     // Initialize Histomanager
     HistoManagerDiJet *hm = new HistoManagerDiJet{};
     hm->setMultiplicityBins(multiplicityBins);
@@ -232,7 +229,6 @@ int main(int argc, char *argv[])
     manager->addAnalysis(analysis);
     manager->init();
     analysis->setNEventsInSample(reader->nEventsTotal());
-    // analysis->init();
 
     manager->performAnalysis();
     manager->finish();
