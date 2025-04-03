@@ -15,10 +15,9 @@ fi
 NEW_DIR="${input_file%.*}"
 
 mkdir -p "${NEW_DIR}_Split"
-
-rm -f "${NEW_DIR}_Split/*.txt"
-
-
+cd "${NEW_DIR}_Split" 
+rm -f *.txt
+cd ../
 
 
 if [ $nfiles_per_job -eq 0 ]; then
