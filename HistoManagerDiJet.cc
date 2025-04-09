@@ -44,7 +44,7 @@ ClassImp(HistoManagerDiJet)
                                              hGenXj_Projection_W{nullptr}, hGenXj_Projection_DiJetW{nullptr}, hInclusiveRefJetPt{nullptr}, hInclusiveRefJetPt_W{nullptr}, hInclusiveRefJetsCMFrame{nullptr}, hInclusiveRefJetsCMFrame_W{nullptr}, hInclusiveRefJetsLabFrame{nullptr}, hInclusiveRefJetsLabFrame_W{nullptr},
                                              hSelectedInclusiveRefJetsMidRapidity_W{nullptr}, hSelectedInclusiveRefJetPt_MidRapidity_W{nullptr}, hLeadingRefJetPt{nullptr}, hLeadingRefJetPt_W{nullptr}, hSubLeadingRefJetPt{nullptr}, hSubLeadingRefJetPt_W{nullptr},
                                              hLeadingRefJetPtWithDijet_W{nullptr}, hSubLeadingRefJetPtWithDijet_W{nullptr}, hXj_C0_W{nullptr}, hXj_C0_DiJetW{nullptr}, hGenXj_C0_W{nullptr}, hGenXj_C0_DiJetW{nullptr}, hTrackPtVsEta{nullptr}, hTrackPtVsEta_W{nullptr}, hTrackPtVsEtaCorrected{nullptr}, hTrackPtVsEtaCorrected_W{nullptr},
-                                             hGenTrackPtVsEta{nullptr}, hGenTrackPtVsEta_W{nullptr}
+                                             hGenTrackPtVsEta{nullptr}, hGenTrackPtVsEta_W{nullptr}, hRecoJES_Eta_W{nullptr}, hRefJES_Eta_W{nullptr}, hRecoJES_Eta_Pt100_W{nullptr}, hRefJES_Eta_Pt100_W{nullptr}, hRecoJES_Eta_Pt120_W{nullptr}, hRefJES_Eta_Pt120_W{nullptr}
 {
     /* Empty*/
 }
@@ -127,6 +127,18 @@ HistoManagerDiJet::~HistoManagerDiJet()
         delete hRecoJES_W;
     if (hRefJES_W)
         delete hRefJES_W;
+    if (hRecoJES_Eta_W)
+        delete hRecoJES_Eta_W;
+    if (hRecoJES_Eta_Pt100_W)
+        delete hRecoJES_Eta_Pt100_W;
+    if (hRecoJES_Eta_Pt120_W)
+        delete hRecoJES_Eta_Pt120_W;
+    if (hRefJES_Eta_W)
+        delete hRefJES_Eta_W;
+    if (hRefJES_Eta_Pt100_W)
+        delete hRefJES_Eta_Pt100_W;
+    if (hRefJES_Eta_Pt120_W)
+        delete hRefJES_Eta_Pt120_W;
     if (hLeadPtvsSubLeadPt_DiJetW)
         delete hLeadPtvsSubLeadPt_DiJetW;
     if (hGenLeadPtvsGenSubLeadPt_DiJetW)
@@ -541,6 +553,18 @@ void HistoManagerDiJet::init()
         hRecoJES_W->Sumw2();
         hRefJES_W = new TH2D("hRefJES_W", "Ref JES Weighted", 200, 0.0, 5.0, 200, 0.0, 1000.0);
         hRefJES_W->Sumw2();
+        hRecoJES_Eta_W = new TH2D("hRecoJES_Eta_W", "Reco JES Weighted", 200, 0.0, 5.0, 200, -5.0, 5.0);
+        hRecoJES_Eta_W->Sumw2();
+        hRefJES_Eta_W = new TH2D("hRefJES_Eta_W", "Ref JES Weighted", 200, 0.0, 5.0, 200, -5.0, 5.0);
+        hRefJES_Eta_W->Sumw2();
+        hRecoJES_Eta_Pt100_W = new TH2D("hRecoJES_Eta_Pt100_W", "Reco JES Weighted", 200, 0.0, 5.0, 200, -5.0, 5.0);
+        hRecoJES_Eta_Pt100_W->Sumw2();
+        hRecoJES_Eta_Pt120_W = new TH2D("hRecoJES_Eta_Pt120_W", "Reco JES Weighted", 200, 0.0, 5.0, 200, -5.0, 5.0);
+        hRecoJES_Eta_Pt120_W->Sumw2();
+        hRefJES_Eta_Pt100_W = new TH2D("hRefJES_Eta_Pt100_W", "Ref JES Weighted", 200, 0.0, 5.0, 200, -5.0, 5.0);
+        hRefJES_Eta_Pt100_W->Sumw2();
+        hRefJES_Eta_Pt120_W = new TH2D("hRefJES_Eta_Pt120_W", "Ref JES Weighted", 200, 0.0, 5.0, 200, -5.0, 5.0);
+        hRefJES_Eta_Pt100_W->Sumw2();
     }
 
     Double_t trkEtaBins[] = {-2.4, -2.1, -1.8, -1.5, -1.3, -1.1, -0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.1, 1.3, 1.5, 1.8, 2.1, 2.4};
@@ -864,6 +888,12 @@ void HistoManagerDiJet ::writeOutput()
     {
         hRecoJES_W->Write();
         hRefJES_W->Write();
+        hRecoJES_Eta_W->Write();
+        hRefJES_Eta_W->Write();
+        hRecoJES_Eta_Pt100_W->Write();
+        hRecoJES_Eta_Pt120_W->Write();
+        hRefJES_Eta_Pt100_W->Write();
+        hRefJES_Eta_Pt120_W->Write();
     }
 
     hLeadSubLeadJets->Write();

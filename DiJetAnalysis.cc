@@ -1072,8 +1072,20 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
 
         if (fIsMC && refPt > 0.0)
         {
-            fHM->hRecoJES_W->Fill(refPt / jetPt, jetPt, event_Weight);
-            fHM->hRefJES_W->Fill(refPt / jetPt, refPt, event_Weight);
+            fHM->hRecoJES_W->Fill(jetPt / refPt, jetPt, event_Weight);
+            fHM->hRefJES_W->Fill(jetPt / refPt, refPt, event_Weight);
+            fHM->hRecoJES_Eta_W->Fill(jetPt / refPt, jetEta, event_Weight);
+            fHM->hRefJES_Eta_W->Fill(jetPt / refPt, refEta, event_Weight);
+            if (jetPt > 100)
+            {
+                fHM->hRecoJES_Eta_Pt100_W->Fill(jetPt / refPt, jetEta, event_Weight);
+                fHM->hRefJES_Eta_Pt100_W->Fill(jetPt / refPt, refEta, event_Weight);
+            }
+            if (jetPt > 120)
+            {
+                fHM->hRefJES_Eta_Pt120_W->Fill(jetPt / refPt, refEta, event_Weight);
+                fHM->hRecoJES_Eta_Pt120_W->Fill(jetPt / refPt, jetEta, event_Weight);
+            }
         }
 
         if (fDoInJetMult && jetPt > fSubLeadJetPtLow)
