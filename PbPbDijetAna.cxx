@@ -138,8 +138,8 @@ int main(int argc, char *argv[])
     DiJetAnalysis *analysis = new DiJetAnalysis{};
     analysis->addHistoManager(hm);
     analysis->setIsMC(isMC);
-    analysis->setLeadJetEtaRange(-1.5, 1.5);
-    analysis->setSubLeadJetEtaRange(-1.5, 1.5);
+    analysis->setLeadJetEtaRange(-1.6, 1.6);
+    analysis->setSubLeadJetEtaRange(-1.6, 1.6);
     analysis->setMultiplicityRange(0., 10000.);
     analysis->setMultiplicityType(4);
     analysis->setDeltaPhi(2. * TMath::Pi() / 3);
