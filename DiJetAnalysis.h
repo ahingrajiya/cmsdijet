@@ -190,6 +190,10 @@ private:
     /// @param event Event object
     /// @return Returns event level weight which has to be applied to every hisotgram
     Double_t EventWeight(const Event *event);
+    /// @brief @brief pPb ptHat weight calculator
+    /// @param ptHat pthat value
+    /// @return returns weight for given pthat of event in MC
+    Double_t pPbptHatWeight(const Double_t &ptHat);
     /// @brief Multiplicity weights
     /// @param multiplicity Multiplicity of the event
     /// @return Array of weights for multiplicity ranges

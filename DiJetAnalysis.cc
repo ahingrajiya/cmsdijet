@@ -467,55 +467,9 @@ Double_t DiJetAnalysis::EventWeight(const Event *event)
     {
         return 1.0;
     }
-    if (fIsMC && fIspPb)
+    if (fIspPb)
     {
-
-        // Magic numbers are (cross section x Nevents generated). These are derived manually and fixed
-        if (ptHat > 15.0 && ptHat <= 30.)
-        {
-            ptHatWeight = 1.0404701e-06 * 961104;
-        }
-        else if (ptHat > 30. && ptHat <= 50.)
-        {
-            ptHatWeight = 7.7966624e-08 * 952110;
-        }
-        else if (ptHat > 50. && ptHat <= 80.)
-        {
-            ptHatWeight = 1.0016052e-08 * 952554;
-        }
-        else if (ptHat > 80. && ptHat <= 120.)
-        {
-            ptHatWeight = 1.3018269e-09 * 996844;
-        }
-        else if (ptHat > 120. && ptHat <= 170.)
-        {
-            ptHatWeight = 2.2648493e-10 * 964681;
-        }
-        else if (ptHat > 170. && ptHat <= 220.)
-        {
-            ptHatWeight = 4.0879112e-11 * 999260;
-        }
-        else if (ptHat > 220. && ptHat <= 280.)
-        {
-            ptHatWeight = 1.1898939e-11 * 964336;
-        }
-        else if (ptHat > 280. && ptHat <= 370.)
-        {
-            ptHatWeight = 3.3364433e-12 * 995036;
-        }
-        else if (ptHat > 370. && ptHat <= 460.)
-        {
-            ptHatWeight = 7.6612402e-13 * 958160;
-        }
-        else if (ptHat > 460. && ptHat <= 540.)
-        {
-            ptHatWeight = 2.1341026e-13 * 981427;
-        }
-        else if (ptHat > 540.)
-        {
-            ptHatWeight = 7.9191586e-14 * 1000000;
-        }
-        ptHatWeight /= fNEventsInSample;
+        ptHatWeight = pPbptHatWeight(ptHat);
     }
     else if (fIspp || fIsPbPb)
     {
@@ -531,6 +485,35 @@ Double_t DiJetAnalysis::EventWeight(const Event *event)
     }
 
     return eventWeight;
+}
+
+Double_t DiJetAnalysis::pPbptHatWeight(const Double_t &pthat)
+{
+    // Each tuple is {ptHatMin, ptHatMax, factor, eventCount}
+    // Magic numbers are (cross section x Nevents generated). These are derived manually and fixed
+
+    const std::vector<std::tuple<double, double, double, double>> ptHatBins = {
+        {15.0, 30.0, 1.0404701e-06, 961104},
+        {30.0, 50.0, 7.7966624e-08, 952110},
+        {50.0, 80.0, 1.0016052e-08, 952554},
+        {80.0, 120.0, 1.3018269e-09, 996844},
+        {120.0, 170.0, 2.2648493e-10, 964681},
+        {170.0, 220.0, 4.0879112e-11, 999260},
+        {220.0, 280.0, 1.1898939e-11, 964336},
+        {280.0, 370.0, 3.3364433e-12, 995036},
+        {370.0, 460.0, 7.6612402e-13, 958160},
+        {460.0, 540.0, 2.1341026e-13, 981427},
+        {540.0, std::numeric_limits<double>::infinity(), 7.9191586e-14, 1000000}};
+
+    for (const auto &[min, max, factor, events] : ptHatBins)
+    {
+        if (pthat > min && pthat <= max)
+        {
+            return (factor * events) / fNEventsInSample;
+        }
+    }
+
+    return 1.0; // fallback if ptHat is not in any range
 }
 
 Float_t DiJetAnalysis::DijetWeight(const Event *event)
@@ -1074,17 +1057,17 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
         {
             fHM->hRecoJES_W->Fill(jetPt / refPt, jetPt, event_Weight);
             fHM->hRefJES_W->Fill(jetPt / refPt, refPt, event_Weight);
-            fHM->hRecoJES_Eta_W->Fill(jetPt / refPt, jetEta, event_Weight);
-            fHM->hRefJES_Eta_W->Fill(jetPt / refPt, refEta, event_Weight);
+            fHM->hRecoJES_Eta_W->Fill(jetPt / refPt, MoveToCMFrame(jetEta), event_Weight);
+            fHM->hRefJES_Eta_W->Fill(jetPt / refPt, MoveToCMFrame(refEta), event_Weight);
             if (jetPt > 100)
             {
-                fHM->hRecoJES_Eta_Pt100_W->Fill(jetPt / refPt, jetEta, event_Weight);
-                fHM->hRefJES_Eta_Pt100_W->Fill(jetPt / refPt, refEta, event_Weight);
+                fHM->hRecoJES_Eta_Pt100_W->Fill(jetPt / refPt, MoveToCMFrame(jetEta), event_Weight);
+                fHM->hRefJES_Eta_Pt100_W->Fill(jetPt / refPt, MoveToCMFrame(refEta), event_Weight);
             }
             if (jetPt > 120)
             {
-                fHM->hRefJES_Eta_Pt120_W->Fill(jetPt / refPt, refEta, event_Weight);
-                fHM->hRecoJES_Eta_Pt120_W->Fill(jetPt / refPt, jetEta, event_Weight);
+                fHM->hRefJES_Eta_Pt120_W->Fill(jetPt / refPt, MoveToCMFrame(refEta), event_Weight);
+                fHM->hRecoJES_Eta_Pt120_W->Fill(jetPt / refPt, MoveToCMFrame(jetEta), event_Weight);
             }
         }
 
