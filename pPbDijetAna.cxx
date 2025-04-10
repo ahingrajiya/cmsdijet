@@ -217,7 +217,7 @@ int main(int argc, char *argv[])
     analysis->setUEType(UEType);
     analysis->doTrackingClosure();
     analysis->setTrackingTable("../aux_files/pPb_8160/trk_eff_table/pPb_EPOS_2D_efftables.root");
-    analysis->setDebug(kTRUE);
+    // analysis->setDebug(kTRUE);
 
     // Initialize Histomanager
     HistoManagerDiJet *hm = new HistoManagerDiJet{};
