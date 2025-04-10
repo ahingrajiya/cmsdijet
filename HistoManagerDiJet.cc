@@ -833,10 +833,8 @@ void HistoManagerDiJet ::writeOutput()
     hMultiplicities->Write();
     hMultiplicities_W->Write();
     hInJetMultiplicity_W->Write();
-    if (fCollSystem == "pPb")
-    {
-        hMultiplicities_DiJet_W->Write();
-    }
+    hMultiplicities_DiJet_W->Write();
+
     if (fIsMC)
     {
         hPtHat->Write();
