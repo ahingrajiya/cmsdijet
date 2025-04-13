@@ -105,37 +105,6 @@ void DiJetAnalysis::init()
     }
 }
 
-Int_t DiJetAnalysis::RecoMultiplicity(const Event *event)
-{
-    if (fDebug)
-    {
-        std::cout << "DiJetAnalysis::RecoMultiplicity Calculating Reco Multiplicity" << std::endl;
-    }
-
-    Int_t iRecoMult = 0;
-    TrackIterator recoIterator;
-    for (recoIterator = event->trackCollection()->begin(); recoIterator != event->trackCollection()->end(); recoIterator++)
-    {
-        Double_t trackPt = (*recoIterator)->TrkPt();
-        Double_t trackEta = (*recoIterator)->TrkEta();
-
-        Bool_t isGoodTrack = (trackPt > fMinTrkPt && trackEta > fTrkEtaRange[0] && trackEta < fTrkEtaRange[1]);
-        if (fDebug)
-        {
-            Form("%5.2f < Track Pt: %5.2f , %5.2f < Track Eta: %5.2f < %5,2f \t %s \n", fMinTrkPt, trackPt, fTrkEtaRange[0], trackEta, fTrkEtaRange[1], (isGoodTrack) ? "True" : "False");
-        }
-
-        if (isGoodTrack)
-            iRecoMult++;
-    }
-    if (fDebug)
-    {
-        std::cout << "Reco Multiplicity: " << iRecoMult << std::endl;
-    }
-
-    return iRecoMult;
-}
-
 void DiJetAnalysis::SetUpMultiplicityWeight(const std::string &multWeightTable)
 {
     fMultWeight = TFile::Open(multWeightTable.c_str(), "OPEN");
@@ -202,13 +171,14 @@ void DiJetAnalysis::SetUpTrackingEfficiency(const std::string &trackingEfficienc
     }
 }
 
-Float_t DiJetAnalysis::CorrectedMultiplicity(const Event *event, const Double_t &eventWeight, const Double_t &multiplicityBin)
+std::pair<Int_t, Float_t> DiJetAnalysis::RecoCorrectedMultiplicity(const Event *event, const Double_t &eventWeight, const Double_t &multiplicityBin)
 {
     if (fDebug)
     {
         std::cout << "DiJetAnalysis::CorrectedMultiplicity Calculating Corrected Multiplicity" << std::endl;
     }
     Float_t iCorrectedMult = 0;
+    Int_t iRecoMult = 0;
     TrackIterator recoIterator;
     Float_t iCorrectionFactor = 1.0;
     for (recoIterator = event->trackCollection()->begin(); recoIterator != event->trackCollection()->end(); recoIterator++)
@@ -224,13 +194,15 @@ Float_t DiJetAnalysis::CorrectedMultiplicity(const Event *event, const Double_t 
 
         if (isGoodTrack)
         {
+            iRecoMult++;
             if (fIspPb)
             {
                 if (!fTrkEffpPb)
                 {
                     std::cerr << "Tracking efficiency table not found for pPb" << std::endl;
                     std::cout << "Please Set up Tracking table to calculate corrected multiplicity" << std::endl;
-                    return -1;
+                    std::cout << "Corrected Multiplicity will be returned as -1" << std::endl;
+                    iCorrectedMult = -1;
                 }
                 else
                 {
@@ -251,7 +223,8 @@ Float_t DiJetAnalysis::CorrectedMultiplicity(const Event *event, const Double_t 
                 {
                     std::cerr << "Tracking efficiency table not found for PbPb" << std::endl;
                     std::cout << "Please Set up Tracking table to calculate corrected multiplicity" << std::endl;
-                    return -1;
+                    std::cout << "Corrected Multiplicity will be returned as -1" << std::endl;
+                    iCorrectedMult = -1;
                 }
                 else
                 {
@@ -284,7 +257,7 @@ Float_t DiJetAnalysis::CorrectedMultiplicity(const Event *event, const Double_t 
     {
         std::cout << "Corrected Multiplicity: " << iCorrectedMult << std::endl;
     }
-    return iCorrectedMult;
+    return {iRecoMult, iCorrectedMult};
 }
 
 std::pair<Int_t, Int_t> DiJetAnalysis::GenSubeMultiplicity(const Event *event, const Double_t &eventWeight, const Double_t &multiplicityBin)
@@ -687,6 +660,7 @@ void DiJetAnalysis::CollSystem(const TString &collSystem)
         std::cerr << "Invalid collision system. Please choose from pp, pPb, PbPb" << std::endl;
     }
 }
+
 Double_t DiJetAnalysis::DeltaPhi(const Double_t &phi1, const Double_t &phi2)
 {
     Double_t dPhi = phi1 - phi2;
@@ -704,6 +678,7 @@ Double_t DiJetAnalysis::DeltaPhi(const Double_t &phi1, const Double_t &phi2)
     }
     return dPhi;
 }
+
 Double_t DiJetAnalysis::Asymmetry(const Float_t &leadJetPt, const Float_t &subLeadJetPt)
 {
     if (fDebug)
@@ -925,8 +900,8 @@ void DiJetAnalysis::processEvent(const Event *event)
     Int_t iRecoMult = event->multiplicity();
     fHM->hRecoMultiplicity_W->Fill(iRecoMult, Event_Weight * fDijetWeight);
 
-    Double_t iCorrectedMult = CorrectedMultiplicity(event, Event_Weight, iMultiplicityBin);
-    fHM->hCorrectedMultiplicity_W->Fill(iCorrectedMult, Event_Weight * fDijetWeight);
+    std::pair<Int_t, Float_t> iRecoCorrectedMult = RecoCorrectedMultiplicity(event, Event_Weight, iMultiplicityBin);
+    fHM->hCorrectedMultiplicity_W->Fill(iRecoCorrectedMult.second, Event_Weight * fDijetWeight);
 
     std::pair<Int_t, Int_t> iGenSubeMult = {0.0, 0.0};
     if (fIsMC)
@@ -937,7 +912,7 @@ void DiJetAnalysis::processEvent(const Event *event)
     }
     Double_t iMultiplicity;
     iMultiplicity = (fMultiplicityType == 0) ? static_cast<Double_t>(iRecoMult) : (fMultiplicityType == 1)          ? static_cast<Double_t>(iGenSubeMult.first)
-                                                                              : (fMultiplicityType == 2)            ? static_cast<Double_t>(iCorrectedMult)
+                                                                              : (fMultiplicityType == 2)            ? static_cast<Double_t>(iRecoCorrectedMult.second)
                                                                               : (fMultiplicityType == 3)            ? static_cast<Double_t>(fIspPb || fIspp ? iGenSubeMult.first : (fIsPbPb ? iGenSubeMult.second : 0))
                                                                               : (fMultiplicityType == 4 && fIsPbPb) ? static_cast<Double_t>(event->hiBinWithShift())
                                                                                                                     : 0;
@@ -960,17 +935,6 @@ void DiJetAnalysis::processEvent(const Event *event)
         fHM->hSelectedMultiplicity_W->Fill(iMultiplicity, Event_Weight * fDijetWeight);
     }
 
-    if (fUseMultiplicityWeight)
-    {
-        for (Int_t i = 0; i < 4; i++)
-        {
-            Double_t Multiplicities[6] = {static_cast<Double_t>(iRecoMult), static_cast<Double_t>(iGenSubeMult.first), static_cast<Double_t>(iCorrectedMult), static_cast<Double_t>(iGenSubeMult.second), static_cast<Double_t>(event->hiBinWithShift()), static_cast<Double_t>(i + 1)};
-        }
-    }
-    else
-    {
-        Double_t Multiplicities[6] = {static_cast<Double_t>(iRecoMult), static_cast<Double_t>(iGenSubeMult.first), static_cast<Double_t>(iCorrectedMult), static_cast<Double_t>(iGenSubeMult.second), static_cast<Double_t>(event->hiBinWithShift()), iMultiplicityBin};
-    }
     processRecoJets(event, Event_Weight, MultWeight, iMultiplicityBin);
 
     if (fIsMC)
@@ -982,7 +946,7 @@ void DiJetAnalysis::processEvent(const Event *event)
     {
         for (Int_t i = 0; i < 4; i++)
         {
-            Double_t Multiplicities[6] = {static_cast<Double_t>(iRecoMult), static_cast<Double_t>(iGenSubeMult.first), static_cast<Double_t>(iCorrectedMult), static_cast<Double_t>(iGenSubeMult.second), static_cast<Double_t>(event->hiBinWithShift()), static_cast<Double_t>(i + 1)};
+            Double_t Multiplicities[7] = {static_cast<Double_t>(iRecoMult), static_cast<Double_t>(iGenSubeMult.first), static_cast<Double_t>(iRecoCorrectedMult.first), static_cast<Double_t>(iRecoCorrectedMult.second), static_cast<Double_t>(iGenSubeMult.second), static_cast<Double_t>(event->hiBinWithShift()), static_cast<Double_t>(i + 1)};
             fHM->hMultiplicities_W->Fill(Multiplicities, Event_Weight * MultWeight[i]);
             if (fIsDiJetFound)
             {
@@ -992,7 +956,7 @@ void DiJetAnalysis::processEvent(const Event *event)
     }
     else
     {
-        Double_t Multiplicities[6] = {static_cast<Double_t>(iRecoMult), static_cast<Double_t>(iGenSubeMult.first), static_cast<Double_t>(iCorrectedMult), static_cast<Double_t>(iGenSubeMult.second), static_cast<Double_t>(event->hiBinWithShift()), iMultiplicityBin};
+        Double_t Multiplicities[7] = {static_cast<Double_t>(iRecoMult), static_cast<Double_t>(iGenSubeMult.first), static_cast<Double_t>(iRecoCorrectedMult.first), static_cast<Double_t>(iRecoCorrectedMult.second), static_cast<Double_t>(iGenSubeMult.second), static_cast<Double_t>(event->hiBinWithShift()), iMultiplicityBin};
         fHM->hMultiplicities_W->Fill(Multiplicities, Event_Weight);
         if (fIsDiJetFound)
         {

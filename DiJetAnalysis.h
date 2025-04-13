@@ -167,16 +167,12 @@ public:
     void doTrackingClosure() { fDoTrackingClosures = kTRUE; }
 
 private:
-    /// @brief Multiplicity calculator
-    /// @param event Event object
-    /// @return Returns number of tracks in the event for a given Trk Pt and Eta range
-    Int_t RecoMultiplicity(const Event *event);
-    /// @brief Corrected Multiplicity calculator
+    /// @brief Reco and Corrected Multiplicity calculator with custom track pt and track eta cuts
     /// @param event Event object
     /// @param eventWeight Event weight
     /// @param multiplicityBin Multiplicity bin
-    /// @return Returns number of tracks in given trk pt and eta range with tracking efficiency correction. Correction factor is [1-(fake rate)]/(efficiency)
-    Float_t CorrectedMultiplicity(const Event *event, const Double_t &eventWeight, const Double_t &multiplicityBin);
+    /// @return Returns pair of Reco tracks with custom trackpt and track eta cut and number of tracks in given trk pt and eta range with tracking efficiency correction. Correction factor is [1-(fake rate)]/(efficiency)
+    std::pair<Int_t, Float_t> RecoCorrectedMultiplicity(const Event *event, const Double_t &eventWeight, const Double_t &multiplicityBin);
     /// @brief Sets up correct efficiency tables for tracking efficiency correction
     /// @param trackingTable Path to the tracking efficiency correction table with its name included. Table is usually root file with .root extension
     void SetUpTrackingEfficiency(const std::string &trackingTable);

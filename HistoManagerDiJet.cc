@@ -382,14 +382,14 @@ void HistoManagerDiJet::init()
         hNGenDijetEvent->Sumw2();
     }
 
-    int MultBins[6] = {5000, 5000, 5000, 5000, 200, nMultiplicityBins + 1};
-    Double_t MultMin[6] = {0.0, 0.0, 0.0, 0.0, 0.0, fMultiplicityBins[0]};
-    Double_t MultMax[6] = {5000.0, 5000.0, 5000.0, 5000.0, 200, fMultiplicityBins[fMultiplicityBins.size() - 1] + 1};
-    hMultiplicities = new THnSparseD("hMultiplicities", "Multiplicity Distribution", 6, MultBins, MultMin, MultMax);
+    int MultBins[7] = {5000, 5000, 5000, 5000, 5000, 200, nMultiplicityBins + 1};
+    Double_t MultMin[7] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, fMultiplicityBins[0]};
+    Double_t MultMax[7] = {5000.0, 5000.0, 5000.0, 5000.0, 5000.0, 200, fMultiplicityBins[fMultiplicityBins.size() - 1] + 1};
+    hMultiplicities = new THnSparseD("hMultiplicities", "Multiplicity Distribution", 7, MultBins, MultMin, MultMax);
     hMultiplicities->Sumw2();
-    hMultiplicities_W = new THnSparseD("hMultiplicities_W", "Multiplicity Distribution with Weights", 6, MultBins, MultMin, MultMax);
+    hMultiplicities_W = new THnSparseD("hMultiplicities_W", "Multiplicity Distribution with Weights", 7, MultBins, MultMin, MultMax);
     hMultiplicities_W->Sumw2();
-    hMultiplicities_DiJet_W = new THnSparseD("hMultiplicities_DiJet_W", "Multiplicity Distribution with Dijet Present", 6, MultBins, MultMin, MultMax);
+    hMultiplicities_DiJet_W = new THnSparseD("hMultiplicities_DiJet_W", "Multiplicity Distribution with Dijet Present", 7, MultBins, MultMin, MultMax);
     hMultiplicities_DiJet_W->Sumw2();
 
     int JetBins[4] = {200, 52, 64, nMultiplicityBins + 1};
