@@ -1019,19 +1019,19 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
 
         if (fIsMC && refPt > 0.0)
         {
-            fHM->hRecoJES_W->Fill(jetPt / refPt, jetPt, event_Weight);
-            fHM->hRefJES_W->Fill(jetPt / refPt, refPt, event_Weight);
-            fHM->hRecoJES_Eta_W->Fill(jetPt / refPt, MoveToCMFrame(jetEta), event_Weight);
-            fHM->hRefJES_Eta_W->Fill(jetPt / refPt, MoveToCMFrame(refEta), event_Weight);
+            fHM->hRecoJES_W->Fill(jetPt / refPt, jetPt, multiplicityBin, event_Weight);
+            fHM->hRefJES_W->Fill(jetPt / refPt, refPt, multiplicityBin, event_Weight);
+            fHM->hRecoJES_Eta_W->Fill(jetPt / refPt, MoveToCMFrame(jetEta), multiplicityBin, event_Weight);
+            fHM->hRefJES_Eta_W->Fill(jetPt / refPt, MoveToCMFrame(refEta), multiplicityBin, event_Weight);
             if (jetPt > 100)
             {
-                fHM->hRecoJES_Eta_Pt100_W->Fill(jetPt / refPt, MoveToCMFrame(jetEta), event_Weight);
-                fHM->hRefJES_Eta_Pt100_W->Fill(jetPt / refPt, MoveToCMFrame(refEta), event_Weight);
+                fHM->hRecoJES_Eta_Pt100_W->Fill(jetPt / refPt, MoveToCMFrame(jetEta), multiplicityBin, event_Weight);
+                fHM->hRefJES_Eta_Pt100_W->Fill(jetPt / refPt, MoveToCMFrame(refEta), multiplicityBin, event_Weight);
             }
             if (jetPt > 120)
             {
-                fHM->hRefJES_Eta_Pt120_W->Fill(jetPt / refPt, MoveToCMFrame(refEta), event_Weight);
-                fHM->hRecoJES_Eta_Pt120_W->Fill(jetPt / refPt, MoveToCMFrame(jetEta), event_Weight);
+                fHM->hRefJES_Eta_Pt120_W->Fill(jetPt / refPt, MoveToCMFrame(refEta), multiplicityBin, event_Weight);
+                fHM->hRecoJES_Eta_Pt120_W->Fill(jetPt / refPt, MoveToCMFrame(jetEta), multiplicityBin, event_Weight);
             }
         }
 

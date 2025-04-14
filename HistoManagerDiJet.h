@@ -122,14 +122,14 @@ public:
     TH2D *hInclusiveUnCorrectedRecoPtVsEtaLabFrame_W;
     TH2D *hInclusiveUnCorrectedRecoPtVsEtaCMFrame_W;
 
-    TH2D *hRecoJES_W;
-    TH2D *hRefJES_W;
-    TH2D *hRecoJES_Eta_W;
-    TH2D *hRefJES_Eta_W;
-    TH2D *hRecoJES_Eta_Pt100_W;
-    TH2D *hRefJES_Eta_Pt100_W;
-    TH2D *hRecoJES_Eta_Pt120_W;
-    TH2D *hRefJES_Eta_Pt120_W;
+    TH3D *hRecoJES_W;
+    TH3D *hRefJES_W;
+    TH3D *hRecoJES_Eta_W;
+    TH3D *hRefJES_Eta_W;
+    TH3D *hRecoJES_Eta_Pt100_W;
+    TH3D *hRefJES_Eta_Pt100_W;
+    TH3D *hRecoJES_Eta_Pt120_W;
+    TH3D *hRefJES_Eta_Pt120_W;
 
     TH2D *hGenLeadingVsGenSubLeading_WO_DiJet_W;
     TH2D *hRefLeadingVsRefSubLeadingMatched_W;
