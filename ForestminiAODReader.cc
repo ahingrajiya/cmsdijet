@@ -1079,6 +1079,7 @@ Event *ForestminiAODReader::returnEvent()
 
             if (fIsMc)
             {
+                std::cout << fRefJetEta[iJet] << std::endl;
                 jet->setRefJetPt(fRefJetPt[iJet]);
                 jet->setRefJetEta(fRefJetEta[iJet]);
                 jet->setRefJetPhi(fRefJetPhi[iJet]);
