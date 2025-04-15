@@ -550,21 +550,21 @@ void HistoManagerDiJet::init()
         hRefLeadPtvsRefSubLeadPt_DiJetW = new TH2D("hRefLeadPtvsRefSubLeadPt_DiJetW", "Ref Lead Pt vs Ref SubLead Pt Weighted", nLeadSubLeadPtBins, LeadSubLeadPtBins, nLeadSubLeadPtBins, LeadSubLeadPtBins);
         hRefLeadPtvsRefSubLeadPt_DiJetW->Sumw2();
 
-        hRecoJES_W = new TH3D("hRecoJES_W", "Reco JES Weighted", 200, 0.0, 5.0, 200, 0.0, 1000.0, nMultiplicityBins, multBinArray[0], multBinArray[fMultiplicityBins.size() - 1]);
+        hRecoJES_W = new TH3D("hRecoJES_W", "Reco JES Weighted", 200, 0.0, 2.0, 200, 0.0, 1000.0, nMultiplicityBins, multBinArray[0], multBinArray[fMultiplicityBins.size() - 1]);
         hRecoJES_W->Sumw2();
-        hRefJES_W = new TH3D("hRefJES_W", "Ref JES Weighted", 200, 0.0, 5.0, 200, 0.0, 1000.0, nMultiplicityBins, multBinArray[0], multBinArray[fMultiplicityBins.size() - 1]);
+        hRefJES_W = new TH3D("hRefJES_W", "Ref JES Weighted", 200, 0.0, 2.0, 200, 0.0, 1000.0, nMultiplicityBins, multBinArray[0], multBinArray[fMultiplicityBins.size() - 1]);
         hRefJES_W->Sumw2();
-        hRecoJES_Eta_W = new TH3D("hRecoJES_Eta_W", "Reco JES Weighted", 200, 0.0, 5.0, 200, -5.0, 5.0, nMultiplicityBins, multBinArray[0], multBinArray[fMultiplicityBins.size() - 1]);
+        hRecoJES_Eta_W = new TH3D("hRecoJES_Eta_W", "Reco JES Weighted", 200, 0.0, 2.0, 200, -5.0, 5.0, nMultiplicityBins, multBinArray[0], multBinArray[fMultiplicityBins.size() - 1]);
         hRecoJES_Eta_W->Sumw2();
-        hRefJES_Eta_W = new TH3D("hRefJES_Eta_W", "Ref JES Weighted", 200, 0.0, 5.0, 200, -5.0, 5.0, nMultiplicityBins, multBinArray[0], multBinArray[fMultiplicityBins.size() - 1]);
+        hRefJES_Eta_W = new TH3D("hRefJES_Eta_W", "Ref JES Weighted", 200, 0.0, 2.0, 200, -5.0, 5.0, nMultiplicityBins, multBinArray[0], multBinArray[fMultiplicityBins.size() - 1]);
         hRefJES_Eta_W->Sumw2();
-        hRecoJES_Eta_Pt100_W = new TH3D("hRecoJES_Eta_Pt100_W", "Reco JES Weighted", 200, 0.0, 5.0, 200, -5.0, 5.0, nMultiplicityBins, multBinArray[0], multBinArray[fMultiplicityBins.size() - 1]);
+        hRecoJES_Eta_Pt100_W = new TH3D("hRecoJES_Eta_Pt100_W", "Reco JES Weighted", 200, 0.0, 2.0, 200, -5.0, 5.0, nMultiplicityBins, multBinArray[0], multBinArray[fMultiplicityBins.size() - 1]);
         hRecoJES_Eta_Pt100_W->Sumw2();
-        hRecoJES_Eta_Pt120_W = new TH3D("hRecoJES_Eta_Pt120_W", "Reco JES Weighted", 200, 0.0, 5.0, 200, -5.0, 5.0, nMultiplicityBins, multBinArray[0], multBinArray[fMultiplicityBins.size() - 1]);
+        hRecoJES_Eta_Pt120_W = new TH3D("hRecoJES_Eta_Pt120_W", "Reco JES Weighted", 200, 0.0, 2.0, 200, -5.0, 5.0, nMultiplicityBins, multBinArray[0], multBinArray[fMultiplicityBins.size() - 1]);
         hRecoJES_Eta_Pt120_W->Sumw2();
-        hRefJES_Eta_Pt100_W = new TH3D("hRefJES_Eta_Pt100_W", "Ref JES Weighted", 200, 0.0, 5.0, 200, -5.0, 5.0, nMultiplicityBins, multBinArray[0], multBinArray[fMultiplicityBins.size() - 1]);
+        hRefJES_Eta_Pt100_W = new TH3D("hRefJES_Eta_Pt100_W", "Ref JES Weighted", 200, 0.0, 2.0, 200, -5.0, 5.0, nMultiplicityBins, multBinArray[0], multBinArray[fMultiplicityBins.size() - 1]);
         hRefJES_Eta_Pt100_W->Sumw2();
-        hRefJES_Eta_Pt120_W = new TH3D("hRefJES_Eta_Pt120_W", "Ref JES Weighted", 200, 0.0, 5.0, 200, -5.0, 5.0, nMultiplicityBins, multBinArray[0], multBinArray[fMultiplicityBins.size() - 1]);
+        hRefJES_Eta_Pt120_W = new TH3D("hRefJES_Eta_Pt120_W", "Ref JES Weighted", 200, 0.0, 2.0, 200, -5.0, 5.0, nMultiplicityBins, multBinArray[0], multBinArray[fMultiplicityBins.size() - 1]);
         hRefJES_Eta_Pt100_W->Sumw2();
     }
 
