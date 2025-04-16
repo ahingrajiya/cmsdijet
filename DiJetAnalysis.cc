@@ -186,6 +186,10 @@ std::pair<Int_t, Float_t> DiJetAnalysis::RecoCorrectedMultiplicity(const Event *
         Double_t trackPt = (*recoIterator)->TrkPt();
         Double_t trackEta = (*recoIterator)->TrkEta();
 
+        Double_t trackQuantites[4] = {trackPt, trackEta, (*recoIterator)->TrkPhi(), multiplicityBin};
+        fHM->hRecoTracks->Fill(trackQuantites);
+        fHM->hRecoTracks_W->Fill(trackQuantites, eventWeight);
+
         Bool_t isGoodTrack = (trackPt > fMinTrkPt && trackEta >= fTrkEtaRange[0] && trackEta <= fTrkEtaRange[1]);
         if (fDebug)
         {
@@ -194,6 +198,8 @@ std::pair<Int_t, Float_t> DiJetAnalysis::RecoCorrectedMultiplicity(const Event *
 
         if (isGoodTrack)
         {
+            fHM->hRecoTracks_Pt1_W->Fill(trackQuantites, eventWeight);
+
             iRecoMult++;
             if (fIspPb)
             {
@@ -288,7 +294,9 @@ std::pair<Int_t, Int_t> DiJetAnalysis::GenSubeMultiplicity(const Event *event, c
         Double_t trackEta = (*genIterator)->TrkEta();
         Int_t trackCharge = (*genIterator)->TrkChg();
         Int_t trackSube = (*genIterator)->TrackSube();
-
+        Double_t trackQuantites[4] = {trackPt, trackEta, (*genIterator)->TrkPhi(), multiplicityBin};
+        fHM->hGenTracks->Fill(trackQuantites);
+        fHM->hGenTracks_W->Fill(trackQuantites, eventWeight);
         Bool_t isGoodTrack = (trackPt > fMinTrkPt && trackEta >= fTrkEtaRange[0] && trackEta <= fTrkEtaRange[1] && trackCharge != 0);
         if (fDebug)
         {
@@ -297,6 +305,7 @@ std::pair<Int_t, Int_t> DiJetAnalysis::GenSubeMultiplicity(const Event *event, c
 
         if (isGoodTrack)
         {
+            fHM->hGenTracks_Pt1_W->Fill(trackQuantites, eventWeight);
             iGenMult++;
             if (fDoTrackingClosures)
             {
@@ -1022,12 +1031,12 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
             fHM->hRefJES_W->Fill(jetPt / refPt, refPt, multiplicityBin, event_Weight);
             fHM->hRecoJES_Eta_W->Fill(jetPt / refPt, MoveToCMFrame(jetEta), multiplicityBin, event_Weight);
             fHM->hRefJES_Eta_W->Fill(jetPt / refPt, MoveToCMFrame(refEta), multiplicityBin, event_Weight);
-            if (jetPt > 100)
+            if (refPt > 100)
             {
                 fHM->hRecoJES_Eta_Pt100_W->Fill(jetPt / refPt, MoveToCMFrame(jetEta), multiplicityBin, event_Weight);
                 fHM->hRefJES_Eta_Pt100_W->Fill(jetPt / refPt, MoveToCMFrame(refEta), multiplicityBin, event_Weight);
             }
-            if (jetPt > 120)
+            if (refPt > 120)
             {
                 fHM->hRefJES_Eta_Pt120_W->Fill(jetPt / refPt, MoveToCMFrame(refEta), multiplicityBin, event_Weight);
                 fHM->hRecoJES_Eta_Pt120_W->Fill(jetPt / refPt, MoveToCMFrame(jetEta), multiplicityBin, event_Weight);

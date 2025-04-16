@@ -44,7 +44,7 @@ ClassImp(HistoManagerDiJet)
                                              hGenXj_Projection_W{nullptr}, hGenXj_Projection_DiJetW{nullptr}, hInclusiveRefJetPt{nullptr}, hInclusiveRefJetPt_W{nullptr}, hInclusiveRefJetsCMFrame{nullptr}, hInclusiveRefJetsCMFrame_W{nullptr}, hInclusiveRefJetsLabFrame{nullptr}, hInclusiveRefJetsLabFrame_W{nullptr},
                                              hSelectedInclusiveRefJetsMidRapidity_W{nullptr}, hSelectedInclusiveRefJetPt_MidRapidity_W{nullptr}, hLeadingRefJetPt{nullptr}, hLeadingRefJetPt_W{nullptr}, hSubLeadingRefJetPt{nullptr}, hSubLeadingRefJetPt_W{nullptr},
                                              hLeadingRefJetPtWithDijet_W{nullptr}, hSubLeadingRefJetPtWithDijet_W{nullptr}, hXj_C0_W{nullptr}, hXj_C0_DiJetW{nullptr}, hGenXj_C0_W{nullptr}, hGenXj_C0_DiJetW{nullptr}, hTrackPtVsEta{nullptr}, hTrackPtVsEta_W{nullptr}, hTrackPtVsEtaCorrected{nullptr}, hTrackPtVsEtaCorrected_W{nullptr},
-                                             hGenTrackPtVsEta{nullptr}, hGenTrackPtVsEta_W{nullptr}, hRecoJES_Eta_W{nullptr}, hRefJES_Eta_W{nullptr}, hRecoJES_Eta_Pt100_W{nullptr}, hRefJES_Eta_Pt100_W{nullptr}, hRecoJES_Eta_Pt120_W{nullptr}, hRefJES_Eta_Pt120_W{nullptr}, hRecoTracks{nullptr}, hRecoTracks_W{nullptr}, hRecoTrakcs_Pt1_W{nullptr},
+                                             hGenTrackPtVsEta{nullptr}, hGenTrackPtVsEta_W{nullptr}, hRecoJES_Eta_W{nullptr}, hRefJES_Eta_W{nullptr}, hRecoJES_Eta_Pt100_W{nullptr}, hRefJES_Eta_Pt100_W{nullptr}, hRecoJES_Eta_Pt120_W{nullptr}, hRefJES_Eta_Pt120_W{nullptr}, hRecoTracks{nullptr}, hRecoTracks_W{nullptr}, hRecoTracks_Pt1_W{nullptr},
                                              hGenTracks{nullptr}, hGenTracks_W{nullptr}, hGenTracks_Pt1_W{nullptr}
 {
     /* Empty*/
@@ -321,8 +321,8 @@ HistoManagerDiJet::~HistoManagerDiJet()
         delete hRecoTracks;
     if (hRecoTracks_W)
         delete hRecoTracks_W;
-    if (hRecoTrakcs_Pt1_W)
-        delete hRecoTrakcs_Pt1_W;
+    if (hRecoTracks_Pt1_W)
+        delete hRecoTracks_Pt1_W;
 
     if (hGenTracks)
         delete hGenTracks;
@@ -455,6 +455,23 @@ void HistoManagerDiJet::init()
     hInclusiveUnCorrectedRecoPtVsEtaCMFrame_W->Sumw2();
     hInclusiveUnCorrectedRecoPtVsEtaLabFrame_W = new TH2D("hInclusiveUnCorrectedRecoPtVsEtaLabFrame_W", "Inclusive Uncorrected Reco Jet Pt vs Eta in Lab Frame Weighted", 100, -5., 5., 200, 0., 1000.);
     hInclusiveUnCorrectedRecoPtVsEtaLabFrame_W->Sumw2();
+
+    int TrackBins[4] = {200, 52, 64, nMultiplicityBins + 1};
+    Double_t TrackMin[4] = {0.0, -3.0, -TMath::Pi(), fMultiplicityBins[0]};
+    Double_t TrackMax[4] = {1000.0, 3.0, TMath::Pi(), fMultiplicityBins[fMultiplicityBins.size() - 1] + 1};
+
+    hRecoTracks = new THnSparseD("hRecoTracks", "Reco Tracks", 4, TrackBins, TrackMin, TrackMax);
+    hRecoTracks->Sumw2();
+    hRecoTracks_W = new THnSparseD("hRecoTracks_W", "Reco Tracks Weighted", 4, TrackBins, TrackMin, TrackMax);
+    hRecoTracks_W->Sumw2();
+    hRecoTracks_Pt1_W = new THnSparseD("hRecoTracks_Pt1_W", "Reco Tracks Pt > 1.0 Weighted", 4, TrackBins, TrackMin, TrackMax);
+    hRecoTracks_Pt1_W->Sumw2();
+    hGenTracks = new THnSparseD("hGenTracks", "Gen Tracks", 4, TrackBins, TrackMin, TrackMax);
+    hGenTracks->Sumw2();
+    hGenTracks_W = new THnSparseD("hGenTracks_W", "Gen Tracks Weighted", 4, TrackBins, TrackMin, TrackMax);
+    hGenTracks_W->Sumw2();
+    hGenTracks_Pt1_W = new THnSparseD("hGenTracks_Pt1_W", "Gen Tracks Pt > 1.0 Weighted", 4, TrackBins, TrackMin, TrackMax);
+    hGenTracks_Pt1_W->Sumw2();
 
     int LeadSLeadJetBins[7] = {200, 100, 64, 200, 100, 64, nMultiplicityBins + 1};
     Double_t LeadSLeadJetMin[7] = {0.0, -5.0, -TMath::Pi(), 0.0, -5.0, -TMath::Pi(), fMultiplicityBins[0]};
@@ -952,6 +969,15 @@ void HistoManagerDiJet ::writeOutput()
     hTrackPtVsEta_W->Write();
     hTrackPtVsEtaCorrected->Write();
     hTrackPtVsEtaCorrected_W->Write();
+    hRecoTracks->Write();
+    hRecoTracks_W->Write();
+    hRecoTracks_Pt1_W->Write();
+    if (fIsMC)
+    {
+        hGenTracks->Write();
+        hGenTracks_W->Write();
+        hGenTracks_Pt1_W->Write();
+    }
 
     gDirectory->cd("..");
     gDirectory->mkdir("Quenching");

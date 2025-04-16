@@ -110,13 +110,6 @@ public:
     THnSparseD *hGenLeadGenSubLeadJets_WithDijet_W;
     THnSparseD *hRefLeadRefSubLeadJets_WithDijet_W;
 
-    THnSparseD *hRecoTracks;
-    THnSparseD *hRecoTracks_W;
-    THnSparseD *hRecoTrakcs_Pt1_W;
-    THnSparseD *hGenTracks;
-    THnSparseD *hGenTracks_W;
-    THnSparseD *hGenTracks_Pt1_W;
-
     TH2D *hLeadPtvsSubLeadPt_DiJetW;
     TH2D *hLeadPtvsSubLeadPt_PtHatW;
     TH2D *hRefLeadPtvsRefSubLeadPt_DiJetW;
@@ -217,6 +210,12 @@ public:
     TH3D *hGenTrackPtVsEta_W;
     TH3D *hTrackPtVsEtaCorrected;
     TH3D *hTrackPtVsEtaCorrected_W;
+    THnSparseD *hRecoTracks;
+    THnSparseD *hRecoTracks_W;
+    THnSparseD *hRecoTracks_Pt1_W;
+    THnSparseD *hGenTracks;
+    THnSparseD *hGenTracks_W;
+    THnSparseD *hGenTracks_Pt1_W;
 
 private:
     Bool_t fIsMC;
