@@ -1022,24 +1022,24 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
             refPhi = (*recoJetIterator)->RefJetPhi();
         }
 
-        if (fIsMC && refPt > 30.0 && MoveToCMFrame(refEta) < 3.0)
+        if (fIsMC && refPt > 30.0 && TMath::Abs(refEta) < 3.0)
         {
             // std::cout << Form("Raw Pt: %f, Jet Pt: %f, Jet Eta: %f, Jet Phi: %f", rawPt, jetPt, jetEta, jetPhi) << std::endl;
             // std::cout << Form("Ref Pt: %f, Ref Eta: %f, Ref Phi: %f", refPt, refEta, refPhi) << std::endl;
 
             fHM->hRecoJES_W->Fill(jetPt / refPt, jetPt, multiplicityBin, event_Weight);
             fHM->hRefJES_W->Fill(jetPt / refPt, refPt, multiplicityBin, event_Weight);
-            fHM->hRecoJES_Eta_W->Fill(jetPt / refPt, MoveToCMFrame(jetEta), multiplicityBin, event_Weight);
-            fHM->hRefJES_Eta_W->Fill(jetPt / refPt, MoveToCMFrame(refEta), multiplicityBin, event_Weight);
+            fHM->hRecoJES_Eta_W->Fill(jetPt / refPt, jetEta, multiplicityBin, event_Weight);
+            fHM->hRefJES_Eta_W->Fill(jetPt / refPt, refEta, multiplicityBin, event_Weight);
             if (refPt > 100)
             {
-                fHM->hRecoJES_Eta_Pt100_W->Fill(jetPt / refPt, MoveToCMFrame(jetEta), multiplicityBin, event_Weight);
-                fHM->hRefJES_Eta_Pt100_W->Fill(jetPt / refPt, MoveToCMFrame(refEta), multiplicityBin, event_Weight);
+                fHM->hRecoJES_Eta_Pt100_W->Fill(jetPt / refPt, jetEta, multiplicityBin, event_Weight);
+                fHM->hRefJES_Eta_Pt100_W->Fill(jetPt / refPt, refEta, multiplicityBin, event_Weight);
             }
             if (refPt > 120)
             {
-                fHM->hRefJES_Eta_Pt120_W->Fill(jetPt / refPt, MoveToCMFrame(refEta), multiplicityBin, event_Weight);
-                fHM->hRecoJES_Eta_Pt120_W->Fill(jetPt / refPt, MoveToCMFrame(jetEta), multiplicityBin, event_Weight);
+                fHM->hRefJES_Eta_Pt120_W->Fill(jetPt / refPt, refEta, multiplicityBin, event_Weight);
+                fHM->hRecoJES_Eta_Pt120_W->Fill(jetPt / refPt, jetEta, multiplicityBin, event_Weight);
             }
         }
 
