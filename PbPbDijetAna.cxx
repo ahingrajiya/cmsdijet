@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
     reader->setPath2JetAnalysis(path2JEC.Data());
     reader->setUseJetID();
     reader->setJetIDType(1);
-    reader->eventsToProcess(-1);
+    reader->eventsToProcess(100);
     reader->setEventCut(eventCut);
     reader->setJetCut(jetCut);
     reader->setTrackCut(trackCut);
