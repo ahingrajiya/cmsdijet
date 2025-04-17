@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
     Bool_t ispPb{kTRUE};
     Bool_t useCMFrame{kFALSE};
     Double_t etaBoost{0.4654094531};
-    TString jetBranchName{"ak4PFJetAnalyzer"};
+    TString jetBranchName{"akCs4PFJetAnalyzer"};
     std::string dijetWeightType{"Gen"};
     TString oFileName{};
     TString JECFileName{};
