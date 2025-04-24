@@ -186,10 +186,6 @@ std::pair<Int_t, Float_t> DiJetAnalysis::RecoCorrectedMultiplicity(const Event *
         Double_t trackPt = (*recoIterator)->TrkPt();
         Double_t trackEta = (*recoIterator)->TrkEta();
 
-        Double_t trackQuantites[4] = {trackPt, trackEta, (*recoIterator)->TrkPhi(), multiplicityBin};
-        fHM->hRecoTracks->Fill(trackQuantites);
-        fHM->hRecoTracks_W->Fill(trackQuantites, eventWeight);
-
         Bool_t isGoodTrack = (trackPt > fMinTrkPt && trackEta >= fTrkEtaRange[0] && trackEta <= fTrkEtaRange[1]);
         if (fDebug)
         {
@@ -198,8 +194,6 @@ std::pair<Int_t, Float_t> DiJetAnalysis::RecoCorrectedMultiplicity(const Event *
 
         if (isGoodTrack)
         {
-            fHM->hRecoTracks_Pt1_W->Fill(trackQuantites, eventWeight);
-
             iRecoMult++;
             if (fIspPb)
             {
@@ -294,9 +288,7 @@ std::pair<Int_t, Int_t> DiJetAnalysis::GenSubeMultiplicity(const Event *event, c
         Double_t trackEta = (*genIterator)->TrkEta();
         Int_t trackCharge = (*genIterator)->TrkChg();
         Int_t trackSube = (*genIterator)->TrackSube();
-        Double_t trackQuantites[4] = {trackPt, trackEta, (*genIterator)->TrkPhi(), multiplicityBin};
-        fHM->hGenTracks->Fill(trackQuantites);
-        fHM->hGenTracks_W->Fill(trackQuantites, eventWeight);
+
         Bool_t isGoodTrack = (trackPt > fMinTrkPt && trackEta >= fTrkEtaRange[0] && trackEta <= fTrkEtaRange[1] && trackCharge != 0);
         if (fDebug)
         {
@@ -305,7 +297,6 @@ std::pair<Int_t, Int_t> DiJetAnalysis::GenSubeMultiplicity(const Event *event, c
 
         if (isGoodTrack)
         {
-            fHM->hGenTracks_Pt1_W->Fill(trackQuantites, eventWeight);
             iGenMult++;
             if (fDoTrackingClosures)
             {
@@ -971,6 +962,11 @@ void DiJetAnalysis::processEvent(const Event *event)
         {
             fHM->hMultiplicities_DiJet_W->Fill(Multiplicities, Event_Weight);
         }
+    }
+    if (fIsDiJetFound && fDoTrackingClosures)
+    {
+        processRecoTracks(event, Event_Weight, MultWeight, iMultiplicityBin);
+        processGenTracks(event, Event_Weight, MultWeight, iMultiplicityBin);
     }
 }
 
@@ -1650,6 +1646,76 @@ void DiJetAnalysis::processGenJets(const Event *event, const Double_t &event_Wei
         {
             Double_t LeadSLeadJetsWithDijet[7] = {genLeadJetPt, genLeadJetEtaCM, genLeadJetPhi, genSubLeadJetPt, genSubLeadJetEtaCM, genSubLeadJetPhi, multiplicityBin};
             fHM->hGenLeadGenSubLeadJets_WithDijet_W->Fill(LeadSLeadJetsWithDijet, event_Weight);
+        }
+    }
+}
+
+void DiJetAnalysis::processRecoTracks(const Event *event, const Double_t &event_Weight, Double_t *multWeight, const Double_t &multiplicityBin)
+{
+    if (fVerbose)
+    {
+        std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
+        std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+        std::cout << "================Processing RecoTracks==================" << std::endl;
+        std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+        std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
+    }
+    TrackIterator trackIterator;
+    for (trackIterator = event->trackCollection()->begin(); trackIterator != event->trackCollection()->end(); trackIterator++)
+    {
+        Float_t trackPt = (*trackIterator)->TrkPt();
+        Float_t trackEta = (*trackIterator)->TrkEta();
+        Float_t trackPhi = (*trackIterator)->TrkPhi();
+
+        Double_t trackQuantities[4] = {trackPt, trackEta, trackPhi, multiplicityBin};
+
+        fHM->hRecoTracks->Fill(trackQuantities);
+        fHM->hRecoTracks_W->Fill(trackQuantities, event_Weight);
+        Bool_t isGoodTrack = (trackPt > fMinTrkPt && trackEta >= fTrkEtaRange[0] && trackEta <= fTrkEtaRange[1]);
+        if (fDebug)
+        {
+            Form("%5.2f < Track Pt: %5.2f , %5.2f < Track Eta: %5.2f < %5,2f \t %s \n", fMinTrkPt, trackPt, fTrkEtaRange[0], trackEta, fTrkEtaRange[1], (isGoodTrack) ? "True" : "False");
+        }
+
+        if (isGoodTrack)
+        {
+            fHM->hRecoTracks_Pt1_W->Fill(trackQuantities, event_Weight);
+        }
+    }
+}
+
+void DiJetAnalysis::processGenTracks(const Event *event, const Double_t &event_Weight, Double_t *multWeight, const Double_t &multiplicityBin)
+{
+    if (fVerbose)
+    {
+        std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
+        std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+        std::cout << "================Processing GenTracks==================" << std::endl;
+        std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+        std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
+    }
+
+    GenTrackIterator genTrackIterator;
+    for (genTrackIterator = event->genTrackCollection()->begin(); genTrackIterator != event->genTrackCollection()->end(); genTrackIterator++)
+    {
+        Double_t trackPt = (*genTrackIterator)->TrkPt();
+        Double_t trackEta = (*genTrackIterator)->TrkEta();
+        Double_t trackPhi = (*genTrackIterator)->TrkPhi();
+        Int_t trackCharge = (*genTrackIterator)->TrkChg();
+
+        Double_t trackQuantities[4] = {trackPt, trackEta, trackPhi, multiplicityBin};
+        fHM->hGenTracks->Fill(trackQuantities);
+        fHM->hGenTracks_W->Fill(trackQuantities, event_Weight);
+
+        Bool_t isGoodTrack = (trackPt > fMinTrkPt && trackEta >= fTrkEtaRange[0] && trackEta <= fTrkEtaRange[1] && trackCharge != 0);
+        if (fDebug)
+        {
+            Form("%5.2f < Track Pt: %5.2f , %5.2f <= Track Eta: %5.2f <= %5.2f, Track Charge = %i /= 0 \t %s \n", fMinTrkPt, trackPt, fTrkEtaRange[0], trackEta, fTrkEtaRange[1], trackCharge, (isGoodTrack) ? "True" : "False");
+        }
+
+        if (isGoodTrack)
+        {
+            fHM->hGenTracks_Pt1_W->Fill(trackQuantities, event_Weight);
         }
     }
 }

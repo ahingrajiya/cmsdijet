@@ -456,9 +456,9 @@ void HistoManagerDiJet::init()
     hInclusiveUnCorrectedRecoPtVsEtaLabFrame_W = new TH2D("hInclusiveUnCorrectedRecoPtVsEtaLabFrame_W", "Inclusive Uncorrected Reco Jet Pt vs Eta in Lab Frame Weighted", 100, -5., 5., 200, 0., 1000.);
     hInclusiveUnCorrectedRecoPtVsEtaLabFrame_W->Sumw2();
 
-    int TrackBins[4] = {1000, 60, 64, nMultiplicityBins + 1};
+    int TrackBins[4] = {100, 60, 64, nMultiplicityBins + 1};
     Double_t TrackMin[4] = {0.0, -3.0, -TMath::Pi(), fMultiplicityBins[0]};
-    Double_t TrackMax[4] = {10.0, 3.0, TMath::Pi(), fMultiplicityBins[fMultiplicityBins.size() - 1] + 1};
+    Double_t TrackMax[4] = {5.0, 3.0, TMath::Pi(), fMultiplicityBins[fMultiplicityBins.size() - 1] + 1};
 
     hRecoTracks = new THnSparseD("hRecoTracks", "Reco Tracks", 4, TrackBins, TrackMin, TrackMax);
     hRecoTracks->Sumw2();
