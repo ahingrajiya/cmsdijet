@@ -45,7 +45,7 @@ ClassImp(HistoManagerDiJet)
                                              hSelectedInclusiveRefJetsMidRapidity_W{nullptr}, hSelectedInclusiveRefJetPt_MidRapidity_W{nullptr}, hLeadingRefJetPt{nullptr}, hLeadingRefJetPt_W{nullptr}, hSubLeadingRefJetPt{nullptr}, hSubLeadingRefJetPt_W{nullptr},
                                              hLeadingRefJetPtWithDijet_W{nullptr}, hSubLeadingRefJetPtWithDijet_W{nullptr}, hXj_C0_W{nullptr}, hXj_C0_DiJetW{nullptr}, hGenXj_C0_W{nullptr}, hGenXj_C0_DiJetW{nullptr}, hTrackPtVsEta{nullptr}, hTrackPtVsEta_W{nullptr}, hTrackPtVsEtaCorrected{nullptr}, hTrackPtVsEtaCorrected_W{nullptr},
                                              hGenTrackPtVsEta{nullptr}, hGenTrackPtVsEta_W{nullptr}, hRecoJES_Eta_W{nullptr}, hRefJES_Eta_W{nullptr}, hRecoJES_Eta_Pt100_W{nullptr}, hRefJES_Eta_Pt100_W{nullptr}, hRecoJES_Eta_Pt120_W{nullptr}, hRefJES_Eta_Pt120_W{nullptr}, hRecoTracks{nullptr}, hRecoTracks_W{nullptr}, hRecoTracks_Pt1_W{nullptr},
-                                             hGenTracks{nullptr}, hGenTracks_W{nullptr}, hGenTracks_Pt1_W{nullptr}
+                                             hGenTracks{nullptr}, hGenTracks_W{nullptr}, hGenTracks_Pt1_W{nullptr}, hJetFlavorFractions_W{nullptr}
 {
     /* Empty*/
 }
@@ -164,6 +164,8 @@ HistoManagerDiJet::~HistoManagerDiJet()
         delete hGenLeadPtvsGenSubLeadPt_PtHatW;
     if (hRefLeadPtvsRefSubLeadPt_PtHatW)
         delete hRefLeadPtvsRefSubLeadPt_PtHatW;
+    if (hJetFlavorFractions_W)
+        delete hJetFlavorFractions_W;
 
     if (hMultiplicities)
         delete hMultiplicities;
@@ -455,6 +457,13 @@ void HistoManagerDiJet::init()
     hInclusiveUnCorrectedRecoPtVsEtaCMFrame_W->Sumw2();
     hInclusiveUnCorrectedRecoPtVsEtaLabFrame_W = new TH2D("hInclusiveUnCorrectedRecoPtVsEtaLabFrame_W", "Inclusive Uncorrected Reco Jet Pt vs Eta in Lab Frame Weighted", 100, -5., 5., 200, 0., 1000.);
     hInclusiveUnCorrectedRecoPtVsEtaLabFrame_W->Sumw2();
+
+    int JetFractionBins[5] = {200, 100, 64, 50, nMultiplicityBins + 1};
+    Double_t JetFractionMin[5] = {0.0, -5.0, -TMath::Pi(), 0.0, fMultiplicityBins[0]};
+    Double_t JetFractionMax[5] = {1000.0, 5.0, TMath::Pi(), 50.0, fMultiplicityBins[fMultiplicityBins.size() - 1] + 1};
+
+    hJetFlavorFractions_W = new THnSparseD("hJetFlavorFractions_W", "Jet Flavor Fractions Weighted", 5, JetFractionBins, JetFractionMin, JetFractionMax);
+    hJetFlavorFractions_W->Sumw2();
 
     int TrackBins[4] = {100, 60, 64, nMultiplicityBins + 1};
     Double_t TrackMin[4] = {0.0, -3.0, -TMath::Pi(), fMultiplicityBins[0]};
@@ -889,6 +898,7 @@ void HistoManagerDiJet ::writeOutput()
     hSelectedInclusiveRecoJetsMidRapidity_W->Write();
     hInclusiveRecoJetPtVsEtaCMFrame_W->Write();
     hInclusiveUnCorrectedRecoPtVsEtaCMFrame_W->Write();
+    hJetFlavorFractions_W->Write();
 
     if (fCollSystem == "pPb")
     {

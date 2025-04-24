@@ -85,6 +85,8 @@ public:
     THnSparseD *hInclusiveRecoJetsCMFrame_W;
     THnSparseD *hSelectedInclusiveRecoJetsMidRapidity_W;
 
+    THnSparseD *hJetFlavorFractions_W;
+
     THnSparseD *hInclusiveRefJetsLabFrame;
     THnSparseD *hInclusiveRefJetsLabFrame_W;
     THnSparseD *hInclusiveRefJetsCMFrame;
