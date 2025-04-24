@@ -1043,7 +1043,7 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
         }
         if (fIsMC && TMath::Abs(refEta) < 3.0 && refPt > 30)
         {
-            Double_t JetFractions[5] = {refPt, refEta, refPhi, TMath::Abs((*recoJetIterator)->JetPartonFlavorForB()), multiplicityBin};
+            Double_t JetFractions[5] = {refPt, refEta, refPhi, static_cast<Double_t>(TMath::Abs((*recoJetIterator)->JetPartonFlavorForB())), multiplicityBin};
             fHM->hJetFlavorFractions_W->Fill(JetFractions, event_Weight);
         }
         if (fDoInJetMult && jetPt > fSubLeadJetPtLow)
