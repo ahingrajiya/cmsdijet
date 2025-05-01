@@ -389,12 +389,19 @@ Double_t DiJetAnalysis::MultiplicityWeight(const Double_t &multiplicity)
 
     if (multiplicity < 9 || multiplicity > 135)
     {
-        std::cerr << "Multiplicity is out of range. Returning 1.0" << std::endl;
+        if (fDebug)
+        {
+            std::cerr << "Multiplicity is out of range. Returning 1.0" << std::endl;
+        }
         return 1.0;
     }
     else
     {
         Double_t weight = fMultiplicityWeight[0]->GetBinContent(fMultiplicityWeight[0]->FindBin(multiplicity));
+
+        std::cout << "Multiplicity Weight : " << weight << std::endl;
+        std::cout << "Multiplicity : " << multiplicity << std::endl;
+
         return (weight > 0) ? weight : 1.0;
     }
 }
