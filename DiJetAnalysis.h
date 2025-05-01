@@ -165,6 +165,8 @@ public:
     void setUEType(const std::string &UEType) { fUEType = UEType; }
     ///@brief Do tracking closure plots
     void doTrackingClosure() { fDoTrackingClosures = kTRUE; }
+    ///@brief Set if to use pPb multiplicity weight
+    void setpPbDoMultiplicityWeight() { fpPbDoMultiplicityWeight = kTRUE; }
 
 private:
     /// @brief Reco and Corrected Multiplicity calculator with custom track pt and track eta cuts
@@ -194,6 +196,10 @@ private:
     /// @param multiplicity Multiplicity of the event
     /// @return Array of weights for multiplicity ranges
     Double_t *MultiplicityWeight(const Int_t &multiplicity);
+    /// @brief Multiplicity weights
+    /// @param multiplicity Multiplicity of the event
+    /// @return Array of weights for multiplicity ranges
+    Double_t MultiplicityWeight(const Double_t &multiplicity);
     /// @brief Dijet weights
     /// @param ispPb Set to be true if it is pPb dataset. For PbPb dataset it needs is set to be false
     /// @param leadJetPt Leading jet pt
@@ -252,6 +258,8 @@ private:
     Float_t MoveToLabFrame(const Float_t &jetEta);
     /// @brief Sets Up array of multiplicity weight histograms
     void SetUpMultiplicityWeight(const std::string &multWeightTable);
+    /// @brief Sets Up multiplicity weight histograms
+    void SetUpMultiplicityWeight(const std::string &multWeightTable, const Bool_t &ispPb);
     /// @brief Set up Dijet weight table
     void SetUpDijetWeight(const std::string &dijetWeightTable);
     ///@brief Set up collision system booleans
@@ -342,6 +350,8 @@ private:
     std::string fUEType;
     ///@brief Do Tracking Closures
     Bool_t fDoTrackingClosures;
+    ///@brief Do multiplicity weight in pPb
+    Bool_t fpPbDoMultiplicityWeight;
 
     ///@brief Which Multiplicity type to use for event selection.
     /// 0 -> Reco Multiplicity

@@ -217,6 +217,8 @@ int main(int argc, char *argv[])
     analysis->setUEType(UEType);
     analysis->doTrackingClosure();
     analysis->setTrackingTable("../aux_files/pPb_8160/trk_eff_table/pPb_EPOS_2D_efftables.root");
+    analysis->setMultiplicityWeightTable("../aux_files/pPb_8160/mult_weight_table/Mult_Weight_pPb.root");
+    analysis->setpPbDoMultiplicityWeight();
     // analysis->setDebug(kTRUE);
 
     // Initialize Histomanager
