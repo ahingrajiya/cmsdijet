@@ -999,9 +999,7 @@ void DiJetAnalysis::processEvent(const Event *event)
 
     if (fpPbDoMultiplicityWeight)
     {
-        std::cout << "Applying Multiplicity Weight: " << Event_Weight << std::endl;
         Event_Weight *= MultiplicityWeight(static_cast<Double_t>(iRecoCorrectedMult.second));
-        std::cout << "Applied Multiplicity Weight: " << Event_Weight << std::endl;
     }
 
     processRecoJets(event, Event_Weight, MultWeight, iMultiplicityBin);
