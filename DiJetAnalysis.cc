@@ -387,7 +387,7 @@ Double_t DiJetAnalysis::MultiplicityWeight(const Double_t &multiplicity)
         return 1.0;
     }
 
-    if (multiplicity < 9 || multiplicity > 135)
+    if (multiplicity < 10 || multiplicity > 185)
     {
         if (fDebug)
         {
@@ -398,7 +398,7 @@ Double_t DiJetAnalysis::MultiplicityWeight(const Double_t &multiplicity)
     else
     {
         Double_t weight = fMultiplicityWeight[0]->GetBinContent(fMultiplicityWeight[0]->FindBin(multiplicity));
-        if (fDebug)
+        // if (fDebug)
         {
             std::cout << "Multiplicity Weight : " << weight << std::endl;
             std::cout << "Multiplicity : " << multiplicity << std::endl;
@@ -999,7 +999,7 @@ void DiJetAnalysis::processEvent(const Event *event)
 
     if (fpPbDoMultiplicityWeight)
     {
-        Event_Weight *= MultiplicityWeight(static_cast<Double_t>(iRecoCorrectedMult.second));
+        Event_Weight *= MultiplicityWeight(static_cast<Double_t>(iRecoMult));
     }
 
     processRecoJets(event, Event_Weight, MultWeight, iMultiplicityBin);
