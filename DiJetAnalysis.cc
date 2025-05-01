@@ -398,7 +398,7 @@ Double_t DiJetAnalysis::MultiplicityWeight(const Double_t &multiplicity)
     else
     {
         Double_t weight = fMultiplicityWeight[0]->GetBinContent(fMultiplicityWeight[0]->FindBin(multiplicity));
-        // if (fDebug)
+        if (fDebug)
         {
             std::cout << "Multiplicity Weight : " << weight << std::endl;
             std::cout << "Multiplicity : " << multiplicity << std::endl;
