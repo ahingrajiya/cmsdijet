@@ -220,7 +220,7 @@ int main(int argc, char *argv[])
     if (isMC)
     {
         analysis->setpPbDoMultiplicityWeight();
-        analysis->setMultiplicityWeightTable("../aux_files/pPb_8160/mult_weight_table/Mult_Weight_pPb_Reco.root");
+        analysis->setMultiplicityWeightTable("../aux_files/pPb_8160/mult_weight_table/Mult_Weight_pPb_Reco_NoDJ.root");
     }
 
     // analysis->setDebug(kTRUE);
