@@ -918,9 +918,11 @@ void DiJetAnalysis::processEvent(const Event *event)
     {
         fDijetWeight = 1.0;
     }
+    if (fpPbDoMultiplicityWeight && fIspPb)
+    {
+        Event_Weight *= MultiplicityWeight(static_cast<Double_t>(event->multiplicity()));
+    }
 
-    fIsDiJetFound = kFALSE;
-    fIsGenDiJetFound = kFALSE;
     Double_t iMultiplicityBin;
     if (fMultiplicityType != 4)
     {
@@ -930,17 +932,6 @@ void DiJetAnalysis::processEvent(const Event *event)
     {
         iMultiplicityBin = FindBin(event->hiBinWithShift());
     }
-
-    if (fIsMC)
-    {
-        fHM->hPtHat->Fill(event->ptHat());
-        fHM->hPtHat_W->Fill(event->ptHat(), Event_Weight);
-    }
-
-    fHM->hNEventsInMult->Fill(iMultiplicityBin);
-
-    fHM->hHiBin->Fill(event->hiBinWithShift());
-    fHM->hHiBin_W->Fill(event->hiBinWithShift(), Event_Weight);
 
     Double_t iVertexZ = event->vz();
 
@@ -955,23 +946,16 @@ void DiJetAnalysis::processEvent(const Event *event)
             iVertexZ = -iVertexZ;
         }
     }
-    fHM->hVz->Fill(iVertexZ);
-    fHM->hVz_W->Fill(iVertexZ, Event_Weight * fDijetWeight);
 
     // Int_t iRecoMult = RecoMultiplicity(fIspPb, event);
     Int_t iRecoMult = event->multiplicity();
-    fHM->hRecoMultiplicity_W->Fill(iRecoMult, Event_Weight * fDijetWeight);
-
     std::pair<Int_t, Float_t> iRecoCorrectedMult = RecoCorrectedMultiplicity(event, Event_Weight, iMultiplicityBin);
-    fHM->hCorrectedMultiplicity_W->Fill(iRecoCorrectedMult.second, Event_Weight * fDijetWeight);
-
     std::pair<Int_t, Int_t> iGenSubeMult = {0.0, 0.0};
     if (fIsMC)
     {
         iGenSubeMult = GenSubeMultiplicity(event, Event_Weight, iMultiplicityBin);
-        fHM->hGenMultiplicity_W->Fill(iGenSubeMult.first, Event_Weight * fDijetWeight);
-        fHM->hSubEventMultiplicity_W->Fill(iGenSubeMult.second, Event_Weight * fDijetWeight);
     }
+
     Double_t iMultiplicity;
     iMultiplicity = (fMultiplicityType == 0) ? static_cast<Double_t>(iRecoMult) : (fMultiplicityType == 1)          ? static_cast<Double_t>(iGenSubeMult.first)
                                                                               : (fMultiplicityType == 2)            ? static_cast<Double_t>(iRecoCorrectedMult.second)
@@ -979,7 +963,6 @@ void DiJetAnalysis::processEvent(const Event *event)
                                                                               : (fMultiplicityType == 4 && fIsPbPb) ? static_cast<Double_t>(event->hiBinWithShift())
                                                                                                                     : 0;
     Double_t *MultWeight = new Double_t[4];
-
     if (fUseMultiplicityWeight && fMultiplicityType != 4)
     {
         MultWeight = MultiplicityWeight(static_cast<Int_t>(iMultiplicity));
@@ -992,15 +975,32 @@ void DiJetAnalysis::processEvent(const Event *event)
         }
     }
 
+    if (fIsMC)
+    {
+        fHM->hPtHat->Fill(event->ptHat());
+        fHM->hPtHat_W->Fill(event->ptHat(), Event_Weight);
+    }
+
+    fHM->hNEventsInMult->Fill(iMultiplicityBin);
+    fHM->hHiBin->Fill(event->hiBinWithShift());
+    fHM->hHiBin_W->Fill(event->hiBinWithShift(), Event_Weight);
+    fHM->hVz->Fill(iVertexZ);
+    fHM->hVz_W->Fill(iVertexZ, Event_Weight * fDijetWeight);
+    fHM->hRecoMultiplicity_W->Fill(iRecoMult, Event_Weight * fDijetWeight);
+    fHM->hCorrectedMultiplicity_W->Fill(iRecoCorrectedMult.second, Event_Weight * fDijetWeight);
+    if (fIsMC)
+    {
+        fHM->hGenMultiplicity_W->Fill(iGenSubeMult.first, Event_Weight * fDijetWeight);
+        fHM->hSubEventMultiplicity_W->Fill(iGenSubeMult.second, Event_Weight * fDijetWeight);
+    }
+
     if (fMultiplicityRange[0] < iMultiplicity && iMultiplicity < fMultiplicityRange[1])
     {
         fHM->hSelectedMultiplicity_W->Fill(iMultiplicity, Event_Weight * fDijetWeight);
     }
 
-    if (fpPbDoMultiplicityWeight)
-    {
-        Event_Weight *= MultiplicityWeight(static_cast<Double_t>(iRecoMult));
-    }
+    fIsDiJetFound = kFALSE;
+    fIsGenDiJetFound = kFALSE;
 
     processRecoJets(event, Event_Weight, MultWeight, iMultiplicityBin);
 
