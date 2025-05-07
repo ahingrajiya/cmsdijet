@@ -84,22 +84,22 @@ int main(int argc, char *argv[])
     {
         if (isPbGoing)
         {
-            if (isEmbedded)
-            {
-                JECFileName = "Autumn16_HI_pPb_Pbgoing_Embedded_MC_L2Relative_AK4PF.txt";
-            }
-            else
+            // if (isEmbedded)
+            // {
+            //     JECFileName = "Autumn16_HI_pPb_Pbgoing_Embedded_MC_L2Relative_AK4PF.txt";
+            // }
+            // else
             {
                 JECFileName = "Autumn16_HI_pPb_Pbgoing_Unembedded_MC_L2Relative_AK4PF.txt";
             }
         }
         else
         {
-            if (isEmbedded)
-            {
-                JECFileName = "Autumn16_HI_pPb_pgoing_Embedded_MC_L2Relative_AK4PF.txt";
-            }
-            else
+            // if (isEmbedded)
+            // {
+            //     JECFileName = "Autumn16_HI_pPb_pgoing_Embedded_MC_L2Relative_AK4PF.txt";
+            // }
+            // else
             {
                 JECFileName = "Autumn16_HI_pPb_pgoing_Unembedded_MC_L2Relative_AK4PF.txt";
             }
@@ -217,11 +217,11 @@ int main(int argc, char *argv[])
     analysis->setUEType(UEType);
     analysis->doTrackingClosure();
     analysis->setTrackingTable("../aux_files/pPb_8160/trk_eff_table/pPb_EPOS_2D_efftables.root");
-    if (isMC)
-    {
-        analysis->setpPbDoMultiplicityWeight();
-        analysis->setMultiplicityWeightTable("../aux_files/pPb_8160/mult_weight_table/Mult_Weight_pPb_Reco_DJ.root");
-    }
+    // if (isMC)
+    // {
+    //     analysis->setpPbDoMultiplicityWeight();
+    //     analysis->setMultiplicityWeightTable("../aux_files/pPb_8160/mult_weight_table/Mult_Weight_pPb_Reco_DJ.root");
+    // }
 
     // analysis->setDebug(kTRUE);
 
