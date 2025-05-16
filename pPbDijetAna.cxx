@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
     Bool_t ispPb{kTRUE};
     Bool_t useCMFrame{kFALSE};
     Double_t etaBoost{0.4654094531};
-    TString jetBranchName{"ak4PFJetAnalyzer"};
+    TString jetBranchName{"akCs4PFJetAnalyzer"};
     std::string dijetWeightType{"Gen"};
     TString oFileName{};
     TString JECFileName{};
@@ -84,10 +84,10 @@ int main(int argc, char *argv[])
     {
         if (isPbGoing)
         {
-            // if (isEmbedded)
-            // {
-            //     JECFileName = "Autumn16_HI_pPb_Pbgoing_Embedded_MC_L2Relative_AK4PF.txt";
-            // }
+            if (isEmbedded)
+            {
+                JECFileName = "Autumn16_HI_pPb_Pbgoing_Embedded_MC_L2Relative_AK4PF.txt";
+            }
             // else
             {
                 JECFileName = "Autumn16_HI_pPb_Pbgoing_Unembedded_MC_L2Relative_AK4PF.txt";
@@ -95,11 +95,11 @@ int main(int argc, char *argv[])
         }
         else
         {
-            // if (isEmbedded)
-            // {
-            //     JECFileName = "Autumn16_HI_pPb_pgoing_Embedded_MC_L2Relative_AK4PF.txt";
-            // }
-            // else
+            if (isEmbedded)
+            {
+                JECFileName = "Autumn16_HI_pPb_pgoing_Embedded_MC_L2Relative_AK4PF.txt";
+            }
+            else
             {
                 JECFileName = "Autumn16_HI_pPb_pgoing_Unembedded_MC_L2Relative_AK4PF.txt";
             }
