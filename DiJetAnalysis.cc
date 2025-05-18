@@ -31,7 +31,7 @@ ClassImp(DiJetAnalysis)
                                      fIsDiJetFound{kFALSE}, fIsGenDiJetFound{kFALSE}, fVerbose{kFALSE}, fMinTrkPt{0.5}, fTrkEffPbPb{nullptr}, fTrkEffpPb{nullptr}, fTrkEffTable{""}, fEventCounter{0},
                                      fCycleCounter{0}, fMultWeightTable{""}, fMultiplicityWeight{nullptr}, fMultWeight{nullptr}, fDoInJetMult{kFALSE}, fMultiplicityType{0}, fUseDijetWeight{kFALSE},
                                      fDijetWeightTable{""}, hDijetWeight{nullptr}, fDijetWeightFile{nullptr}, fDijetWeight{1.0}, hDijetWeightRef{nullptr}, hDijetWeightGen{nullptr}, fDijetWeightType{"Reco"}, fIspp{kFALSE},
-                                     fIsPbPb{kFALSE}, fCollSystem{""}, fUEType{""}, fDoTrackingClosures{kFALSE}, fpPbDoMultiplicityWeight{kFALSE}
+                                     fIsPbPb{kFALSE}, fCollSystem{""}, fUEType{""}, fDoTrackingClosures{kFALSE}, fpPbDoMultiplicityWeight{kFALSE}, fpPbMB{nullptr}, fpPbHM185{nullptr}
 {
     fLeadJetEtaRange[0] = {-1.};
     fLeadJetEtaRange[1] = {1.};
@@ -102,6 +102,10 @@ void DiJetAnalysis::init()
     if (fpPbDoMultiplicityWeight)
     {
         SetUpMultiplicityWeight(fMultWeightTable, fIspPb);
+        fpPbHM185 = new TF1("fHM185", "pol2", 185, 250);
+        fpPbHM185->SetParameters(-5.31185e+00, 4.90035e-02, -8.71705e-05);
+        fpPbMB = new TF1("fpPbMB", "pol4", 10, 185);
+        fpPbMB->SetParameters(4.10681e-01, 3.82374e-03, 1.83548e-04, -2.27844e-06, 7.09986e-09);
     }
 
     if (fUseDijetWeight)
@@ -387,7 +391,7 @@ Double_t DiJetAnalysis::MultiplicityWeight(const Double_t &multiplicity)
         return 1.0;
     }
 
-    if (multiplicity < 10 || multiplicity > 185)
+    if (multiplicity < 10)
     {
         if (fDebug)
         {
@@ -395,15 +399,21 @@ Double_t DiJetAnalysis::MultiplicityWeight(const Double_t &multiplicity)
         }
         return 1.0;
     }
+    else if (multiplicity < 185)
+    {
+        return fpPbMB->Eval(multiplicity);
+    }
+    else if (multiplicity < 250)
+    {
+        return fpPbHM185->Eval(multiplicity);
+    }
     else
     {
-        Double_t weight = fMultiplicityWeight[0]->GetBinContent(fMultiplicityWeight[0]->FindBin(multiplicity));
         if (fDebug)
         {
-            std::cout << "Multiplicity Weight : " << weight << std::endl;
-            std::cout << "Multiplicity : " << multiplicity << std::endl;
+            std::cerr << "Multiplicity is out of range. Returning 1.0" << std::endl;
         }
-        return (weight > 0) ? weight : 1.0;
+        return 1.0;
     }
 }
 
@@ -918,10 +928,12 @@ void DiJetAnalysis::processEvent(const Event *event)
     {
         fDijetWeight = 1.0;
     }
+    // std::cout << "Event Weight : " << Event_Weight << std::endl;
     if (fpPbDoMultiplicityWeight && fIspPb)
     {
         Event_Weight *= MultiplicityWeight(static_cast<Double_t>(event->multiplicity()));
     }
+    // std::cout << "Event Weight * MultWeight : " << Event_Weight << std::endl;
 
     Double_t iMultiplicityBin;
     if (fMultiplicityType != 4)

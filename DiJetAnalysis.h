@@ -364,8 +364,12 @@ private:
 
     Int_t fCycleCounter;
 
+    TF1 *fpPbMB;
+    TF1 *fpPbHM185;
+
     ///@brief Holds dynamic multiplicity or centrality bins
-    std::map<Int_t, Double_t> fBins;
+    std::map<Int_t, Double_t>
+        fBins;
 
     ClassDef(DiJetAnalysis, 0)
 };
