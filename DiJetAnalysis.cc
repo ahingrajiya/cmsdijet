@@ -996,8 +996,7 @@ void DiJetAnalysis::processEvent(const Event *event)
     fHM->hNEventsInMult->Fill(iMultiplicityBin);
     fHM->hHiBin->Fill(event->hiBinWithShift());
     fHM->hHiBin_W->Fill(event->hiBinWithShift(), Event_Weight);
-    fHM->hVz->Fill(iVertexZ);
-    fHM->hVz_W->Fill(iVertexZ, Event_Weight * fDijetWeight);
+
     fHM->hRecoMultiplicity_W->Fill(iRecoMult, Event_Weight * fDijetWeight);
     fHM->hCorrectedMultiplicity_W->Fill(iRecoCorrectedMult.second, Event_Weight * fDijetWeight);
     if (fIsMC)
@@ -1021,6 +1020,11 @@ void DiJetAnalysis::processEvent(const Event *event)
         processGenJets(event, Event_Weight, MultWeight, iMultiplicityBin);
     }
 
+    if (fIsDiJetFound)
+    {
+        fHM->hVz->Fill(iVertexZ);
+        fHM->hVz_W->Fill(iVertexZ, Event_Weight * fDijetWeight);
+    }
     if (fUseMultiplicityWeight)
     {
         for (Int_t i = 0; i < 4; i++)
