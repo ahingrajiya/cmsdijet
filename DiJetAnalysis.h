@@ -25,6 +25,7 @@
 #include "ForestAODReader.h"
 #include "ForestminiAODReader.h"
 #include "TVector2.h"
+#include "TSpline.h"
 
 class DiJetAnalysis : public BaseAnalysis
 {
@@ -366,10 +367,10 @@ private:
 
     TF1 *fpPbMB;
     TF1 *fpPbHM185;
+    TSpline3 *fspline185;
 
     ///@brief Holds dynamic multiplicity or centrality bins
-    std::map<Int_t, Double_t>
-        fBins;
+    std::map<Int_t, Double_t> fBins;
 
     ClassDef(DiJetAnalysis, 0)
 };
