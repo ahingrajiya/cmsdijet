@@ -24,6 +24,9 @@ int main(int argc, char *argv[])
 {
     Bool_t isMC{kTRUE};
     Bool_t ispPb{kFALSE};
+    Bool_t useMultWeight{kFALSE};
+    Bool_t useCMFrame{kFALSE};
+    Double_t etaBoost{0.0};
     TString inFileName;
     TString oFileName;
     TString JECFileName;
@@ -32,6 +35,7 @@ int main(int argc, char *argv[])
     Int_t collEnergyGeV{5020};
     TString collSystem{"pp"};
     Int_t collYear{2018};
+    Bool_t useCentWeight{kFALSE};
     TString jetBranchName{"ak4PFJetAnalyzer"};
     std::vector<std::pair<Int_t, Double_t>> multiplicityBins = {{10, 0.0}, {60, 1.0}, {120, 2.0}, {185, 3.0}, {400, 4.0}};
     std::vector<std::string> filters{"pPAprimaryVertexFilter", "pBeamScrapingFilter", "HBHENoiseFilterResultRun2Loose"};
@@ -66,6 +70,7 @@ int main(int argc, char *argv[])
     // Initialize event cuts
     EventCut *eventCut = new EventCut{};
     eventCut->setVz(-15., 15.);
+    eventCut->setMultiplicty(0, 10000);
     if (isMC)
     {
         eventCut->setPtHat(30., 1000.);
@@ -127,13 +132,13 @@ int main(int argc, char *argv[])
     DiJetAnalysis *analysis = new DiJetAnalysis{};
     analysis->addHistoManager(hm);
     analysis->setIsMC(isMC);
-    analysis->setLeadJetEtaRange(-1.5, 1.5);
-    analysis->setSubLeadJetEtaRange(-1.5, 1.5);
+    analysis->setLeadJetEtaRange(-1., 1.);
+    analysis->setSubLeadJetEtaRange(-1., 1.);
     analysis->setMultiplicityRange(0., 10000.);
     analysis->setMultiplicityType(0);
-    analysis->setLeadJetPt(120.);
+    analysis->setLeadJetPt(100.);
     analysis->setSubLeadJetPt(50.);
-    analysis->setDeltaPhi(2. * TMath::Pi() / 3);
+    analysis->setDeltaPhi(5. * TMath::Pi() / 6);
     analysis->setMinTrkPt(0.5);
     analysis->setTrkEtaRange(-2.4, 2.4);
     analysis->doInJetMultiplicity();
