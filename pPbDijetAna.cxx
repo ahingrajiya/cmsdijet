@@ -49,7 +49,8 @@ int main(int argc, char *argv[])
     TString path2JEC = "..";
     Double_t ptHatCut[2]{15., 30.};
     Bool_t isEmbedded{kTRUE};
-    std::vector<std::pair<Int_t, Double_t>> multiplicityBins = {{0, 0.0}, {10, 1.0}, {60, 2.0}, {120, 3.0}, {185, 4.0}, {250, 5.0}, {400, 6.0}};
+    // std::vector<std::pair<Int_t, Double_t>> multiplicityBins = {{0, 0.0}, {10, 1.0}, {60, 2.0}, {120, 3.0}, {185, 4.0}, {250, 5.0}, {400, 6.0}};
+    std::vector<std::pair<Int_t, Double_t>> multiplicityBins = {{0, 0.0}, {10, 1.0}, {20, 2.0}, {30, 3.0}, {40, 4.0}, {50, 5.0}, {60, 6.0}, {120, 7.0}, {185, 8.0}, {250, 9.0}, {400, 10.0}};
     std::string path2DijetWeight = "../aux_files/pPb_8160/Dijet_Weight/DijetWeight10_New.root";
     std::vector<std::string> filters{"pBeamScrapingFilter", "pPAprimaryVertexFilter", "HBHENoiseFilterResultRun2Loose", "phfCoincFilter", "pVertexFilterCutdz1p0"};
     std::string UEType{"EPOS"};
@@ -173,6 +174,10 @@ int main(int argc, char *argv[])
     reader->setTrackCut(trackCut);
     reader->setEventCut(eventCut);
     reader->setFilters(filters);
+    if (isEmbedded)
+    {
+        reader->setJESCorrections();
+    }
     if (!isMC)
     {
         reader->addJECFile(JECFileDataName.Data());
@@ -215,13 +220,13 @@ int main(int argc, char *argv[])
     analysis->doInJetMultiplicity();
     analysis->setBins(multiplicityBins);
     analysis->setUEType(UEType);
-    analysis->doTrackingClosure();
+    // analysis->doTrackingClosure();
     analysis->setTrackingTable("../aux_files/pPb_8160/trk_eff_table/pPb_EPOS_2D_efftables.root");
-    if (isMC)
-    {
-        analysis->setpPbDoMultiplicityWeight();
-        analysis->setMultiplicityWeightTable("../aux_files/pPb_8160/mult_weight_table/Mult_Weight_pPb_Reco_DJ.root");
-    }
+    // if (isMC)
+    // {
+    //     // analysis->setpPbDoMultiplicityWeight();
+    //     // analysis->setMultiplicityWeightTable("../aux_files/pPb_8160/mult_weight_table/Mult_Weight_pPb_Reco_DJ.root");
+    // }
 
     // analysis->setDebug(kTRUE);
 

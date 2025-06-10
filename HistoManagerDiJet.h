@@ -49,9 +49,11 @@ public:
     void setMultiplicityBins(const std::vector<std::pair<Int_t, Double_t>> &bins)
     {
         fMultiplicityBins.clear();
+        fMultiplicityBinThresholds.clear();
         for (const auto &[threshold, value] : bins)
         {
-            fMultiplicityBins.push_back(value);
+            fMultiplicityBins.push_back(static_cast<float>(value));
+            fMultiplicityBinThresholds.push_back(threshold);
         }
     }
     ///@brief Set Collision System
@@ -201,10 +203,10 @@ public:
     TH1D *hXj_C0_DiJetW;
     TH1D *hGenXj_C0_W;
     TH1D *hGenXj_C0_DiJetW;
-    TH1D *hXj_Projection_W[5];
-    TH1D *hXj_Projection_DiJetW[5];
-    TH1D *hGenXj_Projection_W[5];
-    TH1D *hGenXj_Projection_DiJetW[5];
+    std::vector<TH1D *> hXj_Projection_W;
+    std::vector<TH1D *> hXj_Projection_DiJetW;
+    std::vector<TH1D *> hGenXj_Projection_W;
+    std::vector<TH1D *> hGenXj_Projection_DiJetW;
 
     TH3D *hTrackPtVsEta;
     TH3D *hTrackPtVsEta_W;
@@ -223,6 +225,7 @@ private:
     Bool_t fIsMC;
 
     std::vector<float> fMultiplicityBins;
+    std::vector<int> fMultiplicityBinThresholds;
     TString fCollSystem;
 
     ClassDef(HistoManagerDiJet, 1)

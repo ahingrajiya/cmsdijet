@@ -25,10 +25,12 @@ ClassImp(ForestAODReader)
     //_________________
     ForestAODReader::ForestAODReader()
     : fEvent{nullptr}, fInFileName{nullptr}, fEvents2Read{0}, fEventsProcessed{0}, fIsMc{kFALSE}, fUseHltBranch{kFALSE},
-      fUseSkimmingBranch{kFALSE}, fJetCollection{"ak4PFJetAnalyzer"}, fUseJets{kFALSE}, fUseTrackBranch{kFALSE}, fUseGenTrackBranch{kFALSE}, fHltTree{nullptr},
-      fSkimTree{nullptr}, fEventTree{nullptr}, fTrkTree{nullptr}, fGenTrkTree{nullptr}, fJEC{nullptr}, fJECFiles{}, fJEU{nullptr}, fJEUFiles{}, fCollidingSystem{Form("PbPb")},
-      fCollidingEnergyGeV{5020}, fYearOfDataTaking{2018}, fDoJetPtSmearing{kFALSE}, fFixJetArrays{kFALSE}, fEventCut{nullptr}, fJetCut{nullptr}, fRecoJet2GenJetId{}, fGenJet2RecoJet{},
-      fTrackCut{nullptr}, fUseMatchedJets{kFALSE}, fEventsToProcess{-1}, fUseJetID{kFALSE}, fJetIDType{0}, fHiBinShift{0}
+      fUseSkimmingBranch{kFALSE}, fJetCollection{"ak4PFJetAnalyzer"}, fUseJets{kFALSE}, fUseTrackBranch{kFALSE}, fUseGenTrackBranch{kFALSE},
+      fHltTree{nullptr}, fSkimTree{nullptr}, fEventTree{nullptr}, fTrkTree{nullptr}, fGenTrkTree{nullptr}, fJEC{nullptr}, fJECFiles{},
+      fJEU{nullptr}, fJEUFiles{}, fCollidingSystem{Form("PbPb")}, fCollidingEnergyGeV{5020}, fYearOfDataTaking{2018}, fDoJetPtSmearing{kFALSE},
+      fFixJetArrays{kFALSE}, fEventCut{nullptr}, fJetCut{nullptr}, fRecoJet2GenJetId{}, fGenJet2RecoJet{}, fTrackCut{nullptr},
+      fUseMatchedJets{kFALSE}, fEventsToProcess{-1}, fUseJetID{kFALSE}, fJetIDType{0}, fHiBinShift{0}, fIs_pp{kFALSE}, fIs_PbPb{kFALSE},
+      fIs_pPb{kFALSE}, fJetJESCorrectionsFunction{nullptr}, fApplyJetJESCorrections{kFALSE}, fUseJEU{0}, fSmearType{0}
 {
     // Initialize many variables
     clearVariables();
@@ -37,14 +39,16 @@ ClassImp(ForestAODReader)
 //_________________
 ForestAODReader::ForestAODReader(const Char_t *inputStream, const Bool_t &useHltBranch, const Bool_t &useSkimmingBranch,
                                  const Char_t *jetCollection, const Bool_t &useJets,
-                                 const Bool_t &useTrackBranch, const Bool_t &useGenTrackBranch, const Bool_t &isMc, const Bool_t &setStoreLocation, const Bool_t &useMatchedJets)
-    : fEvent{nullptr}, fInFileName{inputStream}, fEvents2Read{0}, fEventsProcessed{0}, fIsMc{isMc},
-      fUseHltBranch{useHltBranch}, fUseSkimmingBranch{useSkimmingBranch}, fJetCollection{"ak4PFJetAnalyzer"},
-      fUseJets{useJets}, fUseTrackBranch{useTrackBranch}, fUseGenTrackBranch{useGenTrackBranch},
-      fJEC{nullptr}, fJECFiles{}, fJEU{nullptr},
-      fJEUFiles{}, fCollidingSystem{Form("PbPb")}, fCollidingEnergyGeV{5020}, fYearOfDataTaking{2018},
-      fDoJetPtSmearing{kFALSE}, fFixJetArrays{kFALSE}, fEventCut{nullptr}, fJetCut{nullptr}, fIsInStore{setStoreLocation}, fTrackCut{nullptr}, fUseMatchedJets{useMatchedJets}, fEventsToProcess{-1},
-      fUseJetID{kFALSE}, fJetIDType{0}, fHiBinShift{0}
+                                 const Bool_t &useTrackBranch, const Bool_t &useGenTrackBranch, const Bool_t &isMc,
+                                 const Bool_t &setStoreLocation, const Bool_t &useMatchedJets)
+    : fEvent{nullptr}, fInFileName{inputStream}, fEvents2Read{0}, fEventsProcessed{0}, fIsMc{isMc}, fUseHltBranch{useHltBranch},
+      fUseSkimmingBranch{useSkimmingBranch}, fJetCollection{"ak4PFJetAnalyzer"}, fUseJets{useJets}, fUseTrackBranch{useTrackBranch},
+      fUseGenTrackBranch{useGenTrackBranch}, fJEC{nullptr}, fJECFiles{}, fJEU{nullptr}, fJEUFiles{}, fCollidingSystem{Form("PbPb")},
+      fCollidingEnergyGeV{5020}, fYearOfDataTaking{2018}, fDoJetPtSmearing{kFALSE}, fFixJetArrays{kFALSE}, fEventCut{nullptr}, fJetCut{nullptr},
+      fIsInStore{setStoreLocation}, fTrackCut{nullptr}, fUseMatchedJets{useMatchedJets}, fEventsToProcess{-1}, fUseJetID{kFALSE}, fJetIDType{0},
+      fHiBinShift{0}, fIs_pp{kFALSE}, fIs_PbPb{kFALSE}, fIs_pPb{kFALSE}, fJetJESCorrectionsFunction{nullptr}, fApplyJetJESCorrections{kFALSE},
+      fUseJEU{0}, fSmearType{0}
+
 {
     // Initialize many variables
     clearVariables();
@@ -189,6 +193,9 @@ Int_t ForestAODReader::init()
     setupBranches();
     // Setup jet energy correction files and pointer
     setupJEC();
+    setupJEU();
+    SetUpWeightFunctions();
+
     return status;
 }
 
@@ -229,6 +236,46 @@ void ForestAODReader::setupJEC()
     fJEC = new JetCorrector(fJECFiles);
 }
 
+void ForestAODReader::setupJEU()
+{
+
+    // Next part is needed only if JEU correction is applied
+    if (fUseJEU == 0)
+        return;
+
+    // If no path to the aux_file
+    if (fJECPath.Length() <= 0)
+    {
+        // Set default values
+        std::cout << "[WARNING] Default path to JEU files will be used" << std::endl;
+        setPath2JetAnalysis();
+    }
+
+    // If no correction file is specified
+    if (fJEUFiles.empty())
+    {
+        std::cout << "[WARNING] Default JEU file with parameters will be used" << std::endl;
+        std::runtime_error("No JEU files specified. Please add JEU files using addJEUFile() method.");
+    }
+
+    TString tmp = Form("%s/aux_files/%s_%i/JEC/%s",
+                       fJECPath.Data(), fCollidingSystem.Data(),
+                       fCollidingEnergyGeV, fJEUFiles.at(0).c_str());
+
+    fJEU = new JetUncertainty(tmp.Data());
+    std::cout << "JEU file: " << tmp.Data() << std::endl;
+    std::cout << "\t[DONE]" << std::endl;
+}
+
+void ForestAODReader::SetUpWeightFunctions()
+{
+    if (fIs_pPb && fJetCollection == "akCs4PFJetAnalyzer")
+    {
+        fJetJESCorrectionsFunction = new TF1("fJetJESCorrectionsFunction", "sqrt([0] + [1]/x)", 30.0, 800.0, TF1::EAddToList::kNo);
+        fJetJESCorrectionsFunction->SetParameters(1.00269e+00, 4.82019e+00);
+    }
+}
+
 //________________
 Float_t ForestAODReader::jetPtWeight(const Bool_t &isMC, const std::string &system, const Int_t &year,
                                      const Int_t &energy, float jetpt) const
@@ -246,6 +293,28 @@ Float_t ForestAODReader::jetPtWeight(const Bool_t &isMC, const std::string &syst
     return jetptweight;
 }
 
+Float_t ForestAODReader::JetJESCorrections(const Float_t &jetpt)
+{
+    if (!fIs_pPb || !fJetJESCorrectionsFunction)
+    {
+        std::cerr << "Jet JES Corrections function is not set or not applicable for the current system : " << fCollidingSystem << std::endl;
+        std::cerr << "Returning 1.0 as default correction factor." << std::endl;
+        return 1.0;
+    }
+    if (jetpt <= 30.0)
+    {
+
+        return fJetJESCorrectionsFunction->Eval(31.0);
+    }
+    else if (jetpt >= 800.0)
+    {
+        return fJetJESCorrectionsFunction->Eval(800.0);
+    }
+    else
+    {
+        return fJetJESCorrectionsFunction->Eval(jetpt);
+    }
+}
 //________________
 Float_t ForestAODReader::leadJetPtWeight(const Bool_t &isMC, const std::string &system, const Int_t &year,
                                          const Int_t &energy, const Float_t &leadjetpt) const
@@ -1093,20 +1162,39 @@ Event *ForestAODReader::returnEvent()
             jet->setPhi(fRecoJetPhi[iJet]);
             jet->setWTAEta(fRecoJetWTAEta[iJet]);
             jet->setWTAPhi(fRecoJetWTAPhi[iJet]);
+            double pTcorr = 0.0;
             if (fJEC)
             {
                 fJEC->SetJetPT(fRawJetPt[iJet]);
                 fJEC->SetJetEta(fRecoJetEta[iJet]);
                 fJEC->SetJetPhi(fRecoJetPhi[iJet]);
-                double pTcorr = fJEC->GetCorrectedPT();
-                // std::cout << "pTCorr: " << pTcorr << " PtCorr from Forest : " << fRecoJetPt[iJet] << std::endl;
-                jet->setPtJECCorr(fJEC->GetCorrectedPT());
-                // std::cout << "pTCorr: " << jet->recoJetPtJECCorr() << std::endl;
+                pTcorr = fJEC->GetCorrectedPT();
+                if (fApplyJetJESCorrections)
+                {
+                    pTcorr = pTcorr * JetJESCorrections(pTcorr);
+                }
             }
             else
             { // If no JEC available
-                jet->setPtJECCorr(fRecoJetPt[iJet]);
+
+                pTcorr = fRecoJetPt[iJet];
             }
+            if (fUseJEU != 0 && !fIsMc && fJEU)
+            {
+                fJEU->SetJetPT(pTcorr);
+                fJEU->SetJetEta(fRecoJetEta[iJet]);
+                fJEU->SetJetPhi(fRecoJetPhi[iJet]);
+                if (fUseJEU > 0)
+                {
+                    pTcorr *= (1. + fJEU->GetUncertainty().first);
+                }
+                else
+                {
+                    pTcorr *= (1. - fJEU->GetUncertainty().second);
+                }
+            }
+            jet->setPtJECCorr(pTcorr);
+
             if (fIsMc)
             {
                 jet->setRefJetPt(fRefJetPt[iJet]);
@@ -1115,11 +1203,6 @@ Event *ForestAODReader::returnEvent()
                 jet->setJetPartonFlavor(fRefJetPartonFlavor[iJet]);
                 jet->setJetPartonFlavorForB(fRefJetPartonFlavorForB[iJet]);
             }
-
-            // if (fEventsProcessed - 1 == 25794)
-            // {
-            // jet->print();
-            // }
 
             // Check fronе-loaded cut
             if (fJetCut && !fJetCut->pass(jet))

@@ -20,7 +20,7 @@
 
 ClassImp(HistoManagerDiJet)
 
-    HistoManagerDiJet::HistoManagerDiJet() : BaseHistoManager(), fIsMC{kFALSE}, fMultiplicityBins{0.0},
+    HistoManagerDiJet::HistoManagerDiJet() : BaseHistoManager(), fIsMC{kFALSE}, fMultiplicityBins{0.0}, fMultiplicityBinThresholds{0},
                                              hRecoMultiplicity_W{nullptr}, hCorrectedMultiplicity_W{nullptr}, hGenMultiplicity_W{nullptr}, hSubEventMultiplicity_W{nullptr},
                                              hSelectedMultiplicity_W{nullptr}, hMultiplicities{nullptr}, hMultiplicities_W{nullptr}, hPtHat{nullptr}, hPtHat_W{nullptr},
                                              hHiBin{nullptr}, hHiBin_W{nullptr}, hVz{nullptr}, hVz_W{nullptr}, hMultiplicities_DiJet_W{nullptr}, hRecoQuenching_W{nullptr}, hGenQuenching_W{nullptr},
@@ -342,17 +342,14 @@ HistoManagerDiJet::~HistoManagerDiJet()
     if (hGenXj_C0_W)
         delete hGenXj_C0_W;
 
-    for (Int_t i = 0; i < 5; i++)
-    {
-        if (hXj_Projection_W[i])
-            delete hXj_Projection_W[i];
-        if (hXj_Projection_DiJetW[i])
-            delete hXj_Projection_DiJetW[i];
-        if (hGenXj_Projection_W[i])
-            delete hGenXj_Projection_W[i];
-        if (hGenXj_Projection_DiJetW[i])
-            delete hGenXj_Projection_DiJetW[i];
-    }
+    for (auto hist : hXj_Projection_W)
+        delete hist;
+    for (auto hist : hXj_Projection_DiJetW)
+        delete hist;
+    for (auto hist : hGenXj_Projection_W)
+        delete hist;
+    for (auto hist : hGenXj_Projection_DiJetW)
+        delete hist;
 }
 
 void HistoManagerDiJet::init()
@@ -482,9 +479,9 @@ void HistoManagerDiJet::init()
     hGenTracks_Pt1_W = new THnSparseD("hGenTracks_Pt1_W", "Gen Tracks Pt > 1.0 Weighted", 4, TrackBins, TrackMin, TrackMax);
     hGenTracks_Pt1_W->Sumw2();
 
-    int LeadSLeadJetBins[7] = {80, 100, 64, 200, 100, 64, nMultiplicityBins + 1};
+    int LeadSLeadJetBins[7] = {200, 100, 64, 200, 100, 64, nMultiplicityBins + 1};
     Double_t LeadSLeadJetMin[7] = {0.0, -5.0, -TMath::Pi(), 0.0, -5.0, -TMath::Pi(), fMultiplicityBins[0]};
-    Double_t LeadSLeadJetMax[7] = {800.0, 5.0, TMath::Pi(), 1000.0, 5.0, TMath::Pi(), fMultiplicityBins[fMultiplicityBins.size() - 1] + 1};
+    Double_t LeadSLeadJetMax[7] = {1000.0, 5.0, TMath::Pi(), 1000.0, 5.0, TMath::Pi(), fMultiplicityBins[fMultiplicityBins.size() - 1] + 1};
 
     hLeadSubLeadJets = new THnSparseD("hLeadSubLeadJets", "Lead vs SubLead Pt", 7, LeadSLeadJetBins, LeadSLeadJetMin, LeadSLeadJetMax);
     hLeadSubLeadJets->Sumw2();
@@ -523,8 +520,8 @@ void HistoManagerDiJet::init()
     // const int nXjAjBins = 16; // number of bins
     // double XjBins[nXjAjBins + 1] = {0.0, 0.1, 0.2, 0.3, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0};
     const int nXjAjBins = 40; // number of bins
-    // double XjBins[nXjAjBins + 1] = {0.0, 0.025, 0.05, 0.075, 0.1, 0.125, 0.15, 0.175, 0.2, 0.225, 0.25, 0.275, 0.3, 0.325, 0.35, 0.375, 0.4, 0.425, 0.45, 0.475, 0.5, 0.525, 0.55, 0.575, 0.6, 0.625, 0.65, 0.675, 0.7, 0.725, 0.75, 0.775, 0.8, 0.825, 0.85, 0.875, 0.9, 0.925, 0.95, 0.975, 1.0};
-    double XjBins[nXjAjBins + 1] = {0.0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0, 1.05, 1.1, 1.15, 1.2, 1.25, 1.3, 1.35, 1.4, 1.45, 1.5, 1.55, 1.6, 1.65, 1.7, 1.75, 1.8, 1.85, 1.9, 1.95, 2.0};
+    double XjBins[nXjAjBins + 1] = {0.0, 0.025, 0.05, 0.075, 0.1, 0.125, 0.15, 0.175, 0.2, 0.225, 0.25, 0.275, 0.3, 0.325, 0.35, 0.375, 0.4, 0.425, 0.45, 0.475, 0.5, 0.525, 0.55, 0.575, 0.6, 0.625, 0.65, 0.675, 0.7, 0.725, 0.75, 0.775, 0.8, 0.825, 0.85, 0.875, 0.9, 0.925, 0.95, 0.975, 1.0};
+    // double XjBins[nXjAjBins + 1] = {0.0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0, 1.05, 1.1, 1.15, 1.2, 1.25, 1.3, 1.35, 1.4, 1.45, 1.5, 1.55, 1.6, 1.65, 1.7, 1.75, 1.8, 1.85, 1.9, 1.95, 2.0};
 
     const int nXjAjBins_ER = 26; // number of bins
     double XjBins_ER[nXjAjBins_ER + 1] = {0.0, 0.1, 0.2, 0.3, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0, 1.05, 1.1, 1.15, 1.2, 1.25, 1.3, 1.35, 1.4, 1.45, 1.5};
@@ -820,40 +817,44 @@ void HistoManagerDiJet::projectHistograms()
         delete iProjection;
     }
     iProjection = hMultVsXj_W->ProjectionX();
-    hXj_C0_W = (TH1D *)iProjection->Clone("hXj_C0_W");
+    hXj_C0_W = (TH1D *)iProjection->Clone("hXj_W");
     hXj_C0_W->SetTitle("Xj Projection C0 Weighted");
     delete iProjection;
 
     iProjection = hMultVsXj_DiJetW->ProjectionX();
-    hXj_C0_DiJetW = (TH1D *)iProjection->Clone("hXj_C0_DiJetW");
+    hXj_C0_DiJetW = (TH1D *)iProjection->Clone("hXj_DiJetW");
     hXj_C0_DiJetW->SetTitle("Xj Projection C0 Dijet Weighted");
     delete iProjection;
 
     if (fIsMC)
     {
         iProjection = hMultVsGenXj_W->ProjectionX();
-        hGenXj_C0_W = (TH1D *)iProjection->Clone("hGenXj_C0_W");
+        hGenXj_C0_W = (TH1D *)iProjection->Clone("hGenXj_W");
         hGenXj_C0_W->SetTitle("Gen Xj Projection C0 Weighted");
         delete iProjection;
 
         iProjection = hMultVsGenXj_DiJetW->ProjectionX();
-        hGenXj_C0_DiJetW = (TH1D *)iProjection->Clone("hGenXj_C0_DiJetW");
+        hGenXj_C0_DiJetW = (TH1D *)iProjection->Clone("hGenXj_DiJetW");
         hGenXj_C0_DiJetW->SetTitle("Gen Xj Projection C0 Dijet Weighted");
         delete iProjection;
     }
+    hXj_Projection_W.clear();
+    hXj_Projection_DiJetW.clear();
+    hGenXj_Projection_W.clear();
+    hGenXj_Projection_DiJetW.clear();
 
-    for (Int_t i = 0; i < 5; i++)
+    for (Int_t i = 0; i < fMultiplicityBins.size() - 1; i++)
     {
-        hXj_Projection_W[i] = hMultVsXj_W->ProjectionX(Form("hXj_C%i_W", i + 1), hMultVsXj_W->GetYaxis()->FindBin(i + 1), hMultVsXj_W->GetYaxis()->FindBin(i + 1));
-        hXj_Projection_W[i]->SetTitle(Form("Xj Projection C%i Weighted", i + 1));
-        hXj_Projection_DiJetW[i] = hMultVsXj_DiJetW->ProjectionX(Form("hXj_C%i_DiJetW", i + 1), hMultVsXj_DiJetW->GetYaxis()->FindBin(i + 1), hMultVsXj_DiJetW->GetYaxis()->FindBin(i + 1));
-        hXj_Projection_DiJetW[i]->SetTitle(Form("Xj Projection C%i Dijet Weighted", i + 1));
+        hXj_Projection_W.push_back(hMultVsXj_W->ProjectionX(Form("hXj_C%i_W", i), hMultVsXj_W->GetYaxis()->FindBin(i), hMultVsXj_W->GetYaxis()->FindBin(i)));
+        hXj_Projection_W.at(i)->SetTitle(Form("Xj Projection for %i-%i Weighted", static_cast<int>(fMultiplicityBinThresholds.at(i)), static_cast<int>(fMultiplicityBinThresholds.at(i + 1))));
+        hXj_Projection_DiJetW.push_back(hMultVsXj_DiJetW->ProjectionX(Form("hXj_C%i_DiJetW", i), hMultVsXj_DiJetW->GetYaxis()->FindBin(i), hMultVsXj_DiJetW->GetYaxis()->FindBin(i)));
+        hXj_Projection_DiJetW.at(i)->SetTitle(Form("Xj Projection %i-%i Dijet Weighted", static_cast<int>(fMultiplicityBinThresholds.at(i)), static_cast<int>(fMultiplicityBinThresholds.at(i + 1))));
         if (fIsMC)
         {
-            hGenXj_Projection_W[i] = hMultVsGenXj_W->ProjectionX(Form("hGenXj_C%i_W", i + 1), hMultVsGenXj_W->GetYaxis()->FindBin(i + 1), hMultVsGenXj_W->GetYaxis()->FindBin(i + 1));
-            hGenXj_Projection_W[i]->SetTitle(Form("Gen Xj Projection C%i Weighted", i + 1));
-            hGenXj_Projection_DiJetW[i] = hMultVsGenXj_DiJetW->ProjectionX(Form("hGenXj_C%i_DiJetW", i + 1), hMultVsGenXj_DiJetW->GetYaxis()->FindBin(i + 1), hMultVsGenXj_DiJetW->GetYaxis()->FindBin(i + 1));
-            hGenXj_Projection_DiJetW[i]->SetTitle(Form("Gen Xj Projection C%i Dijet Weighted", i + 1));
+            hGenXj_Projection_W.push_back(hMultVsGenXj_W->ProjectionX(Form("hGenXj_C%i_W", i), hMultVsGenXj_W->GetYaxis()->FindBin(i), hMultVsGenXj_W->GetYaxis()->FindBin(i)));
+            hGenXj_Projection_W.at(i)->SetTitle(Form("Gen Xj Projection %i-%i Weighted", static_cast<int>(fMultiplicityBinThresholds.at(i)), static_cast<int>(fMultiplicityBinThresholds.at(i + 1))));
+            hGenXj_Projection_DiJetW.push_back(hMultVsGenXj_DiJetW->ProjectionX(Form("hGenXj_C%i_DiJetW", i), hMultVsGenXj_DiJetW->GetYaxis()->FindBin(i), hMultVsGenXj_DiJetW->GetYaxis()->FindBin(i)));
+            hGenXj_Projection_DiJetW.at(i)->SetTitle(Form("Gen Xj Projection %i-%i Dijet Weighted", static_cast<int>(fMultiplicityBinThresholds.at(i)), static_cast<int>(fMultiplicityBinThresholds.at(i + 1))));
         }
     }
 }
@@ -1085,7 +1086,7 @@ void HistoManagerDiJet ::writeOutput()
             hGenXj_C0_DiJetW->Write();
         }
     }
-    for (Int_t i = 0; i < 5; i++)
+    for (Int_t i = 0; i < hXj_Projection_W.size(); i++)
     {
         hXj_Projection_W[i]->Write();
         if (fCollSystem == "pPb" || fCollSystem == "pp")

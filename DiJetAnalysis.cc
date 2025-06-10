@@ -392,7 +392,7 @@ Double_t *DiJetAnalysis::MultiplicityWeight(const Int_t &multiplicity)
 
 Double_t DiJetAnalysis::MultiplicityWeight(const Double_t &multiplicity)
 {
-    if (!fIsMC || !fIspPb)
+    if (!fIsMC || !fIspPb || !fpPbDoMultiplicityWeight)
     {
         std::cerr << "This function is only for MC. MC is set to be FALSE." << std::endl;
         return 1.0;
@@ -565,6 +565,7 @@ Double_t DiJetAnalysis::pPbptHatWeight(const Double_t &pthat)
         }
     }
 
+    std::cerr << "PtHat value " << pthat << " is out of range. Returning 1.0" << std::endl;
     return 1.0; // fallback if ptHat is not in any range
 }
 
@@ -985,13 +986,6 @@ void DiJetAnalysis::processEvent(const Event *event)
     if (fUseMultiplicityWeight && fMultiplicityType != 4)
     {
         MultWeight = MultiplicityWeight(static_cast<Int_t>(iMultiplicity));
-    }
-    else
-    {
-        for (Int_t i = 0; i < 4; i++)
-        {
-            MultWeight[i] = 1.;
-        }
     }
 
     if (fIsMC)

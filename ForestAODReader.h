@@ -76,7 +76,33 @@ public:
   void useTrackBranch() { fUseTrackBranch = {kTRUE}; }
 
   /// @brief Set colliding system
-  void setCollidingSystem(const Char_t *sys = "PbPb") { fCollidingSystem = sys; }
+  void setCollidingSystem(const Char_t *sys = "PbPb")
+  {
+    fCollidingSystem = sys;
+    fIs_pp = kFALSE;
+    fIs_pPb = kFALSE;
+    fIs_PbPb = kFALSE;
+
+    // Set only the matching flag
+    std::string systemStr(sys);
+
+    if (systemStr == "pp")
+    {
+      fIs_pp = kTRUE;
+    }
+    else if (systemStr == "pPb")
+    {
+      fIs_pPb = kTRUE;
+    }
+    else if (systemStr == "PbPb")
+    {
+      fIs_PbPb = kTRUE;
+    }
+    else
+    {
+      std::cerr << "Unknown colliding system: " << systemStr << std::endl;
+    }
+  }
   /// @brief Set colliding energy
   void setCollidingEnergy(const Int_t &ene = 5020) { fCollidingEnergyGeV = {ene}; }
   /// @brief Set year of data taking
@@ -85,6 +111,15 @@ public:
   void setPath2JetAnalysis(const Char_t *name = "../") { fJECPath = name; }
   ///@brief Add JEC files to the list of JEC files
   void addJECFile(const Char_t *name = "Autumn18_HI_V8_MC_L2Relative_AK4PF") { fJECFiles.push_back(name); }
+  ///@brief Add JEU files to the list of JEU files
+  void addJEUFile(const Char_t *name = "Autumn18_HI_V8_MC_L2Relative_AK4PF")
+  {
+    fJEUFiles.push_back(name);
+  }
+  void SetUpJEUType(const Int_t &type = 0)
+  {
+    fUseJEU = {type};
+  }
   /// @brief Apply jet pT-smearing
   void setJetPtSmearing(const Bool_t &smear = kFALSE)
   {
@@ -131,9 +166,18 @@ public:
   ///@brief Set Trigger names
   void setTriggers(const std::vector<std::string> &triggers) { fTriggers = triggers; }
 
+  /// @brief Set JES corrections
+  void setJESCorrections()
+  {
+    fApplyJetJESCorrections = kTRUE;
+  }
+
+  /// @brief Use JEU
+
 private:
   /// @brief Setup input stream (either single file or a list of files)
-  void setInputStream(const Char_t *inputStream)
+  void
+  setInputStream(const Char_t *inputStream)
   {
     fInFileName = {inputStream};
   }
@@ -237,6 +281,11 @@ private:
   /// @param jetTrackMax pt track in the jet
   /// @param jetRawPt raw jet pt
   Bool_t JetIDType1(const Float_t &jetTrackMax, const Float_t &jetRawPt);
+
+  Float_t JetJESCorrections(const Float_t &jetPt);
+
+  /// @brief Set Up all the functions for weighting
+  void SetUpWeightFunctions();
 
   /// @brief Event with jets and other variables
   Event *fEvent;
@@ -460,6 +509,7 @@ private:
   TString fJECPath;
   /// @brief List of files with JEC
   std::vector<std::string> fJECFiles;
+
   /// @brief Jet Energy Uncertainty instance
   JetUncertainty *fJEU;
   /// @brief List of files with JEU
@@ -473,6 +523,8 @@ private:
   Int_t fYearOfDataTaking;
   /// @brief Apply jet pT-smearing
   Bool_t fDoJetPtSmearing;
+  ///@brief Smearing resolution factor up, down or nominal
+  Int_t fSmearType;
   /// @brief Fix indices
   Bool_t fFixJetArrays;
   /// @brief Event cut
@@ -494,6 +546,20 @@ private:
   /// @brief Vector that contains indices of the reconstructed
   /// jets that macthed to generated jet
   std::vector<Int_t> fGenJet2RecoJet;
+
+  /// @brief Booleans to set colliding systems.
+  Bool_t fIs_pPb;
+  Bool_t fIs_pp;
+  Bool_t fIs_PbPb;
+
+  /// @brief Jet JES Corrections function applied only to AKCS4PF jets in pPb systems
+  TF1 *fJetJESCorrectionsFunction;
+
+  /// @brief Boolean to set if jet energy scale corrections needs to be applied
+  Bool_t fApplyJetJESCorrections;
+
+  /// @brief Use JEU
+  Int_t fUseJEU; // 0 - no, 1 - Up, -1 - down
 
   ClassDef(ForestAODReader, 1)
 };
