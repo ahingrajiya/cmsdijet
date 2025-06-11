@@ -237,7 +237,7 @@ int main(int argc, char *argv[])
     // }
 
     // analysis->setDebug(kTRUE);
-    analysis->setVzWeight();
+    // analysis->setVzWeight();
 
     // Initialize Histomanager
     HistoManagerDiJet *hm = new HistoManagerDiJet{};
