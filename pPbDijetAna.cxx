@@ -41,7 +41,8 @@ int main(int argc, char *argv[])
     Bool_t ispPb{kTRUE};
     Bool_t useCMFrame{kFALSE};
     Double_t etaBoost{0.4654094531};
-    TString jetBranchName{"akCs4PFJetAnalyzer"};
+    TString jetBranchNameEmbedded{"akCs4PFJetAnalyzer"};
+    TString jetBranchNameUnembedded{"ak4PFJetAnalyzer"};
     std::string dijetWeightType{"Gen"};
     TString oFileName{};
     TString JECFileName{};
@@ -161,7 +162,14 @@ int main(int argc, char *argv[])
     reader->useSkimmingBranch();
     reader->useTrackBranch();
     reader->useJets();
-    reader->setJetCollectionBranchName(jetBranchName.Data());
+    if (isEmbedded)
+    {
+        reader->setJetCollectionBranchName(jetBranchNameEmbedded.Data());
+    }
+    else
+    {
+        reader->setJetCollectionBranchName(jetBranchNameUnembedded.Data());
+    }
     reader->setCollidingEnergy(collEnergyGeV);
     reader->setCollidingSystem(collSystem.Data());
     reader->setYearOfDataTaking(collYear);
