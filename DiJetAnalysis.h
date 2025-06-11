@@ -168,6 +168,8 @@ public:
     void doTrackingClosure() { fDoTrackingClosures = kTRUE; }
     ///@brief Set if to use pPb multiplicity weight
     void setpPbDoMultiplicityWeight() { fpPbDoMultiplicityWeight = kTRUE; }
+    ///@brief Set if to apply vz weight
+    void setVzWeight() { fDoVzWeight = kTRUE; }
 
 private:
     /// @brief Reco and Corrected Multiplicity calculator with custom track pt and track eta cuts
@@ -265,6 +267,8 @@ private:
     void SetUpDijetWeight(const std::string &dijetWeightTable);
     ///@brief Set up collision system booleans
     void CollSystem(const TString &collSystem);
+    ///@brief Set up weight functions
+    void SetUpWeightFunctions();
     ///@brief Dijet weight calculator
     ///@param event Event object
     ///@return Dijet weight
@@ -368,6 +372,8 @@ private:
     TF1 *fpPbMB;
     TF1 *fpPbHM185;
     TSpline3 *fspline185;
+    TF1 *fVertexZWeight;
+    Bool_t fDoVzWeight;
 
     ///@brief Holds dynamic multiplicity or centrality bins
     std::map<Int_t, Double_t> fBins;

@@ -27,11 +27,15 @@ ClassImp(DiJetAnalysis)
 
     DiJetAnalysis::DiJetAnalysis() : BaseAnalysis(), fDebug{kFALSE}, fUseCentralityWeight{kFALSE}, fHM{nullptr}, fIspPb{kFALSE},
                                      fIsMC{kFALSE}, fDeltaPhi{5. * TMath::Pi() / 6.}, fIsPbGoing{kFALSE}, fUseCMFrame{kFALSE},
-                                     fEtaBoost{0.0}, fUseMultiplicityWeight{kFALSE}, fLeadJetPtLow{100.}, fSubLeadJetPtLow{50.}, fNEventsInSample{100000000},
-                                     fIsDiJetFound{kFALSE}, fIsGenDiJetFound{kFALSE}, fVerbose{kFALSE}, fMinTrkPt{0.5}, fTrkEffPbPb{nullptr}, fTrkEffpPb{nullptr}, fTrkEffTable{""}, fEventCounter{0},
-                                     fCycleCounter{0}, fMultWeightTable{""}, fMultiplicityWeight{nullptr}, fMultWeight{nullptr}, fDoInJetMult{kFALSE}, fMultiplicityType{0}, fUseDijetWeight{kFALSE},
-                                     fDijetWeightTable{""}, hDijetWeight{nullptr}, fDijetWeightFile{nullptr}, fDijetWeight{1.0}, hDijetWeightRef{nullptr}, hDijetWeightGen{nullptr}, fDijetWeightType{"Reco"}, fIspp{kFALSE},
-                                     fIsPbPb{kFALSE}, fCollSystem{""}, fUEType{""}, fDoTrackingClosures{kFALSE}, fpPbDoMultiplicityWeight{kFALSE}, fpPbMB{nullptr}, fpPbHM185{nullptr}, fspline185{nullptr}
+                                     fEtaBoost{0.0}, fUseMultiplicityWeight{kFALSE}, fLeadJetPtLow{100.}, fSubLeadJetPtLow{50.},
+                                     fNEventsInSample{100000000}, fIsDiJetFound{kFALSE}, fIsGenDiJetFound{kFALSE}, fVerbose{kFALSE},
+                                     fMinTrkPt{0.5}, fTrkEffPbPb{nullptr}, fTrkEffpPb{nullptr}, fTrkEffTable{""}, fEventCounter{0},
+                                     fCycleCounter{0}, fMultWeightTable{""}, fMultiplicityWeight{nullptr}, fMultWeight{nullptr},
+                                     fDoInJetMult{kFALSE}, fMultiplicityType{0}, fUseDijetWeight{kFALSE}, fDijetWeightTable{""},
+                                     hDijetWeight{nullptr}, fDijetWeightFile{nullptr}, fDijetWeight{1.0}, hDijetWeightRef{nullptr},
+                                     hDijetWeightGen{nullptr}, fDijetWeightType{"Reco"}, fIspp{kFALSE}, fIsPbPb{kFALSE}, fCollSystem{""},
+                                     fUEType{""}, fDoTrackingClosures{kFALSE}, fpPbDoMultiplicityWeight{kFALSE}, fpPbMB{nullptr},
+                                     fpPbHM185{nullptr}, fspline185{nullptr}, fVertexZWeight{nullptr}, fDoVzWeight{kFALSE}
 {
     fLeadJetEtaRange[0] = {-1.};
     fLeadJetEtaRange[1] = {1.};
@@ -118,6 +122,20 @@ void DiJetAnalysis::init()
     if (fUseDijetWeight)
     {
         SetUpDijetWeight(fDijetWeightTable);
+    }
+    SetUpWeightFunctions();
+}
+
+void DiJetAnalysis::SetUpWeightFunctions()
+{
+    if (fIspPb)
+    {
+        if (fDoVzWeight)
+        {
+            std::cout << "DiJetAnalysis::SetUpWeightFunctions Setting up Vertex Z Weight Function" << std::endl;
+            fVertexZWeight = new TF1("fVertexZWeight", "pol8", -15.1, 15.1, TF1::EAddToList::kNo);
+            fVertexZWeight->SetParameters(0.856516, -0.0159813, 0.00436628, -0.00012862, 2.61129e-05, -4.16965e-07, 1.73711e-08, -3.11953e-09, 6.24993e-10);
+        }
     }
 }
 
@@ -522,6 +540,11 @@ Double_t DiJetAnalysis::EventWeight(const Event *event)
     if (fIspPb)
     {
         ptHatWeight = pPbptHatWeight(ptHat);
+        if (fDoVzWeight)
+        {
+            vzWeight = fVertexZWeight->Eval(vertexZ);
+            vzWeight = 1. / vzWeight; // Inverse of the vertex Z weight
+        }
     }
     else if (fIspp || fIsPbPb)
     {
