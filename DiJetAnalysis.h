@@ -150,9 +150,6 @@ public:
     void setMultiplicityType(const Int_t &multType) { fMultiplicityType = multType; }
     ///@brief Set Tracking efficiency table
     void setTrackingTable(const std::string &trackingTable) { fTrkEffTable = trackingTable; }
-    /// @brief Multiplicity weight table set up
-    /// @param multWeightTable Path to the multiplicity weight table
-    void setMultiplicityWeightTable(const std::string &multWeightTable) { fMultWeightTable = multWeightTable; }
     /// @brief Set Dijet weight table
     /// @param dijetWeightTable Path to the dijet weight table
     void setDijetWeightTable(const std::string &dijetWeightTable) { fDijetWeightTable = dijetWeightTable; }
@@ -166,8 +163,7 @@ public:
     void setUEType(const std::string &UEType) { fUEType = UEType; }
     ///@brief Do tracking closure plots
     void doTrackingClosure() { fDoTrackingClosures = kTRUE; }
-    ///@brief Set if to use pPb multiplicity weight
-    void setpPbDoMultiplicityWeight() { fpPbDoMultiplicityWeight = kTRUE; }
+
     ///@brief Set if to apply vz weight
     void setVzWeight() { fDoVzWeight = kTRUE; }
 
@@ -259,10 +255,6 @@ private:
     /// @brief Move to Lab Frame
     /// @param jetEta Jet Eta
     Float_t MoveToLabFrame(const Float_t &jetEta);
-    /// @brief Sets Up array of multiplicity weight histograms
-    void SetUpMultiplicityWeight(const std::string &multWeightTable);
-    /// @brief Sets Up multiplicity weight histograms
-    void SetUpMultiplicityWeight(const std::string &multWeightTable, const Bool_t &ispPb);
     /// @brief Set up Dijet weight table
     void SetUpDijetWeight(const std::string &dijetWeightTable);
     ///@brief Set up collision system booleans
@@ -329,8 +321,6 @@ private:
     TrkEff2018PbPb *fTrkEffPbPb;
     ///@brief Tracking efficiency for pPb
     TrkEfficiency2016pPb *fTrkEffpPb;
-    /// @brief @brief multiplicity weight for HYDJET
-    std::string fMultWeightTable;
     ///@brief Dijet weight table PYTHIA at 8 TeV
     std::string fDijetWeightTable;
     ///@brief Multiplicity weight histograms
@@ -343,8 +333,7 @@ private:
     TH2 *hDijetWeightGen;
     ///@brief Tracking efficiency table for PbPb
     std::string fTrkEffTable;
-    ///@brief Multiplicity Weight file
-    TFile *fMultWeight;
+
     ///@brief Dijet Weight file
     TFile *fDijetWeightFile;
     ///@brief Do Injet Multiplicity
@@ -355,8 +344,6 @@ private:
     std::string fUEType;
     ///@brief Do Tracking Closures
     Bool_t fDoTrackingClosures;
-    ///@brief Do multiplicity weight in pPb
-    Bool_t fpPbDoMultiplicityWeight;
 
     ///@brief Which Multiplicity type to use for event selection.
     /// 0 -> Reco Multiplicity
@@ -374,6 +361,8 @@ private:
     TSpline3 *fspline185;
     TF1 *fVertexZWeight;
     Bool_t fDoVzWeight;
+
+    TF1 *fMultWeightFunctions[4];
 
     ///@brief Holds dynamic multiplicity or centrality bins
     std::map<Int_t, Double_t> fBins;

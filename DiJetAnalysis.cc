@@ -30,11 +30,10 @@ ClassImp(DiJetAnalysis)
                                      fEtaBoost{0.0}, fUseMultiplicityWeight{kFALSE}, fLeadJetPtLow{100.}, fSubLeadJetPtLow{50.},
                                      fNEventsInSample{100000000}, fIsDiJetFound{kFALSE}, fIsGenDiJetFound{kFALSE}, fVerbose{kFALSE},
                                      fMinTrkPt{0.5}, fTrkEffPbPb{nullptr}, fTrkEffpPb{nullptr}, fTrkEffTable{""}, fEventCounter{0},
-                                     fCycleCounter{0}, fMultWeightTable{""}, fMultiplicityWeight{nullptr}, fMultWeight{nullptr},
-                                     fDoInJetMult{kFALSE}, fMultiplicityType{0}, fUseDijetWeight{kFALSE}, fDijetWeightTable{""},
-                                     hDijetWeight{nullptr}, fDijetWeightFile{nullptr}, fDijetWeight{1.0}, hDijetWeightRef{nullptr},
-                                     hDijetWeightGen{nullptr}, fDijetWeightType{"Reco"}, fIspp{kFALSE}, fIsPbPb{kFALSE}, fCollSystem{""},
-                                     fUEType{""}, fDoTrackingClosures{kFALSE}, fpPbDoMultiplicityWeight{kFALSE}, fpPbMB{nullptr},
+                                     fCycleCounter{0}, fMultiplicityWeight{nullptr}, fDoInJetMult{kFALSE}, fMultiplicityType{0},
+                                     fUseDijetWeight{kFALSE}, fDijetWeightTable{""}, hDijetWeight{nullptr}, fDijetWeightFile{nullptr},
+                                     fDijetWeight{1.0}, hDijetWeightRef{nullptr}, hDijetWeightGen{nullptr}, fDijetWeightType{"Reco"},
+                                     fIspp{kFALSE}, fIsPbPb{kFALSE}, fCollSystem{""}, fUEType{""}, fDoTrackingClosures{kFALSE}, fpPbMB{nullptr},
                                      fpPbHM185{nullptr}, fspline185{nullptr}, fVertexZWeight{nullptr}, fDoVzWeight{kFALSE}
 {
     fLeadJetEtaRange[0] = {-1.};
@@ -66,7 +65,6 @@ DiJetAnalysis::~DiJetAnalysis()
     }
     if (fUseMultiplicityWeight)
     {
-        fMultWeight->Close();
         for (Int_t i = 0; i < 4; i++)
         {
             if (fMultiplicityWeight[i])
@@ -98,27 +96,6 @@ void DiJetAnalysis::init()
 
     SetUpTrackingEfficiency(fTrkEffTable);
 
-    if (fUseMultiplicityWeight)
-    {
-        SetUpMultiplicityWeight(fMultWeightTable);
-    }
-
-    if (fpPbDoMultiplicityWeight)
-    {
-        SetUpMultiplicityWeight(fMultWeightTable, fIspPb);
-        fpPbHM185 = new TF1("fHM185", "pol2", 185, 250);
-        fpPbHM185->SetParameters(-5.31185e+00, 4.90035e-02, -8.71705e-05);
-        fpPbMB = new TF1("fpPbMB", "pol4", 10, 185);
-        fpPbMB->SetParameters(4.10681e-01, 3.82374e-03, 1.83548e-04, -2.27844e-06, 7.09986e-09);
-        std::vector<double> x1 = {12.5, 13.5, 14.5, 15.5, 16.5, 17.5, 18.5, 19.5, 20.5, 21.5, 22.5, 23.5, 24.5, 25.5, 26.5, 27.5, 28.5, 29.5, 30.5, 31.5, 32.5, 33.5, 34.5, 35.5, 36.5, 37.5, 38.5, 39.5, 40.5, 41.5, 42.5, 43.5, 44.5, 45.5, 46.5, 47.5, 48.5, 49.5, 50.5, 51.5, 52.5, 53.5, 54.5, 55.5, 56.5, 57.5, 58.5, 59.5, 60.5, 61.5, 62.5, 63.5, 64.5, 65.5, 66.5, 67.5, 68.5, 69.5, 70.5, 71.5, 72.5, 73.5, 74.5, 75.5, 76.5, 77.5, 78.5, 79.5, 80.5, 81.5, 82.5, 83.5, 84.5, 85.5, 86.5, 87.5, 88.5, 89.5, 90.5,
-                                  91.5, 92.5, 93.5, 94.5, 95.5, 96.5, 97.5, 98.5, 99.5, 100.5, 101.5, 102.5, 103.5, 104.5, 105.5, 106.5, 107.5, 108.5, 109.5, 110.5, 111.5, 112.5, 113.5, 114.5, 115.5, 116.5, 117.5, 118.5, 119.5, 120.5, 121.5, 122.5, 123.5, 124.5, 125.5, 126.5, 127.5, 128.5, 129.5, 130.5, 131.5, 132.5, 133.5, 134.5, 135.5, 136.5, 137.5, 138.5, 139.5, 140.5, 141.5, 142.5, 143.5, 144.5, 145.5, 146.5, 147.5, 148.5, 149.5, 150.5, 151.5, 152.5, 153.5, 154.5, 155.5, 156.5, 157.5, 158.5, 159.5, 160.5, 161.5, 162.5, 163.5, 164.5, 165.5, 166.5, 167.5, 168.5, 169.5, 170.5, 171.5, 172.5, 173.5, 174.5, 175.5, 176.5, 177.5, 178.5, 179.5, 180.5, 181.5, 182.5, 183.5, 184.5, 185.5};
-        std::vector<double> x2 = {0.785847, 1.11451, 2.9408, 0.956928, 0.903779, 0.184655, 0.941057, 1.01679, 0.572852, 0.858763, 0.970438, 0.363189, 0.330191, 0.686312, 0.522916, 0.619957, 0.779684, 0.77957, 0.708047, 0.707212, 0.840598, 0.783719, 0.67695, 0.75951, 0.752226, 0.62439, 0.856421, 0.674807, 0.760667, 0.611473, 0.801838, 0.756362, 0.812917, 0.87311, 0.817537, 0.87715, 0.760274, 0.829252, 0.725228, 0.889491, 0.819133, 0.809543, 0.750314, 0.88836, 0.87386, 0.946595, 0.906635, 0.929295, 0.899732, 0.88066, 0.955414, 0.9611, 0.855805, 0.87731, 0.91231, 0.942627, 0.985865, 0.973595, 0.963955, 0.896738, 0.930332, 1.01861, 0.910319, 0.994171, 0.939226, 1.01476, 1.00643, 1.06414,
-                                  1.08069, 1.08287, 1.05135, 1.07035, 1.0267, 1.09152, 1.0712, 1.15492, 1.04679, 1.0661, 0.98994, 1.03941, 1.08256, 1.0039, 1.08708, 1.08303, 1.18413, 1.11922, 1.12263, 1.05683, 1.14685, 1.0697, 1.05888, 1.0111, 1.01032, 1.11791, 1.05392, 1.07378, 1.09766, 1.09196, 0.982468, 0.951398, 0.942924, 1.1066, 1.1391, 1.08528, 1.11649, 1.08408, 0.981395, 0.924843, 0.949008, 0.950872, 1.12204, 0.982796, 1.02534, 1.15567, 0.956297, 1.11618, 1.07165, 1.02482, 0.989294, 1.04214, 0.98642, 1.09231, 0.947318, 1.02259, 0.845876, 1.03996, 0.985341, 1.04476, 1.01518, 1.03616, 1.03334, 1.0152, 0.968115, 1.09645, 1.23663, 1.01934, 1.01453, 1.1305, 0.916963, 1.16796, 0.945794, 1.06894, 1.14167, 1.04576, 1.14347, 1.08493, 1.05247, 0.967752, 1.03084, 1.06475, 1.15961, 1.00651, 1.17418, 0.931205, 0.991397, 1.12812, 1.11935, 1.34352, 1.25928, 1.0574, 1.11926, 1.09296, 1.11885, 1.13512, 1.09893, 1.30236, 0.976742, 1.02147, 1.27068, 1.39491, 1.07141, 1.28213, 1.33463};
-
-        TGraph *g1 = new TGraph(x1.size(), &x1[0], &x2[0]);
-        fspline185 = new TSpline3("reweight_spline1", g1);
-    }
-
     if (fUseDijetWeight)
     {
         SetUpDijetWeight(fDijetWeightTable);
@@ -128,7 +105,10 @@ void DiJetAnalysis::init()
 
 void DiJetAnalysis::SetUpWeightFunctions()
 {
-    if (fIspPb)
+    std::cout << "DiJetAnalysis::Setting up Weight Functions for " << fCollSystem << std::endl;
+    std::cout << "Use VertexZ Weights : " << std::boolalpha << fDoVzWeight << std::endl;
+    std::cout << "Use Multiplicity Weights : " << std::boolalpha << fUseMultiplicityWeight << std::endl;
+    if (fIspPb && fIsMC)
     {
         if (fDoVzWeight)
         {
@@ -136,52 +116,14 @@ void DiJetAnalysis::SetUpWeightFunctions()
             fVertexZWeight = new TF1("fVertexZWeight", "pol8", -15.1, 15.1, TF1::EAddToList::kNo);
             fVertexZWeight->SetParameters(0.856516, -0.0159813, 0.00436628, -0.00012862, 2.61129e-05, -4.16965e-07, 1.73711e-08, -3.11953e-09, 6.24993e-10);
         }
-    }
-}
-
-void DiJetAnalysis::SetUpMultiplicityWeight(const std::string &multWeightTable)
-{
-    fMultWeight = TFile::Open(multWeightTable.c_str(), "OPEN");
-    if (!fMultWeight)
-    {
-        std::cerr << "Multiplicity weight table not found" << std::endl;
-    }
-    else
-    {
-        if (fVerbose)
+        if (fUseMultiplicityWeight)
         {
-            std::cout << "DiJetAnalysis::SetUpMultiplicityWeight Setting up Multiplicity Weight" << std::endl;
-            std::cout << "Multiplicity Weight Table: " << multWeightTable << std::endl;
-        }
-        fMultiplicityWeight[0] = (TH1D *)fMultWeight->Get("mult_60_120");
-        fMultiplicityWeight[1] = (TH1D *)fMultWeight->Get("mult_120_185");
-        // fMultiplicityWeight[2] = (TH1D *)f->Get("mult_185");
-        // fMultiplicityWeight[3] = (TH1D *)f->Get("mult_250");
-    }
-}
-
-void DiJetAnalysis::SetUpMultiplicityWeight(const std::string &multWeightTable, const Bool_t &ispPb)
-{
-    if (!fIspPb)
-    {
-        std::cerr << "This function is only for pPb. pPb is set to be FALSE." << std::endl;
-        return;
-    }
-    else
-    {
-        fMultWeight = TFile::Open(multWeightTable.c_str(), "OPEN");
-        if (!fMultWeight)
-        {
-            std::cerr << "Multiplicity weight table not found" << std::endl;
-        }
-        else
-        {
-            if (fVerbose)
-            {
-                std::cout << "DiJetAnalysis::SetUpMultiplicityWeight Setting up Multiplicity Weight Table for pPb" << std::endl;
-                std::cout << "Multiplicity Weight Table: " << multWeightTable << std::endl;
-            }
-            fMultiplicityWeight[0] = (TH1D *)fMultWeight->Get("pPb_Mult_Weight");
+            fMultWeightFunctions[0] = new TF1("fMultWeightFunctions0", "pol2", 10, 60, TF1::EAddToList::kNo);
+            fMultWeightFunctions[0]->SetParameters(1.09585e+00, -1.72226e-02, 2.53749e-04);
+            fMultWeightFunctions[1] = new TF1("fMultWeightFunctions1", "pol3", 60, 185, TF1::EAddToList::kNo);
+            fMultWeightFunctions[1]->SetParameters(-7.73235e-01, 5.18872e-02, -4.74928e-04, 1.38387e-06);
+            fMultWeightFunctions[2] = new TF1("fMultWeightFunctions2", "pol1", 186, 250, TF1::EAddToList::kNo);
+            fMultWeightFunctions[2]->SetParameters(-2.38753e+00, 1.69212e-02);
         }
     }
 }
@@ -410,7 +352,7 @@ Double_t *DiJetAnalysis::MultiplicityWeight(const Int_t &multiplicity)
 
 Double_t DiJetAnalysis::MultiplicityWeight(const Double_t &multiplicity)
 {
-    if (!fIsMC || !fIspPb || !fpPbDoMultiplicityWeight)
+    if (!fIsMC || !fIspPb || !fUseMultiplicityWeight)
     {
         std::cerr << "This function is only for MC. MC is set to be FALSE." << std::endl;
         return 1.0;
@@ -424,13 +366,20 @@ Double_t DiJetAnalysis::MultiplicityWeight(const Double_t &multiplicity)
         }
         return 1.0;
     }
+    else if (multiplicity < 60)
+    {
+        // std::cout << "Mult : " << multiplicity << " Weight : " << fMultWeightFunctions[0]->Eval(multiplicity) << std::endl;
+        return fMultWeightFunctions[0]->Eval(multiplicity);
+    }
     else if (multiplicity < 185)
     {
-        return fspline185->Eval(multiplicity);
+        // std::cout << "Mult : " << multiplicity << " Weight : " << fMultWeightFunctions[0]->Eval(multiplicity) << std::endl;
+        return fMultWeightFunctions[1]->Eval(multiplicity);
     }
     else if (multiplicity < 250)
     {
-        return fpPbHM185->Eval(multiplicity);
+        // std::cout << "Mult : " << multiplicity << " Weight : " << fMultWeightFunctions[2]->Eval(multiplicity) << std::endl;
+        return fMultWeightFunctions[2]->Eval(multiplicity);
     }
     else
     {
@@ -960,7 +909,7 @@ void DiJetAnalysis::processEvent(const Event *event)
         fDijetWeight = 1.0;
     }
     // std::cout << "Event Weight : " << Event_Weight << std::endl;
-    if (fpPbDoMultiplicityWeight && fIspPb)
+    if (fUseMultiplicityWeight && fIspPb)
     {
         Event_Weight *= MultiplicityWeight(static_cast<Double_t>(event->multiplicity()));
     }

@@ -271,7 +271,7 @@ void ForestAODReader::SetUpWeightFunctions()
 {
     if (fIs_pPb && fJetCollection == "akCs4PFJetAnalyzer")
     {
-        std::cout << "Setting Up Weight Functions for p-Pb collisions with akCs4PFJetAnalyzer" << std::endl;
+        std::cout << "ForestAODReader::Setting Up JES Correction Weight Functions for p-Pb collisions with akCs4PFJetAnalyzer" << std::endl;
         fJetJESCorrectionsFunction = new TF1("fJetJESCorrectionsFunction", "sqrt([0] + [1]/x)", 30.0, 800.0, TF1::EAddToList::kNo);
         fJetJESCorrectionsFunction->SetParameters(1.00269e+00, 4.82019e+00);
     }

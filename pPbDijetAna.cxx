@@ -230,11 +230,10 @@ int main(int argc, char *argv[])
     analysis->setUEType(UEType);
     // analysis->doTrackingClosure();
     analysis->setTrackingTable("../aux_files/pPb_8160/trk_eff_table/pPb_EPOS_2D_efftables.root");
-    // if (isMC)
-    // {
-    //     // analysis->setpPbDoMultiplicityWeight();
-    //     // analysis->setMultiplicityWeightTable("../aux_files/pPb_8160/mult_weight_table/Mult_Weight_pPb_Reco_DJ.root");
-    // }
+    if (isMC)
+    {
+        analysis->setUseMultiplicityWeigth();
+    }
 
     // analysis->setDebug(kTRUE);
     // analysis->setVzWeight();
