@@ -116,15 +116,15 @@ void DiJetAnalysis::SetUpWeightFunctions()
             fVertexZWeight = new TF1("fVertexZWeight", "pol8", -15.1, 15.1, TF1::EAddToList::kNo);
             fVertexZWeight->SetParameters(0.856516, -0.0159813, 0.00436628, -0.00012862, 2.61129e-05, -4.16965e-07, 1.73711e-08, -3.11953e-09, 6.24993e-10);
         }
-        if (fUseMultiplicityWeight)
-        {
-            fMultWeightFunctions[0] = new TF1("fMultWeightFunctions0", "pol2", 10, 60, TF1::EAddToList::kNo);
-            fMultWeightFunctions[0]->SetParameters(1.09585e+00, -1.72226e-02, 2.53749e-04);
-            fMultWeightFunctions[1] = new TF1("fMultWeightFunctions1", "pol3", 60, 185, TF1::EAddToList::kNo);
-            fMultWeightFunctions[1]->SetParameters(-7.73235e-01, 5.18872e-02, -4.74928e-04, 1.38387e-06);
-            fMultWeightFunctions[2] = new TF1("fMultWeightFunctions2", "pol1", 186, 250, TF1::EAddToList::kNo);
-            fMultWeightFunctions[2]->SetParameters(-2.38753e+00, 1.69212e-02);
-        }
+        // if (fUseMultiplicityWeight)
+        // {
+        fMultWeightFunctions[0] = new TF1("fMultWeightFunctions0", "pol2", 10, 60, TF1::EAddToList::kNo);
+        fMultWeightFunctions[0]->SetParameters(1.09585e+00, -1.72226e-02, 2.53749e-04);
+        fMultWeightFunctions[1] = new TF1("fMultWeightFunctions1", "pol3", 60, 185, TF1::EAddToList::kNo);
+        fMultWeightFunctions[1]->SetParameters(-7.73235e-01, 5.18872e-02, -4.74928e-04, 1.38387e-06);
+        fMultWeightFunctions[2] = new TF1("fMultWeightFunctions2", "pol1", 186, 250, TF1::EAddToList::kNo);
+        fMultWeightFunctions[2]->SetParameters(-2.38753e+00, 1.69212e-02);
+        // }
     }
 }
 
@@ -352,7 +352,7 @@ Double_t *DiJetAnalysis::MultiplicityWeight(const Int_t &multiplicity)
 
 Double_t DiJetAnalysis::MultiplicityWeight(const Double_t &multiplicity)
 {
-    if (!fIsMC || !fIspPb || !fUseMultiplicityWeight)
+    if (!fIsMC || !fIspPb)
     {
         std::cerr << "This function is only for MC. MC is set to be FALSE." << std::endl;
         return 1.0;
@@ -909,7 +909,7 @@ void DiJetAnalysis::processEvent(const Event *event)
         fDijetWeight = 1.0;
     }
     // std::cout << "Event Weight : " << Event_Weight << std::endl;
-    if (fUseMultiplicityWeight && fIspPb)
+    if (fIspPb)
     {
         Event_Weight *= MultiplicityWeight(static_cast<Double_t>(event->multiplicity()));
     }
@@ -1073,10 +1073,10 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
             refEta = (*recoJetIterator)->RefJetEta();
             refPhi = (*recoJetIterator)->RefJetPhi();
         }
+        // std::cout << Form("Raw Pt: %f, Jet Pt: %f, Jet Eta: %f, Jet Phi: %f", rawPt, jetPt, jetEta, jetPhi) << std::endl;
 
         if (fIsMC && TMath::Abs(refEta) < 3.0)
         {
-            // std::cout << Form("Raw Pt: %f, Jet Pt: %f, Jet Eta: %f, Jet Phi: %f", rawPt, jetPt, jetEta, jetPhi) << std::endl;
             // std::cout << Form("Ref Pt: %f, Ref Eta: %f, Ref Phi: %f", refPt, refEta, refPhi) << std::endl;
 
             fHM->hRecoJES_W->Fill(jetPt / refPt, jetPt, multiplicityBin, event_Weight);

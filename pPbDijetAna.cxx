@@ -232,7 +232,7 @@ int main(int argc, char *argv[])
     analysis->setTrackingTable("../aux_files/pPb_8160/trk_eff_table/pPb_EPOS_2D_efftables.root");
     if (isMC)
     {
-        analysis->setUseMultiplicityWeigth();
+        // analysis->setUseMultiplicityWeigth();
     }
 
     // analysis->setDebug(kTRUE);
