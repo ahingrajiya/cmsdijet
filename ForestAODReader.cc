@@ -32,7 +32,7 @@ ClassImp(ForestAODReader)
       fUseMatchedJets{kFALSE}, fEventsToProcess{-1}, fUseJetID{kFALSE}, fJetIDType{0}, fHiBinShift{0}, fIs_pp{kFALSE}, fIs_PbPb{kFALSE},
       fIs_pPb{kFALSE}, fJetJESCorrectionsFunction{nullptr}, fApplyJetJESCorrections{kFALSE}, fUseJEU{0}, fSmearType{0},
       fJetPtSmearingFunction{nullptr}, fJERSmearingNomial{0}, fJERSmearingUp{0}, fJERSmearingDown{0},
-      fJERSmearingEtaEdges{0}, fRandom{nullptr}
+      fJERSmearingEtaEdges{0}, fRandom{nullptr}, fDoJEU{kFALSE}
 {
     // Initialize many variables
     clearVariables();
@@ -51,7 +51,7 @@ ForestAODReader::ForestAODReader(const Char_t *inputStream, const Bool_t &useHlt
       fIsInStore{setStoreLocation}, fTrackCut{nullptr}, fUseMatchedJets{useMatchedJets}, fEventsToProcess{-1}, fUseJetID{kFALSE}, fJetIDType{0},
       fHiBinShift{0}, fIs_pp{kFALSE}, fIs_PbPb{kFALSE}, fIs_pPb{kFALSE}, fJetJESCorrectionsFunction{nullptr}, fApplyJetJESCorrections{kFALSE},
       fUseJEU{0}, fSmearType{0}, fJetPtSmearingFunction{nullptr}, fJERSmearingNomial{0}, fJERSmearingUp{0}, fJERSmearingDown{0},
-      fJERSmearingEtaEdges{0}, fRandom{nullptr}
+      fJERSmearingEtaEdges{0}, fRandom{nullptr}, fDoJEU{kFALSE}
 
 {
     // Initialize many variables
@@ -240,16 +240,30 @@ void ForestAODReader::setupJEC()
     }
 
     fJEC = new JetCorrector(fJECFiles);
+    std::cout << "\t[DONE]" << std::endl;
 }
 
 void ForestAODReader::setupJEU()
 {
 
     // Next part is needed only if JEU correction is applied
-    if (fUseJEU == 0)
+    if (!fDoJEU)
+    {
+        std::cout << "JEU correction is not applied. Skipping setup." << std::endl;
         return;
+    }
+    if (fIsMc)
+    {
+        std::cout << "[WARNING] JEU correction is not applied for MC. Skipping setup." << std::endl;
+        return;
+    }
+    std::cout << "Setting up JEU correction" << std::endl;
+    if (fUseJEU == 0)
+    {
+        std::cout << "JEU correction is not applied. Skipping setup." << std::endl;
+        return;
+    }
 
-    // If no path to the aux_file
     if (fJECPath.Length() <= 0)
     {
         // Set default values
@@ -280,6 +294,7 @@ void ForestAODReader::SetUpWeightFunctions()
         std::cout << "ForestAODReader::Setting Up JES Correction Weight Functions for p-Pb collisions with akCs4PFJetAnalyzer" << std::endl;
         fJetJESCorrectionsFunction = new TF1("fJetJESCorrectionsFunction", "sqrt([0] + [1]/x)", 30.0, 800.0, TF1::EAddToList::kNo);
         fJetJESCorrectionsFunction->SetParameters(1.00269e+00, 4.82019e+00);
+        std::cout << "\t[DONE]" << std::endl;
     }
 }
 
@@ -1296,10 +1311,12 @@ Event *ForestAODReader::returnEvent()
                 if (fUseJEU > 0)
                 {
                     pTcorr *= (1. + fJEU->GetUncertainty().first);
+                    // std::cout << "JEU Up correction: " << fJEU->GetUncertainty().first << std::endl;
                 }
                 else
                 {
                     pTcorr *= (1. - fJEU->GetUncertainty().second);
+                    // std::cout << "JEU Down correction: " << fJEU->GetUncertainty().second << std::endl;
                 }
             }
             jet->setPtJECCorr(pTcorr);

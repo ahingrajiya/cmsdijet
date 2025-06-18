@@ -47,6 +47,7 @@ int main(int argc, char *argv[])
     TString oFileName{};
     TString JECFileName{};
     TString JECFileDataName{};
+    TString JEUFileName{};
     TString path2JEC = "..";
     Double_t ptHatCut[2]{15., 30.};
     Bool_t isEmbedded{kTRUE};
@@ -57,6 +58,8 @@ int main(int argc, char *argv[])
     std::string UEType{"EPOS"};
     Int_t smearType{0};            // 0 - Nominal Smearing, 1 - JER Smearing, 2 - JEC Smearing
     Bool_t useJERSmearing{kFALSE}; // Use JER Smearing for MC
+    Bool_t useJEU{kTRUE};          // 0 - No JEC Uncertainty, 1 - JEC Uncertainty Up, -1 - JEC Uncertainty Down
+    Int_t JEUType{-1};             // 0 - No JEU, 1 - JEU Up, -1 - JEU Down
     // Command line arguments
     /*
     inputFileList               - input file list with forest file paths
@@ -120,6 +123,7 @@ int main(int argc, char *argv[])
             JECFileName = "Autumn16_HI_pPb_Pbgoing_Embedded_MC_L2Relative_AK4PF.txt";
         }
         JECFileDataName = "Summer16_23Sep2016HV4_DATA_L2L3Residual_AK4PF.txt";
+        JEUFileName = "Summer16_23Sep2016HV4_DATA_Uncertainty_AK4PF.txt";
     }
 
     // Initialize package manager
@@ -191,6 +195,8 @@ int main(int argc, char *argv[])
         reader->addJECFile(JECFileDataName.Data());
         reader->setJetCollectionBranchName(jetBranchNameEmbedded.Data());
         reader->setJESCorrections();
+        reader->setJEU(useJEU, JEUType);
+        reader->addJEUFile(JEUFileName.Data());
     }
 
     manager->setEventReader(reader);
@@ -217,6 +223,8 @@ int main(int argc, char *argv[])
             // analysis->setDijetWeightType(dijetWeightType);
             // analysis->setDijetWeightTable(path2DijetWeight);
         }
+        analysis->setUseMultiplicityWeigth();
+        // analysis->doTrackingClosure();
     }
     analysis->setMultiplicityType(0);
     analysis->setMinTrkPt(1.0);
@@ -230,13 +238,7 @@ int main(int argc, char *argv[])
     analysis->doInJetMultiplicity();
     analysis->setBins(multiplicityBins);
     analysis->setUEType(UEType);
-    // analysis->doTrackingClosure();
     analysis->setTrackingTable("../aux_files/pPb_8160/trk_eff_table/pPb_EPOS_2D_efftables.root");
-    if (isMC)
-    {
-        // analysis->setUseMultiplicityWeigth();
-    }
-
     // analysis->setDebug(kTRUE);
     // analysis->setVzWeight();
 

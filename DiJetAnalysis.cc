@@ -119,11 +119,11 @@ void DiJetAnalysis::SetUpWeightFunctions()
         if (fUseMultiplicityWeight)
         {
             fMultWeightFunctions[0] = new TF1("fMultWeightFunctions0", "pol2", 10, 60, TF1::EAddToList::kNo);
-            fMultWeightFunctions[0]->SetParameters(1.09585e+00, -1.72226e-02, 2.53749e-04);
+            fMultWeightFunctions[0]->SetParameters(5.06724e-01, 2.95805e-03, 5.63112e-05);
             fMultWeightFunctions[1] = new TF1("fMultWeightFunctions1", "pol3", 60, 185, TF1::EAddToList::kNo);
-            fMultWeightFunctions[1]->SetParameters(-7.73235e-01, 5.18872e-02, -4.74928e-04, 1.38387e-06);
-            fMultWeightFunctions[2] = new TF1("fMultWeightFunctions2", "pol1", 186, 250, TF1::EAddToList::kNo);
-            fMultWeightFunctions[2]->SetParameters(-2.38753e+00, 1.69212e-02);
+            fMultWeightFunctions[1]->SetParameters(-9.53556e-01, 5.28692e-02, -4.55892e-04, 1.27018e-06);
+            fMultWeightFunctions[2] = new TF1("fMultWeightFunctions2", "pol2", 186, 260, TF1::EAddToList::kNo);
+            fMultWeightFunctions[2]->SetParameters(-2.26014e+01, 2.19160e-01, -4.88583e-04);
         }
     }
 }
@@ -344,7 +344,7 @@ Double_t DiJetAnalysis::MultiplicityWeight(const Double_t &multiplicity)
         // std::cout << "Mult : " << multiplicity << " Weight : " << fMultWeightFunctions[0]->Eval(multiplicity) << std::endl;
         return fMultWeightFunctions[1]->Eval(multiplicity);
     }
-    else if (multiplicity < 250)
+    else if (multiplicity <= 260)
     {
         // std::cout << "Mult : " << multiplicity << " Weight : " << fMultWeightFunctions[2]->Eval(multiplicity) << std::endl;
         return fMultWeightFunctions[2]->Eval(multiplicity);

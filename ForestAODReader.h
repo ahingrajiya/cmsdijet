@@ -173,6 +173,12 @@ public:
     fApplyJetJESCorrections = kTRUE;
   }
 
+  void setJEU(const Bool_t &doJEU = kFALSE, const Int_t &useJEU = 0)
+  {
+    fDoJEU = {doJEU};
+    fUseJEU = {useJEU};
+  }
+
 private:
   /// @brief Setup input stream (either single file or a list of files)
   void
@@ -569,6 +575,8 @@ private:
 
   /// @brief Use JEU
   Int_t fUseJEU; // 0 - no, 1 - Up, -1 - down
+  /// @brief Do JEU
+  Bool_t fDoJEU;
 
   ClassDef(ForestAODReader, 1)
 };
