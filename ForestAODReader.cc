@@ -30,10 +30,13 @@ ClassImp(ForestAODReader)
       fJEU{nullptr}, fJEUFiles{}, fCollidingSystem{Form("PbPb")}, fCollidingEnergyGeV{5020}, fYearOfDataTaking{2018}, fDoJetPtSmearing{kFALSE},
       fFixJetArrays{kFALSE}, fEventCut{nullptr}, fJetCut{nullptr}, fRecoJet2GenJetId{}, fGenJet2RecoJet{}, fTrackCut{nullptr},
       fUseMatchedJets{kFALSE}, fEventsToProcess{-1}, fUseJetID{kFALSE}, fJetIDType{0}, fHiBinShift{0}, fIs_pp{kFALSE}, fIs_PbPb{kFALSE},
-      fIs_pPb{kFALSE}, fJetJESCorrectionsFunction{nullptr}, fApplyJetJESCorrections{kFALSE}, fUseJEU{0}, fSmearType{0}
+      fIs_pPb{kFALSE}, fJetJESCorrectionsFunction{nullptr}, fApplyJetJESCorrections{kFALSE}, fUseJEU{0}, fSmearType{0},
+      fJetPtSmearingFunction{nullptr}, fJERSmearingNomial{0}, fJERSmearingUp{0}, fJERSmearingDown{0},
+      fJERSmearingEtaEdges{0}, fRandom{nullptr}
 {
     // Initialize many variables
     clearVariables();
+    fRandom = new TRandom3(0);
 }
 
 //_________________
@@ -47,11 +50,13 @@ ForestAODReader::ForestAODReader(const Char_t *inputStream, const Bool_t &useHlt
       fCollidingEnergyGeV{5020}, fYearOfDataTaking{2018}, fDoJetPtSmearing{kFALSE}, fFixJetArrays{kFALSE}, fEventCut{nullptr}, fJetCut{nullptr},
       fIsInStore{setStoreLocation}, fTrackCut{nullptr}, fUseMatchedJets{useMatchedJets}, fEventsToProcess{-1}, fUseJetID{kFALSE}, fJetIDType{0},
       fHiBinShift{0}, fIs_pp{kFALSE}, fIs_PbPb{kFALSE}, fIs_pPb{kFALSE}, fJetJESCorrectionsFunction{nullptr}, fApplyJetJESCorrections{kFALSE},
-      fUseJEU{0}, fSmearType{0}
+      fUseJEU{0}, fSmearType{0}, fJetPtSmearingFunction{nullptr}, fJERSmearingNomial{0}, fJERSmearingUp{0}, fJERSmearingDown{0},
+      fJERSmearingEtaEdges{0}, fRandom{nullptr}
 
 {
     // Initialize many variables
     clearVariables();
+    fRandom = new TRandom3(0);
 }
 
 //_________________
@@ -195,6 +200,7 @@ Int_t ForestAODReader::init()
     setupJEC();
     setupJEU();
     SetUpWeightFunctions();
+    setUpJER();
 
     return status;
 }
@@ -351,26 +357,120 @@ Float_t ForestAODReader::subleadJetPtWeight(const Bool_t &isMC, const std::strin
     return subleadjetptweight;
 }
 
-//________________
-Float_t ForestAODReader::jetPtSmeringWeight(const Bool_t &isMC, const std::string &system, const Int_t &year,
-                                            const Int_t &energy, const Float_t &jetpt, const Bool_t &dosmearing,
-                                            const Float_t resolutionfactor) const
+void ForestAODReader::setUpJER()
 {
-    Float_t jetptsmearweight = 1.0;
-    if (!dosmearing)
-        return jetptsmearweight;
-
-    // JetPtSmearingWeightFunction is derived from MC vs data jet pT spectra.
-    if (!isMC && system == "pp" && energy == 5020 && year == 2017)
+    if (!fIsMc)
     {
-        TF1 *JetPtSmearingWeightFunction =
-            new TF1("JetPtSmearingWeightFunction", "pol3", 0.0, 500.0); // Derived from all jets above 120 GeV and JECv6
-        JetPtSmearingWeightFunction->SetParameters(0.174881, -0.00091979, 3.50064e-06, -6.52541e-09, 4.64199e-12);
-        jetptsmearweight = JetPtSmearingWeightFunction->Eval(jetpt);
-        jetptsmearweight = jetptsmearweight * resolutionfactor;
+        std::cerr << "Jet Energy Resolution (JER) smearing is only applicable for MC samples." << std::endl;
+
+        return;
+    }
+    if (!fDoJetPtSmearing)
+    {
+        std::cout << "Jet Energy Resolution (JER) smearing is not enabled. Skipping setup." << std::endl;
+        return;
+    }
+    std::cout << "Setting Up JER with Smear Type : " << fSmearType << " for Colliding System " << fCollidingSystem << std::endl;
+    fJERSmearingEtaEdges.clear();
+    fJERSmearingNomial.clear();
+    fJERSmearingUp.clear();
+    fJERSmearingDown.clear();
+    if (fIs_pPb)
+    {
+        fJERSmearingEtaEdges = {-5.191, -3.139, -2.964, -2.853, -2.5, -2.322, -2.043, -1.93, -1.74, -1.305, -1.131, -0.783, -0.522,
+                                0.0, 0.522, 0.783, 1.131, 1.305, 1.74, 1.93, 2.043, 2.322, 2.5, 2.853, 2.964, 3.139, 5.191};
+
+        fJERSmearingNomial = {1.1922, 1.1869, 1.7788, 1.3418, 1.2963, 1.1512, 1.1426, 1.1000, 1.1278, 1.1609, 1.1464, 1.1948, 1.15958,
+                              1.15958, 1.1948, 1.1464, 1.1609, 1.1278, 1.1000, 1.1426, 1.1512, 1.2963, 1.3418, 1.7788, 1.1869, 1.1922};
+
+        fJERSmearingUp = {1.341, 1.3112, 1.9796, 1.5509, 1.5334, 1.2652, 1.264, 1.2079, 1.2264, 1.2634, 1.2096, 1.26, 1.224,
+                          1.224, 1.26, 1.2096, 1.2634, 1.2264, 1.2079, 1.264, 1.2652, 1.5334, 1.5509, 1.9796, 1.3112, 1.341};
+
+        fJERSmearingDown = {1.0434, 1.0626, 1.578, 1.1327, 1.0592, 1.0372, 1.0212, 0.9921, 1.0292, 1.0584, 1.0832, 1.1296, 1.095,
+                            1.095, 1.1296, 1.0832, 1.0584, 1.0292, 0.9921, 1.0212, 1.0372, 1.0592, 1.1327, 1.578, 1.0626, 1.0434};
+
+        fJetPtSmearingFunction = new TF1("fJetPtSmearingFunction", "sqrt( [0] * [0] + [1] * [1] / x )", 30., 800.);
+        fJetPtSmearingFunction->SetParameter(0, 0.0415552);
+        fJetPtSmearingFunction->SetParameter(1, 0.960013);
+    }
+}
+
+Double_t ForestAODReader::retriveResolutionFactor(const Float_t &jeteta) const
+{
+    Double_t resolutionFactor{1.0};
+    Double_t value{1.0};
+    if (fJERSmearingEtaEdges.empty() || fJERSmearingNomial.empty() || fJERSmearingUp.empty() || fJERSmearingDown.empty())
+    {
+        std::cerr << "Jet Energy Resolution (JER) smearing is not set up properly." << std::endl;
+        return 1.0;
     }
 
-    return jetptsmearweight;
+    auto it = std::upper_bound(fJERSmearingEtaEdges.begin(), fJERSmearingEtaEdges.end(), jeteta);
+
+    if (it == fJERSmearingEtaEdges.begin())
+    {
+        std::cerr << "Jet eta is below the minimum edge. Returning Factor of 1." << std::endl;
+        return 1.; // or handle differently if needed
+    }
+
+    size_t idx = std::distance(fJERSmearingEtaEdges.begin(), it) - 1;
+
+    if (idx >= fJERSmearingNomial.size())
+    {
+        idx = fJERSmearingNomial.size() - 1;
+    }
+
+    if (fSmearType == 0) // Nominal
+    {
+        value = fJERSmearingNomial[idx];
+    }
+    else if (fSmearType == 1) // Up
+    {
+        value = fJERSmearingUp[idx];
+    }
+    else if (fSmearType == 2) // Down
+    {
+        value = fJERSmearingDown[idx];
+    }
+    else
+    {
+        std::cerr << "Invalid smear type. Returning Factor of 1." << std::endl;
+        return 1.0; // Default resolution factor
+    }
+    resolutionFactor = TMath::Sqrt(TMath::Max(value * value - 1.0, 0.0));
+    // std::cout << "Jet Eta : " << jeteta << " | Index: " << idx << " | Factor: " << resolutionFactor << " | Value : " << value << std::endl;
+    return resolutionFactor;
+}
+
+//________________
+Float_t ForestAODReader::jetPtSmering(const Float_t &refPt, const Float_t &jeteta, const Bool_t &dosmearing) const
+{
+    if (!dosmearing || !fJetPtSmearingFunction || !fIsMc)
+    {
+        return 1.0;
+    }
+    Double_t res = retriveResolutionFactor(jeteta);
+    Double_t smearFactor = 1.0;
+    if (refPt <= 30.)
+    {
+        smearFactor = res * fJetPtSmearingFunction->Eval(31.);
+    }
+    else if (refPt >= 800)
+    {
+        smearFactor = res * fJetPtSmearingFunction->Eval(799.);
+    }
+    else
+    {
+        smearFactor = res * fJetPtSmearingFunction->Eval(refPt);
+    }
+
+    double extraCorr = fRandom->Gaus(1., smearFactor);
+
+    // std::cout << "Resolution factor: " << res << " sigma: " << smearFactor << " refPt: " << refPt
+    //           << " correction factor: " << extraCorr << std::endl;
+    // std::cout << "\t[DONE]\n";
+
+    return extraCorr;
 }
 
 //________________
@@ -1179,6 +1279,13 @@ Event *ForestAODReader::returnEvent()
             { // If no JEC available
 
                 pTcorr = fRecoJetPt[iJet];
+            }
+            if (fIsMc && fDoJetPtSmearing)
+            {
+                if (fRefJetPt[iJet] > 0)
+                {
+                    pTcorr = pTcorr * jetPtSmering(fRefJetPt[iJet], fRecoJetEta[iJet], fDoJetPtSmearing);
+                }
             }
             if (fUseJEU != 0 && !fIsMc && fJEU)
             {

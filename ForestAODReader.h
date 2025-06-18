@@ -16,7 +16,7 @@
 #include "Rtypes.h"
 #include "TChain.h"
 #include "TString.h"
-
+#include "TRandom3.h"
 // JetAnalysis headers
 #include "BaseReader.h"
 #include "Event.h"
@@ -121,9 +121,10 @@ public:
     fUseJEU = {type};
   }
   /// @brief Apply jet pT-smearing
-  void setJetPtSmearing(const Bool_t &smear = kFALSE)
+  void setJetPtSmearing(const Bool_t &isSmear = kFALSE, const Int_t &smearType = 0)
   {
-    fDoJetPtSmearing = {smear};
+    fDoJetPtSmearing = {isSmear};
+    fSmearType = {smearType};
   }
   /// @brief Set event cut
   void setEventCut(EventCut *cut) { fEventCut = {cut}; }
@@ -171,8 +172,6 @@ public:
   {
     fApplyJetJESCorrections = kTRUE;
   }
-
-  /// @brief Use JEU
 
 private:
   /// @brief Setup input stream (either single file or a list of files)
@@ -241,16 +240,10 @@ private:
   Float_t subleadJetPtWeight(const Bool_t &isMC, const std::string &system, const Int_t &year,
                              const Int_t &energy, const Float_t &subleadjetpt) const;
   /// @brief Jet smearing resolution effect
-  /// @param isMC True for MC and false for Data
-  /// @param system Colliding system (pp, pPb or PbPb)
-  /// @param year Year of the data taking
-  /// @param energy Colliding energy (in GeV)
-  /// @param jetpt Jet pT weight
+  /// @param refPt RefPt for the reco Jet Pt
+  /// @param jeteta Jet eta
   /// @param dosmearing Apply smearing
-  /// @param resolutionfactor Worsening resolution by 20%: 0.663, by 10%: 0.458 , by 30%: 0.831
-  Float_t jetPtSmeringWeight(const Bool_t &isMC, const std::string &system, const Int_t &year,
-                             const Int_t &energy, const Float_t &jetpt, const Bool_t &dosmearing,
-                             const Float_t resolutionfactor) const;
+  Float_t jetPtSmering(const Float_t &refPt, const Float_t &jeteta, const Bool_t &dosmearing) const;
   /// @brief Track mixing effect (Seagull)
   /// @param isMC True for MC and false for Data
   /// @param system Colliding system (pp, pPb or PbPb)
@@ -276,20 +269,24 @@ private:
   /// @return Return True if jet passes the ID
   Bool_t JetIDType2(const Float_t &jtNHF, const Float_t &jtNEF, const Float_t &jtCHF, const Float_t &jtMUF, const Float_t &jtCEF,
                     const Int_t &jtCHM, const Int_t &jtCEM, const Int_t &jtNHM, const Int_t &jtNEM, const Int_t &jtMUM, const Float_t &jetEta);
-
   /// @brief PbPbJetID Functions
   /// @param jetTrackMax pt track in the jet
   /// @param jetRawPt raw jet pt
   Bool_t JetIDType1(const Float_t &jetTrackMax, const Float_t &jetRawPt);
-
+  /// @brief Jet JES Correction applied to akCs4PF ONLY to pPb
+  /// @param jetPt corrected jet pT
+  /// @return A correction factor that needs to be applied to the jet pT
   Float_t JetJESCorrections(const Float_t &jetPt);
-
   /// @brief Set Up all the functions for weighting
   void SetUpWeightFunctions();
+  /// @brief Setting Up jet Smearing
+  void setUpJER();
+  /// @brief JER resolution factor retrival
+  /// @param jeteta Jet Eta
+  Double_t retriveResolutionFactor(const Float_t &jeteta) const;
 
   /// @brief Event with jets and other variables
   Event *fEvent;
-
   /// @brief Input filename (name.root) or file with list of ROOT files
   const Char_t *fInFileName;
   ///@brief If input file is in store/user location then add the string to file path to open the file
@@ -308,7 +305,6 @@ private:
   Bool_t fUseHltBranch;
   /// @brief Switch skimming branch ON
   Bool_t fUseSkimmingBranch;
-
   /// @brief Switch particle flow jet branch ON
   Bool_t fUseJets;
   ///@brief Use matched jets (Only applicable for MC)
@@ -521,10 +517,6 @@ private:
   Int_t fCollidingEnergyGeV;
   /// @brief Year of data taking
   Int_t fYearOfDataTaking;
-  /// @brief Apply jet pT-smearing
-  Bool_t fDoJetPtSmearing;
-  ///@brief Smearing resolution factor up, down or nominal
-  Int_t fSmearType;
   /// @brief Fix indices
   Bool_t fFixJetArrays;
   /// @brief Event cut
@@ -557,6 +549,23 @@ private:
 
   /// @brief Boolean to set if jet energy scale corrections needs to be applied
   Bool_t fApplyJetJESCorrections;
+
+  ///@brief JER Smearing Eta Edges
+  std::vector<Float_t> fJERSmearingEtaEdges;
+  ///@brief JER Smearing Nominal Factors
+  std::vector<Float_t> fJERSmearingNomial;
+  ///@brief JER Smearing Up Factors
+  std::vector<Float_t> fJERSmearingUp;
+  ///@brief JER Smearing Down Factors
+  std::vector<Float_t> fJERSmearingDown;
+  /// @brief Apply jet pT-smearing
+  Bool_t fDoJetPtSmearing;
+  ///@brief Smearing resolution factor up, down or nominal
+  Int_t fSmearType;
+  ///@brief Smear Function
+  TF1 *fJetPtSmearingFunction;
+  ///@brief Trandom number generator
+  TRandom3 *fRandom;
 
   /// @brief Use JEU
   Int_t fUseJEU; // 0 - no, 1 - Up, -1 - down

@@ -55,6 +55,8 @@ int main(int argc, char *argv[])
     std::string path2DijetWeight = "../aux_files/pPb_8160/Dijet_Weight/DijetWeight10_New.root";
     std::vector<std::string> filters{"pBeamScrapingFilter", "pPAprimaryVertexFilter", "HBHENoiseFilterResultRun2Loose", "phfCoincFilter", "pVertexFilterCutdz1p0"};
     std::string UEType{"EPOS"};
+    Int_t smearType{0};            // 0 - Nominal Smearing, 1 - JER Smearing, 2 - JEC Smearing
+    Bool_t useJERSmearing{kFALSE}; // Use JER Smearing for MC
     // Command line arguments
     /*
     inputFileList               - input file list with forest file paths
@@ -165,6 +167,8 @@ int main(int argc, char *argv[])
     if (isEmbedded)
     {
         reader->setJetCollectionBranchName(jetBranchNameEmbedded.Data());
+        reader->setJetPtSmearing(useJERSmearing, smearType);
+        reader->setMatchedJets();
     }
     else
     {

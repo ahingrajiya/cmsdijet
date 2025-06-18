@@ -215,22 +215,22 @@ private:
     void processEvent(const Event *event);
     /// @brief Process Reco Jets
     /// @param event Event object
-    void processRecoJets(const Event *event, const Double_t &event_Weight, Double_t *multWeight, const Double_t &multiplicityBin);
+    void processRecoJets(const Event *event, const Double_t &event_Weight, const Double_t &multiplicityBin);
     /// @brief Process Gen Jets
     /// @param event Event object
-    void processGenJets(const Event *event, const Double_t &event_Weight, Double_t *multWeight, const Double_t &multiplicityBin);
+    void processGenJets(const Event *event, const Double_t &event_Weight, const Double_t &multiplicityBin);
     /// @brief Process Reco Tracks
     /// @param event Event object
     /// @param event_Weight Event weight
     /// @param multWeight Multiplicity weight
     /// @param multiplicityBin Multiplicity bin
-    void processRecoTracks(const Event *event, const Double_t &event_Weight, Double_t *multWeight, const Double_t &multiplicityBin);
+    void processRecoTracks(const Event *event, const Double_t &event_Weight, const Double_t &multiplicityBin);
     /// @brief Process Gen Tracks
     /// @param event Event object
     /// @param event_Weight Event weight
     /// @param multWeight Multiplicity weight
     /// @param multiplicityBin Multiplicity bin
-    void processGenTracks(const Event *event, const Double_t &event_Weight, Double_t *multWeight, const Double_t &multiplicityBin);
+    void processGenTracks(const Event *event, const Double_t &event_Weight, const Double_t &multiplicityBin);
     /// @brief Check if all dijet requirements are satisfied
     /// @param leadJetPt Found leading jet pt
     /// @param leadJetEta Found leading jet eta
