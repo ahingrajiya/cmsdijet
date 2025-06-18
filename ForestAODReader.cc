@@ -359,17 +359,18 @@ Float_t ForestAODReader::subleadJetPtWeight(const Bool_t &isMC, const std::strin
 
 void ForestAODReader::setUpJER()
 {
+    if (!fDoJetPtSmearing)
+    {
+        std::cout << "Jet Energy Resolution (JER) smearing is not enabled. Skipping setup." << std::endl;
+        return;
+    }
     if (!fIsMc)
     {
         std::cerr << "Jet Energy Resolution (JER) smearing is only applicable for MC samples." << std::endl;
 
         return;
     }
-    if (!fDoJetPtSmearing)
-    {
-        std::cout << "Jet Energy Resolution (JER) smearing is not enabled. Skipping setup." << std::endl;
-        return;
-    }
+
     std::cout << "Setting Up JER with Smear Type : " << fSmearType << " for Colliding System " << fCollidingSystem << std::endl;
     fJERSmearingEtaEdges.clear();
     fJERSmearingNomial.clear();
