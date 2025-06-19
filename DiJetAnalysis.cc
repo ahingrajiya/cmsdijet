@@ -569,7 +569,7 @@ Float_t DiJetAnalysis::DijetWeight(const Event *event)
             if (deltaPhi > fDeltaPhi)
             {
                 recoDijetPass = kTRUE;
-                // std::cout << "Reco Lead Jet Pt: " << leadJetPt << std::endl;
+                std::cout << "Reco Lead Jet Pt: " << leadJetPt << " Reco Sub Lead Jet Pt: " << subLeadJetPt << std::endl;
             }
         }
         if (fDijetWeightType == "Reco" && recoDijetPass)
@@ -610,6 +610,8 @@ Float_t DiJetAnalysis::DijetWeight(const Event *event)
                     }
                 }
             }
+            std::cout << "Ref Lead Jet Pt: " << leadJetPt << " Ref Sub Lead Jet Pt: " << subLeadJetPt << std::endl;
+
             dijetWeight = DijetWeight(fIspPb, fDijetWeightType, leadJetPt, subLeadJetPt);
         }
         if (fDijetWeightType == "Gen" && recoDijetPass)
@@ -1297,12 +1299,12 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
         fHM->hVzWithDijet_W->Fill(event->vz(), event_Weight);
         if (fIsMC)
         {
-            // if (subLeadRefPt > leadRefPt)
-            // {
-            //     Double_t tempPt = leadRefPt;
-            //     leadRefPt = subLeadRefPt;
-            //     subLeadRefPt = tempPt;
-            // }
+            if (subLeadRefPt > leadRefPt)
+            {
+                Double_t tempPt = leadRefPt;
+                leadRefPt = subLeadRefPt;
+                subLeadRefPt = tempPt;
+            }
 
             fHM->hRefLeadPtvsRefSubLeadPt_PtHatW->Fill(subLeadRefPt, leadRefPt, event_Weight);
             fHM->hRefLeadPtvsRefSubLeadPt_DiJetW->Fill(subLeadRefPt, leadRefPt, event_Weight * fDijetWeight);
