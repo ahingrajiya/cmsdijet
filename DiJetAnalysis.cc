@@ -126,26 +126,31 @@ void DiJetAnalysis::SetUpWeightFunctions()
             fMultWeightFunctions[2]->SetParameters(-2.26014e+01, 2.19160e-01, -4.88583e-04);
         }
     }
+    std::cout << "DiJetAnalysis::SetUpWeightFunctions Setting up Weight Functions for " << fCollSystem << " completed." << std::endl;
+    std::cout << "\t[Done]" << std::endl;
 }
 
 void DiJetAnalysis::SetUpDijetWeight(const std::string &dijetWeightTable)
 {
+    if (!fUseDijetWeight)
+    {
+        std::cout << "DiJetAnalysis::SetUpDijetWeight Dijet Weighting is not enabled. Skipping setup." << std::endl;
+        return;
+    }
+
+    std::cout << "DiJetAnalysis::SetUpDijetWeight Setting up Dijet Weight" << std::endl;
+    std::cout << "Dijet Weight Table: " << dijetWeightTable << std::endl;
     fDijetWeightFile = TFile::Open(dijetWeightTable.c_str(), "OPEN");
     if (!fDijetWeightFile)
     {
         std::cerr << "Dijet weight table not found" << std::endl;
+        return;
     }
-    else
-    {
-        if (fVerbose)
-        {
-            std::cout << "DiJetAnalysis::SetUpDijetWeight Setting up Dijet Weight" << std::endl;
-            std::cout << "Dijet Weight Table: " << dijetWeightTable << std::endl;
-        }
-        hDijetWeight = (TH2D *)fDijetWeightFile->Get("leadptvsubleadpt_map");
-        // hDijetWeightRef = (TH2D *)fDijetWeightFile->Get("leadrefptvsubleadrefpt_map");
-        hDijetWeightGen = (TH2D *)fDijetWeightFile->Get("leadgenptvsubleadgenpt_map");
-    }
+    hDijetWeight = (TH2D *)fDijetWeightFile->Get("Reco");
+    // hDijetWeightRef = (TH2D *)fDijetWeightFile->Get("leadrefptvsubleadrefpt_map");
+    // hDijetWeightGen = (TH2D *)fDijetWeightFile->Get("leadgenptvsubleadgenpt_map");
+    std::cout << "Dijet Weight Table Loaded Successfully" << std::endl;
+    std::cout << "\t[Done]" << std::endl;
 }
 
 void DiJetAnalysis::SetUpTrackingEfficiency(const std::string &trackingEfficiencyTable)
@@ -154,14 +159,17 @@ void DiJetAnalysis::SetUpTrackingEfficiency(const std::string &trackingEfficienc
     // std::cout << "Dijet Analysis::SetUpTrackingEfficiency Setting up Tracking EfficiencyT Tables" << std::endl;
     if (fIsPbPb)
     {
-        std::cout << "Dijet Analysis::SetUpTrackingEfficiency Setting up Tracking EfficiencyT Tables for PbPb" << std::endl;
+        std::cout << "Dijet Analysis::SetUpTrackingEfficiency Setting up Tracking Efficiency Tables for PbPb" << std::endl;
         fTrkEffPbPb = new TrkEff2018PbPb("general", "", false, trackingEfficiencyTable);
+        std::cout << "Tracking Efficiency Table Loaded Successfully" << std::endl;
+        std::cout << "\t[Done]" << std::endl;
     }
     else if (fIspPb)
     {
-        std::cout << "Dijet Analysis::SetUpTrackingEfficiency Setting up Tracking EfficiencyT Tables for pPb" << std::endl;
-
+        std::cout << "Dijet Analysis::SetUpTrackingEfficiency Setting up Tracking Efficiency Tables for pPb" << std::endl;
         fTrkEffpPb = new TrkEfficiency2016pPb(trackingEfficiencyTable, fUEType);
+        std::cout << "Tracking Efficiency Table Loaded Successfully" << std::endl;
+        std::cout << "\t[Done]" << std::endl;
     }
     else if (fIspp)
     {
@@ -381,7 +389,7 @@ Float_t DiJetAnalysis::DijetWeight(const Bool_t &ispPb, const std::string &type,
             if (hDijetWeight == nullptr)
             {
                 std::cerr << "Dijet Weight Type selected is Reco. Dijet Weight Histogram is not found" << std::endl;
-                std::cerr << "Returning Dijet Weight = 0" << std::endl;
+                throw std::runtime_error("Fatal Error : Aborting !");
                 return 0;
             }
             else
@@ -394,7 +402,7 @@ Float_t DiJetAnalysis::DijetWeight(const Bool_t &ispPb, const std::string &type,
             if (hDijetWeight == nullptr)
             {
                 std::cerr << "Dijet Weight Type selected is Ref. Dijet Weight Histogram is not found" << std::endl;
-                std::cerr << "Returning Dijet Weight = 0" << std::endl;
+                throw std::runtime_error("Fatal Error : Aborting !");
                 return 0;
             }
             // weight = hDijetWeightRef->GetBinContent(hDijetWeightRef->GetXaxis()->FindBin(subLeadPt), hDijetWeightRef->GetYaxis()->FindBin(leadPt));
@@ -404,7 +412,7 @@ Float_t DiJetAnalysis::DijetWeight(const Bool_t &ispPb, const std::string &type,
             if (hDijetWeight == nullptr)
             {
                 std::cerr << "Dijet Weight Type selected is Gen. Dijet Weight Histogram is not found" << std::endl;
-                std::cerr << "Returning Dijet Weight = 0" << std::endl;
+                throw std::runtime_error("Fatal Error : Aborting !");
                 return 0;
             }
             else
