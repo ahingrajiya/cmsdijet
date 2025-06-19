@@ -113,6 +113,9 @@ public:
     THnSparseD *hLeadSubLeadJets_WithDijet_W;
     THnSparseD *hGenLeadGenSubLeadJets_WithDijet_W;
     THnSparseD *hRefLeadRefSubLeadJets_WithDijet_W;
+    THnSparseD *hLeadSubLeadJets_WithDijet_DiJetW;
+    THnSparseD *hGenLeadGenSubLeadJets_WithDijet_DiJetW;
+    THnSparseD *hRefLeadRefSubLeadJets_WithDijet_DiJetW;
 
     TH2D *hLeadPtvsSubLeadPt_DiJetW;
     TH2D *hLeadPtvsSubLeadPt_PtHatW;
@@ -198,6 +201,13 @@ public:
     TH1D *hSubLeadingRecoJetPtWithDijet_W;
     TH1D *hSubLeadingGenJetPtWithDijet_W;
     TH1D *hSubLeadingRefJetPtWithDijet_W;
+
+    TH1D *hLeadingRecoJetPtWithDijet_DiJetW;
+    TH1D *hLeadingGenJetPtWithDijet_DiJetW;
+    TH1D *hLeadingRefJetPtWithDijet_DiJetW;
+    TH1D *hSubLeadingRecoJetPtWithDijet_DiJetW;
+    TH1D *hSubLeadingGenJetPtWithDijet_DiJetW;
+    TH1D *hSubLeadingRefJetPtWithDijet_DiJetW;
 
     TH1D *hXj_C0_W;
     TH1D *hXj_C0_DiJetW;
