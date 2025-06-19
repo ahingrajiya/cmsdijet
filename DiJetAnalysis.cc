@@ -569,7 +569,7 @@ Float_t DiJetAnalysis::DijetWeight(const Event *event)
             if (deltaPhi > fDeltaPhi)
             {
                 recoDijetPass = kTRUE;
-                std::cout << "Reco Lead Jet Pt: " << leadJetPt << " Reco Sub Lead Jet Pt: " << subLeadJetPt << std::endl;
+                // std::cout << "Reco Lead Jet Pt: " << leadJetPt << " Reco Sub Lead Jet Pt: " << subLeadJetPt << std::endl;
             }
         }
         if (fDijetWeightType == "Reco" && recoDijetPass)
@@ -610,7 +610,7 @@ Float_t DiJetAnalysis::DijetWeight(const Event *event)
                     }
                 }
             }
-            std::cout << "Ref Lead Jet Pt: " << leadJetPt << " Ref Sub Lead Jet Pt: " << subLeadJetPt << std::endl;
+            // std::cout << "Ref Lead Jet Pt: " << leadJetPt << " Ref Sub Lead Jet Pt: " << subLeadJetPt << std::endl;
 
             dijetWeight = DijetWeight(fIspPb, fDijetWeightType, leadJetPt, subLeadJetPt);
         }
@@ -1239,9 +1239,9 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
 
         if (deltaPhi > fDeltaPhi)
         {
-            std::cout << "Ref Lead : " << leadRefPt << " Ref SLead : " << subLeadRefPt << std::endl;
-            std::cout << "Ref Matched Lead : " << leadMatchedJetPt << " Ref Matched SLead :  " << subLeadMatchedJetPt << std::endl;
-            std::cout << "Lead Jet Pt: " << leadJetPt << " SubLead Jet Pt: " << subLeadJetPt << std::endl;
+            // std::cout << "Ref Lead : " << leadRefPt << " Ref SLead : " << subLeadRefPt << std::endl;
+            // std::cout << "Ref Matched Lead : " << leadMatchedJetPt << " Ref Matched SLead :  " << subLeadMatchedJetPt << std::endl;
+            // std::cout << "Lead Jet Pt: " << leadJetPt << " SubLead Jet Pt: " << subLeadJetPt << std::endl;
             // std::cout << "Lead Jet Eta: " << leadJetEtaCM << " SubLead Jet Eta: " << subLeadJetEtaCM << std::endl;
             // std::cout << "Xj : " << Xj << " Delta Phi : " << deltaPhi << std::endl;
             // std::cout << "Event Number : " << event->eventNumber() << std::endl;
@@ -1401,8 +1401,8 @@ void DiJetAnalysis::processGenJets(const Event *event, const Double_t &event_Wei
 
     if (fIsDiJetFound)
     {
-        std::cout << "Gen Lead : " << genLeadJetPt << "Gen SLead : " << genSubLeadJetPt << std::endl;
-        std::cout << std::endl;
+        // std::cout << "Gen Lead : " << genLeadJetPt << "Gen SLead : " << genSubLeadJetPt << std::endl;
+        // std::cout << std::endl;
 
         fHM->hGenLeadPtvsGenSubLeadPt_PtHatW->Fill(genSubLeadJetPt, genLeadJetPt, event_Weight);
         fHM->hGenLeadPtvsGenSubLeadPt_DiJetW->Fill(genSubLeadJetPt, genLeadJetPt, event_Weight * fDijetWeight);
