@@ -1397,6 +1397,15 @@ void DiJetAnalysis::processGenJets(const Event *event, const Double_t &event_Wei
         }
     }
 
+    if (fIsDiJetFound)
+    {
+        std::cout << "Gen Lead : " << genLeadJetPt << "Gen SLead : " << genSubLeadJetPt << std::endl;
+        std::cout << std::endl;
+
+        fHM->hGenLeadPtvsGenSubLeadPt_PtHatW->Fill(genSubLeadJetPt, genLeadJetPt, event_Weight);
+        fHM->hGenLeadPtvsGenSubLeadPt_DiJetW->Fill(genSubLeadJetPt, genLeadJetPt, event_Weight * fDijetWeight);
+    }
+
     Float_t genLeadJetEtaCM = MoveToCMFrame(genLeadJetEta);
     Float_t genSubLeadJetEtaCM = MoveToCMFrame(genSubLeadJetEta);
     Bool_t isGenDiJet = CheckDijet(genLeadJetPt, genLeadJetEtaCM, genSubLeadJetPt, genSubLeadJetEtaCM, kTRUE, kTRUE);
@@ -1430,14 +1439,6 @@ void DiJetAnalysis::processGenJets(const Event *event, const Double_t &event_Wei
             fHM->hMultVsGenXj_W->Fill(Xj, multiplicityBin, event_Weight);
             fHM->hMultVsGenXj_DiJetW->Fill(Xj, multiplicityBin, event_Weight * fDijetWeight);
             fHM->hNGenDijetEvent->Fill(1);
-        }
-        if (fIsDiJetFound)
-        {
-            std::cout << "Gen Lead : " << genLeadJetPt << "Gen SLead : " << genSubLeadJetPt << std::endl;
-            std::cout << std::endl;
-
-            fHM->hGenLeadPtvsGenSubLeadPt_PtHatW->Fill(genSubLeadJetPt, genLeadJetPt, event_Weight);
-            fHM->hGenLeadPtvsGenSubLeadPt_DiJetW->Fill(genSubLeadJetPt, genLeadJetPt, event_Weight * fDijetWeight);
         }
     }
     if (fIsGenDiJetFound)
