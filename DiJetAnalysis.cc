@@ -138,7 +138,7 @@ void DiJetAnalysis::SetUpDijetWeight(const std::string &dijetWeightTable)
         return;
     }
 
-    std::cout << "DiJetAnalysis::SetUpDijetWeight Setting up Dijet Weight" << std::endl;
+    std::cout << "DiJetAnalysis::SetUpDijetWeight Setting up Dijet Weight with DiJet Weight Type : " << fDijetWeightType << std::endl;
     std::cout << "Dijet Weight Table: " << dijetWeightTable << std::endl;
     fDijetWeightFile = TFile::Open(dijetWeightTable.c_str(), "OPEN");
     if (!fDijetWeightFile)
@@ -147,7 +147,7 @@ void DiJetAnalysis::SetUpDijetWeight(const std::string &dijetWeightTable)
         return;
     }
     hDijetWeight = (TH2D *)fDijetWeightFile->Get("Reco");
-    // hDijetWeightRef = (TH2D *)fDijetWeightFile->Get("leadrefptvsubleadrefpt_map");
+    hDijetWeightRef = (TH2D *)fDijetWeightFile->Get("Ref");
     // hDijetWeightGen = (TH2D *)fDijetWeightFile->Get("leadgenptvsubleadgenpt_map");
     std::cout << "Dijet Weight Table Loaded Successfully" << std::endl;
     std::cout << "\t[Done]" << std::endl;
@@ -399,17 +399,17 @@ Float_t DiJetAnalysis::DijetWeight(const Bool_t &ispPb, const std::string &type,
         }
         else if (type == "Ref")
         {
-            if (hDijetWeight == nullptr)
+            if (hDijetWeightRef == nullptr)
             {
                 std::cerr << "Dijet Weight Type selected is Ref. Dijet Weight Histogram is not found" << std::endl;
                 throw std::runtime_error("Fatal Error : Aborting !");
                 return 0;
             }
-            // weight = hDijetWeightRef->GetBinContent(hDijetWeightRef->GetXaxis()->FindBin(subLeadPt), hDijetWeightRef->GetYaxis()->FindBin(leadPt));
+            weight = hDijetWeightRef->GetBinContent(hDijetWeightRef->GetXaxis()->FindBin(subLeadPt), hDijetWeightRef->GetYaxis()->FindBin(leadPt));
         }
         else if (type == "Gen")
         {
-            if (hDijetWeight == nullptr)
+            if (hDijetWeightGen == nullptr)
             {
                 std::cerr << "Dijet Weight Type selected is Gen. Dijet Weight Histogram is not found" << std::endl;
                 throw std::runtime_error("Fatal Error : Aborting !");
@@ -647,7 +647,7 @@ Float_t DiJetAnalysis::DijetWeight(const Event *event)
                 }
             }
             dijetWeight = DijetWeight(fIspPb, fDijetWeightType, leadJetPt, subLeadJetPt);
-            // std::cout << "Dijet Weight2 : " << fDijetWeight << std::endl;
+            // std::cout << "Dijet Weight : " << fDijetWeight << std::endl;
         }
     }
     return dijetWeight;
