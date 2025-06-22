@@ -848,6 +848,26 @@ Bool_t DiJetAnalysis::CheckDijet(const Float_t &leadpt, const Float_t &leadeta, 
     return (isDijetPt && isDijetLeadEta && isDijetSubLeadEta && isDijetID);
 }
 
+Int_t DiJetAnalysis::GetDiJetRegion(const Float_t &jetEta)
+{
+    if (jetEta > -3.3 && jetEta < -1.2)
+    {
+        return 1;
+    }
+    else if (jetEta > -1. && jetEta < 1.)
+    {
+        return 2;
+    }
+    else if (jetEta > 1.2 && jetEta < 3.3)
+    {
+        return 3;
+    }
+    else
+    {
+        return -1;
+    }
+}
+
 void DiJetAnalysis::processEvent(const Event *event)
 {
     if (fVerbose)

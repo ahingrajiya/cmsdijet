@@ -125,6 +125,7 @@ public:
     ///@brief Set Leading jet eta range
     void setLeadJetEtaRange(const Double_t &low, const Double_t &hi)
     {
+
         fLeadJetEtaRange[0] = low;
         fLeadJetEtaRange[1] = hi;
     }
@@ -265,6 +266,10 @@ private:
     ///@param event Event object
     ///@return Dijet weight
     Float_t DijetWeight(const Event *event);
+    ///@brief Get DiJet Region based on jet eta
+    ///@param jetEta Jet Eta
+    ///@return Returns 1 for Backward , 2 for Mid , 3 for Forward, and -1 for not in any region
+    Int_t GetDiJetRegion(const Float_t &jetEta);
     ///@brief Print debug information
     Bool_t fDebug;
     ///@brief Delta Phi selection for dijet

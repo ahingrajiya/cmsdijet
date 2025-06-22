@@ -223,10 +223,10 @@ int main(int argc, char *argv[])
             analysis->setDijetWeightType(dijetWeightType);
             analysis->setDijetWeightTable(path2DijetWeight);
         }
-        analysis->setUseDijetWeight();
-        analysis->setDijetWeightType(dijetWeightType);
-        analysis->setDijetWeightTable(path2DijetWeight);
-        analysis->setUseMultiplicityWeigth();
+        // analysis->setUseDijetWeight();
+        // analysis->setDijetWeightType(dijetWeightType);
+        // analysis->setDijetWeightTable(path2DijetWeight);
+        // analysis->setUseMultiplicityWeigth();
         // analysis->doTrackingClosure();
     }
     analysis->setMultiplicityType(0);
@@ -237,7 +237,7 @@ int main(int argc, char *argv[])
     analysis->setLeadJetPt(100.);
     analysis->setSubLeadJetPt(50.);
     analysis->setLeadJetEtaRange(-1., 1.);
-    analysis->setSubLeadJetEtaRange(-1., 1.);
+    analysis->setSubLeadJetEtaRange(1.2, 3.3);
     analysis->doInJetMultiplicity();
     analysis->setBins(multiplicityBins);
     analysis->setUEType(UEType);
