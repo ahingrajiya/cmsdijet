@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     Double_t etaBoost{0.4654094531};
     TString jetBranchNameEmbedded{"akCs4PFJetAnalyzer"};
     TString jetBranchNameUnembedded{"ak4PFJetAnalyzer"};
-    std::string dijetWeightType{"Ref"};
+    std::string dijetWeightType{"Reco"};
     TString oFileName{};
     TString JECFileName{};
     TString JECFileDataName{};
@@ -223,9 +223,9 @@ int main(int argc, char *argv[])
             analysis->setDijetWeightType(dijetWeightType);
             analysis->setDijetWeightTable(path2DijetWeight);
         }
-        // analysis->setUseDijetWeight();
-        // analysis->setDijetWeightType(dijetWeightType);
-        // analysis->setDijetWeightTable(path2DijetWeight);
+        analysis->setUseDijetWeight();
+        analysis->setDijetWeightType(dijetWeightType);
+        analysis->setDijetWeightTable(path2DijetWeight);
         analysis->setUseMultiplicityWeigth();
         // analysis->doTrackingClosure();
     }
