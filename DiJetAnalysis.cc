@@ -574,7 +574,14 @@ Float_t DiJetAnalysis::DijetWeight(const Event *event)
         }
         if (fDijetWeightType == "Reco" && recoDijetPass)
         {
-            dijetWeight = DijetWeight(fIspPb, fDijetWeightType, leadJetPt, subLeadJetPt);
+            if (leadJetPt < 210 || subLeadJetPt < 210)
+            {
+                dijetWeight = DijetWeight(fIspPb, fDijetWeightType, leadJetPt, subLeadJetPt);
+            }
+            else
+            {
+                dijetWeight = 1.;
+            }
         }
         else if (fDijetWeightType == "Ref" && recoDijetPass)
         {
@@ -611,8 +618,14 @@ Float_t DiJetAnalysis::DijetWeight(const Event *event)
                 }
             }
             // std::cout << "Ref Lead Jet Pt: " << leadJetPt << " Ref Sub Lead Jet Pt: " << subLeadJetPt << std::endl;
-
-            dijetWeight = DijetWeight(fIspPb, fDijetWeightType, leadJetPt, subLeadJetPt);
+            if (leadJetPt < 210 || subLeadJetPt < 210)
+            {
+                dijetWeight = DijetWeight(fIspPb, fDijetWeightType, leadJetPt, subLeadJetPt);
+            }
+            else
+            {
+                dijetWeight = 1.;
+            }
         }
         if (fDijetWeightType == "Gen" && recoDijetPass)
         {

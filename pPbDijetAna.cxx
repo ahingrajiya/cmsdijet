@@ -226,7 +226,7 @@ int main(int argc, char *argv[])
         // analysis->setUseDijetWeight();
         // analysis->setDijetWeightType(dijetWeightType);
         // analysis->setDijetWeightTable(path2DijetWeight);
-        // analysis->setUseMultiplicityWeigth();
+        analysis->setUseMultiplicityWeigth();
         // analysis->doTrackingClosure();
     }
     analysis->setMultiplicityType(0);
