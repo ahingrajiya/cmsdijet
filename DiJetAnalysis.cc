@@ -119,12 +119,12 @@ void DiJetAnalysis::SetUpWeightFunctions()
         if (fUseMultiplicityWeight)
         {
             // mid-mid
-            fMultWeightFunctions[0] = new TF1("fMultWeightFunctions0", "pol2", 10, 60, TF1::EAddToList::kNo);
-            fMultWeightFunctions[0]->SetParameters(5.06724e-01, 2.95805e-03, 5.63112e-05);
-            fMultWeightFunctions[1] = new TF1("fMultWeightFunctions1", "pol3", 60, 185, TF1::EAddToList::kNo);
-            fMultWeightFunctions[1]->SetParameters(-9.53556e-01, 5.28692e-02, -4.55892e-04, 1.27018e-06);
-            fMultWeightFunctions[2] = new TF1("fMultWeightFunctions2", "pol2", 186, 260, TF1::EAddToList::kNo);
-            fMultWeightFunctions[2]->SetParameters(-2.26014e+01, 2.19160e-01, -4.88583e-04);
+            // fMultWeightFunctions[0] = new TF1("fMultWeightFunctions0", "pol2", 10, 60, TF1::EAddToList::kNo);
+            // fMultWeightFunctions[0]->SetParameters(5.06724e-01, 2.95805e-03, 5.63112e-05);
+            // fMultWeightFunctions[1] = new TF1("fMultWeightFunctions1", "pol3", 60, 185, TF1::EAddToList::kNo);
+            // fMultWeightFunctions[1]->SetParameters(-9.53556e-01, 5.28692e-02, -4.55892e-04, 1.27018e-06);
+            // fMultWeightFunctions[2] = new TF1("fMultWeightFunctions2", "pol2", 186, 260, TF1::EAddToList::kNo);
+            // fMultWeightFunctions[2]->SetParameters(-2.26014e+01, 2.19160e-01, -4.88583e-04);
             // mid-fwd
             fMultWeightFunctions[0] = new TF1("fMultWeightFunctions0", "pol3", 10, 60, TF1::EAddToList::kNo);
             fMultWeightFunctions[0]->SetParameters(-1.07473e+00, 1.72549e-01, -4.63849e-03, 3.98460e-05);
@@ -132,6 +132,27 @@ void DiJetAnalysis::SetUpWeightFunctions()
             fMultWeightFunctions[1]->SetParameters(-4.55434e-01, 4.70269e-02, -4.58131e-04, 1.35414e-06);
             fMultWeightFunctions[2] = new TF1("fMultWeightFunctions2", "pol2", 186, 260, TF1::EAddToList::kNo);
             fMultWeightFunctions[2]->SetParameters(1.59781e+01, -1.44755e-01, 3.50179e-04);
+            // mid-bkw
+            // fMultWeightFunctions[0] = new TF1("fMultWeightFunctions0", "pol3", 10, 60, TF1::EAddToList::kNo);
+            // fMultWeightFunctions[0]->SetParameters(-2.22496e-01, 9.31040e-02, -2.68669e-03, 2.43632e-05);
+            // fMultWeightFunctions[1] = new TF1("fMultWeightFunctions1", "pol3", 60, 185, TF1::EAddToList::kNo);
+            // fMultWeightFunctions[1]->SetParameters(-1.18984e+00, 5.86234e-02, -5.09734e-04, 1.45418e-06);
+            // fMultWeightFunctions[2] = new TF1("fMultWeightFunctions2", "pol2", 186, 260, TF1::EAddToList::kNo);
+            // fMultWeightFunctions[2]->SetParameters(-1.75136e+01, 1.59773e-01, -3.21435e-04);
+            // // bkw-mid
+            // fMultWeightFunctions[0] = new TF1("fMultWeightFunctions0", "pol3", 10, 60, TF1::EAddToList::kNo);
+            // fMultWeightFunctions[0]->SetParameters(2.32021e+00, -1.31249e-01, 3.35567e-03, -2.65828e-05);
+            // fMultWeightFunctions[1] = new TF1("fMultWeightFunctions1", "pol3", 60, 185, TF1::EAddToList::kNo);
+            // fMultWeightFunctions[1]->SetParameters(-4.44804e-01, 3.88384e-02, -3.44231e-04, 1.01595e-06);
+            // fMultWeightFunctions[2] = new TF1("fMultWeightFunctions2", "pol2", 186, 260, TF1::EAddToList::kNo);
+            // fMultWeightFunctions[2]->SetParameters(-2.02281e+01, 1.96730e-01, -4.34811e-04);
+            // // fwd-mid
+            // fMultWeightFunctions[0] = new TF1("fMultWeightFunctions0", "pol3", 10, 60, TF1::EAddToList::kNo);
+            // fMultWeightFunctions[0]->SetParameters(-4.09932e-02, 8.61824e-02, -2.41133e-03, 2.12260e-05);
+            // fMultWeightFunctions[1] = new TF1("fMultWeightFunctions1", "pol3", 60, 185, TF1::EAddToList::kNo);
+            // fMultWeightFunctions[1]->SetParameters(9.29770e-03, 3.30045e-02, -3.20617e-04, 9.26969e-07);
+            // fMultWeightFunctions[2] = new TF1("fMultWeightFunctions2", "pol2", 186, 260, TF1::EAddToList::kNo);
+            // fMultWeightFunctions[2]->SetParameters(3.75198e-01, 6.09370e-03, -1.18203e-05);
         }
     }
     std::cout << "DiJetAnalysis::SetUpWeightFunctions Setting up Weight Functions for " << fCollSystem << " completed." << std::endl;
