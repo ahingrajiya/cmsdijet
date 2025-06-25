@@ -119,12 +119,12 @@ void DiJetAnalysis::SetUpWeightFunctions()
         if (fUseMultiplicityWeight)
         {
             // mid-mid
-            fMultWeightFunctions[0] = new TF1("fMultWeightFunctions0", "pol2", 10, 60, TF1::EAddToList::kNo);
-            fMultWeightFunctions[0]->SetParameters(5.06724e-01, 2.95805e-03, 5.63112e-05);
-            fMultWeightFunctions[1] = new TF1("fMultWeightFunctions1", "pol3", 60, 185, TF1::EAddToList::kNo);
-            fMultWeightFunctions[1]->SetParameters(-9.53556e-01, 5.28692e-02, -4.55892e-04, 1.27018e-06);
-            fMultWeightFunctions[2] = new TF1("fMultWeightFunctions2", "pol2", 186, 260, TF1::EAddToList::kNo);
-            fMultWeightFunctions[2]->SetParameters(-2.26014e+01, 2.19160e-01, -4.88583e-04);
+            // fMultWeightFunctions[0] = new TF1("fMultWeightFunctions0", "pol2", 10, 60, TF1::EAddToList::kNo);
+            // fMultWeightFunctions[0]->SetParameters(5.06724e-01, 2.95805e-03, 5.63112e-05);
+            // fMultWeightFunctions[1] = new TF1("fMultWeightFunctions1", "pol3", 60, 185, TF1::EAddToList::kNo);
+            // fMultWeightFunctions[1]->SetParameters(-9.53556e-01, 5.28692e-02, -4.55892e-04, 1.27018e-06);
+            // fMultWeightFunctions[2] = new TF1("fMultWeightFunctions2", "pol2", 186, 260, TF1::EAddToList::kNo);
+            // fMultWeightFunctions[2]->SetParameters(-2.26014e+01, 2.19160e-01, -4.88583e-04);
             // // mid-fwd
             // fMultWeightFunctions[0] = new TF1("fMultWeightFunctions0", "pol3", 10, 60, TF1::EAddToList::kNo);
             // fMultWeightFunctions[0]->SetParameters(-1.07473e+00, 1.72549e-01, -4.63849e-03, 3.98460e-05);
@@ -153,6 +153,14 @@ void DiJetAnalysis::SetUpWeightFunctions()
             // fMultWeightFunctions[1]->SetParameters(9.29770e-03, 3.30045e-02, -3.20617e-04, 9.26969e-07);
             // fMultWeightFunctions[2] = new TF1("fMultWeightFunctions2", "pol2", 186, 260, TF1::EAddToList::kNo);
             // fMultWeightFunctions[2]->SetParameters(3.75198e-01, 6.09370e-03, -1.18203e-05);
+            /// dener's
+
+            fMultWeightFunctions[0] = new TF1("fMultWeightFunctions0", "pol2", 10, 60, TF1::EAddToList::kNo);
+            fMultWeightFunctions[0]->SetParameters(1.09585e+00, -1.72226e-02, 2.53749e-04);
+            fMultWeightFunctions[1] = new TF1("fMultWeightFunctions1", "pol3", 60, 185, TF1::EAddToList::kNo);
+            fMultWeightFunctions[1]->SetParameters(-7.73235e-01, 5.18872e-02, -4.74928e-04, 1.38387e-06);
+            fMultWeightFunctions[2] = new TF1("fMultWeightFunctions2", "pol2", 186, 260, TF1::EAddToList::kNo);
+            fMultWeightFunctions[2]->SetParameters(-1.76375e+00, 1.13405e-02, 1.22664e-05);
         }
     }
     std::cout << "DiJetAnalysis::SetUpWeightFunctions Setting up Weight Functions for " << fCollSystem << " completed." << std::endl;
@@ -932,6 +940,7 @@ Float_t DiJetAnalysis::FlipVertexZ(const Float_t &vertexz)
         return vertexz;
     }
 }
+
 void DiJetAnalysis::processEvent(const Event *event)
 {
     if (fVerbose)
