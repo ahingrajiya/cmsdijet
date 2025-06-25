@@ -270,6 +270,10 @@ private:
     ///@param jetEta Jet Eta
     ///@return Returns 1 for Backward , 2 for Mid , 3 for Forward, and -1 for not in any region
     Int_t GetDiJetRegion(const Float_t &jetEta);
+    ///@brief Flip Vertex
+    ///@param vertexz Vertex Z for pPb
+    ///@return Returns the vertexz after flipping it for pPb
+    Float_t FlipVertexZ(const Float_t &vertexz);
     ///@brief Print debug information
     Bool_t fDebug;
     ///@brief Delta Phi selection for dijet

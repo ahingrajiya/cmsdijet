@@ -910,6 +910,28 @@ Int_t DiJetAnalysis::GetDiJetRegion(const Float_t &jetEta)
     }
 }
 
+Float_t DiJetAnalysis::FlipVertexZ(const Float_t &vertexz)
+{
+    if (fIspPb)
+    {
+        if (!fIsMC && !fIsPbGoing)
+        {
+            return (-vertexz);
+        }
+        else if (fIsMC && fIsPbGoing)
+        {
+            return (-vertexz);
+        }
+        else
+        {
+            return vertexz;
+        }
+    }
+    else
+    {
+        return vertexz;
+    }
+}
 void DiJetAnalysis::processEvent(const Event *event)
 {
     if (fVerbose)
@@ -967,16 +989,9 @@ void DiJetAnalysis::processEvent(const Event *event)
 
     Double_t iVertexZ = event->vz();
 
-    if (fIspPb && fUseCMFrame)
+    if (fIspPb)
     {
-        if (!fIsMC && !fIsPbGoing)
-        {
-            iVertexZ = -iVertexZ;
-        }
-        else if (fIsMC && fIsPbGoing)
-        {
-            iVertexZ = -iVertexZ;
-        }
+        iVertexZ = FlipVertexZ(iVertexZ);
     }
 
     // Int_t iRecoMult = RecoMultiplicity(fIspPb, event);
