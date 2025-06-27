@@ -119,12 +119,12 @@ void DiJetAnalysis::SetUpWeightFunctions()
         if (fUseMultiplicityWeight)
         {
             // mid-mid
-            // fMultWeightFunctions[0] = new TF1("fMultWeightFunctions0", "pol2", 10, 60, TF1::EAddToList::kNo);
-            // fMultWeightFunctions[0]->SetParameters(5.06724e-01, 2.95805e-03, 5.63112e-05);
-            // fMultWeightFunctions[1] = new TF1("fMultWeightFunctions1", "pol3", 60, 185, TF1::EAddToList::kNo);
-            // fMultWeightFunctions[1]->SetParameters(-9.53556e-01, 5.28692e-02, -4.55892e-04, 1.27018e-06);
-            // fMultWeightFunctions[2] = new TF1("fMultWeightFunctions2", "pol2", 186, 260, TF1::EAddToList::kNo);
-            // fMultWeightFunctions[2]->SetParameters(-2.26014e+01, 2.19160e-01, -4.88583e-04);
+            fMultWeightFunctions[0] = new TF1("fMultWeightFunctions0", "pol2", 10, 60, TF1::EAddToList::kNo);
+            fMultWeightFunctions[0]->SetParameters(5.06724e-01, 2.95805e-03, 5.63112e-05);
+            fMultWeightFunctions[1] = new TF1("fMultWeightFunctions1", "pol3", 60, 185, TF1::EAddToList::kNo);
+            fMultWeightFunctions[1]->SetParameters(-9.53556e-01, 5.28692e-02, -4.55892e-04, 1.27018e-06);
+            fMultWeightFunctions[2] = new TF1("fMultWeightFunctions2", "pol2", 186, 260, TF1::EAddToList::kNo);
+            fMultWeightFunctions[2]->SetParameters(-2.26014e+01, 2.19160e-01, -4.88583e-04);
             // // mid-fwd
             // fMultWeightFunctions[0] = new TF1("fMultWeightFunctions0", "pol3", 10, 60, TF1::EAddToList::kNo);
             // fMultWeightFunctions[0]->SetParameters(-1.07473e+00, 1.72549e-01, -4.63849e-03, 3.98460e-05);
@@ -162,8 +162,8 @@ void DiJetAnalysis::SetUpWeightFunctions()
             // fMultWeightFunctions[2] = new TF1("fMultWeightFunctions2", "pol2", 186, 260, TF1::EAddToList::kNo);
             // fMultWeightFunctions[2]->SetParameters(-1.76375e+00, 1.13405e-02, 1.22664e-05);
 
-            fMultWeightFunctions[0] = new TF1("fMultWeightFunctions0", "pol8", 10, 210, TF1::EAddToList::kNo);
-            fMultWeightFunctions[0]->SetParameters(-0.0958084, -0.00115779, 0.00233641, -8.42997e-05, 1.42306e-06, -1.27251e-08, 6.20308e-11, -1.56457e-13, 1.60319e-16);
+            // fMultWeightFunctions[0] = new TF1("fMultWeightFunctions0", "pol8", 10, 210, TF1::EAddToList::kNo);
+            // fMultWeightFunctions[0]->SetParameters(-0.0958084, -0.00115779, 0.00233641, -8.42997e-05, 1.42306e-06, -1.27251e-08, 6.20308e-11, -1.56457e-13, 1.60319e-16);
             // fMultWeightFunctions[1] = new TF1("fMultWeightFunctions1", "pol3", 60, 185, TF1::EAddToList::kNo);
             // fMultWeightFunctions[1]->SetParameters(-7.73235e-01, 5.18872e-02, -4.74928e-04, 1.38387e-06);
             // fMultWeightFunctions[2] = new TF1("fMultWeightFunctions2", "pol2", 186, 260, TF1::EAddToList::kNo);
@@ -378,29 +378,29 @@ Double_t DiJetAnalysis::MultiplicityWeight(const Double_t &multiplicity)
         return 1.0;
     }
 
-    // if (multiplicity < 10)
-    // {
-    //     if (fDebug)
-    //     {
-    //         std::cerr << "Multiplicity is out of range. Returning 1.0" << std::endl;
-    //     }
-    //     return 1.0;
-    // }
-    if (multiplicity < 205)
+    if (multiplicity < 10)
     {
-        // std::cout << "Mult : " << multiplicity << " Weight : " << 1. / (fMultWeightFunctions[0]->Eval(multiplicity)) << std::endl;
-        return (1. / (fMultWeightFunctions[0]->Eval(multiplicity)));
+        if (fDebug)
+        {
+            std::cerr << "Multiplicity is out of range. Returning 1.0" << std::endl;
+        }
+        return 1.0;
     }
-    // else if (multiplicity < 185)
-    // {
-    //     // std::cout << "Mult : " << multiplicity << " Weight : " << fMultWeightFunctions[0]->Eval(multiplicity) << std::endl;
-    //     return fMultWeightFunctions[1]->Eval(multiplicity);
-    // }
-    // else if (multiplicity <= 260)
-    // {
-    //     // std::cout << "Mult : " << multiplicity << " Weight : " << fMultWeightFunctions[2]->Eval(multiplicity) << std::endl;
-    //     return fMultWeightFunctions[2]->Eval(multiplicity);
-    // }
+    else if (multiplicity < 60)
+    {
+        // std::cout << "Mult : " << multiplicity << " Weight : " << (fMultWeightFunctions[0]->Eval(multiplicity)) << std::endl;
+        return fMultWeightFunctions[0]->Eval(multiplicity);
+    }
+    else if (multiplicity < 185)
+    {
+        // std::cout << "Mult : " << multiplicity << " Weight : " << fMultWeightFunctions[0]->Eval(multiplicity) << std::endl;
+        return fMultWeightFunctions[1]->Eval(multiplicity);
+    }
+    else if (multiplicity <= 260)
+    {
+        // std::cout << "Mult : " << multiplicity << " Weight : " << fMultWeightFunctions[2]->Eval(multiplicity) << std::endl;
+        return fMultWeightFunctions[2]->Eval(multiplicity);
+    }
     else
     {
         if (fDebug)
