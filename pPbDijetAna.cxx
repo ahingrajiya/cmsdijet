@@ -236,8 +236,8 @@ int main(int argc, char *argv[])
     analysis->setEtaBoost(etaBoost);
     analysis->setLeadJetPt(100.);
     analysis->setSubLeadJetPt(50.);
-    analysis->setLeadJetEtaRange(-3.3, -1.2);
-    analysis->setSubLeadJetEtaRange(-1., 1.);
+    analysis->setLeadJetEtaRange(-1., 1.);
+    analysis->setSubLeadJetEtaRange(1.2, 2.4);
     analysis->doInJetMultiplicity();
     analysis->setBins(multiplicityBins);
     analysis->setUEType(UEType);
