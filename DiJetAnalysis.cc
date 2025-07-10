@@ -1321,10 +1321,12 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
 
         Double_t refXj;
         Double_t refDeltaPhi;
+        Double_t matchedRefXj;
         if (fIsMC)
         {
             refDeltaPhi = TMath::Abs(DeltaPhi(leadRefPhi, subLeadRefPhi));
             refXj = Asymmetry(leadRefPt, subLeadRefPt);
+            matchedRefXj = Asymmetry(leadMatchedJetPt, subLeadMatchedJetPt);
         }
 
         Double_t QuenchingQuantities[5] = {Xj, deltaPhi, leadJetPt, subLeadJetPt, multiplicityBin};
@@ -1352,15 +1354,19 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
 
             if (fIsMC)
             {
-                fHM->hMultVsRefXj_ER_W->Fill(refXj, multiplicityBin, event_Weight);
-                fHM->hMultVsRefXj_ER_DiJetW->Fill(refXj, multiplicityBin, event_Weight * fDijetWeight);
 
                 if (refXj > 1.0)
                 {
                     refXj = 1. / refXj;
                 }
+                if (matchedRefXj > 1.0)
+                {
+                    matchedRefXj = 1. / matchedRefXj;
+                }
                 fHM->hMultVsRefXj_W->Fill(refXj, multiplicityBin, event_Weight);
                 fHM->hMultVsRefXj_DiJetW->Fill(refXj, multiplicityBin, event_Weight * fDijetWeight);
+                fHM->hMultVsMatchedRefXj_W->Fill(matchedRefXj, multiplicityBin, event_Weight);
+                fHM->hMultVsMatchedRefXj_DiJetW->Fill(matchedRefXj, multiplicityBin, event_Weight * fDijetWeight);
             }
 
             fHM->hNDijetEvent->Fill(1);

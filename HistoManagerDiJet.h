@@ -146,9 +146,9 @@ public:
     TH2D *hMultVsXj_W;
     TH2D *hMultVsXj_DiJetW;
     TH2D *hMultVsRefXj_W;
-    TH2D *hMultVsRefXj_ER_W;
+    TH2D *hMultVsMatchedRefXj_W;
     TH2D *hMultVsRefXj_DiJetW;
-    TH2D *hMultVsRefXj_ER_DiJetW;
+    TH2D *hMultVsMatchedRefXj_DiJetW;
     TH2D *hMultVsGenXj_W;
     TH2D *hMultVsGenXj_DiJetW;
     TH1D *hVzWithDijet_W;
@@ -217,6 +217,10 @@ public:
     std::vector<TH1D *> hXj_Projection_DiJetW;
     std::vector<TH1D *> hGenXj_Projection_W;
     std::vector<TH1D *> hGenXj_Projection_DiJetW;
+    std::vector<TH1D *> hRefXj_Projection_W;
+    std::vector<TH1D *> hRefXj_Projection_DiJetW;
+    std::vector<TH1D *> hMatchedRefXj_Projection_W;
+    std::vector<TH1D *> hMatchedRefXj_Projection_DiJetW;
 
     TH3D *hTrackPtVsEta;
     TH3D *hTrackPtVsEta_W;

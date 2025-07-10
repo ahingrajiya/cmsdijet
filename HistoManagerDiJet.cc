@@ -21,34 +21,58 @@
 ClassImp(HistoManagerDiJet)
 
     HistoManagerDiJet::HistoManagerDiJet() : BaseHistoManager(), fIsMC{kFALSE}, fMultiplicityBins{0.0}, fMultiplicityBinThresholds{0},
-                                             hRecoMultiplicity_W{nullptr}, hCorrectedMultiplicity_W{nullptr}, hGenMultiplicity_W{nullptr}, hSubEventMultiplicity_W{nullptr},
-                                             hSelectedMultiplicity_W{nullptr}, hMultiplicities{nullptr}, hMultiplicities_W{nullptr}, hPtHat{nullptr}, hPtHat_W{nullptr},
-                                             hHiBin{nullptr}, hHiBin_W{nullptr}, hVz{nullptr}, hVz_W{nullptr}, hMultiplicities_DiJet_W{nullptr}, hRecoQuenching_W{nullptr}, hGenQuenching_W{nullptr},
-                                             hDeltaPhi_W{nullptr}, hMultVsXj_W{nullptr}, hNDijetEvent{nullptr}, hNEventsInMult{nullptr}, hGenDeltaPhi_W{nullptr},
-                                             hMultVsGenXj_W{nullptr}, hNGenDijetEvent{nullptr}, hInJetMultiplicity_W{nullptr}, hGenInJetMultiplicity_W{nullptr}, hLeadSubLeadJets{nullptr},
-                                             hGenLeadGenSubLeadJets{nullptr}, hGenLeadGenSubLeadJets_W{nullptr}, hLeadSubLeadJets_W{nullptr}, hVzWithDijet_W{nullptr}, hMultVsXj_DiJetW{nullptr}, hMultVsRefXj_W{nullptr}, hMultVsRefXj_DiJetW{nullptr},
-                                             hMultVsRefXj_ER_W{nullptr}, hMultVsRefXj_ER_DiJetW{nullptr}, hRefLeadRefSubLeadJets{nullptr}, hRefLeadRefSubLeadJets_W{nullptr}, hMultVsGenXj_DiJetW{nullptr}, hRecoJES_W{nullptr}, hRefJES_W{nullptr},
-                                             hGenLeadingVsGenSubLeading_WO_DiJet_W{nullptr}, hRefLeadingVsRefSubLeadingMatched_W{nullptr}, hLeadPtvsSubLeadPt_DiJetW{nullptr},
-                                             hRefLeadPtvsRefSubLeadPt_DiJetW{nullptr}, hLeadSubLeadJets_MidRapidity_W{nullptr}, hGenLeadGenSubLeadJets_MidRapidity_W{nullptr}, hRefLeadRefSubLeadJets_MidRapidity_W{nullptr},
-                                             hGenLeadPtvsGenSubLeadPt_DiJetW{nullptr}, hLeadSubLeadJets_WithDijet_W{nullptr}, hGenLeadGenSubLeadJets_WithDijet_W{nullptr}, hRefLeadRefSubLeadJets_WithDijet_W{nullptr},
-                                             hGenLeadPtvsGenSubLeadPt_PtHatW{nullptr}, hRefLeadPtvsRefSubLeadPt_PtHatW{nullptr}, hLeadPtvsSubLeadPt_PtHatW{nullptr}, hDeltaPhi_WithDiJet_W{nullptr}, hGenDeltaPhi_WithDiJet_W{nullptr},
-                                             hInclusiveUncorrectedRecoJets{nullptr}, hInclusiveUncorrectedRecoJets_W{nullptr}, hInclusiveRecoJetsLabFrame{nullptr}, hInclusiveRecoJetsLabFrame_W{nullptr},
-                                             hInclusiveRecoJetsCMFrame{nullptr}, hInclusiveRecoJetsCMFrame_W{nullptr}, hSelectedInclusiveRecoJetsMidRapidity_W{nullptr}, hInclusiveGenJetsLabFrame{nullptr},
-                                             hInclusiveGenJetsLabFrame_W{nullptr}, hInclusiveGenJetsCMFrame{nullptr}, hInclusiveGenJetsCMFrame_W{nullptr}, hSelectedInclusiveGenJetsMidRapidity_W{nullptr},
-                                             hInclusiveRecoJetPtVsEtaLabFrame_W{nullptr}, hInclusiveRecoJetPtVsEtaCMFrame_W{nullptr}, hInclusiveUnCorrectedRecoPtVsEtaLabFrame_W{nullptr}, hInclusiveUnCorrectedRecoPtVsEtaCMFrame_W{nullptr},
-                                             hInclusiveRecoJetPt{nullptr}, hInclusiveRecoJetPt_W{nullptr}, hInclusiveGenJetPt{nullptr}, hInclusiveGenJetPt_W{nullptr}, hSelectedInclusiveRecoJetPt_MidRapidity_W{nullptr},
-                                             hSelectedInclusiveGenJetPt_MidRapidity_W{nullptr}, hInclusiveRecoJetEtaCMFrame{nullptr}, hInclusiveRecoJetEtaCMFrame_W{nullptr}, hInclusiveGenJetEtaLabFrame{nullptr}, hInclusiveRecoJetEtaLabFrame_W{nullptr},
-                                             hSelectedInclusiveRecoJetEtaMidRapidity_W{nullptr}, hInclusiveGenJetEtaCMFrame{nullptr}, hInclusiveGenJetEtaCMFrame_W{nullptr}, hSelectedInclusiveGenJetEtaMidRapidity_W{nullptr},
-                                             hLeadingRecoJetPt{nullptr}, hLeadingRecoJetPt_W{nullptr}, hSubLeadingRecoJetPt{nullptr}, hSubLeadingRecoJetPt_W{nullptr}, hLeadingGenJetPt{nullptr}, hLeadingGenJetPt_W{nullptr}, hSubLeadingGenJetPt{nullptr}, hSubLeadingGenJetPt_W{nullptr},
-                                             hLeadingRecoJetPtWithDijet_W{nullptr}, hSubLeadingRecoJetPtWithDijet_W{nullptr}, hLeadingGenJetPtWithDijet_W{nullptr}, hSubLeadingGenJetPtWithDijet_W{nullptr}, hXj_Projection_W{nullptr}, hXj_Projection_DiJetW{nullptr},
-                                             hGenXj_Projection_W{nullptr}, hGenXj_Projection_DiJetW{nullptr}, hInclusiveRefJetPt{nullptr}, hInclusiveRefJetPt_W{nullptr}, hInclusiveRefJetsCMFrame{nullptr}, hInclusiveRefJetsCMFrame_W{nullptr}, hInclusiveRefJetsLabFrame{nullptr}, hInclusiveRefJetsLabFrame_W{nullptr},
-                                             hSelectedInclusiveRefJetsMidRapidity_W{nullptr}, hSelectedInclusiveRefJetPt_MidRapidity_W{nullptr}, hLeadingRefJetPt{nullptr}, hLeadingRefJetPt_W{nullptr}, hSubLeadingRefJetPt{nullptr}, hSubLeadingRefJetPt_W{nullptr},
-                                             hLeadingRefJetPtWithDijet_W{nullptr}, hSubLeadingRefJetPtWithDijet_W{nullptr}, hXj_C0_W{nullptr}, hXj_C0_DiJetW{nullptr}, hGenXj_C0_W{nullptr}, hGenXj_C0_DiJetW{nullptr}, hTrackPtVsEta{nullptr}, hTrackPtVsEta_W{nullptr}, hTrackPtVsEtaCorrected{nullptr}, hTrackPtVsEtaCorrected_W{nullptr},
-                                             hGenTrackPtVsEta{nullptr}, hGenTrackPtVsEta_W{nullptr}, hRecoJES_Eta_W{nullptr}, hRefJES_Eta_W{nullptr}, hRecoJES_Eta_Pt100_W{nullptr}, hRefJES_Eta_Pt100_W{nullptr}, hRecoJES_Eta_Pt120_W{nullptr}, hRefJES_Eta_Pt120_W{nullptr}, hRecoTracks{nullptr}, hRecoTracks_W{nullptr}, hRecoTracks_Pt1_W{nullptr},
-                                             hGenTracks{nullptr}, hGenTracks_W{nullptr}, hGenTracks_Pt1_W{nullptr}, hJetFlavorFractions_W{nullptr}, hLeadSubLeadJets_WithDijet_DiJetW{nullptr},
-                                             hGenLeadGenSubLeadJets_WithDijet_DiJetW{nullptr}, hRefLeadRefSubLeadJets_WithDijet_DiJetW{nullptr},
-                                             hLeadingGenJetPtWithDijet_DiJetW{nullptr}, hSubLeadingGenJetPtWithDijet_DiJetW{nullptr}, hLeadingRefJetPtWithDijet_DiJetW{nullptr}, hSubLeadingRefJetPtWithDijet_DiJetW{nullptr},
-                                             hLeadingRecoJetPtWithDijet_DiJetW{nullptr}, hSubLeadingRecoJetPtWithDijet_DiJetW{nullptr}
+                                             hRecoMultiplicity_W{nullptr}, hCorrectedMultiplicity_W{nullptr}, hGenMultiplicity_W{nullptr},
+                                             hSubEventMultiplicity_W{nullptr}, hSelectedMultiplicity_W{nullptr}, hMultiplicities{nullptr},
+                                             hMultiplicities_W{nullptr}, hPtHat{nullptr}, hPtHat_W{nullptr}, hHiBin{nullptr}, hHiBin_W{nullptr},
+                                             hVz{nullptr}, hVz_W{nullptr}, hMultiplicities_DiJet_W{nullptr}, hRecoQuenching_W{nullptr},
+                                             hGenQuenching_W{nullptr}, hDeltaPhi_W{nullptr}, hMultVsXj_W{nullptr}, hNDijetEvent{nullptr},
+                                             hNEventsInMult{nullptr}, hGenDeltaPhi_W{nullptr}, hMultVsGenXj_W{nullptr}, hNGenDijetEvent{nullptr},
+                                             hInJetMultiplicity_W{nullptr}, hGenInJetMultiplicity_W{nullptr}, hLeadSubLeadJets{nullptr},
+                                             hGenLeadGenSubLeadJets{nullptr}, hGenLeadGenSubLeadJets_W{nullptr}, hLeadSubLeadJets_W{nullptr},
+                                             hVzWithDijet_W{nullptr}, hMultVsXj_DiJetW{nullptr}, hMultVsRefXj_W{nullptr}, hMultVsRefXj_DiJetW{nullptr},
+                                             hMultVsMatchedRefXj_W{nullptr}, hMultVsMatchedRefXj_DiJetW{nullptr}, hRefLeadRefSubLeadJets{nullptr},
+                                             hRefLeadRefSubLeadJets_W{nullptr}, hMultVsGenXj_DiJetW{nullptr}, hRecoJES_W{nullptr}, hRefJES_W{nullptr},
+                                             hGenLeadingVsGenSubLeading_WO_DiJet_W{nullptr}, hRefLeadingVsRefSubLeadingMatched_W{nullptr},
+                                             hLeadPtvsSubLeadPt_DiJetW{nullptr}, hRefLeadPtvsRefSubLeadPt_DiJetW{nullptr}, hLeadSubLeadJets_MidRapidity_W{nullptr},
+                                             hGenLeadGenSubLeadJets_MidRapidity_W{nullptr}, hRefLeadRefSubLeadJets_MidRapidity_W{nullptr},
+                                             hGenLeadPtvsGenSubLeadPt_DiJetW{nullptr}, hLeadSubLeadJets_WithDijet_W{nullptr},
+                                             hGenLeadGenSubLeadJets_WithDijet_W{nullptr}, hRefLeadRefSubLeadJets_WithDijet_W{nullptr},
+                                             hGenLeadPtvsGenSubLeadPt_PtHatW{nullptr}, hRefLeadPtvsRefSubLeadPt_PtHatW{nullptr},
+                                             hLeadPtvsSubLeadPt_PtHatW{nullptr}, hDeltaPhi_WithDiJet_W{nullptr}, hGenDeltaPhi_WithDiJet_W{nullptr},
+                                             hInclusiveUncorrectedRecoJets{nullptr}, hInclusiveUncorrectedRecoJets_W{nullptr},
+                                             hInclusiveRecoJetsLabFrame{nullptr}, hInclusiveRecoJetsLabFrame_W{nullptr}, hInclusiveRecoJetsCMFrame{nullptr},
+                                             hInclusiveRecoJetsCMFrame_W{nullptr}, hSelectedInclusiveRecoJetsMidRapidity_W{nullptr},
+                                             hInclusiveGenJetsLabFrame{nullptr}, hInclusiveGenJetsLabFrame_W{nullptr}, hInclusiveGenJetsCMFrame{nullptr},
+                                             hInclusiveGenJetsCMFrame_W{nullptr}, hSelectedInclusiveGenJetsMidRapidity_W{nullptr},
+                                             hInclusiveRecoJetPtVsEtaLabFrame_W{nullptr}, hInclusiveRecoJetPtVsEtaCMFrame_W{nullptr},
+                                             hInclusiveUnCorrectedRecoPtVsEtaLabFrame_W{nullptr}, hInclusiveUnCorrectedRecoPtVsEtaCMFrame_W{nullptr},
+                                             hInclusiveRecoJetPt{nullptr}, hInclusiveRecoJetPt_W{nullptr}, hInclusiveGenJetPt{nullptr},
+                                             hInclusiveGenJetPt_W{nullptr}, hSelectedInclusiveRecoJetPt_MidRapidity_W{nullptr},
+                                             hSelectedInclusiveGenJetPt_MidRapidity_W{nullptr}, hInclusiveRecoJetEtaCMFrame{nullptr},
+                                             hInclusiveRecoJetEtaCMFrame_W{nullptr}, hInclusiveGenJetEtaLabFrame{nullptr}, hInclusiveRecoJetEtaLabFrame_W{nullptr},
+                                             hSelectedInclusiveRecoJetEtaMidRapidity_W{nullptr}, hInclusiveGenJetEtaCMFrame{nullptr},
+                                             hInclusiveGenJetEtaCMFrame_W{nullptr}, hSelectedInclusiveGenJetEtaMidRapidity_W{nullptr}, hLeadingRecoJetPt{nullptr},
+                                             hLeadingRecoJetPt_W{nullptr}, hSubLeadingRecoJetPt{nullptr}, hSubLeadingRecoJetPt_W{nullptr},
+                                             hLeadingGenJetPt{nullptr}, hLeadingGenJetPt_W{nullptr}, hSubLeadingGenJetPt{nullptr}, hSubLeadingGenJetPt_W{nullptr},
+                                             hLeadingRecoJetPtWithDijet_W{nullptr}, hSubLeadingRecoJetPtWithDijet_W{nullptr}, hLeadingGenJetPtWithDijet_W{nullptr},
+                                             hSubLeadingGenJetPtWithDijet_W{nullptr}, hXj_Projection_W{nullptr}, hXj_Projection_DiJetW{nullptr},
+                                             hGenXj_Projection_W{nullptr}, hGenXj_Projection_DiJetW{nullptr}, hInclusiveRefJetPt{nullptr},
+                                             hInclusiveRefJetPt_W{nullptr}, hInclusiveRefJetsCMFrame{nullptr}, hInclusiveRefJetsCMFrame_W{nullptr},
+                                             hInclusiveRefJetsLabFrame{nullptr}, hInclusiveRefJetsLabFrame_W{nullptr},
+                                             hSelectedInclusiveRefJetsMidRapidity_W{nullptr}, hSelectedInclusiveRefJetPt_MidRapidity_W{nullptr},
+                                             hLeadingRefJetPt{nullptr}, hLeadingRefJetPt_W{nullptr}, hSubLeadingRefJetPt{nullptr}, hSubLeadingRefJetPt_W{nullptr},
+                                             hLeadingRefJetPtWithDijet_W{nullptr}, hSubLeadingRefJetPtWithDijet_W{nullptr}, hXj_C0_W{nullptr},
+                                             hXj_C0_DiJetW{nullptr}, hGenXj_C0_W{nullptr}, hGenXj_C0_DiJetW{nullptr}, hTrackPtVsEta{nullptr},
+                                             hTrackPtVsEta_W{nullptr}, hTrackPtVsEtaCorrected{nullptr}, hTrackPtVsEtaCorrected_W{nullptr},
+                                             hGenTrackPtVsEta{nullptr}, hGenTrackPtVsEta_W{nullptr}, hRecoJES_Eta_W{nullptr}, hRefJES_Eta_W{nullptr},
+                                             hRecoJES_Eta_Pt100_W{nullptr}, hRefJES_Eta_Pt100_W{nullptr}, hRecoJES_Eta_Pt120_W{nullptr},
+                                             hRefJES_Eta_Pt120_W{nullptr}, hRecoTracks{nullptr}, hRecoTracks_W{nullptr}, hRecoTracks_Pt1_W{nullptr},
+                                             hGenTracks{nullptr}, hGenTracks_W{nullptr}, hGenTracks_Pt1_W{nullptr}, hJetFlavorFractions_W{nullptr},
+                                             hLeadSubLeadJets_WithDijet_DiJetW{nullptr}, hGenLeadGenSubLeadJets_WithDijet_DiJetW{nullptr},
+                                             hRefLeadRefSubLeadJets_WithDijet_DiJetW{nullptr}, hLeadingGenJetPtWithDijet_DiJetW{nullptr},
+                                             hSubLeadingGenJetPtWithDijet_DiJetW{nullptr}, hLeadingRefJetPtWithDijet_DiJetW{nullptr},
+                                             hSubLeadingRefJetPtWithDijet_DiJetW{nullptr}, hLeadingRecoJetPtWithDijet_DiJetW{nullptr},
+                                             hSubLeadingRecoJetPtWithDijet_DiJetW{nullptr}
 {
     /* Empty*/
 }
@@ -89,10 +113,10 @@ HistoManagerDiJet::~HistoManagerDiJet()
         delete hMultVsRefXj_W;
     if (hMultVsRefXj_DiJetW)
         delete hMultVsRefXj_DiJetW;
-    if (hMultVsRefXj_ER_W)
-        delete hMultVsRefXj_ER_W;
-    if (hMultVsRefXj_ER_DiJetW)
-        delete hMultVsRefXj_ER_DiJetW;
+    if (hMultVsMatchedRefXj_W)
+        delete hMultVsMatchedRefXj_W;
+    if (hMultVsMatchedRefXj_DiJetW)
+        delete hMultVsMatchedRefXj_DiJetW;
     if (hNDijetEvent)
         delete hNDijetEvent;
     if (hGenDeltaPhi_W)
@@ -371,6 +395,14 @@ HistoManagerDiJet::~HistoManagerDiJet()
         delete hist;
     for (auto hist : hGenXj_Projection_DiJetW)
         delete hist;
+    for (auto hist : hRefXj_Projection_W)
+        delete hist;
+    for (auto hist : hRefXj_Projection_DiJetW)
+        delete hist;
+    for (auto hist : hMatchedRefXj_Projection_W)
+        delete hist;
+    for (auto hist : hMatchedRefXj_Projection_DiJetW)
+        delete hist;
 }
 
 void HistoManagerDiJet::init()
@@ -587,10 +619,10 @@ void HistoManagerDiJet::init()
         hMultVsRefXj_W->Sumw2();
         hMultVsRefXj_DiJetW = new TH2D("hMultVsRefXj_DiJetW", "RefXj Distribution XjWeighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
         hMultVsRefXj_DiJetW->Sumw2();
-        hMultVsRefXj_ER_W = new TH2D("hMultVsRefXj_ER_W", "RefXj Distribution ER Weighted", nXjAjBins_ER, XjBins_ER, nMultiplicityBins, multBinArray);
-        hMultVsRefXj_ER_W->Sumw2();
-        hMultVsRefXj_ER_DiJetW = new TH2D("hMultVsRefXj_ER_DiJetW", "RefXj Distribution ER XjWeighted", nXjAjBins_ER, XjBins_ER, nMultiplicityBins, multBinArray);
-        hMultVsRefXj_ER_DiJetW->Sumw2();
+        hMultVsMatchedRefXj_W = new TH2D("hMultVsMatchedRefXj_W", "Matched RefXj Distribution Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
+        hMultVsMatchedRefXj_W->Sumw2();
+        hMultVsMatchedRefXj_DiJetW = new TH2D("hMultVsMatchedRefXj_DiJetW", "Matched RefXj Distribution XjWeighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
+        hMultVsMatchedRefXj_DiJetW->Sumw2();
         hMultVsGenXj_W = new TH2D("hMultVsGenXj_W", "Gen Xj Distribution Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
         hMultVsGenXj_W->Sumw2();
         hMultVsGenXj_DiJetW = new TH2D("hMultVsGenXj_DiJetW", "Gen Xj Distribution DijetWeighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
@@ -912,6 +944,14 @@ void HistoManagerDiJet::projectHistograms()
             hGenXj_Projection_W.at(i)->SetTitle(Form("Gen Xj Projection %i-%i Weighted", static_cast<int>(fMultiplicityBinThresholds.at(i)), static_cast<int>(fMultiplicityBinThresholds.at(i + 1))));
             hGenXj_Projection_DiJetW.push_back(hMultVsGenXj_DiJetW->ProjectionX(Form("hGenXj_C%i_DiJetW", i), hMultVsGenXj_DiJetW->GetYaxis()->FindBin(i), hMultVsGenXj_DiJetW->GetYaxis()->FindBin(i)));
             hGenXj_Projection_DiJetW.at(i)->SetTitle(Form("Gen Xj Projection %i-%i Dijet Weighted", static_cast<int>(fMultiplicityBinThresholds.at(i)), static_cast<int>(fMultiplicityBinThresholds.at(i + 1))));
+            hRefXj_Projection_W.push_back(hMultVsRefXj_W->ProjectionX(Form("hRefXj_C%i_W", i), hMultVsRefXj_W->GetYaxis()->FindBin(i), hMultVsRefXj_W->GetYaxis()->FindBin(i)));
+            hRefXj_Projection_W.at(i)->SetTitle(Form("Ref Xj Projection %i-%i Weighted", static_cast<int>(fMultiplicityBinThresholds.at(i)), static_cast<int>(fMultiplicityBinThresholds.at(i + 1))));
+            hRefXj_Projection_DiJetW.push_back(hMultVsRefXj_DiJetW->ProjectionX(Form("hRefXj_C%i_DiJetW", i), hMultVsRefXj_DiJetW->GetYaxis()->FindBin(i), hMultVsRefXj_DiJetW->GetYaxis()->FindBin(i)));
+            hRefXj_Projection_DiJetW.at(i)->SetTitle(Form("Ref Xj Projection %i-%i Dijet Weighted", static_cast<int>(fMultiplicityBinThresholds.at(i)), static_cast<int>(fMultiplicityBinThresholds.at(i + 1))));
+            hMatchedRefXj_Projection_W.push_back(hMultVsMatchedRefXj_W->ProjectionX(Form("hMatchedRefXj_C%i_W", i), hMultVsMatchedRefXj_W->GetYaxis()->FindBin(i), hMultVsMatchedRefXj_W->GetYaxis()->FindBin(i)));
+            hMatchedRefXj_Projection_W.at(i)->SetTitle(Form("Matched Ref Xj Projection %i-%i Weighted", static_cast<int>(fMultiplicityBinThresholds.at(i)), static_cast<int>(fMultiplicityBinThresholds.at(i + 1))));
+            hMatchedRefXj_Projection_DiJetW.push_back(hMultVsMatchedRefXj_DiJetW->ProjectionX(Form("hMatchedRefXj_C%i_DiJetW", i), hMultVsMatchedRefXj_DiJetW->GetYaxis()->FindBin(i), hMultVsMatchedRefXj_DiJetW->GetYaxis()->FindBin(i)));
+            hMatchedRefXj_Projection_DiJetW.at(i)->SetTitle(Form("Matched Ref Xj Projection %i-%i Dijet Weighted", static_cast<int>(fMultiplicityBinThresholds.at(i)), static_cast<int>(fMultiplicityBinThresholds.at(i + 1))));
         }
     }
 }
@@ -1067,7 +1107,7 @@ void HistoManagerDiJet ::writeOutput()
     if (fIsMC)
     {
         hMultVsRefXj_W->Write();
-        hMultVsRefXj_ER_W->Write();
+        hMultVsMatchedRefXj_W->Write();
         hGenQuenching_W->Write();
         hGenDeltaPhi_W->Write();
         hGenDeltaPhi_WithDiJet_W->Write();
@@ -1076,7 +1116,7 @@ void HistoManagerDiJet ::writeOutput()
         if (fCollSystem == "pPb" || fCollSystem == "pp")
         {
             hMultVsRefXj_DiJetW->Write();
-            hMultVsRefXj_ER_DiJetW->Write();
+            hMultVsMatchedRefXj_DiJetW->Write();
             hMultVsGenXj_DiJetW->Write();
         }
     }
@@ -1162,9 +1202,13 @@ void HistoManagerDiJet ::writeOutput()
         if (fIsMC)
         {
             hGenXj_Projection_W[i]->Write();
+            hRefXj_Projection_W[i]->Write();
+            hMatchedRefXj_Projection_W[i]->Write();
             if (fCollSystem == "pPb" || fCollSystem == "pp")
             {
                 hGenXj_Projection_DiJetW[i]->Write();
+                hRefXj_Projection_DiJetW[i]->Write();
+                hMatchedRefXj_Projection_DiJetW[i]->Write();
             }
         }
     }
