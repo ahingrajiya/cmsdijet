@@ -389,7 +389,7 @@ Double_t DiJetAnalysis::MultiplicityWeight(const Double_t &multiplicity)
     else if (multiplicity < 210)
     {
         // std::cout << "Mult : " << multiplicity << " Weight : " << (fMultWeightFunctions[0]->Eval(multiplicity)) << std::endl;
-        return fMultWeightFunctions[0]->Eval(multiplicity);
+        return 1. / (fMultWeightFunctions[0]->Eval(multiplicity));
     }
     // else if (multiplicity < 185)
     // {
