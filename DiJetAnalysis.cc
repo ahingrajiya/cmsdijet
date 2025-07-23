@@ -1411,12 +1411,12 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
             fHM->hRefLeadPtvsRefSubLeadPt_PtHatW->Fill(subLeadRefPt, leadRefPt, event_Weight);
             fHM->hRefLeadPtvsRefSubLeadPt_DiJetW->Fill(subLeadRefPt, leadRefPt, event_Weight * fDijetWeight);
 
-            if (subLeadMatchedJetPt > leadMatchedJetPt)
-            {
-                Double_t tempPt = leadMatchedJetPt;
-                leadMatchedJetPt = subLeadMatchedJetPt;
-                subLeadMatchedJetPt = tempPt;
-            }
+            // if (subLeadMatchedJetPt > leadMatchedJetPt)
+            // {
+            //     Double_t tempPt = leadMatchedJetPt;
+            //     leadMatchedJetPt = subLeadMatchedJetPt;
+            //     subLeadMatchedJetPt = tempPt;
+            // }
             fHM->hRefLeadingVsRefSubLeadingMatched_W->Fill(subLeadMatchedJetPt, leadMatchedJetPt, event_Weight);
         }
     }
