@@ -191,7 +191,7 @@ void DiJetAnalysis::SetUpDijetWeight(const std::string &dijetWeightTable)
         return;
     }
     hDijetWeight = (TH2D *)fDijetWeightFile->Get("Reco");
-    hDijetWeightRef = (TH2D *)fDijetWeightFile->Get("Ref");
+    // hDijetWeightRef = (TH2D *)fDijetWeightFile->Get("Ref");
     // hDijetWeightGen = (TH2D *)fDijetWeightFile->Get("leadgenptvsubleadgenpt_map");
     std::cout << "Dijet Weight Table Loaded Successfully" << std::endl;
     std::cout << "\t[Done]" << std::endl;
@@ -1408,8 +1408,8 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
                 subLeadRefPt = tempPt;
             }
 
-            fHM->hRefLeadPtvsRefSubLeadPt_PtHatW->Fill(subLeadRefPt, leadRefPt, event_Weight);
-            fHM->hRefLeadPtvsRefSubLeadPt_DiJetW->Fill(subLeadRefPt, leadRefPt, event_Weight * fDijetWeight);
+            fHM->hRefLeadPtvsRefSubLeadPt_PtHatW->Fill(subLeadMatchedJetPt, leadMatchedJetPt, event_Weight);
+            fHM->hRefLeadPtvsRefSubLeadPt_DiJetW->Fill(subLeadMatchedJetPt, leadMatchedJetPt, event_Weight * fDijetWeight);
 
             // if (subLeadMatchedJetPt > leadMatchedJetPt)
             // {

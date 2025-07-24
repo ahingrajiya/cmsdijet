@@ -30,7 +30,7 @@ ClassImp(ForestAODReader)
       fJEU{nullptr}, fJEUFiles{}, fCollidingSystem{Form("PbPb")}, fCollidingEnergyGeV{5020}, fYearOfDataTaking{2018}, fDoJetPtSmearing{kFALSE},
       fFixJetArrays{kFALSE}, fEventCut{nullptr}, fJetCut{nullptr}, fRecoJet2GenJetId{}, fGenJet2RecoJet{}, fTrackCut{nullptr},
       fUseMatchedJets{kFALSE}, fEventsToProcess{-1}, fUseJetID{kFALSE}, fJetIDType{0}, fHiBinShift{0}, fIs_pp{kFALSE}, fIs_PbPb{kFALSE},
-      fIs_pPb{kFALSE}, fJetJESCorrectionsFunction{nullptr}, fApplyJetJESCorrections{kFALSE}, fUseJEU{0}, fSmearType{0},
+      fIs_pPb{kFALSE}, fJetJESCorrectionsFunction{nullptr}, fApplyJetJESCorrections{kFALSE}, fJEUType{0}, fSmearType{0},
       fJetPtSmearingFunction{nullptr}, fJERSmearingNomial{0}, fJERSmearingUp{0}, fJERSmearingDown{0},
       fJERSmearingEtaEdges{0}, fRandom{nullptr}, fDoJEU{kFALSE}
 {
@@ -50,7 +50,7 @@ ForestAODReader::ForestAODReader(const Char_t *inputStream, const Bool_t &useHlt
       fCollidingEnergyGeV{5020}, fYearOfDataTaking{2018}, fDoJetPtSmearing{kFALSE}, fFixJetArrays{kFALSE}, fEventCut{nullptr}, fJetCut{nullptr},
       fIsInStore{setStoreLocation}, fTrackCut{nullptr}, fUseMatchedJets{useMatchedJets}, fEventsToProcess{-1}, fUseJetID{kFALSE}, fJetIDType{0},
       fHiBinShift{0}, fIs_pp{kFALSE}, fIs_PbPb{kFALSE}, fIs_pPb{kFALSE}, fJetJESCorrectionsFunction{nullptr}, fApplyJetJESCorrections{kFALSE},
-      fUseJEU{0}, fSmearType{0}, fJetPtSmearingFunction{nullptr}, fJERSmearingNomial{0}, fJERSmearingUp{0}, fJERSmearingDown{0},
+      fJEUType{0}, fSmearType{0}, fJetPtSmearingFunction{nullptr}, fJERSmearingNomial{0}, fJERSmearingUp{0}, fJERSmearingDown{0},
       fJERSmearingEtaEdges{0}, fRandom{nullptr}, fDoJEU{kFALSE}
 
 {
@@ -190,6 +190,10 @@ void ForestAODReader::clearVariables()
 //_________________
 Int_t ForestAODReader::init()
 {
+    std::cout << "====================================================" << std::endl;
+    std::cout << "ForestAODReader:: Initializing Forest AOD Reader" << std::endl;
+    std::cout << "====================================================" << std::endl;
+    std::cout << std::endl;
     Int_t status = 0;
     // Setup chains to read
 
@@ -201,13 +205,21 @@ Int_t ForestAODReader::init()
     setupJEU();
     SetUpWeightFunctions();
     setUpJER();
+    fJetCut->report();
+    fTrackCut->report();
 
+    std::cout << std::endl;
+    std::cout << "====================================================" << std::endl;
+    std::cout << "ForestAODReader:: Initialization completed. Exiting ForestAODReader." << std::endl;
+    std::cout << "====================================================" << std::endl;
+    std::cout << std::endl;
     return status;
 }
 
 //________________
 void ForestAODReader::setupJEC()
 {
+    std::cout << "===========Setting up JEC correction============" << std::endl;
     // If no path to the aux_file
     if (fJECPath.Length() <= 0)
     {
@@ -240,27 +252,33 @@ void ForestAODReader::setupJEC()
     }
 
     fJEC = new JetCorrector(fJECFiles);
-    std::cout << "\t[DONE]" << std::endl;
+    std::cout << "Setting Up JEC \t[DONE]" << std::endl;
+    std::cout << std::endl;
 }
 
 void ForestAODReader::setupJEU()
 {
 
+    std::cout << "===========Setting up JEU correction============" << std::endl;
     // Next part is needed only if JEU correction is applied
     if (!fDoJEU)
     {
         std::cout << "JEU correction is not applied. Skipping setup." << std::endl;
+        std::cout << std::endl;
         return;
     }
     if (fIsMc)
     {
         std::cout << "[WARNING] JEU correction is not applied for MC. Skipping setup." << std::endl;
+        std::cout << std::endl;
         return;
     }
     std::cout << "Setting up JEU correction" << std::endl;
-    if (fUseJEU == 0)
+    if (fJEUType == 0)
     {
         std::cout << "JEU correction is not applied. Skipping setup." << std::endl;
+        std::cout << std::endl;
+
         return;
     }
 
@@ -284,18 +302,23 @@ void ForestAODReader::setupJEU()
 
     fJEU = new JetUncertainty(tmp.Data());
     std::cout << "JEU file: " << tmp.Data() << std::endl;
-    std::cout << "\t[DONE]" << std::endl;
+    std::cout << "Setting Up JEU \t[DONE]" << std::endl;
+    std::cout << std::endl;
 }
 
 void ForestAODReader::SetUpWeightFunctions()
 {
+    std::cout << "===============Setting Up Weight Functions for Forest AOD Reader ============" << std::endl;
     if (fIs_pPb && fJetCollection == "akCs4PFJetAnalyzer")
     {
         std::cout << "ForestAODReader::Setting Up JES Correction Weight Functions for p-Pb collisions with akCs4PFJetAnalyzer" << std::endl;
         fJetJESCorrectionsFunction = new TF1("fJetJESCorrectionsFunction", "sqrt([0] + [1]/x)", 30.0, 800.0, TF1::EAddToList::kNo);
         fJetJESCorrectionsFunction->SetParameters(1.00269e+00, 4.82019e+00);
-        std::cout << "\t[DONE]" << std::endl;
+        std::cout << "Setting Up JES  Weight Function \t[DONE]" << std::endl;
+        std::cout << std::endl;
     }
+    std::cout << "Setting Up Weight Functions for Forest AOD Reader \t[DONE]" << std::endl;
+    std::cout << std::endl;
 }
 
 //________________
@@ -374,14 +397,17 @@ Float_t ForestAODReader::subleadJetPtWeight(const Bool_t &isMC, const std::strin
 
 void ForestAODReader::setUpJER()
 {
+    std::cout << "===========Setting up JER Smearing============" << std::endl;
     if (!fDoJetPtSmearing)
     {
         std::cout << "Jet Energy Resolution (JER) smearing is not enabled. Skipping setup." << std::endl;
+        std::cout << std::endl;
         return;
     }
     if (!fIsMc)
     {
         std::cerr << "Jet Energy Resolution (JER) smearing is only applicable for MC samples." << std::endl;
+        std::cout << std::endl;
 
         return;
     }
@@ -409,6 +435,8 @@ void ForestAODReader::setUpJER()
         fJetPtSmearingFunction->SetParameter(0, 0.0415552);
         fJetPtSmearingFunction->SetParameter(1, 0.960013);
     }
+    std::cout << "Setting Up JER Smearing \t[DONE]" << std::endl;
+    std::cout << std::endl;
 }
 
 Double_t ForestAODReader::retriveResolutionFactor(const Float_t &jeteta) const
@@ -622,41 +650,49 @@ Int_t ForestAODReader::setupChains()
     Int_t returnStatus = 1;
 
     // Setup chains to read
-
-    std::cout << "Setting chains... ";
-
+    std::cout << "==================ForestAODReader:: Setting up chains to read=====================" << std::endl;
+    std::cout << ">>>>>>>>>>>>>>Setting Up Trees <<<<<<<<<<<<<" << std::endl;
+    std::cout << std::endl;
     // Use event branch
     fEventTree = new TChain("hiEvtAnalyzer/HiTree");
+    std::cout << "Setting Tree for events : " << fEventTree->GetName() << "\t [Done]" << std::endl;
 
     // Use HLT branch
     if (fUseHltBranch)
     {
         fHltTree = new TChain("hltanalysis/HltTree");
+        std::cout << "Setting Tree for High Level Trigger : " << fHltTree->GetName() << "\t [Done]" << std::endl;
     }
     // Use skimming branch
     if (fUseSkimmingBranch)
     {
         fSkimTree = new TChain("skimanalysis/HltTree");
+        std::cout << "Setting Tree for Skimming Analysis : " << fSkimTree->GetName() << "\t [Done]" << std::endl;
     }
     // Use jet branch
     if (fUseJets)
     {
         fJetTree = new TChain(Form("%s/t", fJetCollection.Data()));
+        std::cout << "Setting Tree for Jets : " << fJetTree->GetName() << "\t [Done]" << std::endl;
     }
 
     // Use reconstructed track branch
     if (fUseTrackBranch)
     {
         fTrkTree = new TChain("ppTrack/trackTree");
+        std::cout << "Setting Tree for Reconstructed Tracks : " << fTrkTree->GetName() << "\t [Done]" << std::endl;
     }
     // Use generated track branch
     if (fIsMc && fUseGenTrackBranch)
     {
         fGenTrkTree = new TChain("HiGenParticleAna/hi");
+        std::cout << "Setting Tree for Generated Tracks : " << fGenTrkTree->GetName() << "\t [Done]" << std::endl;
     }
-    std::cout << "\t[DONE]\n";
+    std::cout << ">>>>>>>>>>>>>>>>>Tree Setting \t[DONE]<<<<<<<<<<<<<<<<<<<\n";
+    std::cout << std::endl;
 
     // Initialize input file name (should switch to const char* processing later)
+    std::cout << ">>>>>>>>>>>>>>>>>>>>Adding Input Files to the Chain<<<<<<<<<<<<<<<<<<" << std::endl;
     std::cout << "Input File List : " << fInFileName << std::endl;
     TString input(fInFileName);
 
@@ -765,6 +801,9 @@ Int_t ForestAODReader::setupChains()
             }
             std::cout << Form("Total number of files in chain: %d\n", nFiles);
             std::cout << Form("Total number of events to read: %lld\n", fEvents2Read);
+            std::cout << ">>>>>>>>>>>>>>>Files have been added to Chains<<<<<<<<<<<<<<<<<<<" << std::endl;
+            std::cout << "===============Setting Up Chains \t[DONE]====================" << std::endl;
+            std::cout << std::endl;
         } // else {   if file list
         returnStatus = 0;
     } // else {   if normal input
@@ -1018,23 +1057,43 @@ void ForestAODReader::setupBranches()
 //_________________
 void ForestAODReader::report()
 {
+    // std::cout << std::boolalpha;
     TString report = "\nForestAODReader::Reporting\n";
+    report += TString::Format("Colliding System             :\t %s\n", fCollidingSystem.Data());
+    report += TString::Format("Is Monte Carlo               :\t %i\n", fIsMc);
+
     report += TString::Format("Use HLT Triggers             :\t %i\n", fUseHltBranch);
     if (fUseHltBranch)
         for (int i = 0; i < fTriggers.size(); i++)
         {
-            report += TString::Format("\tTrigger %i :\t %s\n", i + 1, fTriggers[i].c_str());
+            report += TString::Format("\tTrigger %i           :\t %s\n", i + 1, fTriggers[i].c_str());
         }
-    report += TString::Format("Use Skimming Branch             :\t %i\n", fUseSkimmingBranch);
+    report += TString::Format("Use Skimming Branch          :\t %i\n", fUseSkimmingBranch);
     if (fUseSkimmingBranch)
         for (int i = 0; i < fFilters.size(); i++)
         {
-            report += TString::Format("\tFilter %i  :\t %s\n", i + 1, fFilters[i].c_str());
+            report += TString::Format("\tFilter %i             :\t %s\n", i + 1, fFilters[i].c_str());
         }
     report += TString::Format("Use Jet Branch               :\t %i\n", fUseJets);
     report += TString::Format("Jet Collection Name          :\t %s\n", fJetCollection.Data());
     report += TString::Format("Use Track Branch             :\t %i\n", fUseTrackBranch);
     report += TString::Format("Use Gen Tracks               :\t %i\n", fUseGenTrackBranch);
+    report += TString::Format("JEC File Name                :\t %s\n", fJECFiles[0].c_str());
+    if (!fIsMc)
+    {
+        report += TString::Format("JEC Residualas               :\t %s\n", fJECFiles[1].c_str());
+        report += TString::Format("Apply JEU                    :\t %i\n", fDoJEU);
+        report += TString::Format("JEU Uncertainty Type         :\t %i\n", fJEUType);
+        report += TString::Format("JEU File                     :\t %s\n", fJEUFiles[0].c_str());
+    }
+    report += TString::Format("Apply Jet Pt Smearing        :\t %i\n", fDoJetPtSmearing);
+    if (fDoJetPtSmearing)
+        report += TString::Format("Jet Pt Smearing Type         :\t %i\n", fSmearType);
+
+    report += TString::Format("Apply Jet ID                 :\t %i\n", fUseJetID);
+    if (fUseJetID)
+        report += TString::Format("Jet ID Type                  :\t %i\n", fJetIDType);
+
     std::cout << report.Data() << std::endl;
 }
 
@@ -1303,12 +1362,12 @@ Event *ForestAODReader::returnEvent()
                     pTcorr = pTcorr * jetPtSmering(fRefJetPt[iJet], fRecoJetEta[iJet], fDoJetPtSmearing);
                 }
             }
-            if (fUseJEU != 0 && !fIsMc && fJEU)
+            if (fJEUType > 0 && !fIsMc && fJEU)
             {
                 fJEU->SetJetPT(pTcorr);
                 fJEU->SetJetEta(fRecoJetEta[iJet]);
                 fJEU->SetJetPhi(fRecoJetPhi[iJet]);
-                if (fUseJEU > 0)
+                if (fJEUType > 0)
                 {
                     pTcorr *= (1. + fJEU->GetUncertainty().first);
                     // std::cout << "JEU Up correction: " << fJEU->GetUncertainty().first << std::endl;

@@ -116,10 +116,6 @@ public:
   {
     fJEUFiles.push_back(name);
   }
-  void SetUpJEUType(const Int_t &type = 0)
-  {
-    fUseJEU = {type};
-  }
   /// @brief Apply jet pT-smearing
   void setJetPtSmearing(const Bool_t &isSmear = kFALSE, const Int_t &smearType = 0)
   {
@@ -176,7 +172,7 @@ public:
   void setJEU(const Bool_t &doJEU = kFALSE, const Int_t &useJEU = 0)
   {
     fDoJEU = {doJEU};
-    fUseJEU = {useJEU};
+    fJEUType = {useJEU};
   }
 
 private:
@@ -574,7 +570,7 @@ private:
   TRandom3 *fRandom;
 
   /// @brief Use JEU
-  Int_t fUseJEU; // 0 - no, 1 - Up, -1 - down
+  Int_t fJEUType; // 0 - no, 1 - Up, -1 - down
   /// @brief Do JEU
   Bool_t fDoJEU;
 

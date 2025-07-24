@@ -35,17 +35,23 @@ TrackCut::~TrackCut()
 
 void TrackCut::report()
 {
-    TString report = "\nReporting From TrackCut";
-    report += TString::Format("Track Pt         :\t %f - %f\n", fTrackPt[0], fTrackPt[1]);
-    report += TString::Format("Track Eta        :\t %f - %f\n", fTrackEta[0], fTrackEta[1]);
-    report += TString::Format("Track DXY        :\t >=%f\n", fTrackDXY);
-    report += TString::Format("Track DZ         :\t >=%f\n", fTrackDZ);
-    report += TString::Format("Track PtErr      :\t >=%f\n", fPtError);
-    report += TString::Format("Track Charge     :\t %d\n", fCharge);
-    report += TString::Format("Track HighPurity :\t %d\n", fHighPurity);
-    report += TString::Format("Track Chi2 Cut   :\t %d\n", fChi2);
-    report += TString::Format("Track CaloMatch  :\t %d\n", fCaloMatching);
-    report += TString::Format("Track NHits      :\t %d\n", fNHits);
+    TString report = "\n=======================TrackCut::Reporting Track Selections in Reader=======================\n";
+    report += TString::Format("\n>>>>>>>>>>>>>Reconstructed Tracks Selections<<<<<<<<<<<<<\n");
+    report += TString::Format("Track Pt              :\t %f - %f\n", fTrackPt[0], fTrackPt[1]);
+    report += TString::Format("Track Eta             :\t %f - %f\n", fTrackEta[0], fTrackEta[1]);
+    report += TString::Format("Track DXY             :\t >=%f\n", fTrackDXY);
+    report += TString::Format("Track DZ              :\t >=%f\n", fTrackDZ);
+    report += TString::Format("Track PtErr           :\t >=%f\n", fPtError);
+    report += TString::Format("Use Charged Tracks    :\t %i\n", fCharge);
+    report += TString::Format("Use HighPurity Tracks :\t %i\n", fHighPurity);
+    report += TString::Format("Use Track Chi2        :\t %i\n", fChi2);
+    report += TString::Format("Use CaloMatched Tracks:\t %i\n", fCaloMatching);
+    report += TString::Format("Use Track NHits       :\t %i\n", fNHits);
+    report += TString::Format("Use Track MVAAlgo     :\t %i\n", fMVAAlgo);
+    report += TString::Format("\n>>>>>>>>>>>>>>Generated Tracks Selections<<<<<<<<<<<<\n");
+    report += TString::Format("Gen Track Pt          :\t %f - %f\n", fTrackPt[0], fTrackPt[1]);
+    report += TString::Format("Gen Track Eta         :\t %f - %f\n", fTrackEta[0], fTrackEta[1]);
+    report += TString::Format("Use Charged Gen Tracks:\t %i\n", fCharge);
     std::cout << report.Data() << std::endl;
 }
 

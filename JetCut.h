@@ -41,10 +41,7 @@ public:
     fPt[0] = lo;
     fPt[1] = hi;
   }
-  /// @brief Jet R of cone radius maximum
-  void setConeR(const Double_t &max) { fConeR = max; }
-  /// @brief Require reconstructed jet to have a matching to generated jet
-  void setMustHaveGenMathing() { fMustHaveGenMatching = kTRUE; }
+
   /// @brief Preudorapidity of the reconstructed jet
   void setEta(const Double_t &lo, const Double_t &hi)
   {
@@ -63,10 +60,6 @@ public:
 private:
   /// @brief Jet pT
   Double_t fPt[2];
-  /// @brief Jet cone radius
-  Double_t fConeR;
-  /// @brief Jet must have generated jet matching
-  Bool_t fMustHaveGenMatching;
   /// @brief Pseudorapidity of the jet
   Double_t fEta[2];
   /// @brief Print status for each jet
