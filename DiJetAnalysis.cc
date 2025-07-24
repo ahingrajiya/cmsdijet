@@ -191,7 +191,7 @@ void DiJetAnalysis::SetUpDijetWeight(const std::string &dijetWeightTable)
         return;
     }
     hDijetWeight = (TH2D *)fDijetWeightFile->Get("Reco");
-    // hDijetWeightRef = (TH2D *)fDijetWeightFile->Get("Ref");
+    hDijetWeightRef = (TH2D *)fDijetWeightFile->Get("Ref");
     // hDijetWeightGen = (TH2D *)fDijetWeightFile->Get("leadgenptvsubleadgenpt_map");
     std::cout << "Dijet Weight Table Loaded Successfully" << std::endl;
     std::cout << "\t[Done]" << std::endl;
