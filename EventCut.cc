@@ -22,9 +22,9 @@
 ClassImp(EventCut)
 
     //________________
-    EventCut::EventCut() : fVx{-1e9, 1e9}, fVy{-1e9, 1e9}, fVz{-1e9, 1e9},
+    EventCut::EventCut() : fVz{-1e9, 1e9},
                            fShiftVx{0}, fShiftVy{0}, fVR{1e9},
-                           fHiBin{-1000, 1000}, fCentVal{-1000., 1000.},
+                           fHiBin{-1000, 1000},
                            fPtHat{-1e9, 1e9}, fPtHatWeight{-1e9, 1e9}, fVerbose{kFALSE},
                            fEventsPassed{0}, fEventsFailed{0},
                            fMultiplicity{-5000, 5000}
@@ -42,17 +42,11 @@ EventCut::~EventCut()
 //________________
 void EventCut::report()
 {
-    TString report = "\nReporting from EventCut";
-    report += TString::Format("Vx              :\t %f - %f\n", fVx[0], fVx[1]);
-    report += TString::Format("Vy              :\t %f - %f\n", fVy[0], fVy[1]);
+    TString report = "\n==============EventCut::Reporting Event Selections in Reader================\n";
     report += TString::Format("Vz              :\t %f - %f\n", fVz[0], fVz[1]);
     report += TString::Format("HiBin           :\t %d - %d\n", fHiBin[0], fHiBin[1]);
     report += TString::Format("Multiplicity    :\t %d - %d\n", fMultiplicity[0], fMultiplicity[1]);
-    report += TString::Format("Centrality      :\t %f - %f\n", fCentVal[0], fCentVal[1]);
     report += TString::Format("pThat           :\t %f - %f\n", fPtHat[0], fPtHat[1]);
-    report += TString::Format("ptHatWeight     :\t %f - %f\n", fPtHatWeight[0], fPtHatWeight[1]);
-    report += TString::Format("Events passed   :\t %lld\n", fEventsPassed);
-    report += TString::Format("Events failed   :\t %lld\n", fEventsFailed);
 
     std::cout << report.Data() << std::endl;
 }
@@ -65,9 +59,6 @@ Bool_t EventCut::pass(const Event *ev)
     {
         std::cout << "\n----- Event cut -----\n";
     }
-
-    const Bool_t goodVx = kTRUE;
-    const Bool_t goodVy = kTRUE;
 
     const Bool_t goodVz = (fVz[0] <= ev->vz()) &&
                           (ev->vz() <= fVz[1]);
@@ -101,15 +92,6 @@ Bool_t EventCut::pass(const Event *ev)
     {
         std::cout << Form("ptHat        : %9.2f <= %9.2f < %9.2f or ptHat < 0 \t %s \n",
                           fPtHat[0], ev->ptHat(), fPtHat[1], (goodPtHat) ? "true" : "false");
-    }
-
-    const Bool_t goodPtHatWeight = (fPtHatWeight[0] <= ev->ptHatWeight()) &&
-                                   (ev->ptHatWeight() < fPtHatWeight[1]);
-
-    if (fVerbose)
-    {
-        std::cout << Form("eventWeight  : %7.2f <= %7.2f < %7.2f \t %s \n",
-                          fPtHatWeight[0], ev->ptHatWeight(), fPtHatWeight[1], (goodPtHatWeight) ? "true" : "false");
     }
 
     const Bool_t goodMultiplicity = (fMultiplicity[0] <= ev->multiplicity()) &&
@@ -149,8 +131,7 @@ Bool_t EventCut::pass(const Event *ev)
         }
     }
 
-    Bool_t passEvent = goodVx && goodVy && goodVz && goodHiBin &&
-                       goodPtHat && goodPtHatWeight && goodMultiplicity && goodFilter && goodHiBinShifted && goodTrigger;
+    Bool_t passEvent = goodVz && goodHiBin && goodPtHat && goodMultiplicity && goodFilter && goodHiBinShifted && goodTrigger;
     (passEvent) ? fEventsPassed++ : fEventsFailed++;
 
     return passEvent;

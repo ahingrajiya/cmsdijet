@@ -34,18 +34,6 @@ public:
   // Setters
   //
 
-  /// @brief Set limits on Vx
-  void setVx(const Double_t &lo = -1e9, const Double_t &hi = 1e9)
-  {
-    fVx[0] = lo;
-    fVx[1] = hi;
-  }
-  /// @brief Set limits on Vy
-  void setVy(const Double_t &lo = -1e9, const Double_t &hi = 1e9)
-  {
-    fVy[0] = lo;
-    fVy[1] = hi;
-  }
   /// @brief Set limits on Vz
   void setVz(const Double_t &lo = -1e9, const Double_t &hi = 1e9)
   {
@@ -106,10 +94,6 @@ public:
   virtual Bool_t pass(const Event *ev);
 
 private:
-  /// @brief Vertex x interval
-  Double_t fVx[2];
-  /// @brief Vertex y interval
-  Double_t fVy[2];
   /// @brief Vertex z interval
   Double_t fVz[2];
 

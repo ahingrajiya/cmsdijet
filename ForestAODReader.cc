@@ -205,13 +205,13 @@ Int_t ForestAODReader::init()
     setupJEU();
     SetUpWeightFunctions();
     setUpJER();
+    fEventCut->report();
     fJetCut->report();
     fTrackCut->report();
 
-    std::cout << std::endl;
-    std::cout << "====================================================" << std::endl;
+    std::cout << "=====================================================================" << std::endl;
     std::cout << "ForestAODReader:: Initialization completed. Exiting ForestAODReader." << std::endl;
-    std::cout << "====================================================" << std::endl;
+    std::cout << "=====================================================================" << std::endl;
     std::cout << std::endl;
     return status;
 }
@@ -252,7 +252,7 @@ void ForestAODReader::setupJEC()
     }
 
     fJEC = new JetCorrector(fJECFiles);
-    std::cout << "Setting Up JEC \t[DONE]" << std::endl;
+    std::cout << "=============Setting Up JEC \t[DONE]==================" << std::endl;
     std::cout << std::endl;
 }
 
@@ -302,7 +302,7 @@ void ForestAODReader::setupJEU()
 
     fJEU = new JetUncertainty(tmp.Data());
     std::cout << "JEU file: " << tmp.Data() << std::endl;
-    std::cout << "Setting Up JEU \t[DONE]" << std::endl;
+    std::cout << "=============Setting Up JEU \t[DONE]==================" << std::endl;
     std::cout << std::endl;
 }
 
@@ -317,7 +317,7 @@ void ForestAODReader::SetUpWeightFunctions()
         std::cout << "Setting Up JES  Weight Function \t[DONE]" << std::endl;
         std::cout << std::endl;
     }
-    std::cout << "Setting Up Weight Functions for Forest AOD Reader \t[DONE]" << std::endl;
+    std::cout << "=======Setting Up Weight Functions for Forest AOD Reader \t[DONE]======" << std::endl;
     std::cout << std::endl;
 }
 
@@ -651,8 +651,9 @@ Int_t ForestAODReader::setupChains()
 
     // Setup chains to read
     std::cout << "==================ForestAODReader:: Setting up chains to read=====================" << std::endl;
-    std::cout << ">>>>>>>>>>>>>>Setting Up Trees <<<<<<<<<<<<<" << std::endl;
     std::cout << std::endl;
+
+    std::cout << ">>>>>>>>>>>>>>Setting Up Trees <<<<<<<<<<<<<" << std::endl;
     // Use event branch
     fEventTree = new TChain("hiEvtAnalyzer/HiTree");
     std::cout << "Setting Tree for events : " << fEventTree->GetName() << "\t [Done]" << std::endl;
@@ -1058,7 +1059,7 @@ void ForestAODReader::setupBranches()
 void ForestAODReader::report()
 {
     // std::cout << std::boolalpha;
-    TString report = "\nForestAODReader::Reporting\n";
+    TString report = "\n===========ForestAODReader::Reporting Reader Setup===============\n";
     report += TString::Format("Colliding System             :\t %s\n", fCollidingSystem.Data());
     report += TString::Format("Is Monte Carlo               :\t %i\n", fIsMc);
 
@@ -1093,7 +1094,6 @@ void ForestAODReader::report()
     report += TString::Format("Apply Jet ID                 :\t %i\n", fUseJetID);
     if (fUseJetID)
         report += TString::Format("Jet ID Type                  :\t %i\n", fJetIDType);
-
     std::cout << report.Data() << std::endl;
 }
 
