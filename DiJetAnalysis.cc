@@ -635,7 +635,7 @@ Float_t DiJetAnalysis::DijetWeight(const Event *event)
 
             dijetWeight = DijetWeight(fIspPb, fDijetWeightType, matchedLeadRefPt, matchedSubLeadRefPt);
         }
-        if (fDijetWeightType == "Gen" && recoDijetPass)
+        else if (fDijetWeightType == "Gen" && recoDijetPass)
         {
             leadJetPt = -999.;
             subLeadJetPt = -999.;
@@ -671,6 +671,12 @@ Float_t DiJetAnalysis::DijetWeight(const Event *event)
             }
             dijetWeight = DijetWeight(fIspPb, fDijetWeightType, leadJetPt, subLeadJetPt);
             // std::cout << "Dijet Weight : " << fDijetWeight << std::endl;
+        }
+        else
+        {
+            std::cerr << "Dijet Weight Type is not selected or wrong selection. Please select Dijet Weight type from Reco, Ref or Gen" << std::endl;
+            std::cerr << "Returning Dijet Weight = 0" << std::endl;
+            dijetWeight = 1.0;
         }
     }
     return dijetWeight;
