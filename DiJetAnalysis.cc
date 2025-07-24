@@ -573,6 +573,8 @@ Float_t DiJetAnalysis::DijetWeight(const Event *event)
         Float_t subLeadJetEta = -999.;
         Float_t leadJetPhi = -999.;
         Float_t subLeadJetPhi = -999.;
+        Float_t matchedLeadRefPt = -999.;
+        Float_t matchedSubLeadRefPt = -999.;
         Bool_t recoLeadJetID = kFALSE;
         Bool_t recoSubLeadJetID = kFALSE;
         Bool_t recoDijetPass = kFALSE;
@@ -584,6 +586,7 @@ Float_t DiJetAnalysis::DijetWeight(const Event *event)
             Float_t jetEta = (*recoJetIterator)->eta();
             Float_t jetPhi = (*recoJetIterator)->phi();
             Bool_t jetID = (*recoJetIterator)->JetID();
+            Float_t jetRefPt = (*recoJetIterator)->RefJetPt();
             if (jetPt > leadJetPt)
             {
                 subLeadJetPt = leadJetPt;
@@ -594,6 +597,9 @@ Float_t DiJetAnalysis::DijetWeight(const Event *event)
                 leadJetEta = jetEta;
                 leadJetPhi = jetPhi;
                 recoLeadJetID = jetID;
+
+                matchedSubLeadRefPt = matchedLeadRefPt;
+                matchedLeadRefPt = jetRefPt;
             }
             else if (jetPt > subLeadJetPt)
             {
@@ -601,6 +607,8 @@ Float_t DiJetAnalysis::DijetWeight(const Event *event)
                 subLeadJetEta = jetEta;
                 subLeadJetPhi = jetPhi;
                 recoSubLeadJetID = jetID;
+
+                matchedSubLeadRefPt = jetRefPt;
             }
         }
 
@@ -618,58 +626,14 @@ Float_t DiJetAnalysis::DijetWeight(const Event *event)
         }
         if (fDijetWeightType == "Reco" && recoDijetPass)
         {
-            if (leadJetPt < 210 || subLeadJetPt < 210)
-            {
-                dijetWeight = DijetWeight(fIspPb, fDijetWeightType, leadJetPt, subLeadJetPt);
-            }
-            else
-            {
-                dijetWeight = 1.;
-            }
+
+            dijetWeight = DijetWeight(fIspPb, fDijetWeightType, leadJetPt, subLeadJetPt);
         }
         else if (fDijetWeightType == "Ref" && recoDijetPass)
         {
-            leadJetPt = -999.;
-            subLeadJetPt = -999.;
-            leadJetEta = -999.;
-            subLeadJetEta = -999.;
-            leadJetPhi = -999.;
-            subLeadJetPhi = -999.;
-            RecoJetIterator recoJetIterator;
-            for (recoJetIterator = event->recoJetCollection()->begin(); recoJetIterator != event->recoJetCollection()->end(); recoJetIterator++)
-            {
-                Float_t jetPt = (*recoJetIterator)->RefJetPt();
-                Float_t jetEta = (*recoJetIterator)->RefJetEta();
-                Float_t jetPhi = (*recoJetIterator)->RefJetPhi();
-
-                if (fIsMC)
-                {
-                    if (jetPt > leadJetPt)
-                    {
-                        subLeadJetPt = leadJetPt;
-                        subLeadJetEta = leadJetEta;
-                        subLeadJetPhi = leadJetPhi;
-                        leadJetPt = jetPt;
-                        leadJetEta = jetEta;
-                        leadJetPhi = jetPhi;
-                    }
-                    else if (jetPt > subLeadJetPt)
-                    {
-                        subLeadJetPt = jetPt;
-                        subLeadJetEta = jetEta;
-                        subLeadJetPhi = jetPhi;
-                    }
-                }
-            }
             // std::cout << "Ref Lead Jet Pt: " << leadJetPt << " Ref Sub Lead Jet Pt: " << subLeadJetPt << std::endl;
-            if (leadJetPt < 210 || subLeadJetPt < 210)
-            {
-                dijetWeight = DijetWeight(fIspPb, fDijetWeightType, leadJetPt, subLeadJetPt);
-            }
-            else
-            {
-                dijetWeight = 1.;
-            }
+
+            dijetWeight = DijetWeight(fIspPb, fDijetWeightType, matchedLeadRefPt, matchedSubLeadRefPt);
         }
         if (fDijetWeightType == "Gen" && recoDijetPass)
         {
