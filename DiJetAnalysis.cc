@@ -34,7 +34,8 @@ ClassImp(DiJetAnalysis)
                                      fUseDijetWeight{kFALSE}, fDijetWeightTable{""}, hDijetWeight{nullptr}, fDijetWeightFile{nullptr},
                                      fDijetWeight{1.0}, hDijetWeightRef{nullptr}, hDijetWeightGen{nullptr}, fDijetWeightType{"Reco"},
                                      fIspp{kFALSE}, fIsPbPb{kFALSE}, fCollSystem{""}, fUEType{""}, fDoTrackingClosures{kFALSE}, fpPbMB{nullptr},
-                                     fpPbHM185{nullptr}, fspline185{nullptr}, fVertexZWeight{nullptr}, fDoVzWeight{kFALSE}
+                                     fpPbHM185{nullptr}, fspline185{nullptr}, fVertexZWeight{nullptr}, fDoVzWeight{kFALSE}, fRecoType{kFALSE},
+                                     fRefType{kFALSE}, fGenType{kFALSE}
 {
     fLeadJetEtaRange[0] = {-1.};
     fLeadJetEtaRange[1] = {1.};
@@ -190,9 +191,28 @@ void DiJetAnalysis::SetUpDijetWeight(const std::string &dijetWeightTable)
         std::cerr << "Dijet weight table not found" << std::endl;
         return;
     }
-    hDijetWeight = (TH2D *)fDijetWeightFile->Get("Reco");
-    hDijetWeightRef = (TH2D *)fDijetWeightFile->Get("Ref");
-    // hDijetWeightGen = (TH2D *)fDijetWeightFile->Get("leadgenptvsubleadgenpt_map");
+    if (fDijetWeightType == "Reco")
+    {
+        hDijetWeight = (TH2D *)fDijetWeightFile->Get("Reco");
+        fRecoType = kTRUE;
+    }
+    else if (fDijetWeightType == "Ref")
+    {
+        hDijetWeightRef = (TH2D *)fDijetWeightFile->Get("Ref");
+
+        fRefType = kTRUE;
+    }
+    else if (fDijetWeightType == "Gen")
+    {
+        // hDijetWeightGen = (TH2D *)fDijetWeightFile->Get("leadgenptvsubleadgenpt_map");
+        fGenType = kTRUE;
+    }
+    else
+    {
+        std::cerr << "Dijet weight type is not selected or wrong selection. Please select Dijet Weight time from Reco, Ref or Gen" << std::endl;
+        std::cerr << "Returning Dijet Weight = 0" << std::endl;
+        return;
+    }
     std::cout << "Dijet Weight Table Loaded Successfully" << std::endl;
     std::cout << "\t[Done]" << std::endl;
 }
@@ -411,13 +431,12 @@ Double_t DiJetAnalysis::MultiplicityWeight(const Double_t &multiplicity)
     }
 }
 
-Float_t DiJetAnalysis::DijetWeight(const Bool_t &ispPb, const std::string &type, const Double_t &leadPt, const Double_t &subLeadPt)
+Float_t DiJetAnalysis::DijetWeight(const Bool_t &ispPb, const Double_t &leadPt, const Double_t &subLeadPt)
 {
     Float_t weight = 1.0;
     if (fDebug)
     {
         std::cout << "DiJetAnalysis::DijetWeight Calculating Dijet Weight" << std::endl;
-        std::cout << "Dijet Weight Type : " << type << std::endl;
     }
     if (!fIsMC)
     {
@@ -427,8 +446,7 @@ Float_t DiJetAnalysis::DijetWeight(const Bool_t &ispPb, const std::string &type,
     }
     if (fIsMC)
     {
-
-        if (type == "Reco")
+        if (fRecoType)
         {
             if (hDijetWeight == nullptr)
             {
@@ -441,7 +459,8 @@ Float_t DiJetAnalysis::DijetWeight(const Bool_t &ispPb, const std::string &type,
                 weight = hDijetWeight->GetBinContent(hDijetWeight->GetXaxis()->FindBin(subLeadPt), hDijetWeight->GetYaxis()->FindBin(leadPt));
             }
         }
-        else if (type == "Ref")
+
+        else if (fRefType)
         {
             if (hDijetWeightRef == nullptr)
             {
@@ -451,7 +470,7 @@ Float_t DiJetAnalysis::DijetWeight(const Bool_t &ispPb, const std::string &type,
             }
             weight = hDijetWeightRef->GetBinContent(hDijetWeightRef->GetXaxis()->FindBin(subLeadPt), hDijetWeightRef->GetYaxis()->FindBin(leadPt));
         }
-        else if (type == "Gen")
+        else if (fGenType)
         {
             if (hDijetWeightGen == nullptr)
             {
@@ -624,62 +643,65 @@ Float_t DiJetAnalysis::DijetWeight(const Event *event)
                 // std::cout << "Reco Lead Jet Pt: " << leadJetPt << " Reco Sub Lead Jet Pt: " << subLeadJetPt << std::endl;
             }
         }
-        if (fDijetWeightType == "Reco" && recoDijetPass)
+        if (recoDijetPass)
         {
-
-            dijetWeight = DijetWeight(fIspPb, fDijetWeightType, leadJetPt, subLeadJetPt);
-        }
-        else if (fDijetWeightType == "Ref" && recoDijetPass)
-        {
-            // std::cout << "Ref Lead Jet Pt: " << leadJetPt << " Ref Sub Lead Jet Pt: " << subLeadJetPt << std::endl;
-            if (matchedLeadRefPt < matchedSubLeadRefPt)
+            if (fRecoType)
             {
-                std::swap(matchedLeadRefPt, matchedSubLeadRefPt);
+
+                dijetWeight = DijetWeight(fIspPb, leadJetPt, subLeadJetPt);
             }
-            dijetWeight = DijetWeight(fIspPb, fDijetWeightType, matchedLeadRefPt, matchedSubLeadRefPt);
-        }
-        else if (fDijetWeightType == "Gen" && recoDijetPass)
-        {
-            leadJetPt = -999.;
-            subLeadJetPt = -999.;
-            leadJetEta = -999.;
-            subLeadJetEta = -999.;
-            leadJetPhi = -999.;
-            subLeadJetPhi = -999.;
-            GenJetIterator genJetIterator;
-            for (genJetIterator = event->genJetCollection()->begin(); genJetIterator != event->genJetCollection()->end(); genJetIterator++)
+            else if (fRefType)
             {
-                Float_t jetPt = (*genJetIterator)->pt();
-                Float_t jetEta = (*genJetIterator)->eta();
-                Float_t jetPhi = (*genJetIterator)->phi();
-
-                if (fIsMC)
+                // std::cout << "Ref Lead Jet Pt: " << leadJetPt << " Ref Sub Lead Jet Pt: " << subLeadJetPt << std::endl;
+                if (matchedLeadRefPt < matchedSubLeadRefPt)
                 {
-                    if (jetPt > leadJetPt)
+                    std::swap(matchedLeadRefPt, matchedSubLeadRefPt);
+                }
+                dijetWeight = DijetWeight(fIspPb, matchedLeadRefPt, matchedSubLeadRefPt);
+            }
+            else if (fGenType)
+            {
+                leadJetPt = -999.;
+                subLeadJetPt = -999.;
+                leadJetEta = -999.;
+                subLeadJetEta = -999.;
+                leadJetPhi = -999.;
+                subLeadJetPhi = -999.;
+                GenJetIterator genJetIterator;
+                for (genJetIterator = event->genJetCollection()->begin(); genJetIterator != event->genJetCollection()->end(); genJetIterator++)
+                {
+                    Float_t jetPt = (*genJetIterator)->pt();
+                    Float_t jetEta = (*genJetIterator)->eta();
+                    Float_t jetPhi = (*genJetIterator)->phi();
+
+                    if (fIsMC)
                     {
-                        subLeadJetPt = leadJetPt;
-                        subLeadJetEta = leadJetEta;
-                        subLeadJetPhi = leadJetPhi;
-                        leadJetPt = jetPt;
-                        leadJetEta = jetEta;
-                        leadJetPhi = jetPhi;
-                    }
-                    else if (jetPt > subLeadJetPt)
-                    {
-                        subLeadJetPt = jetPt;
-                        subLeadJetEta = jetEta;
-                        subLeadJetPhi = jetPhi;
+                        if (jetPt > leadJetPt)
+                        {
+                            subLeadJetPt = leadJetPt;
+                            subLeadJetEta = leadJetEta;
+                            subLeadJetPhi = leadJetPhi;
+                            leadJetPt = jetPt;
+                            leadJetEta = jetEta;
+                            leadJetPhi = jetPhi;
+                        }
+                        else if (jetPt > subLeadJetPt)
+                        {
+                            subLeadJetPt = jetPt;
+                            subLeadJetEta = jetEta;
+                            subLeadJetPhi = jetPhi;
+                        }
                     }
                 }
+                dijetWeight = DijetWeight(fIspPb, leadJetPt, subLeadJetPt);
+                // std::cout << "Dijet Weight : " << fDijetWeight << std::endl;
             }
-            dijetWeight = DijetWeight(fIspPb, fDijetWeightType, leadJetPt, subLeadJetPt);
-            // std::cout << "Dijet Weight : " << fDijetWeight << std::endl;
-        }
-        else
-        {
-            std::cerr << "Dijet Weight Type is not selected or wrong selection. Please select Dijet Weight type from Reco, Ref or Gen" << std::endl;
-            std::cerr << "Returning Dijet Weight = 0" << std::endl;
-            dijetWeight = 1.0;
+            else
+            {
+                std::cerr << "Dijet Weight Type is not selected or wrong selection. Please select Dijet Weight type from Reco, Ref or Gen" << std::endl;
+                std::cerr << "Returning Dijet Weight = 0" << std::endl;
+                dijetWeight = 1.0;
+            }
         }
     }
     return dijetWeight;

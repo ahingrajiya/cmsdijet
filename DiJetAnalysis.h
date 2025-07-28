@@ -205,7 +205,7 @@ private:
     /// @param leadJetPt Leading jet pt
     /// @param subLeadJetPt Subleading jet pt
     /// @return Dijet weight
-    Float_t DijetWeight(const Bool_t &ispPb, const std::string &type, const Double_t &leadJetPt, const Double_t &subLeadJetPt);
+    Float_t DijetWeight(const Bool_t &ispPb, const Double_t &leadJetPt, const Double_t &subLeadJetPt);
     /// @brief Calaulates Delta Phi between two jets
     /// @param phi1 Jet Phi 1
     /// @param phi2 Jet Phi 2
@@ -340,6 +340,10 @@ private:
     TH2 *hDijetWeightRef;
     ///@brief Dijet Weight Gen Histogram
     TH2 *hDijetWeightGen;
+    ///@brief Dijet weight type
+    Bool_t fRecoType;
+    Bool_t fRefType;
+    Bool_t fGenType;
     ///@brief Tracking efficiency table for PbPb
     std::string fTrkEffTable;
 
