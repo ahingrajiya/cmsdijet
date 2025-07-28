@@ -632,7 +632,10 @@ Float_t DiJetAnalysis::DijetWeight(const Event *event)
         else if (fDijetWeightType == "Ref" && recoDijetPass)
         {
             // std::cout << "Ref Lead Jet Pt: " << leadJetPt << " Ref Sub Lead Jet Pt: " << subLeadJetPt << std::endl;
-
+            if (matchedLeadRefPt < matchedSubLeadRefPt)
+            {
+                std::swap(matchedLeadRefPt, matchedSubLeadRefPt);
+            }
             dijetWeight = DijetWeight(fIspPb, fDijetWeightType, matchedLeadRefPt, matchedSubLeadRefPt);
         }
         else if (fDijetWeightType == "Gen" && recoDijetPass)
@@ -1378,6 +1381,10 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
                 subLeadRefPt = tempPt;
             }
 
+            if (leadMatchedJetPt < subLeadMatchedJetPt)
+            {
+                std::swap(leadMatchedJetPt, subLeadMatchedJetPt);
+            }
             fHM->hRefLeadPtvsRefSubLeadPt_PtHatW->Fill(subLeadMatchedJetPt, leadMatchedJetPt, event_Weight);
             fHM->hRefLeadPtvsRefSubLeadPt_DiJetW->Fill(subLeadMatchedJetPt, leadMatchedJetPt, event_Weight * fDijetWeight);
 
