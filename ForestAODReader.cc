@@ -435,6 +435,7 @@ void ForestAODReader::setUpJER()
         fJetPtSmearingFunction->SetParameter(0, 0.0415552);
         fJetPtSmearingFunction->SetParameter(1, 0.960013);
     }
+
     std::cout << "Setting Up JER Smearing \t[DONE]" << std::endl;
     std::cout << std::endl;
 }
@@ -507,9 +508,8 @@ Float_t ForestAODReader::jetPtSmering(const Float_t &refPt, const Float_t &jetet
     {
         smearFactor = res * fJetPtSmearingFunction->Eval(refPt);
     }
-
+    fRandom->SetSeed(1729);
     double extraCorr = fRandom->Gaus(1., smearFactor);
-
     // std::cout << "Resolution factor: " << res << " sigma: " << smearFactor << " refPt: " << refPt
     //           << " correction factor: " << extraCorr << std::endl;
     // std::cout << "\t[DONE]\n";
