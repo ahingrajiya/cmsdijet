@@ -225,11 +225,11 @@ int main(int argc, char *argv[])
         }
         if (isEmbedded)
         {
-            analysis->setUseMultiplicityWeigth();
-            analysis->doTrackingClosure();
-            analysis->setUseDijetWeight();
-            analysis->setDijetWeightType(dijetWeightType);
-            analysis->setDijetWeightTable(path2DijetWeight);
+            // analysis->setUseMultiplicityWeigth();
+            // analysis->doTrackingClosure();
+            // analysis->setUseDijetWeight();
+            // analysis->setDijetWeightType(dijetWeightType);
+            // analysis->setDijetWeightTable(path2DijetWeight);
         }
     }
     analysis->setMultiplicityType(0);
