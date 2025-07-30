@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     Double_t etaBoost{0.4654094531};
     TString jetBranchNameEmbedded{"akCs4PFJetAnalyzer"};
     TString jetBranchNameUnembedded{"ak4PFJetAnalyzer"};
-    std::string dijetWeightType{"Gen"};
+    std::string dijetWeightType{"Ref"};
     TString oFileName{};
     TString JECFileName{};
     TString JECFileDataName{};
@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
     Bool_t isEmbedded{kTRUE};
     std::vector<std::pair<Int_t, Double_t>> multiplicityBins = {{0, 0.0}, {10, 1.0}, {60, 2.0}, {120, 3.0}, {185, 4.0}, {250, 5.0}, {400, 6.0}};
     // std::vector<std::pair<Int_t, Double_t>> multiplicityBins = {{0, 0.0}, {10, 1.0}, {20, 2.0}, {30, 3.0}, {40, 4.0}, {50, 5.0}, {60, 6.0}, {120, 7.0}, {185, 8.0}, {250, 9.0}, {400, 10.0}};
-    std::string path2DijetWeight = "../aux_files/pPb_8160/Dijet_Weight/DJW.root";
+    std::string path2DijetWeight = "../aux_files/pPb_8160/Dijet_Weight/DJWEPOS.root";
     std::vector<std::string> filters{"pBeamScrapingFilter", "pPAprimaryVertexFilter", "HBHENoiseFilterResultRun2Loose", "phfCoincFilter", "pVertexFilterCutdz1p0"};
     std::string UEType{"EPOS"};
     Int_t smearType{0};           // 0 - Nominal Smearing, 1 - JER Smearing, 2 - JEC Smearing
