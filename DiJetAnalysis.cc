@@ -160,7 +160,7 @@ void DiJetAnalysis::SetUpDijetWeight(const std::string &dijetWeightTable)
     }
     else if (fDijetWeightType == "Gen")
     {
-        // hDijetWeightGen = (TH2D *)fDijetWeightFile->Get("leadgenptvsubleadgenpt_map");
+        hDijetWeightGen = (TH2D *)fDijetWeightFile->Get("Gen");
         fGenType = kTRUE;
     }
     else
