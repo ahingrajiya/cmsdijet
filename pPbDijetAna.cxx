@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     Double_t etaBoost{0.4654094531};
     TString jetBranchNameEmbedded{"akCs4PFJetAnalyzer"};
     TString jetBranchNameUnembedded{"ak4PFJetAnalyzer"};
-    std::string dijetWeightType{"Ref"};
+    std::string dijetWeightType{"Gen"};
     TString oFileName{};
     TString JECFileName{};
     TString JECFileDataName{};
@@ -213,7 +213,6 @@ int main(int argc, char *argv[])
     {
         analysis->setIspGoing();
     }
-    analysis->setMultiplicityRange(10, 400);
     if (isMC)
     {
         if (!isEmbedded)
@@ -225,11 +224,12 @@ int main(int argc, char *argv[])
         }
         if (isEmbedded)
         {
-            // analysis->setUseMultiplicityWeigth();
+            analysis->setMultiplicityRange(10, 400);
+            analysis->setUseMultiplicityWeigth();
             // analysis->doTrackingClosure();
-            // analysis->setUseDijetWeight();
-            // analysis->setDijetWeightType(dijetWeightType);
-            // analysis->setDijetWeightTable(path2DijetWeight);
+            analysis->setUseDijetWeight();
+            analysis->setDijetWeightType(dijetWeightType);
+            analysis->setDijetWeightTable(path2DijetWeight);
         }
     }
     analysis->setMultiplicityType(0);
