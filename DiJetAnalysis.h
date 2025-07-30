@@ -274,6 +274,10 @@ private:
     ///@param vertexz Vertex Z for pPb
     ///@return Returns the vertexz after flipping it for pPb
     Float_t FlipVertexZ(const Float_t &vertexz);
+    ///@brief Get Bin for Dijet Weight
+    ///@param binEdges Bin Edges of Histogram
+    ///@param value Value to search for in bin edges
+    Int_t BinBinarySearch(const std::vector<double> &binEdges, const double &value);
     ///@brief Print debug information
     Bool_t fDebug;
     ///@brief Delta Phi selection for dijet
@@ -332,14 +336,8 @@ private:
     TrkEfficiency2016pPb *fTrkEffpPb;
     ///@brief Dijet weight table PYTHIA at 8 TeV
     std::string fDijetWeightTable;
-    ///@brief Multiplicity weight histograms
-    TH1 *fMultiplicityWeight[4];
     ///@brief Dijet Weight histograms
     TH2 *hDijetWeight;
-    ///@brief Dijet Weight Ref Histogram
-    TH2 *hDijetWeightRef;
-    ///@brief Dijet Weight Gen Histogram
-    TH2 *hDijetWeightGen;
     ///@brief Dijet weight type
     Bool_t fRecoType;
     Bool_t fRefType;
@@ -369,13 +367,22 @@ private:
 
     Int_t fCycleCounter;
 
-    TF1 *fpPbMB;
-    TF1 *fpPbHM185;
-    TSpline3 *fspline185;
+    ///@brief Vertex Z weight function
     TF1 *fVertexZWeight;
+    ///@brief Do Vz weight
     Bool_t fDoVzWeight;
-
+    ///@brief Holds multiplicity weight functions
     TF1 *fMultWeightFunctions[4];
+    ///@brief Bin Edges for DijetWeight Histogram
+    std::vector<double> fXBinEdges;
+    ///@brief Bin Edges for DijetWeight Histogram
+    std::vector<double> fYBinEdges;
+    ///@brief Dijet Weights Holder
+    std::vector<double> fBinContent;
+    ///@brief Number of Bins on X Axis
+    Int_t fXBinCount;
+    ///@brief Number of Bins on Y Axis
+    Int_t fYBinCount;
 
     ///@brief Holds dynamic multiplicity or centrality bins
     std::map<Int_t, Double_t> fBins;

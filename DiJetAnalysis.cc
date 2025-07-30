@@ -30,12 +30,11 @@ ClassImp(DiJetAnalysis)
                                      fEtaBoost{0.0}, fUseMultiplicityWeight{kFALSE}, fLeadJetPtLow{100.}, fSubLeadJetPtLow{50.},
                                      fNEventsInSample{100000000}, fIsDiJetFound{kFALSE}, fIsGenDiJetFound{kFALSE}, fVerbose{kFALSE},
                                      fMinTrkPt{0.5}, fTrkEffPbPb{nullptr}, fTrkEffpPb{nullptr}, fTrkEffTable{""}, fEventCounter{0},
-                                     fCycleCounter{0}, fMultiplicityWeight{nullptr}, fDoInJetMult{kFALSE}, fMultiplicityType{0},
-                                     fUseDijetWeight{kFALSE}, fDijetWeightTable{""}, hDijetWeight{nullptr}, fDijetWeightFile{nullptr},
-                                     fDijetWeight{1.0}, hDijetWeightRef{nullptr}, hDijetWeightGen{nullptr}, fDijetWeightType{"Reco"},
-                                     fIspp{kFALSE}, fIsPbPb{kFALSE}, fCollSystem{""}, fUEType{""}, fDoTrackingClosures{kFALSE}, fpPbMB{nullptr},
-                                     fpPbHM185{nullptr}, fspline185{nullptr}, fVertexZWeight{nullptr}, fDoVzWeight{kFALSE}, fRecoType{kFALSE},
-                                     fRefType{kFALSE}, fGenType{kFALSE}
+                                     fCycleCounter{0}, fDoInJetMult{kFALSE}, fMultiplicityType{0}, fUseDijetWeight{kFALSE}, fDijetWeightTable{""},
+                                     hDijetWeight{nullptr}, fDijetWeightFile{nullptr}, fDijetWeight{1.0}, fDijetWeightType{"Reco"}, fIspp{kFALSE},
+                                     fIsPbPb{kFALSE}, fCollSystem{""}, fUEType{""}, fDoTrackingClosures{kFALSE}, fVertexZWeight{nullptr},
+                                     fDoVzWeight{kFALSE}, fRecoType{kFALSE}, fRefType{kFALSE}, fGenType{kFALSE}, fMultWeightFunctions{nullptr},
+                                     fXBinEdges{}, fYBinEdges{}, fBinContent{}, fXBinCount{0}, fYBinCount{0}
 {
     fLeadJetEtaRange[0] = {-1.};
     fLeadJetEtaRange[1] = {1.};
@@ -66,11 +65,12 @@ DiJetAnalysis::~DiJetAnalysis()
     }
     if (fUseMultiplicityWeight)
     {
-        for (Int_t i = 0; i < 4; i++)
+        for (auto &weightFunction : fMultWeightFunctions)
         {
-            if (fMultiplicityWeight[i])
+            if (weightFunction)
             {
-                delete fMultiplicityWeight[i];
+                delete weightFunction;
+                weightFunction = nullptr;
             }
         }
     }
@@ -78,11 +78,10 @@ DiJetAnalysis::~DiJetAnalysis()
     {
         fDijetWeightFile->Close();
         delete hDijetWeight;
-        delete hDijetWeightRef;
-        delete hDijetWeightGen;
         hDijetWeight = nullptr;
-        hDijetWeightRef = nullptr;
-        hDijetWeightGen = nullptr;
+        fXBinEdges.clear();
+        fYBinEdges.clear();
+        fBinContent.clear();
     }
 }
 
@@ -154,13 +153,13 @@ void DiJetAnalysis::SetUpDijetWeight(const std::string &dijetWeightTable)
     }
     else if (fDijetWeightType == "Ref")
     {
-        hDijetWeightRef = (TH2D *)fDijetWeightFile->Get("Ref");
+        hDijetWeight = (TH2D *)fDijetWeightFile->Get("Ref");
 
         fRefType = kTRUE;
     }
     else if (fDijetWeightType == "Gen")
     {
-        hDijetWeightGen = (TH2D *)fDijetWeightFile->Get("Gen");
+        hDijetWeight = (TH2D *)fDijetWeightFile->Get("Gen");
         fGenType = kTRUE;
     }
     else
@@ -169,8 +168,61 @@ void DiJetAnalysis::SetUpDijetWeight(const std::string &dijetWeightTable)
         std::cerr << "Returning Dijet Weight = 0" << std::endl;
         return;
     }
+
+    if (!hDijetWeight)
+    {
+        std::cerr << "Dijet weight histogram not found" << std::endl;
+        throw std::runtime_error("Dijet weight histogram not found");
+    }
+    fXBinCount = hDijetWeight->GetNbinsX();
+    fYBinCount = hDijetWeight->GetNbinsY();
+
+    fXBinEdges.resize(fXBinCount + 1);
+    fYBinEdges.resize(fYBinCount + 1);
+    fBinContent.resize(fXBinCount * fYBinCount);
+
+    for (Int_t i = 0; i < fXBinCount + 1; i++)
+    {
+        fXBinEdges[i] = hDijetWeight->GetXaxis()->GetBinLowEdge(i + 1);
+    }
+    for (Int_t i = 0; i < fYBinCount + 1; i++)
+    {
+        fYBinEdges[i] = hDijetWeight->GetYaxis()->GetBinLowEdge(i + 1);
+    }
+    for (Int_t i = 1; i <= fXBinCount; i++)
+    {
+        for (Int_t j = 1; j <= fYBinCount; j++)
+        {
+            fBinContent[(i - 1) * fYBinCount + (j - 1)] = hDijetWeight->GetBinContent(i, j);
+        }
+    }
     std::cout << "Dijet Weight Table Loaded Successfully" << std::endl;
     std::cout << "\t[Done]" << std::endl;
+}
+
+Int_t DiJetAnalysis::BinBinarySearch(const std::vector<double> &binEdges, const double &bin)
+{
+    Int_t lowBin = 0;
+    Int_t highBin = binEdges.size() - 2;
+
+    while (lowBin <= highBin)
+    {
+        Int_t midBin = (highBin + lowBin) / 2;
+
+        if (bin >= binEdges[midBin] && bin < binEdges[midBin + 1])
+        {
+            return midBin; // Found the bin
+        }
+        else if (bin < binEdges[midBin])
+        {
+            highBin = midBin - 1;
+        }
+        else
+        {
+            lowBin = midBin + 1;
+        }
+    }
+    return -1;
 }
 
 void DiJetAnalysis::SetUpTrackingEfficiency(const std::string &trackingEfficiencyTable)
@@ -382,7 +434,6 @@ Double_t DiJetAnalysis::MultiplicityWeight(const Double_t &multiplicity)
 
 Float_t DiJetAnalysis::DijetWeight(const Bool_t &ispPb, const Double_t &leadPt, const Double_t &subLeadPt)
 {
-    Float_t weight = 1.0;
     if (fDebug)
     {
         std::cout << "DiJetAnalysis::DijetWeight Calculating Dijet Weight" << std::endl;
@@ -395,58 +446,34 @@ Float_t DiJetAnalysis::DijetWeight(const Bool_t &ispPb, const Double_t &leadPt, 
     }
     if (fIsMC)
     {
-        if (fRecoType)
-        {
-            if (hDijetWeight == nullptr)
-            {
-                std::cerr << "Dijet Weight Type selected is Reco. Dijet Weight Histogram is not found" << std::endl;
-                throw std::runtime_error("Fatal Error : Aborting !");
-                return 0;
-            }
-            else
-            {
-                weight = hDijetWeight->GetBinContent(hDijetWeight->GetXaxis()->FindBin(subLeadPt), hDijetWeight->GetYaxis()->FindBin(leadPt));
-            }
-        }
 
-        else if (fRefType)
+        int xBin = BinBinarySearch(fXBinEdges, subLeadPt);
+        int yBin = BinBinarySearch(fYBinEdges, leadPt);
+        if (xBin < 0 || yBin < 0)
         {
-            if (hDijetWeightRef == nullptr)
+            if (fDebug)
             {
-                std::cerr << "Dijet Weight Type selected is Ref. Dijet Weight Histogram is not found" << std::endl;
-                throw std::runtime_error("Fatal Error : Aborting !");
-                return 0;
+                std::cout << "Bin Edges Out of Range for Lead Pt: " << leadPt << " and SubLead Pt: " << subLeadPt << std::endl;
+                std::cout << "XBins: " << xBin << ", YBins: " << yBin << std::endl;
+                std::cout << "Returning Dijet Weight = 1.0" << std::endl;
             }
-            weight = hDijetWeightRef->GetBinContent(hDijetWeightRef->GetXaxis()->FindBin(subLeadPt), hDijetWeightRef->GetYaxis()->FindBin(leadPt));
-        }
-        else if (fGenType)
-        {
-            if (hDijetWeightGen == nullptr)
-            {
-                std::cerr << "Dijet Weight Type selected is Gen. Dijet Weight Histogram is not found" << std::endl;
-                throw std::runtime_error("Fatal Error : Aborting !");
-                return 0;
-            }
-            else
-            {
-                weight = hDijetWeightGen->GetBinContent(hDijetWeightGen->GetXaxis()->FindBin(subLeadPt), hDijetWeightGen->GetYaxis()->FindBin(leadPt));
-            }
+            return 1.0;
         }
         else
         {
-            std::cerr << "Dijet weight type is not selected or wrong selection. Please select Dijet Weight time from Reco, Ref or Gen" << std::endl;
-            std::cerr << "Returning Dijet Weight = 0" << std::endl;
+            if (fDebug)
+            {
+                std::cout << "Dijet Weight : " << fBinContent[xBin * fXBinCount + yBin] << std::endl;
+            }
+            return fBinContent[xBin * fXBinCount + yBin];
         }
     }
-    if (fDebug)
+    else
     {
-        std::cout << "Dijet Weight : " << weight << std::endl;
-    }
-    if (weight == 0.0)
-    {
+        std::cerr << "Dijet Weight is calculated for MonteCarlo Only. MC is set to be FALSE." << std::endl;
+        std::cerr << "Returning Dijet Weight = 1.0" << std::endl;
         return 1.0;
     }
-    return weight;
 }
 
 Double_t DiJetAnalysis::EventWeight(const Event *event)
