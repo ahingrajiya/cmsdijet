@@ -72,7 +72,7 @@ ClassImp(HistoManagerDiJet)
                                              hRefLeadRefSubLeadJets_WithDijet_DiJetW{nullptr}, hLeadingGenJetPtWithDijet_DiJetW{nullptr},
                                              hSubLeadingGenJetPtWithDijet_DiJetW{nullptr}, hLeadingRefJetPtWithDijet_DiJetW{nullptr},
                                              hSubLeadingRefJetPtWithDijet_DiJetW{nullptr}, hLeadingRecoJetPtWithDijet_DiJetW{nullptr},
-                                             hSubLeadingRecoJetPtWithDijet_DiJetW{nullptr}
+                                             hSubLeadingRecoJetPtWithDijet_DiJetW{nullptr}, hRefLeadRefSubLead_W{nullptr}, hGenLeadGenSubLead_W{nullptr}
 {
     /* Empty*/
 }
@@ -350,6 +350,10 @@ HistoManagerDiJet::~HistoManagerDiJet()
         delete hLeadingRefJetPtWithDijet_DiJetW;
     if (hSubLeadingRefJetPtWithDijet_DiJetW)
         delete hSubLeadingRefJetPtWithDijet_DiJetW;
+    if (hRefLeadRefSubLead_W)
+        delete hRefLeadRefSubLead_W;
+    if (hGenLeadGenSubLead_W)
+        delete hGenLeadGenSubLead_W;
 
     if (hGenTrackPtVsEta)
         delete hGenTrackPtVsEta;
@@ -573,6 +577,11 @@ void HistoManagerDiJet::init()
         hRefLeadRefSubLeadJets_WithDijet_DiJetW = new THnSparseD("hRefLeadRefSubLeadJets_WithDijet_DiJetW", "Ref Lead vs Ref SubLead Pt With Dijet With DiJetWeighted", 7, LeadSLeadJetBins, LeadSLeadJetMin, LeadSLeadJetMax);
         hRefLeadRefSubLeadJets_WithDijet_DiJetW->Sumw2();
     }
+
+    hRefLeadRefSubLead_W = new TH2D("hRefLeadRefSubLead_W", "Ref Leading vs Ref SubLeading Jet", 200, 0., 1000., 200, 0., 1000.);
+    hRefLeadRefSubLead_W->Sumw2();
+    hGenLeadGenSubLead_W = new TH2D("hGenLeadGenSubLead_W", "Gen Leading vs Gen SubLeading Jet", 200, 0., 1000., 200, 0., 1000.);
+    hGenLeadGenSubLead_W->Sumw2();
 
     const int nDphiBins = 30; // number of bins
     double DphiBins[nDphiBins + 1] = {0.0, TMath::Pi() / 5., TMath::Pi() / 3., (3. / 7.) * TMath::Pi(), TMath::Pi() / 2., (4. / 7.) * TMath::Pi(), (3. / 5.) * TMath::Pi(), 1.93731547, 1.98967535, 2.04203522, 2.0943951, 2.14675498, 2.19911486, 2.25147474, 2.30383461, 2.35619449, 2.40855437, 2.46091425, 2.51327412, 2.565634, 2.61799388, 2.67035376, 2.72271363, 2.77507351, 2.82743339, 2.87979327, 2.93215314, 2.98451302, 3.0368729, 3.08923278, TMath::Pi()};
@@ -1054,12 +1063,14 @@ void HistoManagerDiJet ::writeOutput()
         hGenLeadGenSubLeadJets_MidRapidity_W->Write();
         hGenLeadGenSubLeadJets_WithDijet_W->Write();
         hGenLeadGenSubLeadJets_WithDijet_DiJetW->Write();
+        hGenLeadGenSubLead_W->Write();
 
         hRefLeadRefSubLeadJets->Write();
         hRefLeadRefSubLeadJets_W->Write();
         hRefLeadRefSubLeadJets_MidRapidity_W->Write();
         hRefLeadRefSubLeadJets_WithDijet_W->Write();
         hRefLeadRefSubLeadJets_WithDijet_W->Write();
+        hRefLeadRefSubLead_W->Write();
 
         if (fCollSystem == "pPb" || fCollSystem == "pp")
         {

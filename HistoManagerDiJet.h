@@ -235,6 +235,9 @@ public:
     THnSparseD *hGenTracks_W;
     THnSparseD *hGenTracks_Pt1_W;
 
+    TH2D *hRefLeadRefSubLead_W;
+    TH2D *hGenLeadGenSubLead_W;
+
 private:
     Bool_t fIsMC;
 
