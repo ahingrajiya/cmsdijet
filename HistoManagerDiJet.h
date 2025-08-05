@@ -121,6 +121,8 @@ public:
     TH2D *hLeadPtvsSubLeadPt_PtHatW;
     TH2D *hRefLeadPtvsRefSubLeadPt_DiJetW;
     TH2D *hRefLeadPtvsRefSubLeadPt_PtHatW;
+    TH2D *hRefLeadPtVsRefSubLeadPtMatched_PtHatW;
+    TH2D *hRefLeadPtVsRefSubLeadPtMatched_DiJetW;
     TH2D *hGenLeadPtvsGenSubLeadPt_DiJetW;
     TH2D *hGenLeadPtvsGenSubLeadPt_PtHatW;
 
@@ -139,7 +141,6 @@ public:
     TH3D *hRefJES_Eta_Pt120_W;
 
     TH2D *hGenLeadingVsGenSubLeading_WO_DiJet_W;
-    TH2D *hRefLeadingVsRefSubLeadingMatched_W;
 
     THnSparseD *hRecoQuenching_W;
     THnSparseD *hGenQuenching_W;

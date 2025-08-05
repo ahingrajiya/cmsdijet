@@ -951,7 +951,7 @@ void DiJetAnalysis::processEvent(const Event *event)
     if (fUseDijetWeight)
     {
         fDijetWeight = DijetWeight(event);
-        fDijetWeight = pow(fDijetWeight, 0.8); // std::cout << "Dijet Weight : " << fDijetWeight << std::endl;
+        fDijetWeight = pow(fDijetWeight, 1.2); // std::cout << "Dijet Weight : " << fDijetWeight << std::endl;
     }
     else
     {
@@ -1381,9 +1381,10 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
             {
                 std::swap(leadMatchedJetPt, subLeadMatchedJetPt);
             }
-            fHM->hRefLeadPtvsRefSubLeadPt_PtHatW->Fill(subLeadMatchedJetPt, leadMatchedJetPt, event_Weight);
-            fHM->hRefLeadPtvsRefSubLeadPt_DiJetW->Fill(subLeadMatchedJetPt, leadMatchedJetPt, event_Weight * fDijetWeight);
-            fHM->hRefLeadingVsRefSubLeadingMatched_W->Fill(subLeadMatchedJetPt, leadMatchedJetPt, event_Weight);
+            fHM->hRefLeadPtVsRefSubLeadPtMatched_PtHatW->Fill(subLeadMatchedJetPt, leadMatchedJetPt, event_Weight);
+            fHM->hRefLeadPtVsRefSubLeadPtMatched_DiJetW->Fill(subLeadMatchedJetPt, leadMatchedJetPt, event_Weight * fDijetWeight);
+            fHM->hRefLeadPtvsRefSubLeadPt_PtHatW->Fill(subLeadRefPt, leadRefPt, event_Weight);
+            fHM->hRefLeadPtvsRefSubLeadPt_DiJetW->Fill(subLeadRefPt, leadRefPt, event_Weight * fDijetWeight);
             fHM->hRefLeadRefSubLead_W->Fill(subLeadMatchedJetPt, leadMatchedJetPt, event_Weight);
         }
     }
