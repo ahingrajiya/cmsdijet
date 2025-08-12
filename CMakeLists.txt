@@ -7,6 +7,7 @@ set(libname JetAnalysis)
 
 #set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_BUILD_TYPE RelWithDebInfo)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -masm=intel")
 
 #set(CMAKE_CXX_STANDARD 17)
 #set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -122,6 +123,27 @@ target_link_libraries(PbPbDijetAna ${libname})
 target_link_libraries(ppDijetAna ${libname})
 target_link_libraries(OODijetAna ${libname})
 
+
+foreach(src_file IN LISTS SRC)
+    get_filename_component(src_name ${src_file} NAME_WE)
+    add_custom_command(
+        OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${src_name}.s
+        COMMAND ${CMAKE_CXX_COMPILER} -S -masm=intel -O2
+                ${CMAKE_CURRENT_SOURCE_DIR}/${src_file}
+                -o ${CMAKE_CURRENT_BINARY_DIR}/${src_name}.s
+        DEPENDS ${src_file}
+        COMMENT "Generating assembly for ${src_name}.cc"
+    )
+endforeach()
+
+foreach(exe pPbDijetAna PbPbDijetAna ppDijetAna OODijetAna)
+    add_custom_command(
+        TARGET ${exe}
+        POST_BUILD
+        COMMAND objdump -d -M intel $<TARGET_FILE:${exe}> > ${exe}.asm
+        COMMENT "Dumping machine code for ${exe} into ${exe}.asm"
+    )
+endforeach()
 
 
 # Include directories 
