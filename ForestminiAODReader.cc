@@ -142,7 +142,6 @@ void ForestminiAODReader::clearVariables()
         } // if (i<100
 
     } // for (Short_t i{0}; i<9999; i++)
-    std::cout << fIsMc << std::endl;
     if (fIsMc)
     {
         fGenTrackPt->clear();
@@ -464,6 +463,16 @@ Int_t ForestminiAODReader::setupChains()
         else if (fCollidingSystem == "PbPb")
         {
             fTrkTree = new TChain("PbPbTracks/trackTree");
+        }
+        else if (fCollidingSystem == "OO")
+        {
+            fTrkTree = new TChain("ppTracks/trackTree");
+        }
+        else
+        {
+            std::cerr << "ERROR: Unknown colliding system: " << fCollidingSystem << ". Cannot set up track tree." << std::endl;
+            returnStatus = 1;
+            return returnStatus;
         }
     }
     // Use generated track branch

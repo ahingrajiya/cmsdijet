@@ -1030,11 +1030,8 @@ void DiJetAnalysis::processEvent(const Event *event)
         processGenJets(event, Event_Weight, iMultiplicityBin);
     }
 
-    if (fIsDiJetFound)
-    {
-        fHM->hVz->Fill(iVertexZ);
-        fHM->hVz_W->Fill(iVertexZ, Event_Weight * fDijetWeight);
-    }
+    fHM->hVz->Fill(iVertexZ);
+    fHM->hVz_W->Fill(iVertexZ, Event_Weight * fDijetWeight);
 
     Double_t Multiplicities[7] = {static_cast<Double_t>(iRecoMult), static_cast<Double_t>(iGenSubeMult.first), static_cast<Double_t>(iRecoCorrectedMult.first), static_cast<Double_t>(iRecoCorrectedMult.second), static_cast<Double_t>(iGenSubeMult.second), static_cast<Double_t>(event->hiBinWithShift()), iMultiplicityBin};
     fHM->hMultiplicities_W->Fill(Multiplicities, Event_Weight);
@@ -1052,6 +1049,14 @@ void DiJetAnalysis::processEvent(const Event *event)
 
 void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_Weight, const Double_t &multiplicityBin)
 {
+    if (event->recoJetCollection()->empty())
+    {
+        if (fVerbose)
+        {
+            std::cout << "No RecoJets found in the event. Skipping RecoJet processing." << std::endl;
+        }
+        return;
+    }
     if (fVerbose)
     {
         std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
@@ -1080,6 +1085,7 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
 
     RecoJetIterator recoJetIterator;
     TrackIterator recoTrackIterator;
+
     for (recoJetIterator = event->recoJetCollection()->begin(); recoJetIterator != event->recoJetCollection()->end(); recoJetIterator++)
     {
         Float_t jetPt = (*recoJetIterator)->ptJECCorr();
@@ -1392,6 +1398,14 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
 
 void DiJetAnalysis::processGenJets(const Event *event, const Double_t &event_Weight, const Double_t &multiplicityBin)
 {
+    if (event->genJetCollection()->empty())
+    {
+        if (fVerbose)
+        {
+            std::cout << "No GenJets found in the event. Skipping GenJet processing." << std::endl;
+        }
+        return;
+    }
     if (fVerbose)
     {
         std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
@@ -1525,6 +1539,15 @@ void DiJetAnalysis::processGenJets(const Event *event, const Double_t &event_Wei
 
 void DiJetAnalysis::processRecoTracks(const Event *event, const Double_t &event_Weight, const Double_t &multiplicityBin)
 {
+    if (event->trackCollection()->empty())
+    {
+        if (fVerbose)
+        {
+            std::cout << "No RecoTracks found in the event. Skipping RecoTrack processing." << std::endl;
+        }
+        return;
+    }
+
     if (fVerbose)
     {
         std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
@@ -1559,6 +1582,14 @@ void DiJetAnalysis::processRecoTracks(const Event *event, const Double_t &event_
 
 void DiJetAnalysis::processGenTracks(const Event *event, const Double_t &event_Weight, const Double_t &multiplicityBin)
 {
+    if (event->genTrackCollection()->empty())
+    {
+        if (fVerbose)
+        {
+            std::cout << "No GenTracks found in the event. Skipping GenTrack processing." << std::endl;
+        }
+        return;
+    }
     if (fVerbose)
     {
         std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;

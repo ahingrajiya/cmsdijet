@@ -39,9 +39,9 @@ public:
     /// @param inputStream Input file (.root) or list of ROOT files that contain
     /// CMS ForestminiAOD
     ForestminiAODReader(const Char_t *inputStream,
-                        const Bool_t &useHltBranch = kTRUE,
-                        const Bool_t &useSkimmingBranch = kTRUE, const Char_t *jetCollection = "ak4PFJetAnalyzer",
-                        const Bool_t &useJets = kTRUE, const Bool_t &useTrackBranch = kFALSE,
+                        const Bool_t &useHltBranch = kFALSE,
+                        const Bool_t &useSkimmingBranch = kFALSE, const Char_t *jetCollection = "ak4PFJetAnalyzer",
+                        const Bool_t &useJets = kFALSE, const Bool_t &useTrackBranch = kFALSE,
                         const Bool_t &useGenTrackBranch = kFALSE,
                         const Bool_t &isMc = kFALSE, const Bool_t &setStoreLocation = kFALSE, const Bool_t &useMatchedJets = kFALSE);
     /// @brief Destructor

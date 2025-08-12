@@ -112,6 +112,7 @@ target_link_libraries(${libname} ${ROOT_LIBRARIES})
 add_executable(pPbDijetAna pPbDijetAna.cxx)
 add_executable(PbPbDijetAna PbPbDijetAna.cxx)
 add_executable(ppDijetAna ppDijetAna.cxx)
+add_executable(OODijetAna OODijetAna.cxx)
 
 
 # Link created libraries
@@ -119,6 +120,7 @@ add_executable(ppDijetAna ppDijetAna.cxx)
 target_link_libraries(pPbDijetAna ${libname})
 target_link_libraries(PbPbDijetAna ${libname})
 target_link_libraries(ppDijetAna ${libname})
+target_link_libraries(OODijetAna ${libname})
 
 
 
