@@ -15,7 +15,6 @@
 // ROOT headers
 #include "TObject.h"
 #include "Collections.h"
-#include "TriggerAndSkim.h"
 
 //________________
 class Event : public TObject

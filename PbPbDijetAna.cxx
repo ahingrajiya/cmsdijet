@@ -15,7 +15,7 @@
 #include "BaseAnalysis.h"
 #include "JetCut.h"
 #include "Event.h"
-#include "ForestminiAODReader.h"
+#include "ForestReader.h"
 #include "TrackCut.h"
 #include "Manager.h"
 #include "DiJetAnalysis.h"
@@ -98,7 +98,8 @@ int main(int argc, char *argv[])
     trackCut->setMVAAlgo();
     // trackCut->setVerbose();
 
-    ForestAODReader *reader = new ForestAODReader{inFileName};
+    ForestReader *reader = new ForestReader{inFileName};
+    reader->setForestFileType(ForestReader::ForestFileType::AOD);
     if (isMC)
     {
         reader->setIsMc(isMC);
@@ -113,7 +114,7 @@ int main(int argc, char *argv[])
     reader->setFilters(filters);
     reader->setJetCollectionBranchName(jetBranchName.Data());
     reader->setCollidingEnergy(collEnergyGeV);
-    reader->setCollidingSystem(collSystem.Data());
+    reader->setCollidingSystem(ForestReader::CollidingSystemType::PbPb);
     reader->setYearOfDataTaking(collYear);
     reader->addJECFile(JECFileName.Data());
     reader->setPath2JetAnalysis(path2JEC.Data());
@@ -151,16 +152,6 @@ int main(int argc, char *argv[])
     analysis->doInJetMultiplicity();
     analysis->setCollSystem(collSystem);
     analysis->setBins(multiplicityBins);
-    if (isMC)
-    {
-        analysis->setUseDijetWeight();
-        analysis->setDijetWeightType(dijetWeightType);
-        analysis->setDijetWeightTable(path2DijetWeight);
-    }
-    // analysis->setMultiplicityWeightTable(path2MultWeight);
-    // analysis->setUseMultiplicityWeigth();
-    // std::cout << "Here" << std::endl;
-    // analysis->init();
 
     manager->addAnalysis(analysis);
     manager->init();

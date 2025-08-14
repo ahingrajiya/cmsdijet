@@ -53,15 +53,13 @@ set(HEADERS
         BaseTrack.h
         HistoManagerDiJet.h
         Collections.h
-        ForestAODReader.h
-        ForestminiAODReader.h
+        ForestReader.h
         JetCorrector.h
         JetUncertainty.h
         EventCut.h
         JetCut.h
         TrackCut.h
         Manager.h
-        TriggerAndSkim.h
         pPb_TrackingEfficiency/TrkEfficiency2016pPb.h
         PbPb_TrackingEfficiencies/trackingEfficiency2018PbPb.h
 )
@@ -78,15 +76,13 @@ set(SRC
         BaseJet.cc
         BaseTrack.cc
         HistoManagerDiJet.cc
-        ForestAODReader.cc
-        ForestminiAODReader.cc
+        ForestReader.cc
         JetCorrector.cc
         JetUncertainty.cc
         EventCut.cc
         JetCut.cc
         TrackCut.cc
         Manager.cc
-        TriggerAndSkim.cc
 )
 
 # Generate ROOT dictionaries

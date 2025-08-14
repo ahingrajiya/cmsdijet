@@ -4,9 +4,9 @@
  * @brief Base class for event readers
  * @version 0.1
  * @date 2023-10-19
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 
 // JetAnalysis headers
@@ -17,13 +17,15 @@
 
 ClassImp(BaseReader)
 
-//_________________
-BaseReader::BaseReader() : fReaderStatus{0} {
+    //_________________
+    BaseReader::BaseReader() : fReaderStatus{0}
+{
     /* empty */
 }
 
 //_________________
-void BaseReader::report() {
+void BaseReader::report()
+{
     std::cout << Form("\nReporting from the BaseReader class\n");
 
     // Need to call event, track, jet and other reportes here
@@ -33,5 +35,6 @@ void BaseReader::report() {
     // else {
     //     temp += "NONE";
     // }
-    std::cout << "\n" << std::endl;
+    std::cout << "\n"
+              << std::endl;
 }

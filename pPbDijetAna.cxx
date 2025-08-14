@@ -10,7 +10,7 @@
  */
 
 // Jet Analysis Headers
-#include "ForestAODReader.h"
+#include "ForestReader.h"
 #include "DiJetAnalysis.h"
 #include "HistoManagerDiJet.h"
 #include "Manager.h"
@@ -158,7 +158,8 @@ int main(int argc, char *argv[])
 
     // Initialize Forest Reader
 
-    ForestAODReader *reader = new ForestAODReader{inFileName};
+    ForestReader *reader = new ForestReader{inFileName};
+    reader->setForestFileType(ForestReader::ForestFileType::AOD);
     if (isMC)
     {
         reader->setIsMc(isMC);
@@ -179,7 +180,7 @@ int main(int argc, char *argv[])
     reader->useTrackBranch();
     reader->useJets();
     reader->setCollidingEnergy(collEnergyGeV);
-    reader->setCollidingSystem(collSystem.Data());
+    reader->setCollidingSystem(ForestReader::CollidingSystemType::pPb);
     reader->setYearOfDataTaking(collYear);
     reader->addJECFile(JECFileName.Data());
     reader->setPath2JetAnalysis(path2JEC.Data());

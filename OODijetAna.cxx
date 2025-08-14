@@ -10,7 +10,7 @@
  */
 
 // Jet Analysis Headers
-#include "ForestAODReader.h"
+#include "ForestReader.h"
 #include "DiJetAnalysis.h"
 #include "HistoManagerDiJet.h"
 #include "Manager.h"
@@ -85,41 +85,24 @@ int main(int argc, char *argv[])
 
     if (isMC)
     {
-        if (isPbGoing)
-        {
-            if (isEmbedded)
-            {
-                JECFileName = "Autumn16_HI_pPb_Pbgoing_Embedded_MC_L2Relative_AK4PF.txt";
-            }
-            else
-            {
-                JECFileName = "Autumn16_HI_pPb_Pbgoing_Unembedded_MC_L2Relative_AK4PF.txt";
-            }
-        }
-        else
-        {
-            if (isEmbedded)
-            {
-                JECFileName = "Autumn16_HI_pPb_pgoing_Embedded_MC_L2Relative_AK4PF.txt";
-            }
-            else
-            {
-                JECFileName = "Autumn16_HI_pPb_pgoing_Unembedded_MC_L2Relative_AK4PF.txt";
-            }
-        }
-    }
-    else
-    {
-        if (isPbGoing)
-        {
-            JECFileName = "Autumn16_HI_pPb_pgoing_Embedded_MC_L2Relative_AK4PF.txt";
-        }
-        else
+
+        if (isEmbedded)
         {
             JECFileName = "Autumn16_HI_pPb_Pbgoing_Embedded_MC_L2Relative_AK4PF.txt";
         }
-        JECFileDataName = "Summer16_23Sep2016HV4_DATA_L2L3Residual_AK4PF.txt";
-        JEUFileName = "Summer16_23Sep2016HV4_DATA_Uncertainty_AK4PF.txt";
+        else
+        {
+            JECFileName = "Autumn16_HI_pPb_Pbgoing_Unembedded_MC_L2Relative_AK4PF.txt";
+        }
+    }
+
+    else
+    {
+
+        JECFileName = "Winter25Prompt25_V1_MC_L2Relative_AK4PFPuppi.txt";
+
+        // JECFileDataName = "Summer16_23Sep2016HV4_DATA_L2L3Residual_AK4PF.txt";
+        // JEUFileName = "Summer16_23Sep2016HV4_DATA_Uncertainty_AK4PF.txt";
     }
 
     // Initialize package manager
@@ -154,7 +137,8 @@ int main(int argc, char *argv[])
 
     // Initialize Forest Reader
 
-    ForestminiAODReader *reader = new ForestminiAODReader{inFileName};
+    ForestReader *reader = new ForestReader{inFileName};
+    reader->setForestFileType(ForestReader::ForestFileType::MiniAOD);
     if (isMC)
     {
         reader->setIsMc(isMC);
@@ -162,27 +146,27 @@ int main(int argc, char *argv[])
     }
     reader->useSkimmingBranch();
     reader->useTrackBranch();
-    // reader->useJets();
+    reader->useJets();
     reader->setCollidingEnergy(collEnergyGeV);
-    reader->setCollidingSystem(collSystem.Data());
+    reader->setCollidingSystem(ForestReader::CollidingSystemType::OO);
     reader->setYearOfDataTaking(collYear);
-    // reader->addJECFile(JECFileName.Data());
-    // reader->setPath2JetAnalysis(path2JEC.Data());
+    reader->addJECFile(JECFileName.Data());
+    reader->setPath2JetAnalysis(path2JEC.Data());
     // reader->setUseJetID();
     // reader->setJetIDType(2);
     reader->eventsToProcess(-1);
-    // reader->setJetCut(jetCut);
+    reader->setJetCut(jetCut);
     reader->setTrackCut(trackCut);
     reader->setEventCut(eventCut);
     reader->setFilters(filters);
-    // if (!isMC)
-    // {
-    //     reader->addJECFile(JECFileDataName.Data());
-    //     reader->setJetCollectionBranchName(jetBranchNameEmbedded.Data());
-    //     reader->setJESCorrections();
-    //     reader->setJEU(useJEU, JEUType);
-    //     reader->addJEUFile(JEUFileName.Data());
-    // }
+    if (!isMC)
+    {
+        // reader->addJECFile(JECFileDataName.Data());
+        reader->setJetCollectionBranchName(jetBranchNameEmbedded.Data());
+        // reader->setJESCorrections();
+        // reader->setJEU(useJEU, JEUType);
+        // reader->addJEUFile(JEUFileName.Data());
+    }
 
     manager->setEventReader(reader);
 
@@ -190,14 +174,7 @@ int main(int argc, char *argv[])
     DiJetAnalysis *analysis = new DiJetAnalysis{};
     analysis->setIsMC(isMC);
     analysis->setCollSystem(collSystem);
-    if (isPbGoing)
-    {
-        analysis->setIsPbGoing();
-    }
-    else if (!isPbGoing)
-    {
-        analysis->setIspGoing();
-    }
+
     if (isMC)
     {
         if (!isEmbedded)
@@ -244,7 +221,6 @@ int main(int argc, char *argv[])
     manager->addAnalysis(analysis);
     manager->init();
     analysis->setNEventsInSample(reader->nEventsTotal());
-
     manager->performAnalysis();
     manager->finish();
 

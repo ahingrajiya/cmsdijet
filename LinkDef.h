@@ -26,12 +26,8 @@
 #pragma link C++ class DiJetAnalysis + ;
 #pragma link C++ class Manager + ;
 #pragma link C++ class HistoManagerDiJet + ;
-#pragma link C++ class TriggerAndSkim + ;
 #pragma link C++ class TrkEff2018PbPb + ;
 #pragma link C++ class TrkEfficiency2016pPb + ;
-
-// User-defined classes
-#pragma link C++ class ForestAODReader + ;
-#pragma link C++ class ForestminiAODReader + ;
+#pragma link C++ class ForestReader + ;
 
 #endif

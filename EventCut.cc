@@ -43,10 +43,10 @@ EventCut::~EventCut()
 void EventCut::report()
 {
     TString report = "\n==============EventCut::Reporting Event Selections in Reader================\n";
-    report += TString::Format("Vz              :\t %f - %f\n", fVz[0], fVz[1]);
-    report += TString::Format("HiBin           :\t %d - %d\n", fHiBin[0], fHiBin[1]);
-    report += TString::Format("Multiplicity    :\t %d - %d\n", fMultiplicity[0], fMultiplicity[1]);
-    report += TString::Format("pThat           :\t %f - %f\n", fPtHat[0], fPtHat[1]);
+    report += TString::Format("VertexZ         :\t %f <= VertexZ <= %f\n", fVz[0], fVz[1]);
+    report += TString::Format("HiBin           :\t %d <= HiBin <= %d\n", fHiBin[0], fHiBin[1]);
+    report += TString::Format("Multiplicity    :\t %d <= Multiplicity <= %d\n", fMultiplicity[0], fMultiplicity[1]);
+    report += TString::Format("pThat           :\t %f < pThat <= %f\n", fPtHat[0], fPtHat[1]);
 
     std::cout << report.Data() << std::endl;
 }

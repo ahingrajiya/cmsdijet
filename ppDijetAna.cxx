@@ -15,7 +15,7 @@
 #include "BaseAnalysis.h"
 #include "JetCut.h"
 #include "Event.h"
-#include "ForestminiAODReader.h"
+#include "ForestReader.h"
 #include "TrackCut.h"
 #include "Manager.h"
 #include "DiJetAnalysis.h"
@@ -92,7 +92,8 @@ int main(int argc, char *argv[])
     trackCut->setDZ(3.0);
     trackCut->setHighPurity();
 
-    ForestAODReader *reader = new ForestAODReader{inFileName};
+    ForestReader *reader = new ForestReader{inFileName};
+    reader->setForestFileType(ForestReader::ForestFileType::MiniAOD);
     if (isMC)
     {
         reader->setIsMc(isMC);
@@ -104,7 +105,7 @@ int main(int argc, char *argv[])
     reader->setFilters(filters);
     reader->setJetCollectionBranchName(jetBranchName.Data());
     reader->setCollidingEnergy(collEnergyGeV);
-    reader->setCollidingSystem(collSystem.Data());
+    reader->setCollidingSystem(ForestReader::CollidingSystemType::pp);
     reader->setYearOfDataTaking(collYear);
     reader->setUseJetID();
     reader->setJetIDType(2);

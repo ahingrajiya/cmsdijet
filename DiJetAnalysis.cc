@@ -1040,9 +1040,9 @@ void DiJetAnalysis::processEvent(const Event *event)
         fHM->hMultiplicities_DiJet_W->Fill(Multiplicities, Event_Weight);
     }
 
-    if (fIsDiJetFound && fDoTrackingClosures)
+    processRecoTracks(event, Event_Weight, iMultiplicityBin);
+    if (fIsMC)
     {
-        processRecoTracks(event, Event_Weight, iMultiplicityBin);
         processGenTracks(event, Event_Weight, iMultiplicityBin);
     }
 }

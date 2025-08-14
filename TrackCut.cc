@@ -23,7 +23,7 @@ ClassImp(TrackCut)
 
     TrackCut::TrackCut() : fTrackPt{0., 1e8}, fTrackEta{-2.4, 2.4}, fTrackDXY{3.0},
                            fTrackDZ{3.}, fPtError{0.1}, fCharge{kTRUE}, fHighPurity{kTRUE},
-                           fCaloMatching{kFALSE}, fChi2{kFALSE}, fNHits{kFALSE}, fVerbose{kFALSE}
+                           fCaloMatching{kFALSE}, fChi2{kFALSE}, fNHits{kFALSE}, fVerbose{kFALSE}, fMVAAlgo{kFALSE}
 {
     /* Empty*/
 }
@@ -37,8 +37,8 @@ void TrackCut::report()
 {
     TString report = "\n=======================TrackCut::Reporting Track Selections in Reader=======================\n";
     report += TString::Format("\n>>>>>>>>>>>>>Reconstructed Tracks Selections<<<<<<<<<<<<<\n");
-    report += TString::Format("Track Pt              :\t %f - %f\n", fTrackPt[0], fTrackPt[1]);
-    report += TString::Format("Track Eta             :\t %f - %f\n", fTrackEta[0], fTrackEta[1]);
+    report += TString::Format("Track Pt              :\t %f < Track Pt <= %f\n", fTrackPt[0], fTrackPt[1]);
+    report += TString::Format("Track Eta             :\t %f <= Track Eta <= %f\n", fTrackEta[0], fTrackEta[1]);
     report += TString::Format("Track DXY             :\t >=%f\n", fTrackDXY);
     report += TString::Format("Track DZ              :\t >=%f\n", fTrackDZ);
     report += TString::Format("Track PtErr           :\t >=%f\n", fPtError);

@@ -40,6 +40,7 @@ Manager::~Manager()
 //________________
 void Manager::init()
 {
+
     if (fEventReader)
     {
         fEventReader->report();

@@ -39,8 +39,8 @@ JetCut::~JetCut()
 void JetCut::report()
 {
     TString report = "\n====================JetCut::Reporting Jet Selections in Reader=================\n";
-    report += TString::Format("Jet Transverse Momentum (pT)              :\t %f < Jet pT < %f\n", fPt[0], fPt[1]);
-    report += TString::Format("Jet Pseudorapidity (#eta)                 :\t %f < Jet #eta < %f\n", fEta[0], fEta[1]);
+    report += TString::Format("Jet Transverse Momentum (pT)              :\t %f <= Jet pT <= %f\n", fPt[0], fPt[1]);
+    report += TString::Format("Jet Pseudorapidity (#eta)                 :\t %f <= Jet #eta <= %f\n", fEta[0], fEta[1]);
     std::cout << report.Data() << std::endl;
 }
 

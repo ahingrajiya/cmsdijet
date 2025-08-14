@@ -22,8 +22,7 @@
 #include "HistoManagerDiJet.h"
 #include "PbPb_TrackingEfficiencies/trackingEfficiency2018PbPb.h"
 #include "pPb_TrackingEfficiency/TrkEfficiency2016pPb.h"
-#include "ForestAODReader.h"
-#include "ForestminiAODReader.h"
+#include "ForestReader.h"
 #include "TVector2.h"
 #include "TSpline.h"
 
