@@ -36,8 +36,8 @@
 
 # build directory
 build/*
-*.txt
-*.list
+files_input/*
+files_input/*
 
 processing/cond/*
 processing/condor/log/*

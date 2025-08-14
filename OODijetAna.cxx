@@ -31,16 +31,12 @@ void usage()
 int main(int argc, char *argv[])
 {
     Bool_t isMC{kTRUE};
-    Bool_t isPbGoing{};
     TString inFileName;
     Int_t collEnergyGeV{5360};
     TString collSystem{"OO"};
-    Int_t collYear{2024};
+    Int_t collYear{2025};
     Bool_t useCentWeight{kFALSE};
     Bool_t useMultWeight{kFALSE};
-    Bool_t ispPb{kFALSE};
-    Bool_t useCMFrame{kFALSE};
-    Double_t etaBoost{0.0};
     TString jetBranchNameEmbedded{"akCs4PFJetAnalyzer"};
     TString jetBranchNameUnembedded{"ak4PFJetAnalyzer"};
     std::string dijetWeightType{"Gen"};
@@ -52,8 +48,6 @@ int main(int argc, char *argv[])
     Double_t ptHatCut[2]{15., 30.};
     Bool_t isEmbedded{kTRUE};
     std::vector<std::pair<Int_t, Double_t>> multiplicityBins = {{0, 0.0}, {10, 1.0}, {60, 2.0}, {120, 3.0}, {185, 4.0}, {250, 5.0}, {400, 6.0}, {500, 7.0}};
-    // std::vector<std::pair<Int_t, Double_t>> multiplicityBins = {{0, 0.0}, {10, 1.0}, {20, 2.0}, {30, 3.0}, {40, 4.0}, {50, 5.0}, {60, 6.0}, {120, 7.0}, {185, 8.0}, {250, 9.0}, {400, 10.0}};
-    // std::string path2DijetWeight = "../aux_files/pPb_8160/Dijet_Weight/DJWEPOS.root";
     std::vector<std::string> filters{"pprimaryVertexFilter", "pphfCoincFilterPF2Th4"};
     std::string UEType{"HIJING"};
     Int_t smearType{0};            // 0 - Nominal Smearing, 1 - JER Smearing, 2 - JEC Smearing
@@ -85,22 +79,12 @@ int main(int argc, char *argv[])
 
     if (isMC)
     {
-
-        if (isEmbedded)
-        {
-            JECFileName = "Autumn16_HI_pPb_Pbgoing_Embedded_MC_L2Relative_AK4PF.txt";
-        }
-        else
-        {
-            JECFileName = "Autumn16_HI_pPb_Pbgoing_Unembedded_MC_L2Relative_AK4PF.txt";
-        }
+        JECFileName = "Winter25Prompt25_V1_MC_L2Relative_AK4PFPuppi.txt";
     }
 
     else
     {
-
         JECFileName = "Winter25Prompt25_V1_MC_L2Relative_AK4PFPuppi.txt";
-
         // JECFileDataName = "Summer16_23Sep2016HV4_DATA_L2L3Residual_AK4PF.txt";
         // JEUFileName = "Summer16_23Sep2016HV4_DATA_Uncertainty_AK4PF.txt";
     }
@@ -153,7 +137,7 @@ int main(int argc, char *argv[])
     reader->addJECFile(JECFileName.Data());
     reader->setPath2JetAnalysis(path2JEC.Data());
     // reader->setUseJetID();
-    // reader->setJetIDType(2);
+    reader->setJetIDType(2);
     reader->eventsToProcess(-1);
     reader->setJetCut(jetCut);
     reader->setTrackCut(trackCut);
@@ -179,36 +163,23 @@ int main(int argc, char *argv[])
     {
         if (!isEmbedded)
         {
-            analysis->setMultiplicityRange(0, 400);
-            // analysis->setUseDijetWeight();
-            // analysis->setDijetWeightType(dijetWeightType);
-            // analysis->setDijetWeightTable(path2DijetWeight);
+            analysis->setMultiplicityRange(0, 500);
         }
         if (isEmbedded)
         {
             analysis->setMultiplicityRange(10, 500);
-            // analysis->setUseMultiplicityWeigth();
-            // analysis->doTrackingClosure();
-            // analysis->setUseDijetWeight();
-            // analysis->setDijetWeightType(dijetWeightType);
-            // analysis->setDijetWeightTable(path2DijetWeight);
         }
     }
     analysis->setMultiplicityType(0);
     analysis->setMinTrkPt(1.0);
-    // analysis->setDeltaPhi(5 * TMath::Pi() / 6);
-    // analysis->setUseCMFrame();
-    // analysis->setEtaBoost(etaBoost);
-    // analysis->setLeadJetPt(120.);
-    // analysis->setSubLeadJetPt(50.);
-    // analysis->setLeadJetEtaRange(-1.6, 1.6);
-    // analysis->setSubLeadJetEtaRange(-1.6, 1.6);
-    // analysis->doInJetMultiplicity();
+    analysis->setDeltaPhi(5 * TMath::Pi() / 6);
+
+    analysis->setLeadJetPt(100.);
+    analysis->setSubLeadJetPt(50.);
+    analysis->setLeadJetEtaRange(-1.6, 1.6);
+    analysis->setSubLeadJetEtaRange(-1.6, 1.6);
     analysis->setBins(multiplicityBins);
     analysis->setUEType(UEType);
-    // analysis->setTrackingTable("../aux_files/pPb_8160/trk_eff_table/pPb_EPOS_2D_efftables.root");
-    // analysis->setDebug(kTRUE);
-    // analysis->setVzWeight();
 
     // Initialize Histomanager
     HistoManagerDiJet *hm = new HistoManagerDiJet{};
