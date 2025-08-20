@@ -140,6 +140,8 @@ int main(int argc, char *argv[])
     analysis->setLeadJetPt(100.);
     analysis->setSubLeadJetPt(50.);
     analysis->setDeltaPhi(5. * TMath::Pi() / 6);
+    analysis->setInclusiveCorrectedJetPtMin(50.);
+    analysis->setInclusiveJetEtaRange(-1.6, 1.6);
     analysis->setMinTrkPt(0.5);
     analysis->setTrkEtaRange(-2.4, 2.4);
     analysis->doInJetMultiplicity();
