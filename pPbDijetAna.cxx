@@ -58,8 +58,8 @@ int main(int argc, char *argv[])
     std::string UEType{"EPOS"};
     Int_t smearType{0};           // 0 - Nominal Smearing, 1 - JER Smearing, 2 - JEC Smearing
     Bool_t useJERSmearing{kTRUE}; // Use JER Smearing for MC
-    Bool_t useJEU{kTRUE};         // 0 - No JEC Uncertainty, 1 - JEC Uncertainty Up, -1 - JEC Uncertainty Down
-    Int_t JEUType{-1};            // 0 - No JEU, 1 - JEU Up, -1 - JEU Down
+    Bool_t useJEU{kFALSE};        // 0 - No JEC Uncertainty, 1 - JEC Uncertainty Up, -1 - JEC Uncertainty Down
+    Int_t JEUType{0};             // 0 - No JEU, 1 - JEU Up, -1 - JEU Down
     // Command line arguments
     /*
     inputFileList               - input file list with forest file paths
@@ -242,6 +242,8 @@ int main(int argc, char *argv[])
     analysis->setSubLeadJetPt(50.);
     analysis->setLeadJetEtaRange(-1.6, 1.6);
     analysis->setSubLeadJetEtaRange(-1.6, 1.6);
+    analysis->setInclusiveJetEtaRange(-1.6, 1.6);
+    analysis->setInclusiveCorrectedJetPtMin(120.0);
     analysis->doInJetMultiplicity();
     analysis->setBins(multiplicityBins);
     analysis->setUEType(UEType);

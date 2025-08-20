@@ -34,7 +34,7 @@ ClassImp(DiJetAnalysis)
                                      hDijetWeight{nullptr}, fDijetWeightFile{nullptr}, fDijetWeight{1.0}, fDijetWeightType{"Reco"}, fIspp{kFALSE},
                                      fIsPbPb{kFALSE}, fCollSystem{""}, fUEType{""}, fDoTrackingClosures{kFALSE}, fVertexZWeight{nullptr},
                                      fDoVzWeight{kFALSE}, fRecoType{kFALSE}, fRefType{kFALSE}, fGenType{kFALSE}, fMultWeightFunctions{nullptr},
-                                     fXBinEdges{}, fYBinEdges{}, fBinContent{}, fXBinCount{0}, fYBinCount{0}
+                                     fXBinEdges{}, fYBinEdges{}, fBinContent{}, fXBinCount{0}, fYBinCount{0}, fInclusiveCorrectedJetPtMin{50.}
 {
     fLeadJetEtaRange[0] = {-1.};
     fLeadJetEtaRange[1] = {1.};
@@ -44,6 +44,8 @@ ClassImp(DiJetAnalysis)
     fMultiplicityRange[1] = {50.};
     fTrkEtaRange[0] = {-2.4};
     fTrkEtaRange[1] = {2.4};
+    fInclusiveJetEtaRange[0] = {-1.6};
+    fInclusiveJetEtaRange[1] = {1.6};
 }
 
 DiJetAnalysis::~DiJetAnalysis()
@@ -1204,12 +1206,12 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
         Float_t jetEtaCM = MoveToCMFrame(jetEta);
 
         Double_t JetQuantities[4] = {jetPt, jetEtaCM, jetPhi, multiplicityBin};
-        Double_t JetQuantitiesLab[4] = {jetPt, MoveToLabFrame(jetEta), jetPhi, multiplicityBin};
+        Double_t JetQuantitiesLab[4] = {jetPt, jetEta, jetPhi, multiplicityBin};
         Double_t UnCorrJetQuantities[4] = {rawPt, jetEta, jetPhi, multiplicityBin};
 
         fHM->hInclusiveRecoJetsCMFrame->Fill(JetQuantities);
         fHM->hInclusiveRecoJetsCMFrame_W->Fill(JetQuantities, event_Weight);
-        if (jetPt > 50.0 && TMath::Abs(jetEtaCM) < 1.6)
+        if (jetPt > fInclusiveCorrectedJetPtMin && jetEtaCM < fInclusiveJetEtaRange[1] && jetEtaCM > fInclusiveJetEtaRange[0])
         {
             fHM->hSelectedInclusiveRecoJetsMidRapidity_W->Fill(JetQuantities, event_Weight);
         }
@@ -1222,8 +1224,8 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
         {
             fHM->hInclusiveRecoJetsLabFrame->Fill(JetQuantitiesLab);
             fHM->hInclusiveRecoJetsLabFrame_W->Fill(JetQuantitiesLab, event_Weight);
-            fHM->hInclusiveUnCorrectedRecoPtVsEtaLabFrame_W->Fill(MoveToLabFrame(jetEta), rawPt, event_Weight);
-            fHM->hInclusiveRecoJetPtVsEtaLabFrame_W->Fill(MoveToLabFrame(jetEta), jetPt, event_Weight);
+            fHM->hInclusiveUnCorrectedRecoPtVsEtaLabFrame_W->Fill(jetEta, rawPt, event_Weight);
+            fHM->hInclusiveRecoJetPtVsEtaLabFrame_W->Fill(jetEta, jetPt, event_Weight);
         }
 
         if (fIsMC)
@@ -1238,7 +1240,7 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
                 fHM->hInclusiveRefJetsLabFrame->Fill(RefJetQuantitiesLab);
                 fHM->hInclusiveRefJetsLabFrame_W->Fill(RefJetQuantitiesLab, event_Weight);
             }
-            if (jetPt > 50.0 && TMath::Abs(jetEtaCM) < 1.6)
+            if (jetPt > fInclusiveCorrectedJetPtMin && jetEtaCM < fInclusiveJetEtaRange[1] && jetEtaCM > fInclusiveJetEtaRange[0])
             {
                 fHM->hSelectedInclusiveRefJetsMidRapidity_W->Fill(RefJetQuantities, event_Weight);
             }
@@ -1248,7 +1250,7 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
     Float_t leadJetEtaCM = MoveToCMFrame(leadJetEta);
     Float_t subLeadJetEtaCM = MoveToCMFrame(subLeadJetEta);
     Bool_t isDiJet = CheckDijet(leadJetPt, leadJetEtaCM, subLeadJetPt, subLeadJetEtaCM, leadJetID, subLeadJetID);
-    if (leadJetPt > 100.0 && subLeadJetPt > 50.)
+    if (leadJetPt > fLeadJetPtLow && subLeadJetPt > fSubLeadJetPtLow)
     {
 
         Double_t LeadSLeadJets[7] = {leadJetPt, leadJetEtaCM, leadJetPhi, subLeadJetPt, subLeadJetEtaCM, subLeadJetPhi, multiplicityBin};
@@ -1447,7 +1449,7 @@ void DiJetAnalysis::processGenJets(const Event *event, const Double_t &event_Wei
             genSubLeadJetPhi = genJetPhi;
         }
 
-        if (fDoInJetMult && fSubLeadJetPtLow > 50.0)
+        if (fDoInJetMult && fSubLeadJetPtLow > fSubLeadJetPtLow)
         {
             Int_t iInJetMult = 0;
             for (genTrackIterator = event->genTrackCollection()->begin(); genTrackIterator != event->genTrackCollection()->end(); genTrackIterator++)
@@ -1477,7 +1479,7 @@ void DiJetAnalysis::processGenJets(const Event *event, const Double_t &event_Wei
             fHM->hInclusiveGenJetsLabFrame->Fill(JetQuantitiesLab);
             fHM->hInclusiveGenJetsLabFrame_W->Fill(JetQuantitiesLab, event_Weight);
         }
-        if (genJetPt > 50.0 && TMath::Abs(genJetEtaCM) < 1.6)
+        if (genJetPt > fInclusiveCorrectedJetPtMin && genJetEtaCM < fInclusiveJetEtaRange[1] && genJetEtaCM > fInclusiveJetEtaRange[0])
         {
             fHM->hSelectedInclusiveGenJetsMidRapidity_W->Fill(JetQuantities, event_Weight);
         }
@@ -1497,9 +1499,8 @@ void DiJetAnalysis::processGenJets(const Event *event, const Double_t &event_Wei
     Float_t genSubLeadJetEtaCM = MoveToCMFrame(genSubLeadJetEta);
     Bool_t isGenDiJet = CheckDijet(genLeadJetPt, genLeadJetEtaCM, genSubLeadJetPt, genSubLeadJetEtaCM, kTRUE, kTRUE);
 
-    if (genLeadJetPt > 100. && genSubLeadJetPt > 50.)
+    if (genLeadJetPt > fLeadJetPtLow && genSubLeadJetPt > fSubLeadJetPtLow)
     {
-
         Double_t LeadSLeadGenJets[7] = {genLeadJetPt, genLeadJetEtaCM, genLeadJetPhi, genSubLeadJetPt, genSubLeadJetEtaCM, genSubLeadJetPhi, multiplicityBin};
         fHM->hGenLeadGenSubLeadJets->Fill(LeadSLeadGenJets);
         fHM->hGenLeadGenSubLeadJets_W->Fill(LeadSLeadGenJets, event_Weight);
@@ -1507,7 +1508,6 @@ void DiJetAnalysis::processGenJets(const Event *event, const Double_t &event_Wei
 
     if (isGenDiJet)
     {
-
         Double_t LeadSLeadGenJetsMidRapidity[7] = {genLeadJetPt, genLeadJetEtaCM, genLeadJetPhi, genSubLeadJetPt, genSubLeadJetEtaCM, genSubLeadJetPhi, multiplicityBin};
         fHM->hGenLeadGenSubLeadJets_MidRapidity_W->Fill(LeadSLeadGenJetsMidRapidity, event_Weight);
 
@@ -1530,7 +1530,6 @@ void DiJetAnalysis::processGenJets(const Event *event, const Double_t &event_Wei
     }
     if (fIsGenDiJetFound)
     {
-
         Double_t LeadSLeadJetsWithDijet[7] = {genLeadJetPt, genLeadJetEtaCM, genLeadJetPhi, genSubLeadJetPt, genSubLeadJetEtaCM, genSubLeadJetPhi, multiplicityBin};
         fHM->hGenLeadGenSubLeadJets_WithDijet_W->Fill(LeadSLeadJetsWithDijet, event_Weight);
         fHM->hGenLeadGenSubLeadJets_WithDijet_DiJetW->Fill(LeadSLeadJetsWithDijet, event_Weight * fDijetWeight);

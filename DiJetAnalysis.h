@@ -166,6 +166,14 @@ public:
 
     ///@brief Set if to apply vz weight
     void setVzWeight() { fDoVzWeight = kTRUE; }
+    ///@brief Set Inclusive Corrected Jet Pt Minimum
+    void setInclusiveCorrectedJetPtMin(const Double_t &minPt) { fInclusiveCorrectedJetPtMin = minPt; }
+    ///@brief Set Inclusive Jet Eta Range
+    void setInclusiveJetEtaRange(const Double_t &low, const Double_t &high)
+    {
+        fInclusiveJetEtaRange[0] = low;
+        fInclusiveJetEtaRange[1] = high;
+    }
 
 private:
     /// @brief Reco and Corrected Multiplicity calculator with custom track pt and track eta cuts
@@ -382,6 +390,10 @@ private:
     Int_t fXBinCount;
     ///@brief Number of Bins on Y Axis
     Int_t fYBinCount;
+    ///@brief Inclusive Corrected JetPt Minimum
+    Double_t fInclusiveCorrectedJetPtMin;
+    ///@brief Inclusive Jet Eta
+    Double_t fInclusiveJetEtaRange[2];
 
     ///@brief Holds dynamic multiplicity or centrality bins
     std::map<Int_t, Double_t> fBins;
