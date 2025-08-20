@@ -243,7 +243,7 @@ int main(int argc, char *argv[])
     analysis->setLeadJetEtaRange(-1.6, 1.6);
     analysis->setSubLeadJetEtaRange(-1.6, 1.6);
     analysis->setInclusiveJetEtaRange(-1.6, 1.6);
-    analysis->setInclusiveCorrectedJetPtMin(120.0);
+    analysis->setInclusiveCorrectedJetPtMin(50.0);
     analysis->doInJetMultiplicity();
     analysis->setBins(multiplicityBins);
     analysis->setUEType(UEType);
