@@ -55,6 +55,7 @@ int main(int argc, char *argv[])
     // std::vector<std::pair<Int_t, Double_t>> multiplicityBins = {{0, 0.0}, {10, 1.0}, {20, 2.0}, {30, 3.0}, {40, 4.0}, {50, 5.0}, {60, 6.0}, {120, 7.0}, {185, 8.0}, {250, 9.0}, {400, 10.0}};
     std::string path2DijetWeight = "../aux_files/pPb_8160/Dijet_Weight/DJWEPOS.root";
     std::vector<std::string> filters{"pBeamScrapingFilter", "pPAprimaryVertexFilter", "HBHENoiseFilterResultRun2Loose", "phfCoincFilter", "pVertexFilterCutdz1p0"};
+    std::vector<std::string> triggers{"HLT_PAAK4PFJet80_Eta5p1_v3"};
     std::string UEType{"EPOS"};
     Int_t smearType{0};           // 0 - Nominal Smearing, 1 - JER Smearing, 2 - JEC Smearing
     Bool_t useJERSmearing{kTRUE}; // Use JER Smearing for MC
