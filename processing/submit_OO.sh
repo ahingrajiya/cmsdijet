@@ -23,7 +23,11 @@ if [ "$doBuild" -eq 1 ]; then
 fi
 
 if [ "$DataSet" -eq 1 ]; then
-    echo "PYTHIA + HIJING Datasset is selected"    
+    echo "PYTHIA + HIJING Datasset is selected"  
+    cd ${EXEC_PATH}   
+    sample_prefix="OO_MC"
+    input_files_list="${EXEC_PATH}/files_input/OO5360/MC/"
+    output_path="/eos/user/a/ahingraj/outputs/OO_MC/"
     exit 0
 fi
 
