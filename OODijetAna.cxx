@@ -127,6 +127,7 @@ int main(int argc, char *argv[])
     {
         reader->setIsMc(isMC);
         reader->useGenTrackBranch();
+        reader->setStoreLocation();
     }
     reader->useSkimmingBranch();
     reader->useTrackBranch();
