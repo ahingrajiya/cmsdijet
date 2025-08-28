@@ -28,7 +28,7 @@ if [ "$DataSet" -eq 1 ]; then
     sample_prefix="OO_MC"
     input_files_list="${EXEC_PATH}/files_input/OO5360/MC/"
     output_path="/eos/user/a/ahingraj/outputs/OO_MC/"
-    exit 0
+    isMC=1
 fi
 
 if [ "$DataSet" -eq 2 ]; then
