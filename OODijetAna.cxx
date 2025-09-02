@@ -128,6 +128,7 @@ int main(int argc, char *argv[])
         reader->setIsMc(isMC);
         reader->useGenTrackBranch();
         reader->setStoreLocation(kTRUE);
+        reader->setJetCollectionBranchName(jetBranchNameEmbedded.Data());
     }
     reader->useSkimmingBranch();
     reader->useTrackBranch();
@@ -138,7 +139,7 @@ int main(int argc, char *argv[])
     reader->addJECFile(JECFileName.Data());
     reader->setPath2JetAnalysis(path2JEC.Data());
     // reader->setUseJetID();
-    reader->setJetIDType(2);
+    // reader->setJetIDType(2);
     reader->eventsToProcess(-1);
     reader->setJetCut(jetCut);
     reader->setTrackCut(trackCut);
@@ -146,11 +147,7 @@ int main(int argc, char *argv[])
     reader->setFilters(filters);
     if (!isMC)
     {
-        // reader->addJECFile(JECFileDataName.Data());
         reader->setJetCollectionBranchName(jetBranchNameEmbedded.Data());
-        // reader->setJESCorrections();
-        // reader->setJEU(useJEU, JEUType);
-        // reader->addJEUFile(JEUFileName.Data());
     }
 
     manager->setEventReader(reader);
