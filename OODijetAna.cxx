@@ -171,13 +171,14 @@ int main(int argc, char *argv[])
     analysis->setMultiplicityType(0);
     analysis->setMinTrkPt(1.0);
     analysis->setDeltaPhi(5 * TMath::Pi() / 6);
-
     analysis->setLeadJetPt(100.);
     analysis->setSubLeadJetPt(50.);
     analysis->setLeadJetEtaRange(-1.6, 1.6);
     analysis->setSubLeadJetEtaRange(-1.6, 1.6);
     analysis->setBins(multiplicityBins);
     analysis->setUEType(UEType);
+    analysis->setInclusiveCorrectedJetPtMin(50.);
+    analysis->setInclusiveJetEtaRange(-1.6, 1.6);
 
     // Initialize Histomanager
     HistoManagerDiJet *hm = new HistoManagerDiJet{};
