@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
     TString JEUFileName{};
     TString path2JEC = "..";
     Double_t ptHatCut[2]{15., 30.};
-    Bool_t isEmbedded{kTRUE};
+    Bool_t isEmbedded{kFALSE};
     std::vector<std::pair<Int_t, Double_t>> multiplicityBins = {{0, 0.0}, {10, 1.0}, {60, 2.0}, {120, 3.0}, {185, 4.0}, {250, 5.0}, {400, 6.0}, {500, 7.0}};
     std::vector<std::string> filters{"pprimaryVertexFilter", "pphfCoincFilterPF2Th4"};
     std::string UEType{"HIJING"};
@@ -178,7 +178,7 @@ int main(int argc, char *argv[])
     analysis->setBins(multiplicityBins);
     analysis->setUEType(UEType);
     analysis->setInclusiveCorrectedJetPtMin(50.);
-    analysis->setInclusiveJetEtaRange(-1.6, 1.6);
+    analysis->setInclusiveJetEtaRange(-2.4, 2.4);
 
     // Initialize Histomanager
     HistoManagerDiJet *hm = new HistoManagerDiJet{};
