@@ -285,6 +285,11 @@ private:
     ///@param binEdges Bin Edges of Histogram
     ///@param value Value to search for in bin edges
     Int_t BinBinarySearch(const std::vector<double> &binEdges, const double &value);
+    ///@brief Get jet flavor
+    ///@param partonFlavour Parton flavour from jet
+    ///@return Returns jet flavor classified as quark jets ->1 and gluon jets -> -1 and unknown flavor -> 0
+    Double_t GetJetFlavor(const Int_t &partonFlavour);
+
     ///@brief Print debug information
     Bool_t fDebug;
     ///@brief Delta Phi selection for dijet

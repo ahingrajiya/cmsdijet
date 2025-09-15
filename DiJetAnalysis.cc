@@ -921,6 +921,22 @@ Float_t DiJetAnalysis::FlipVertexZ(const Float_t &vertexz)
     }
 }
 
+Double_t DiJetAnalysis::GetJetFlavor(const Int_t &partonFlavor)
+{
+    if (partonFlavor == 21)
+    {
+        return -1.; // Gluon
+    }
+    else if (partonFlavor == 0)
+    {
+        return 0.; // Quark
+    }
+    else
+    {
+        return 1.; // Undefined
+    }
+}
+
 void DiJetAnalysis::processEvent(const Event *event)
 {
     if (fVerbose)
@@ -1204,10 +1220,11 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
         }
 
         Float_t jetEtaCM = MoveToCMFrame(jetEta);
+        Double_t jetFlavor = GetJetFlavor((*recoJetIterator)->JetPartonFlavorForB());
 
-        Double_t JetQuantities[4] = {jetPt, jetEtaCM, jetPhi, multiplicityBin};
-        Double_t JetQuantitiesLab[4] = {jetPt, jetEta, jetPhi, multiplicityBin};
-        Double_t UnCorrJetQuantities[4] = {rawPt, jetEta, jetPhi, multiplicityBin};
+        Double_t JetQuantities[5] = {jetPt, jetEtaCM, jetPhi, jetFlavor, multiplicityBin};
+        Double_t JetQuantitiesLab[5] = {jetPt, jetEta, jetPhi, jetFlavor, multiplicityBin};
+        Double_t UnCorrJetQuantities[5] = {rawPt, jetEta, jetPhi, jetFlavor, multiplicityBin};
 
         fHM->hInclusiveRecoJetsCMFrame->Fill(JetQuantities);
         fHM->hInclusiveRecoJetsCMFrame_W->Fill(JetQuantities, event_Weight);
@@ -1230,8 +1247,8 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
 
         if (fIsMC)
         {
-            Double_t RefJetQuantities[4] = {refPt, MoveToCMFrame(refEta), refPhi, multiplicityBin};
-            Double_t RefJetQuantitiesLab[4] = {refPt, MoveToLabFrame(refEta), refPhi, multiplicityBin};
+            Double_t RefJetQuantities[5] = {refPt, MoveToCMFrame(refEta), refPhi, jetFlavor, multiplicityBin};
+            Double_t RefJetQuantitiesLab[5] = {refPt, MoveToLabFrame(refEta), refPhi, jetFlavor, multiplicityBin};
 
             fHM->hInclusiveRefJetsCMFrame->Fill(RefJetQuantities);
             fHM->hInclusiveRefJetsCMFrame_W->Fill(RefJetQuantities, event_Weight);
@@ -1469,9 +1486,9 @@ void DiJetAnalysis::processGenJets(const Event *event, const Double_t &event_Wei
         }
 
         Float_t genJetEtaCM = MoveToCMFrame(genJetEta);
-
-        Double_t JetQuantities[4] = {genJetPt, genJetEtaCM, genJetPhi, multiplicityBin};
-        Double_t JetQuantitiesLab[4] = {genJetPt, MoveToLabFrame(genJetEta), genJetPhi, multiplicityBin};
+        double_t jetFlavor = 1.0; // Placeholder for jet flavor in gen jets
+        Double_t JetQuantities[5] = {genJetPt, genJetEtaCM, genJetPhi, jetFlavor, multiplicityBin};
+        Double_t JetQuantitiesLab[5] = {genJetPt, MoveToLabFrame(genJetEta), genJetPhi, jetFlavor, multiplicityBin};
         fHM->hInclusiveGenJetsCMFrame->Fill(JetQuantities);
         fHM->hInclusiveGenJetsCMFrame_W->Fill(JetQuantities, event_Weight);
         if (fIspPb)
