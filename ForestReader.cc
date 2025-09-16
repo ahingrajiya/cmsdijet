@@ -12,14 +12,6 @@
 // Jet analysis headers
 #include "ForestReader.h"
 
-// ROOT headers
-#include "TFile.h"
-
-// C++ headers
-#include <cstddef>
-#include <cstring>
-#include <fstream>
-
 ClassImp(ForestReader)
 
     //_________________

@@ -15,6 +15,7 @@
 // ROOT headers
 #include "Rtypes.h"
 #include "TObject.h"
+#include "TString.h"
 
 // JetAnalysis headers
 #include "Event.h"

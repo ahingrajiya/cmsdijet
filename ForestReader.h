@@ -24,9 +24,13 @@
 #include "JetCorrector.h"
 #include "JetCut.h"
 #include "JetUncertainty.h"
+#include "TFile.h"
 #include "TrackCut.h"
 
 // C++ headers
+#include <cstddef>
+#include <cstring>
+#include <fstream>
 #include <list>
 
 //_________________

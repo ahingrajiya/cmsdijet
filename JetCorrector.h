@@ -32,7 +32,7 @@
 #include "TF3.h"
 
 // ROOT headers
-// #include "TObject.h"
+#include "TObject.h"
 
 //_________________
 class SingleJetCorrector

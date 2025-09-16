@@ -12,9 +12,18 @@
 #ifndef DiJetAnalysis_h
 #define DiJetAnalysis_h
 
+#include <iostream>
+
 // ROOT libraries
 #include "TObject.h"
 #include "TString.h"
+// ROOT Headers
+#include "TF1.h"
+#include "TLorentzVector.h"
+#include "TMath.h"
+#include "TObject.h"
+#include "TROOT.h"
+#include "TVector3.h"
 
 // Jet analysis headers
 #include "BaseAnalysis.h"

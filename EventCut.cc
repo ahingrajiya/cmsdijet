@@ -12,13 +12,6 @@
 // Jet analysis headers
 #include "EventCut.h"
 
-// ROOT headers
-#include "TMath.h"
-#include "TString.h"
-
-// C++ headers
-#include <iostream>
-
 ClassImp(EventCut)
 
     //________________

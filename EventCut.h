@@ -16,9 +16,12 @@
 #include "Event.h"
 
 // ROOT headers
-#include "Rtypes.h"
 
+#include "Rtypes.h"
+#include "TMath.h"
+#include "TString.h"
 // C++ headers
+#include <iostream>
 #include <limits>
 
 //________________

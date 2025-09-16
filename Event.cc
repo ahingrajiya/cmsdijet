@@ -12,12 +12,6 @@
 // Jet analysis headers
 #include "Event.h"
 
-// ROOT headers
-#include "TString.h"
-
-// C++ headers
-#include <iostream>
-
 //________________
 Event::Event() :
     TObject(), fRunId{0}, fEventId{0}, fLumi{0}, fVx{0}, fVy{0}, fVz{0}, fHiBin{-1}, fHiBinShifted{-10}, fPtHat{-1}, fPtHatWeight{-1}, fNBadJets{0}, fMult{0},

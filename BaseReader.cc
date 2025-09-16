@@ -12,9 +12,6 @@
 // JetAnalysis headers
 #include "BaseReader.h"
 
-// ROOT headers
-#include "TString.h"
-
 ClassImp(BaseReader)
 
     //_________________

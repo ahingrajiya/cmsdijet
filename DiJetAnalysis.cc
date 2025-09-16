@@ -12,17 +12,6 @@
 // Jet Analysis Header
 #include "DiJetAnalysis.h"
 
-// ROOT Headers
-#include "TF1.h"
-#include "TLorentzVector.h"
-#include "TMath.h"
-#include "TObject.h"
-#include "TROOT.h"
-#include "TVector3.h"
-
-// C++ header
-#include <iostream>
-
 ClassImp(DiJetAnalysis)
 
     DiJetAnalysis::DiJetAnalysis() :

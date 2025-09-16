@@ -15,6 +15,10 @@
 // ROOT headers
 #include "Collections.h"
 #include "TObject.h"
+#include "TString.h"
+
+// C++ headers
+#include <iostream>
 
 //________________
 class Event : public TObject
