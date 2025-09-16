@@ -30,6 +30,6 @@ ClassImp(RecoJet)
 void RecoJet::print()
 {
     std::cout << Form("--  Reconstructed jet info  --\n")
-              << Form("pT: %5.2f  eta: %3.2f  phi: %3.2f  pTcorr: %5.2f  WTAeta: %3.2f  WTAphi: %3.2f  JetId: %d\n",
-                      this->pt(), this->eta(), this->phi(), fPtJECCorr, this->WTAEta(), this->WTAPhi(), this->JetID());
+              << Form("pT: %5.2f  eta: %3.2f  phi: %3.2f  pTcorr: %5.2f  WTAeta: %3.2f  WTAphi: %3.2f  JetId: %d\n", this->pt(), this->eta(), this->phi(), fPtJECCorr,
+                      this->WTAEta(), this->WTAPhi(), this->JetID());
 }

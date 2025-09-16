@@ -30,6 +30,6 @@ ClassImp(GenJet)
 void GenJet::print()
 {
     std::cout << "--  Generated jet info  --\n"
-              << Form("pT: %5.2f  eta: %3.2f  phi: %3.2f  WTAeta: %3.2f  WTAphi: %3.2f  flavor: %d  flavForB: %d\n",
-                      this->pt(), this->eta(), this->phi(), this->WTAEta(), this->WTAPhi());
+              << Form("pT: %5.2f  eta: %3.2f  phi: %3.2f  WTAeta: %3.2f  WTAphi: %3.2f  flavor: %d  flavForB: %d\n", this->pt(), this->eta(), this->phi(), this->WTAEta(),
+                      this->WTAPhi());
 }

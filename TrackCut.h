@@ -13,8 +13,8 @@
 #define TrackCut_h
 
 // Jet Analysis header
-#include "Track.h"
 #include "GenTrack.h"
+#include "Track.h"
 
 // ROOT Headers
 #include "Rtypes.h"
@@ -24,7 +24,7 @@
 
 class TrackCut
 {
-public:
+   public:
     ///@brief Constructor
     TrackCut();
     ///@brief Destructor
@@ -73,7 +73,7 @@ public:
     ///@brief Check if gen track passes the cut
     virtual Bool_t GenPass(const GenTrack *track);
 
-private:
+   private:
     ///@brief Track Pt
     Double_t fTrackPt[2];
     ///@brief Track Eta

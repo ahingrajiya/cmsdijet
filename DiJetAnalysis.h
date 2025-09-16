@@ -19,16 +19,16 @@
 // Jet analysis headers
 #include "BaseAnalysis.h"
 #include "Event.h"
+#include "ForestReader.h"
 #include "HistoManagerDiJet.h"
 #include "PbPb_TrackingEfficiencies/trackingEfficiency2018PbPb.h"
-#include "pPb_TrackingEfficiency/TrkEfficiency2016pPb.h"
-#include "ForestReader.h"
-#include "TVector2.h"
 #include "TSpline.h"
+#include "TVector2.h"
+#include "pPb_TrackingEfficiency/TrkEfficiency2016pPb.h"
 
 class DiJetAnalysis : public BaseAnalysis
 {
-public:
+   public:
     /// @brief Default Constructor
     DiJetAnalysis();
     ///@brief Destructor
@@ -57,10 +57,7 @@ public:
         }
     }
     ///@brief Set debug information
-    void setDebug(const Bool_t &debug)
-    {
-        fDebug = debug;
-    }
+    void setDebug(const Bool_t &debug) { fDebug = debug; }
     ///@brief Add histogram Manager
     void addHistoManager(HistoManagerDiJet *hm) { fHM = hm; }
     ///@brief Set DeltaPhi selection for dijet
@@ -68,15 +65,9 @@ public:
     ///@brief Set if dataset is MC or not
     void setIsMC(const Bool_t &isMC) { fIsMC = isMC; }
     ///@brief Set if it is Pbgoing direction
-    void setIsPbGoing()
-    {
-        fIsPbGoing = kTRUE;
-    }
+    void setIsPbGoing() { fIsPbGoing = kTRUE; }
     ///@brief Set if it is pgoing direction
-    void setIspGoing()
-    {
-        fIsPbGoing = kFALSE;
-    }
+    void setIspGoing() { fIsPbGoing = kFALSE; }
     ///@brief Set Multiplicity Range
     void setMultiplicityRange(const Double_t &low, const Double_t &hi)
     {
@@ -124,7 +115,6 @@ public:
     ///@brief Set Leading jet eta range
     void setLeadJetEtaRange(const Double_t &low, const Double_t &hi)
     {
-
         fLeadJetEtaRange[0] = low;
         fLeadJetEtaRange[1] = hi;
     }
@@ -175,21 +165,25 @@ public:
         fInclusiveJetEtaRange[1] = high;
     }
 
-private:
+   private:
     /// @brief Reco and Corrected Multiplicity calculator with custom track pt and track eta cuts
     /// @param event Event object
     /// @param eventWeight Event weight
     /// @param multiplicityBin Multiplicity bin
-    /// @return Returns pair of Reco tracks with custom trackpt and track eta cut and number of tracks in given trk pt and eta range with tracking efficiency correction. Correction factor is [1-(fake rate)]/(efficiency)
+    /// @return Returns pair of Reco tracks with custom trackpt and track eta cut and number of
+    /// tracks in given trk pt and eta range with tracking efficiency correction. Correction factor
+    /// is [1-(fake rate)]/(efficiency)
     std::pair<Int_t, Float_t> RecoCorrectedMultiplicity(const Event *event, const Double_t &eventWeight, const Double_t &multiplicityBin);
     /// @brief Sets up correct efficiency tables for tracking efficiency correction
-    /// @param trackingTable Path to the tracking efficiency correction table with its name included. Table is usually root file with .root extension
+    /// @param trackingTable Path to the tracking efficiency correction table with its name
+    /// included. Table is usually root file with .root extension
     void SetUpTrackingEfficiency(const std::string &trackingTable);
     /// @brief Gen and Subevent Multiplicity calculator
     /// @param event Event object
     /// @param eventWeight Event weight
     /// @param multiplicityBin Multiplicity bin
-    /// @return Returns number of generated tracks in the event for a given Trk Pt and Eta range and generated subevent tracks.
+    /// @return Returns number of generated tracks in the event for a given Trk Pt and Eta range and
+    /// generated subevent tracks.
     std::pair<Int_t, Int_t> GenSubeMultiplicity(const Event *event, const Double_t &eventWeight, const Double_t &multiplicityBin);
     /// @brief Event weight calculator
     /// @param event Event object
@@ -208,7 +202,8 @@ private:
     /// @return Array of weights for multiplicity ranges
     Double_t MultiplicityWeight(const Double_t &multiplicity);
     /// @brief Dijet weights
-    /// @param ispPb Set to be true if it is pPb dataset. For PbPb dataset it needs is set to be false
+    /// @param ispPb Set to be true if it is pPb dataset. For PbPb dataset it needs is set to be
+    /// false
     /// @param leadJetPt Leading jet pt
     /// @param subLeadJetPt Subleading jet pt
     /// @return Dijet weight
@@ -247,7 +242,8 @@ private:
     /// @param leadID Leading jet ID
     /// @param subLeadID Subleading jet ID
     /// @return Returns true if all dijet requirements are satisfied
-    Bool_t CheckDijet(const Float_t &leadJetPt, const Float_t &leadJetEta, const Float_t &subLeadJetPt, const Float_t &subLeadJetEta, const Bool_t &leadID, const Bool_t &subLeadID);
+    Bool_t CheckDijet(const Float_t &leadJetPt, const Float_t &leadJetEta, const Float_t &subLeadJetPt, const Float_t &subLeadJetEta, const Bool_t &leadID,
+                      const Bool_t &subLeadID);
     /// @brief Xj calculator
     /// @param leadJetPt Leading jet pt
     /// @param subLeadJetPt Subleading jet pt
@@ -287,7 +283,8 @@ private:
     Int_t BinBinarySearch(const std::vector<double> &binEdges, const double &value);
     ///@brief Get jet flavor
     ///@param partonFlavour Parton flavour from jet
-    ///@return Returns jet flavor classified as quark jets ->1 and gluon jets -> -1 and unknown flavor -> 0
+    ///@return Returns jet flavor classified as quark jets ->1 and gluon jets -> -1 and unknown
+    /// flavor -> 0
     Double_t GetJetFlavor(const Int_t &partonFlavour);
 
     ///@brief Print debug information

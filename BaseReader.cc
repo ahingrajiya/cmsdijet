@@ -35,6 +35,5 @@ void BaseReader::report()
     // else {
     //     temp += "NONE";
     // }
-    std::cout << "\n"
-              << std::endl;
+    std::cout << "\n" << std::endl;
 }

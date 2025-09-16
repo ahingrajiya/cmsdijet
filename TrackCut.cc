@@ -21,9 +21,9 @@
 
 ClassImp(TrackCut)
 
-    TrackCut::TrackCut() : fTrackPt{0., 1e8}, fTrackEta{-2.4, 2.4}, fTrackDXY{3.0},
-                           fTrackDZ{3.}, fPtError{0.1}, fCharge{kTRUE}, fHighPurity{kTRUE},
-                           fCaloMatching{kFALSE}, fChi2{kFALSE}, fNHits{kFALSE}, fVerbose{kFALSE}, fMVAAlgo{kFALSE}
+    TrackCut::TrackCut() :
+    fTrackPt{0., 1e8}, fTrackEta{-2.4, 2.4}, fTrackDXY{3.0}, fTrackDZ{3.}, fPtError{0.1}, fCharge{kTRUE}, fHighPurity{kTRUE}, fCaloMatching{kFALSE}, fChi2{kFALSE},
+    fNHits{kFALSE}, fVerbose{kFALSE}, fMVAAlgo{kFALSE}
 {
     /* Empty*/
 }
@@ -83,13 +83,15 @@ Bool_t TrackCut::RecoPass(const Track *track)
     Bool_t goodDXY = (TMath::Abs((track->TrackVertexDxy() / track->TrackVertexDxyErr())) < fTrackDXY);
     if (fVerbose)
     {
-        std::cout << Form("Track Vertex DXY : %5.2f < %5.2f \t %s \n", TMath::Abs((track->TrackVertexDxy() / track->TrackVertexDxyErr())), fTrackDXY, (goodDXY) ? "True" : "False");
+        std::cout << Form("Track Vertex DXY : %5.2f < %5.2f \t %s \n", TMath::Abs((track->TrackVertexDxy() / track->TrackVertexDxyErr())), fTrackDXY,
+                          (goodDXY) ? "True" : "False");
     }
 
     Bool_t goodDZ = (TMath::Abs((track->TrackVertexDz() / track->TrackVertexDzErr())) < fTrackDZ);
     if (fVerbose)
     {
-        std::cout << Form("Track Vertex DZ : %5.2f < %5.2f \t %s \n", TMath::Abs((track->TrackVertexDz() / track->TrackVertexDzErr())), fTrackDZ, (goodDZ) ? "True" : "False");
+        std::cout << Form("Track Vertex DZ : %5.2f < %5.2f \t %s \n", TMath::Abs((track->TrackVertexDz() / track->TrackVertexDzErr())), fTrackDZ,
+                          (goodDZ) ? "True" : "False");
     }
 
     Bool_t goodCharge = kTRUE;
@@ -120,7 +122,8 @@ Bool_t TrackCut::RecoPass(const Track *track)
             goodCaloMatch = (((track->TrackpfEcal() + track->TrackpfHcal()) / (TMath::CosH(track->TrkEta()) * track->TrkPt())) > 0.5);
             if (fVerbose)
             {
-                std::cout << Form("Track Calo Matching : Track Pt = %5.2f Calo Matching = %5.2f \t %s \n", track->TrkPt(), ((track->TrackpfEcal() + track->TrackpfHcal()) / (TMath::CosH(track->TrkEta()) * track->TrkPt())), (goodCaloMatch) ? "True" : "False");
+                std::cout << Form("Track Calo Matching : Track Pt = %5.2f Calo Matching = %5.2f \t %s \n", track->TrkPt(),
+                                  ((track->TrackpfEcal() + track->TrackpfHcal()) / (TMath::CosH(track->TrkEta()) * track->TrkPt())), (goodCaloMatch) ? "True" : "False");
             }
         }
         if (fVerbose)
@@ -152,8 +155,7 @@ Bool_t TrackCut::RecoPass(const Track *track)
     Bool_t goodMVA = kTRUE;
     if (fMVAAlgo)
     {
-        if (track->TrackMVA() < 0.98 && track->TrackAlgo() == 6)
-            goodMVA = kFALSE;
+        if (track->TrackMVA() < 0.98 && track->TrackAlgo() == 6) goodMVA = kFALSE;
 
         if (fVerbose)
         {

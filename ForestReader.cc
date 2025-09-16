@@ -23,16 +23,15 @@
 ClassImp(ForestReader)
 
     //_________________
-    ForestReader::ForestReader()
-    : fEvent{nullptr}, fInFileName{nullptr}, fEvents2Read{0}, fEventsProcessed{0}, fIsMc{kFALSE}, fUseHltBranch{kFALSE},
-      fUseSkimmingBranch{kFALSE}, fJetCollection{"ak4PFJetAnalyzer"}, fUseJets{kFALSE}, fUseTrackBranch{kFALSE}, fUseGenTrackBranch{kFALSE},
-      fHltTree{nullptr}, fSkimTree{nullptr}, fEventTree{nullptr}, fTrkTree{nullptr}, fGenTrkTree{nullptr}, fJEC{nullptr}, fJECFiles{},
-      fJEU{nullptr}, fJEUFiles{}, fCollidingSystem{Form("PbPb")}, fCollidingEnergyGeV{5020}, fYearOfDataTaking{2018}, fDoJetPtSmearing{kFALSE},
-      fFixJetArrays{kFALSE}, fEventCut{nullptr}, fJetCut{nullptr}, fRecoJet2GenJetId{}, fGenJet2RecoJet{}, fTrackCut{nullptr},
-      fUseMatchedJets{kFALSE}, fEventsToProcess{-1}, fUseJetID{kFALSE}, fJetIDType{0}, fHiBinShift{0}, fIs_pp{kFALSE}, fIs_PbPb{kFALSE},
-      fIs_pPb{kFALSE}, fJetJESCorrectionsFunction{nullptr}, fApplyJetJESCorrections{kFALSE}, fJEUType{0}, fSmearType{0},
-      fJetPtSmearingFunction{nullptr}, fJERSmearingNomial{0}, fJERSmearingUp{0}, fJERSmearingDown{0},
-      fJERSmearingEtaEdges{0}, fRandom{nullptr}, fDoJEU{kFALSE}, fIsAOD{kFALSE}, fIsMiniAOD{kFALSE}, fIs_OO{kFALSE}
+    ForestReader::ForestReader() :
+    fEvent{nullptr}, fInFileName{nullptr}, fEvents2Read{0}, fEventsProcessed{0}, fIsMc{kFALSE}, fUseHltBranch{kFALSE}, fUseSkimmingBranch{kFALSE},
+    fJetCollection{"ak4PFJetAnalyzer"}, fUseJets{kFALSE}, fUseTrackBranch{kFALSE}, fUseGenTrackBranch{kFALSE}, fHltTree{nullptr}, fSkimTree{nullptr}, fEventTree{nullptr},
+    fTrkTree{nullptr}, fGenTrkTree{nullptr}, fJEC{nullptr}, fJECFiles{}, fJEU{nullptr}, fJEUFiles{}, fCollidingSystem{Form("PbPb")}, fCollidingEnergyGeV{5020},
+    fYearOfDataTaking{2018}, fDoJetPtSmearing{kFALSE}, fFixJetArrays{kFALSE}, fEventCut{nullptr}, fJetCut{nullptr}, fRecoJet2GenJetId{}, fGenJet2RecoJet{},
+    fTrackCut{nullptr}, fUseMatchedJets{kFALSE}, fEventsToProcess{-1}, fUseJetID{kFALSE}, fJetIDType{0}, fHiBinShift{0}, fIs_pp{kFALSE}, fIs_PbPb{kFALSE},
+    fIs_pPb{kFALSE}, fJetJESCorrectionsFunction{nullptr}, fApplyJetJESCorrections{kFALSE}, fJEUType{0}, fSmearType{0}, fJetPtSmearingFunction{nullptr},
+    fJERSmearingNomial{0}, fJERSmearingUp{0}, fJERSmearingDown{0}, fJERSmearingEtaEdges{0}, fRandom{nullptr}, fDoJEU{kFALSE}, fIsAOD{kFALSE}, fIsMiniAOD{kFALSE},
+    fIs_OO{kFALSE}
 {
     // Initialize many variables
     clearVariables();
@@ -40,19 +39,16 @@ ClassImp(ForestReader)
 }
 
 //_________________
-ForestReader::ForestReader(const Char_t *inputStream, const Bool_t &isAOD, const Bool_t &isMiniAOD,
-                           const Bool_t &useHltBranch, const Bool_t &useSkimmingBranch,
-                           const Char_t *jetCollection, const Bool_t &useJets,
-                           const Bool_t &useTrackBranch, const Bool_t &useGenTrackBranch, const Bool_t &isMc,
-                           const Bool_t &setStoreLocation, const Bool_t &useMatchedJets)
-    : fEvent{nullptr}, fInFileName{inputStream}, fIsAOD{isAOD}, fIsMiniAOD{isMiniAOD}, fEvents2Read{0}, fEventsProcessed{0}, fIsMc{isMc}, fUseHltBranch{useHltBranch},
-      fUseSkimmingBranch{useSkimmingBranch}, fJetCollection{"ak4PFJetAnalyzer"}, fUseJets{useJets}, fUseTrackBranch{useTrackBranch},
-      fUseGenTrackBranch{useGenTrackBranch}, fJEC{nullptr}, fJECFiles{}, fJEU{nullptr}, fJEUFiles{}, fCollidingSystem{Form("PbPb")},
-      fCollidingEnergyGeV{5020}, fYearOfDataTaking{2018}, fDoJetPtSmearing{kFALSE}, fFixJetArrays{kFALSE}, fEventCut{nullptr}, fJetCut{nullptr},
-      fIsInStore{setStoreLocation}, fTrackCut{nullptr}, fUseMatchedJets{useMatchedJets}, fEventsToProcess{-1}, fUseJetID{kFALSE}, fJetIDType{0},
-      fHiBinShift{0}, fIs_pp{kFALSE}, fIs_PbPb{kFALSE}, fIs_pPb{kFALSE}, fJetJESCorrectionsFunction{nullptr}, fApplyJetJESCorrections{kFALSE},
-      fJEUType{0}, fSmearType{0}, fJetPtSmearingFunction{nullptr}, fJERSmearingNomial{0}, fJERSmearingUp{0}, fJERSmearingDown{0},
-      fJERSmearingEtaEdges{0}, fRandom{nullptr}, fDoJEU{kFALSE}, fIs_OO{kFALSE}
+ForestReader::ForestReader(const Char_t *inputStream, const Bool_t &isAOD, const Bool_t &isMiniAOD, const Bool_t &useHltBranch, const Bool_t &useSkimmingBranch,
+                           const Char_t *jetCollection, const Bool_t &useJets, const Bool_t &useTrackBranch, const Bool_t &useGenTrackBranch, const Bool_t &isMc,
+                           const Bool_t &setStoreLocation, const Bool_t &useMatchedJets) :
+    fEvent{nullptr}, fInFileName{inputStream}, fIsAOD{isAOD}, fIsMiniAOD{isMiniAOD}, fEvents2Read{0}, fEventsProcessed{0}, fIsMc{isMc}, fUseHltBranch{useHltBranch},
+    fUseSkimmingBranch{useSkimmingBranch}, fJetCollection{"ak4PFJetAnalyzer"}, fUseJets{useJets}, fUseTrackBranch{useTrackBranch}, fUseGenTrackBranch{useGenTrackBranch},
+    fJEC{nullptr}, fJECFiles{}, fJEU{nullptr}, fJEUFiles{}, fCollidingSystem{Form("PbPb")}, fCollidingEnergyGeV{5020}, fYearOfDataTaking{2018}, fDoJetPtSmearing{kFALSE},
+    fFixJetArrays{kFALSE}, fEventCut{nullptr}, fJetCut{nullptr}, fIsInStore{setStoreLocation}, fTrackCut{nullptr}, fUseMatchedJets{useMatchedJets}, fEventsToProcess{-1},
+    fUseJetID{kFALSE}, fJetIDType{0}, fHiBinShift{0}, fIs_pp{kFALSE}, fIs_PbPb{kFALSE}, fIs_pPb{kFALSE}, fJetJESCorrectionsFunction{nullptr},
+    fApplyJetJESCorrections{kFALSE}, fJEUType{0}, fSmearType{0}, fJetPtSmearingFunction{nullptr}, fJERSmearingNomial{0}, fJERSmearingUp{0}, fJERSmearingDown{0},
+    fJERSmearingEtaEdges{0}, fRandom{nullptr}, fDoJEU{kFALSE}, fIs_OO{kFALSE}
 
 {
     // Initialize many variables
@@ -63,30 +59,18 @@ ForestReader::ForestReader(const Char_t *inputStream, const Bool_t &isAOD, const
 //_________________
 ForestReader::~ForestReader()
 {
-    if (fEvent)
-        delete fEvent;
-    if (fHltTree)
-        delete fHltTree;
-    if (fSkimTree)
-        delete fSkimTree;
-    if (fEventTree)
-        delete fEventTree;
-    if (fUseJets)
-        delete fJetTree;
-    if (fTrkTree)
-        delete fTrkTree;
-    if (fGenTrkTree)
-        delete fGenTrkTree;
-    if (fJEC)
-        delete fJEC;
-    if (fJEU)
-        delete fJEU;
-    if (fEventCut)
-        delete fEventCut;
-    if (fJetCut)
-        delete fJetCut;
-    if (fTrackCut)
-        delete fTrackCut;
+    if (fEvent) delete fEvent;
+    if (fHltTree) delete fHltTree;
+    if (fSkimTree) delete fSkimTree;
+    if (fEventTree) delete fEventTree;
+    if (fUseJets) delete fJetTree;
+    if (fTrkTree) delete fTrkTree;
+    if (fGenTrkTree) delete fGenTrkTree;
+    if (fJEC) delete fJEC;
+    if (fJEU) delete fJEU;
+    if (fEventCut) delete fEventCut;
+    if (fJetCut) delete fJetCut;
+    if (fTrackCut) delete fTrackCut;
 }
 
 //_________________
@@ -112,7 +96,6 @@ void ForestReader::clearVariables()
     // Loop over jets and tracks
     for (Short_t i{0}; i < 9999; i++)
     {
-
         // Jet variables
         if (i < 1000)
         {
@@ -149,7 +132,7 @@ void ForestReader::clearVariables()
                 fGenJetWTAPhi[i] = {0.f};
             }
 
-        } // if (i<100)
+        }  // if (i<100)
     }
     // Track variables
     if (fIsAOD)
@@ -268,9 +251,7 @@ void ForestReader::setupJEC()
     std::vector<std::string> tmp;
     for (UInt_t i{0}; i < fJECFiles.size(); i++)
     {
-        tmp.push_back(Form("%s/aux_files/%s_%i/JEC/%s",
-                           fJECPath.Data(), fCollidingSystem.Data(),
-                           fCollidingEnergyGeV, fJECFiles.at(i).c_str()));
+        tmp.push_back(Form("%s/aux_files/%s_%i/JEC/%s", fJECPath.Data(), fCollidingSystem.Data(), fCollidingEnergyGeV, fJECFiles.at(i).c_str()));
     }
 
     fJECFiles.clear();
@@ -289,7 +270,6 @@ void ForestReader::setupJEC()
 
 void ForestReader::setupJEU()
 {
-
     std::cout << "===========Setting up JEU correction============" << std::endl;
     // Next part is needed only if JEU correction is applied
     if (!fDoJEU)
@@ -327,9 +307,7 @@ void ForestReader::setupJEU()
         std::runtime_error("No JEU files specified. Please add JEU files using addJEUFile() method.");
     }
 
-    TString tmp = Form("%s/aux_files/%s_%i/JEC/%s",
-                       fJECPath.Data(), fCollidingSystem.Data(),
-                       fCollidingEnergyGeV, fJEUFiles.at(0).c_str());
+    TString tmp = Form("%s/aux_files/%s_%i/JEC/%s", fJECPath.Data(), fCollidingSystem.Data(), fCollidingEnergyGeV, fJEUFiles.at(0).c_str());
 
     fJEU = new JetUncertainty(tmp.Data());
     std::cout << "JEU file: " << tmp.Data() << std::endl;
@@ -353,8 +331,7 @@ void ForestReader::SetUpWeightFunctions()
 }
 
 //________________
-Float_t ForestReader::jetPtWeight(const Bool_t &isMC, const std::string &system, const Int_t &year,
-                                  const Int_t &energy, float jetpt) const
+Float_t ForestReader::jetPtWeight(const Bool_t &isMC, const std::string &system, const Int_t &year, const Int_t &energy, float jetpt) const
 {
     Float_t jetptweight = 1.0;
 
@@ -379,7 +356,6 @@ Float_t ForestReader::JetJESCorrections(const Float_t &jetpt)
     }
     if (jetpt <= 30.0)
     {
-
         return fJetJESCorrectionsFunction->Eval(31.0);
     }
     else if (jetpt >= 800.0)
@@ -392,8 +368,7 @@ Float_t ForestReader::JetJESCorrections(const Float_t &jetpt)
     }
 }
 //________________
-Float_t ForestReader::leadJetPtWeight(const Bool_t &isMC, const std::string &system, const Int_t &year,
-                                      const Int_t &energy, const Float_t &leadjetpt) const
+Float_t ForestReader::leadJetPtWeight(const Bool_t &isMC, const std::string &system, const Int_t &year, const Int_t &energy, const Float_t &leadjetpt) const
 {
     Float_t leadjetptweight = 1.0;
 
@@ -409,8 +384,7 @@ Float_t ForestReader::leadJetPtWeight(const Bool_t &isMC, const std::string &sys
 }
 
 //________________
-Float_t ForestReader::subleadJetPtWeight(const Bool_t &isMC, const std::string &system, const Int_t &year,
-                                         const Int_t &energy, const Float_t &subleadjetpt) const
+Float_t ForestReader::subleadJetPtWeight(const Bool_t &isMC, const std::string &system, const Int_t &year, const Int_t &energy, const Float_t &subleadjetpt) const
 {
     Float_t subleadjetptweight = 1.0;
 
@@ -450,17 +424,17 @@ void ForestReader::setUpJER()
     fJERSmearingDown.clear();
     if (fIs_pPb)
     {
-        fJERSmearingEtaEdges = {-5.191, -3.139, -2.964, -2.853, -2.5, -2.322, -2.043, -1.93, -1.74, -1.305, -1.131, -0.783, -0.522,
-                                0.0, 0.522, 0.783, 1.131, 1.305, 1.74, 1.93, 2.043, 2.322, 2.5, 2.853, 2.964, 3.139, 5.191};
+        fJERSmearingEtaEdges = {-5.191, -3.139, -2.964, -2.853, -2.5, -2.322, -2.043, -1.93, -1.74, -1.305, -1.131, -0.783, -0.522, 0.0,
+                                0.522,  0.783,  1.131,  1.305,  1.74, 1.93,   2.043,  2.322, 2.5,   2.853,  2.964,  3.139,  5.191};
 
-        fJERSmearingNomial = {1.1922, 1.1869, 1.7788, 1.3418, 1.2963, 1.1512, 1.1426, 1.1000, 1.1278, 1.1609, 1.1464, 1.1948, 1.15958,
+        fJERSmearingNomial = {1.1922,  1.1869, 1.7788, 1.3418, 1.2963, 1.1512, 1.1426, 1.1000, 1.1278, 1.1609, 1.1464, 1.1948, 1.15958,
                               1.15958, 1.1948, 1.1464, 1.1609, 1.1278, 1.1000, 1.1426, 1.1512, 1.2963, 1.3418, 1.7788, 1.1869, 1.1922};
 
-        fJERSmearingUp = {1.341, 1.3112, 1.9796, 1.5509, 1.5334, 1.2652, 1.264, 1.2079, 1.2264, 1.2634, 1.2096, 1.26, 1.224,
-                          1.224, 1.26, 1.2096, 1.2634, 1.2264, 1.2079, 1.264, 1.2652, 1.5334, 1.5509, 1.9796, 1.3112, 1.341};
+        fJERSmearingUp = {1.341, 1.3112, 1.9796, 1.5509, 1.5334, 1.2652, 1.264, 1.2079, 1.2264, 1.2634, 1.2096, 1.26,   1.224,
+                          1.224, 1.26,   1.2096, 1.2634, 1.2264, 1.2079, 1.264, 1.2652, 1.5334, 1.5509, 1.9796, 1.3112, 1.341};
 
-        fJERSmearingDown = {1.0434, 1.0626, 1.578, 1.1327, 1.0592, 1.0372, 1.0212, 0.9921, 1.0292, 1.0584, 1.0832, 1.1296, 1.095,
-                            1.095, 1.1296, 1.0832, 1.0584, 1.0292, 0.9921, 1.0212, 1.0372, 1.0592, 1.1327, 1.578, 1.0626, 1.0434};
+        fJERSmearingDown = {1.0434, 1.0626, 1.578,  1.1327, 1.0592, 1.0372, 1.0212, 0.9921, 1.0292, 1.0584, 1.0832, 1.1296, 1.095,
+                            1.095,  1.1296, 1.0832, 1.0584, 1.0292, 0.9921, 1.0212, 1.0372, 1.0592, 1.1327, 1.578,  1.0626, 1.0434};
 
         fJetPtSmearingFunction = new TF1("fJetPtSmearingFunction", "sqrt( [0] * [0] + [1] * [1] / x )", 30., 800.);
         fJetPtSmearingFunction->SetParameter(0, 0.0415552);
@@ -486,7 +460,7 @@ Double_t ForestReader::retriveResolutionFactor(const Float_t &jeteta) const
     if (it == fJERSmearingEtaEdges.begin())
     {
         std::cerr << "Jet eta is below the minimum edge. Returning Factor of 1." << std::endl;
-        return 1.; // or handle differently if needed
+        return 1.;  // or handle differently if needed
     }
 
     size_t idx = std::distance(fJERSmearingEtaEdges.begin(), it) - 1;
@@ -496,22 +470,22 @@ Double_t ForestReader::retriveResolutionFactor(const Float_t &jeteta) const
         idx = fJERSmearingNomial.size() - 1;
     }
 
-    if (fSmearType == 0) // Nominal
+    if (fSmearType == 0)  // Nominal
     {
         value = fJERSmearingNomial[idx];
     }
-    else if (fSmearType == 1) // Up
+    else if (fSmearType == 1)  // Up
     {
         value = fJERSmearingUp[idx];
     }
-    else if (fSmearType == 2) // Down
+    else if (fSmearType == 2)  // Down
     {
         value = fJERSmearingDown[idx];
     }
     else
     {
         std::cerr << "Invalid smear type. Returning Factor of 1." << std::endl;
-        return 1.0; // Default resolution factor
+        return 1.0;  // Default resolution factor
     }
     resolutionFactor = TMath::Sqrt(TMath::Max(value * value - 1.0, 0.0));
     // std::cout << "Jet Eta : " << jeteta << " | Index: " << idx << " | Factor: " << resolutionFactor << " | Value : " << value << std::endl;
@@ -549,8 +523,8 @@ Float_t ForestReader::jetPtSmering(const Float_t &refPt, const Float_t &jeteta, 
 }
 
 //________________
-Float_t ForestReader::trkEtaMixWeight(const Bool_t &isMC, const std::string &system, const Int_t &year,
-                                      const Int_t &energy, const Float_t &trketa, const Bool_t &reco) const
+Float_t ForestReader::trkEtaMixWeight(const Bool_t &isMC, const std::string &system, const Int_t &year, const Int_t &energy, const Float_t &trketa,
+                                      const Bool_t &reco) const
 {
     float trketamixweight = 1.0;
 
@@ -566,11 +540,9 @@ Float_t ForestReader::trkEtaMixWeight(const Bool_t &isMC, const std::string &sys
 }
 
 //________________
-Float_t ForestReader::eventWeight(const Bool_t &isMC, const Bool_t &use_centrality, const std::string &system,
-                                  const Int_t &year, const Int_t &energy, const Float_t &vz, const Int_t mult,
-                                  const Float_t &weighttree, const Float_t &leadjetpt) const
+Float_t ForestReader::eventWeight(const Bool_t &isMC, const Bool_t &use_centrality, const std::string &system, const Int_t &year, const Int_t &energy, const Float_t &vz,
+                                  const Int_t mult, const Float_t &weighttree, const Float_t &leadjetpt) const
 {
-
     Float_t vzweight = 1.0;
     Float_t multweight = 1.0;
     Float_t evtweight = 1.0;
@@ -586,25 +558,21 @@ Float_t ForestReader::eventWeight(const Bool_t &isMC, const Bool_t &use_centrali
 
     if (isMC && !use_centrality && system == "pp" && energy == 5020 && year == 2017)
     {
-
         TF1 *VzWeightFunction = new TF1("VzWeightFunction", "pol6", -15.0, 15.0);
-        VzWeightFunction->SetParameters(0.973805, 0.00339418, 0.000757544, -1.37331e-06, -2.82953e-07, -3.06778e-10,
-                                        3.48615e-09);
+        VzWeightFunction->SetParameters(0.973805, 0.00339418, 0.000757544, -1.37331e-06, -2.82953e-07, -3.06778e-10, 3.48615e-09);
         vzweight = VzWeightFunction->Eval(vz);
 
         TF1 *MultCentWeightFunction = new TF1("MultCentWeightFunction", "pol0", 0.0, 500.0);
         MultCentWeightFunction->SetParameter(0, 1.0);
         multweight = MultCentWeightFunction->Eval(mult);
 
-        TF1 *MultTriggerWeightFunction =
-            new TF1("MultTriggerWeightFunction", "pol0", 0.0, 500.0); // fitted from turn on curves
+        TF1 *MultTriggerWeightFunction = new TF1("MultTriggerWeightFunction", "pol0", 0.0, 500.0);  // fitted from turn on curves
         MultTriggerWeightFunction->SetParameter(0, 1.0);
         Float_t multtrigweight = 1.0;
         multtrigweight = MultTriggerWeightFunction->Eval(mult);
         multefficiency = 1. / multtrigweight;
 
-        TF1 *JetTriggerWeightFunction =
-            new TF1("JetTriggerWeightFunction", "pol0", 0.0, 500.0); // fitted from turn on curves
+        TF1 *JetTriggerWeightFunction = new TF1("JetTriggerWeightFunction", "pol0", 0.0, 500.0);  // fitted from turn on curves
         JetTriggerWeightFunction->SetParameter(0, 1.0);
         Float_t jettrigweight = 1.0;
         jettrigweight = JetTriggerWeightFunction->Eval(leadjetpt);
@@ -627,15 +595,15 @@ Bool_t ForestReader::JetIDType1(const Float_t &trackMaxPt, const Float_t &jetRaw
     return jetID;
 }
 
-Bool_t ForestReader::JetIDType2(const Float_t &jtNHF, const Float_t &jtNEF, const Float_t &jtCHF, const Float_t &jtMUF, const Float_t &jtCEF,
-                                const Int_t &jtCHM, const Int_t &jtCEM, const Int_t &jtNHM, const Int_t &jtNEM, const Int_t &jtMUM, const float_t &jetEta)
+Bool_t ForestReader::JetIDType2(const Float_t &jtNHF, const Float_t &jtNEF, const Float_t &jtCHF, const Float_t &jtMUF, const Float_t &jtCEF, const Int_t &jtCHM,
+                                const Int_t &jtCEM, const Int_t &jtNHM, const Int_t &jtNEM, const Int_t &jtMUM, const float_t &jetEta)
 {
     Bool_t jetID = kTRUE;
     Int_t ChargedMult = jtCHM + jtCEM + jtMUM;
     Int_t NeutralMult = jtNHM + jtNEM;
     Int_t NConst = ChargedMult + NeutralMult;
-    Float_t chemFracCut = 0.9; // Magic Number provided by the JetMET group
-    Float_t nhFracCut = 0.9;   // Magic Number provided by the JetMET group
+    Float_t chemFracCut = 0.9;  // Magic Number provided by the JetMET group
+    Float_t nhFracCut = 0.9;    // Magic Number provided by the JetMET group
 
     if (fabs(jetEta) <= 2.7)
     {
@@ -676,7 +644,6 @@ void ForestReader::finish()
 //_________________
 Int_t ForestReader::setupChains()
 {
-
     // Setup chains (0-good, 1-bad)
     Int_t returnStatus = 1;
 
@@ -750,16 +717,11 @@ Int_t ForestReader::setupChains()
         {
             std::cout << Form("Adding %s file to chains\n", input.Data());
             fEventTree->Add(input.Data());
-            if (fUseSkimmingBranch)
-                fSkimTree->Add(input.Data());
-            if (fUseJets)
-                fJetTree->Add(input.Data());
-            if (fUseTrackBranch)
-                fTrkTree->Add(input.Data());
-            if (fIsMc && fUseGenTrackBranch)
-                fGenTrkTree->Add(input.Data());
-            if (fUseHltBranch)
-                fHltTree->Add(input.Data());
+            if (fUseSkimmingBranch) fSkimTree->Add(input.Data());
+            if (fUseJets) fJetTree->Add(input.Data());
+            if (fUseTrackBranch) fTrkTree->Add(input.Data());
+            if (fIsMc && fUseGenTrackBranch) fGenTrkTree->Add(input.Data());
+            if (fUseHltBranch) fHltTree->Add(input.Data());
 
             if (fEventsToProcess == -1)
             {
@@ -777,8 +739,7 @@ Int_t ForestReader::setupChains()
         {
             std::ifstream inputStream(input.Data());
 
-            if (!inputStream)
-                std::cout << Form("ERROR: Cannot open file list: %s\n", input.Data());
+            if (!inputStream) std::cout << Form("ERROR: Cannot open file list: %s\n", input.Data());
             Int_t nFiles = 0;
             std::string file;
             size_t pos;
@@ -788,8 +749,7 @@ Int_t ForestReader::setupChains()
                 //       Take only the first part
                 // cout << "DEBUG found " <<  file << endl;
                 pos = file.find_first_of(" ");
-                if (pos != std::string::npos)
-                    file.erase(pos, file.length() - pos);
+                if (pos != std::string::npos) file.erase(pos, file.length() - pos);
                 // std::cout << "DEBUG found [" << file << "]" << std::endl;
 
                 // Check that file is of a correct name
@@ -810,26 +770,21 @@ Int_t ForestReader::setupChains()
                         std::cout << Form("Adding file to chain: %s\n", file.c_str());
                         // Adding file to chains
                         fEventTree->Add(file.c_str());
-                        if (fUseHltBranch)
-                            fHltTree->Add(file.c_str());
-                        if (fUseSkimmingBranch)
-                            fSkimTree->Add(file.c_str());
-                        if (fUseJets)
-                            fJetTree->Add(file.c_str());
-                        if (fUseTrackBranch)
-                            fTrkTree->Add(file.c_str());
-                        if (fIsMc && fUseGenTrackBranch)
-                            fGenTrkTree->Add(file.c_str());
+                        if (fUseHltBranch) fHltTree->Add(file.c_str());
+                        if (fUseSkimmingBranch) fSkimTree->Add(file.c_str());
+                        if (fUseJets) fJetTree->Add(file.c_str());
+                        if (fUseTrackBranch) fTrkTree->Add(file.c_str());
+                        if (fIsMc && fUseGenTrackBranch) fGenTrkTree->Add(file.c_str());
                         ++nFiles;
-                    } // if(ftmp && !ftmp->IsZombie() && ftmp->GetNkeys())
+                    }  // if(ftmp && !ftmp->IsZombie() && ftmp->GetNkeys())
 
                     if (ftmp)
                     {
                         ftmp->Close();
-                    } // if (ftmp)
-                } // if ( file.find(".root") != std::string::npos && file.find("Forest") != std::string::npos &&
-                  // file.find("AOD") != std::string::npos )
-            } // while ( getline( inputStream, file ) )
+                    }  // if (ftmp)
+                }  // if ( file.find(".root") != std::string::npos && file.find("Forest") != std::string::npos &&
+                   // file.find("AOD") != std::string::npos )
+            }  // while ( getline( inputStream, file ) )
             if (fEventsToProcess == -1)
             {
                 fEvents2Read = fEventTree->GetEntries();
@@ -843,28 +798,22 @@ Int_t ForestReader::setupChains()
             std::cout << ">>>>>>>>>>>>>>>Files have been added to Chains<<<<<<<<<<<<<<<<<<<" << std::endl;
             std::cout << "===============Setting Up Chains \t[DONE]====================" << std::endl;
             std::cout << std::endl;
-        } // else {   if file list
+        }  // else {   if file list
         returnStatus = 0;
-    } // else {   if normal input
+    }  // else {   if normal input
     return returnStatus;
 }
 
 //_________________
 void ForestReader::setupBranches()
 {
-
     // Disable all branches - this is important while reading big files
     fEventTree->SetBranchStatus("*", 0);
-    if (fUseHltBranch)
-        fHltTree->SetBranchStatus("*", 0);
-    if (fUseSkimmingBranch)
-        fSkimTree->SetBranchStatus("*", 0);
-    if (fUseJets)
-        fJetTree->SetBranchStatus("*", 0);
-    if (fUseTrackBranch)
-        fTrkTree->SetBranchStatus("*", 0);
-    if (fUseGenTrackBranch && fIsMc)
-        fGenTrkTree->SetBranchStatus("*", 0);
+    if (fUseHltBranch) fHltTree->SetBranchStatus("*", 0);
+    if (fUseSkimmingBranch) fSkimTree->SetBranchStatus("*", 0);
+    if (fUseJets) fJetTree->SetBranchStatus("*", 0);
+    if (fUseTrackBranch) fTrkTree->SetBranchStatus("*", 0);
+    if (fUseGenTrackBranch && fIsMc) fGenTrkTree->SetBranchStatus("*", 0);
 
     // enable branches of interest -> see definition of each variables above
 
@@ -875,7 +824,7 @@ void ForestReader::setupBranches()
     fEventTree->SetBranchStatus("vz", 1);
     if (fIs_PbPb || fIs_OO)
     {
-        fEventTree->SetBranchStatus("hiBin", 1); // centrality only for PbPb and XeXe
+        fEventTree->SetBranchStatus("hiBin", 1);  // centrality only for PbPb and XeXe
         fEventTree->SetBranchAddress("hiBin", &fHiBin);
     }
     fEventTree->SetBranchAddress("run", &fRunId);
@@ -901,7 +850,6 @@ void ForestReader::setupBranches()
         fTriggerPointers = new Int_t[fTriggers.size()];
         for (size_t i = 0; i < fTriggers.size(); i++)
         {
-
             if (fHltTree->GetLeaf(fTriggers[i].c_str()))
             {
                 fHltTree->SetBranchStatus(fTriggers[i].c_str(), 1);
@@ -913,7 +861,7 @@ void ForestReader::setupBranches()
             }
         }
 
-    } // if ( fUseHltBranch )
+    }  // if ( fUseHltBranch )
 
     // Skimming quantities
     if (fUseSkimmingBranch)
@@ -927,7 +875,6 @@ void ForestReader::setupBranches()
 
         for (size_t i = 0; i < fFilters.size(); i++)
         {
-
             if (fSkimTree->GetLeaf(fFilters[i].c_str()))
             {
                 fSkimTree->SetBranchStatus(fFilters[i].c_str(), 1);
@@ -938,12 +885,11 @@ void ForestReader::setupBranches()
                 throw std::runtime_error("Terminating ! Following Skim filter was not found in the tree : " + fFilters[i]);
             }
         }
-    } // if ( fUseSkimmingBranch )
+    }  // if ( fUseSkimmingBranch )
 
     // Jet quantities
     if (fUseJets)
     {
-
         fJetTree->SetBranchStatus("nref", 1);
         fJetTree->SetBranchStatus("rawpt", 1);
         fJetTree->SetBranchStatus("trackMax", 1);
@@ -1018,7 +964,7 @@ void ForestReader::setupBranches()
             fJetTree->SetBranchAddress("refparton_flavorForB", &fRefJetPartonFlavorForB);
         }
 
-    } // if ( fUsePartFlowJetBranch )
+    }  // if ( fUsePartFlowJetBranch )
 
     // Track quantities
     if (fUseTrackBranch)
@@ -1110,7 +1056,7 @@ void ForestReader::setupBranches()
             }
         }
 
-    } // if ( fUseTrackBranch )
+    }  // if ( fUseTrackBranch )
 
     // Gen particle quantities
     if (fIsMc && fUseGenTrackBranch)
@@ -1174,19 +1120,16 @@ void ForestReader::report()
         }
     }
     report += TString::Format("Apply Jet Pt Smearing        :\t %i\n", fDoJetPtSmearing);
-    if (fDoJetPtSmearing)
-        report += TString::Format("Jet Pt Smearing Type         :\t %i\n", fSmearType);
+    if (fDoJetPtSmearing) report += TString::Format("Jet Pt Smearing Type         :\t %i\n", fSmearType);
 
     report += TString::Format("Apply Jet ID                 :\t %i\n", fUseJetID);
-    if (fUseJetID)
-        report += TString::Format("Jet ID Type                  :\t %i\n", fJetIDType);
+    if (fUseJetID) report += TString::Format("Jet ID Type                  :\t %i\n", fJetIDType);
     std::cout << report.Data() << std::endl;
 }
 
 //_________________
 void ForestReader::readEvent()
 {
-
     if (fIsMc)
     {
         fRecoJet2GenJetId.clear();
@@ -1198,19 +1141,14 @@ void ForestReader::readEvent()
     if (fEventsProcessed >= fEvents2Read)
     {
         std::cerr << "ForestReader::readEvent() out of entry numbers\n";
-        fReaderStatus = 2; // End of input stream
+        fReaderStatus = 2;  // End of input stream
     }
     fEventTree->GetEntry(fEventsProcessed);
-    if (fUseHltBranch)
-        fHltTree->GetEntry(fEventsProcessed);
-    if (fUseSkimmingBranch)
-        fSkimTree->GetEntry(fEventsProcessed);
-    if (fUseJets)
-        fJetTree->GetEntry(fEventsProcessed);
-    if (fUseTrackBranch)
-        fTrkTree->GetEntry(fEventsProcessed);
-    if (fUseGenTrackBranch)
-        fGenTrkTree->GetEntry(fEventsProcessed);
+    if (fUseHltBranch) fHltTree->GetEntry(fEventsProcessed);
+    if (fUseSkimmingBranch) fSkimTree->GetEntry(fEventsProcessed);
+    if (fUseJets) fJetTree->GetEntry(fEventsProcessed);
+    if (fUseTrackBranch) fTrkTree->GetEntry(fEventsProcessed);
+    if (fUseGenTrackBranch) fGenTrkTree->GetEntry(fEventsProcessed);
 
     fEventsProcessed++;
     // if (fEventsProcessed - 1 == 25794)
@@ -1220,16 +1158,13 @@ void ForestReader::readEvent()
 //________________
 void ForestReader::fixIndices()
 {
-
     if (fUseJets)
     {
-
         // Loop over reconstructed jets
         if (fIsMc)
         {
             for (Int_t iRecoJet{0}; iRecoJet < fNRecoJets; iRecoJet++)
             {
-
                 if (fNGenJets <= 0)
                 {
                     fRecoJet2GenJetId.push_back(-1);
@@ -1252,8 +1187,7 @@ void ForestReader::fixIndices()
                         if (TMath::Abs(fGenJetPt[iGenJet] - fRefJetPt[iRecoJet]) > 2.f * FLT_EPSILON)
                         {
                             // If it is the last one
-                            if (iGenJet == (fNGenJets - 1))
-                                fRecoJet2GenJetId.push_back(-1);
+                            if (iGenJet == (fNGenJets - 1)) fRecoJet2GenJetId.push_back(-1);
                             continue;
                         }
                         else
@@ -1266,7 +1200,7 @@ void ForestReader::fixIndices()
                             break;
                         }
                     }
-                } // for (Int_t iRecoJet=0; iRecoJet<fNPFRecoJets; iRecoJet++)
+                }  // for (Int_t iRecoJet=0; iRecoJet<fNPFRecoJets; iRecoJet++)
 
                 // Fill the corresponding index in the reco vector and fill the gen
                 for (Int_t iGenJet{0}; iGenJet < fNGenJets; iGenJet++)
@@ -1349,11 +1283,9 @@ Event *ForestReader::returnEvent()
     // Create particle flow jet instances
     if (fUseJets)
     {
-
         // Loop over generated jets
         if (fIsMc && !fEvent->isGenJetCollectionFilled())
         {
-
             for (Int_t iGenJet{0}; iGenJet < fNGenJets; iGenJet++)
             {
                 GenJet *jet = new GenJet{};
@@ -1362,8 +1294,7 @@ Event *ForestReader::returnEvent()
                 jet->setPhi(fGenJetPhi[iGenJet]);
                 jet->setWTAEta(fGenJetWTAEta[iGenJet]);
                 jet->setWTAPhi(fGenJetWTAPhi[iGenJet]);
-                jet->setPtWeight(jetPtWeight(fIsMc, fCollidingSystem.Data(), fYearOfDataTaking, fCollidingEnergyGeV,
-                                             fGenJetPt[iGenJet]));
+                jet->setPtWeight(jetPtWeight(fIsMc, fCollidingSystem.Data(), fYearOfDataTaking, fCollidingEnergyGeV, fGenJetPt[iGenJet]));
 
                 if (fJetCut && !fJetCut->pass(jet))
                 {
@@ -1372,17 +1303,16 @@ Event *ForestReader::returnEvent()
                 }
                 fEvent->genJetCollection()->push_back(jet);
 
-            } // for (Int_t iGenJet{0}; iGenJet<fNPFGenJets; iGenJet++)
+            }  // for (Int_t iGenJet{0}; iGenJet<fNPFGenJets; iGenJet++)
 
             // Projection from filling the collection several times
             fEvent->setGenJetCollectionIsFilled();
-        } // if ( fIsMc )
+        }  // if ( fIsMc )
 
         // Loop over reconstructed jets
 
         for (Int_t iJet{0}; iJet < fNRecoJets; iJet++)
         {
-
             // Create a new jet instance
             RecoJet *jet = new RecoJet{};
 
@@ -1397,7 +1327,7 @@ Event *ForestReader::returnEvent()
                 }
                 // Add index of the matched GenJet
                 // jet->setGenJetId(fRecoJet2GenJetId.at(iJet));
-            } // if ( fIsMc )
+            }  // if ( fIsMc )
 
             // Reco
             if (fUseJetID)
@@ -1409,8 +1339,8 @@ Event *ForestReader::returnEvent()
                 }
                 else if (fJetIDType == 2)
                 {
-                    iJetID = JetIDType2(fRecoPfNHF[iJet], fRecoPfNEF[iJet], fRecoPfCHF[iJet], fRecoPfMUF[iJet], fRecoPfCEF[iJet],
-                                        fRecoPfCHM[iJet], fRecoPfCEM[iJet], fRecoPfNHM[iJet], fRecoPfNEM[iJet], fRecoPfMUM[iJet], fRecoJetEta[iJet]);
+                    iJetID = JetIDType2(fRecoPfNHF[iJet], fRecoPfNEF[iJet], fRecoPfCHF[iJet], fRecoPfMUF[iJet], fRecoPfCEF[iJet], fRecoPfCHM[iJet], fRecoPfCEM[iJet],
+                                        fRecoPfNHM[iJet], fRecoPfNEM[iJet], fRecoPfMUM[iJet], fRecoJetEta[iJet]);
                 }
                 else
                 {
@@ -1436,7 +1366,7 @@ Event *ForestReader::returnEvent()
                 }
             }
             else
-            { // If no JEC available
+            {  // If no JEC available
 
                 pTcorr = fRecoJetPt[iJet];
             }
@@ -1554,7 +1484,6 @@ Event *ForestReader::returnEvent()
         {
             for (Int_t iTrack{0}; iTrack < fTrackPtVec->size(); iTrack++)
             {
-
                 Track *track = new Track{};
                 track->setTrackPt(fTrackPtVec->at(iTrack));
                 track->setTrackEta(fTrackEtaVec->at(iTrack));

@@ -9,16 +9,15 @@
  *
  */
 
+#include "BaseAnalysis.h"
+#include "DiJetAnalysis.h"
+#include "Event.h"
+#include "EventCut.h"
+#include "ForestReader.h"
 #include "HistoManagerDiJet.h"
 #include "JetCut.h"
-#include "EventCut.h"
-#include "BaseAnalysis.h"
-#include "JetCut.h"
-#include "Event.h"
-#include "ForestReader.h"
-#include "TrackCut.h"
 #include "Manager.h"
-#include "DiJetAnalysis.h"
+#include "TrackCut.h"
 
 int main(int argc, char *argv[])
 {
@@ -59,7 +58,6 @@ int main(int argc, char *argv[])
     }
     else
     {
-
         JECFileName = "Spring18_ppRef5TeV_V6_MC_L2Relative_AK4PF.txt";
         JECFileDataName = "Spring18_ppRef5TeV_V6_DATA_L2L3Residual_AK4PF.txt";
     }

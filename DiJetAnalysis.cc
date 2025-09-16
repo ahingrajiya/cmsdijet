@@ -13,11 +13,11 @@
 #include "DiJetAnalysis.h"
 
 // ROOT Headers
-#include "TObject.h"
-#include "TMath.h"
-#include "TROOT.h"
-#include "TLorentzVector.h"
 #include "TF1.h"
+#include "TLorentzVector.h"
+#include "TMath.h"
+#include "TObject.h"
+#include "TROOT.h"
 #include "TVector3.h"
 
 // C++ header
@@ -25,16 +25,14 @@
 
 ClassImp(DiJetAnalysis)
 
-    DiJetAnalysis::DiJetAnalysis() : BaseAnalysis(), fDebug{kFALSE}, fUseCentralityWeight{kFALSE}, fHM{nullptr}, fIspPb{kFALSE},
-                                     fIsMC{kFALSE}, fDeltaPhi{5. * TMath::Pi() / 6.}, fIsPbGoing{kFALSE}, fUseCMFrame{kFALSE},
-                                     fEtaBoost{0.0}, fUseMultiplicityWeight{kFALSE}, fLeadJetPtLow{100.}, fSubLeadJetPtLow{50.},
-                                     fNEventsInSample{100000000}, fIsDiJetFound{kFALSE}, fIsGenDiJetFound{kFALSE}, fVerbose{kFALSE},
-                                     fMinTrkPt{0.5}, fTrkEffPbPb{nullptr}, fTrkEffpPb{nullptr}, fTrkEffTable{""}, fEventCounter{0},
-                                     fCycleCounter{0}, fDoInJetMult{kFALSE}, fMultiplicityType{0}, fUseDijetWeight{kFALSE}, fDijetWeightTable{""},
-                                     hDijetWeight{nullptr}, fDijetWeightFile{nullptr}, fDijetWeight{1.0}, fDijetWeightType{"Reco"}, fIspp{kFALSE},
-                                     fIsPbPb{kFALSE}, fCollSystem{""}, fUEType{""}, fDoTrackingClosures{kFALSE}, fVertexZWeight{nullptr},
-                                     fDoVzWeight{kFALSE}, fRecoType{kFALSE}, fRefType{kFALSE}, fGenType{kFALSE}, fMultWeightFunctions{nullptr},
-                                     fXBinEdges{}, fYBinEdges{}, fBinContent{}, fXBinCount{0}, fYBinCount{0}, fInclusiveCorrectedJetPtMin{50.}
+    DiJetAnalysis::DiJetAnalysis() :
+    BaseAnalysis(), fDebug{kFALSE}, fUseCentralityWeight{kFALSE}, fHM{nullptr}, fIspPb{kFALSE}, fIsMC{kFALSE}, fDeltaPhi{5. * TMath::Pi() / 6.}, fIsPbGoing{kFALSE},
+    fUseCMFrame{kFALSE}, fEtaBoost{0.0}, fUseMultiplicityWeight{kFALSE}, fLeadJetPtLow{100.}, fSubLeadJetPtLow{50.}, fNEventsInSample{100000000}, fIsDiJetFound{kFALSE},
+    fIsGenDiJetFound{kFALSE}, fVerbose{kFALSE}, fMinTrkPt{0.5}, fTrkEffPbPb{nullptr}, fTrkEffpPb{nullptr}, fTrkEffTable{""}, fEventCounter{0}, fCycleCounter{0},
+    fDoInJetMult{kFALSE}, fMultiplicityType{0}, fUseDijetWeight{kFALSE}, fDijetWeightTable{""}, hDijetWeight{nullptr}, fDijetWeightFile{nullptr}, fDijetWeight{1.0},
+    fDijetWeightType{"Reco"}, fIspp{kFALSE}, fIsPbPb{kFALSE}, fCollSystem{""}, fUEType{""}, fDoTrackingClosures{kFALSE}, fVertexZWeight{nullptr}, fDoVzWeight{kFALSE},
+    fRecoType{kFALSE}, fRefType{kFALSE}, fGenType{kFALSE}, fMultWeightFunctions{nullptr}, fXBinEdges{}, fYBinEdges{}, fBinContent{}, fXBinCount{0}, fYBinCount{0},
+    fInclusiveCorrectedJetPtMin{50.}
 {
     fLeadJetEtaRange[0] = {-1.};
     fLeadJetEtaRange[1] = {1.};
@@ -124,7 +122,8 @@ void DiJetAnalysis::SetUpWeightFunctions()
             fMultWeightFunctions[0]->SetParameters(9.94057e-01, -1.44680e-02, 2.23186e-04);
             fMultWeightFunctions[1] = new TF1("fMultWeightFunctions1", "pol3", 60, 250, TF1::EAddToList::kNo);
             fMultWeightFunctions[1]->SetParameters(-8.19857e-01, 4.86311e-02, -4.12493e-04, 1.12352e-06);
-            // fMultWeightFunctions[2] = new TF1("fMultWeightFunctions2", "pol2", 186, 260, TF1::EAddToList::kNo);
+            // fMultWeightFunctions[2] = new TF1("fMultWeightFunctions2", "pol2", 186, 260,
+            // TF1::EAddToList::kNo);
             // fMultWeightFunctions[2]->SetParameters(-1.76375e+00, 1.13405e-02, 1.22664e-05);
         }
     }
@@ -166,7 +165,9 @@ void DiJetAnalysis::SetUpDijetWeight(const std::string &dijetWeightTable)
     }
     else
     {
-        std::cerr << "Dijet weight type is not selected or wrong selection. Please select Dijet Weight time from Reco, Ref or Gen" << std::endl;
+        std::cerr << "Dijet weight type is not selected or wrong selection. Please select Dijet "
+                     "Weight time from Reco, Ref or Gen"
+                  << std::endl;
         std::cerr << "Returning Dijet Weight = 0" << std::endl;
         return;
     }
@@ -213,7 +214,7 @@ Int_t DiJetAnalysis::BinBinarySearch(const std::vector<double> &binEdges, const 
 
         if (bin >= binEdges[midBin] && bin < binEdges[midBin + 1])
         {
-            return midBin; // Found the bin
+            return midBin;  // Found the bin
         }
         else if (bin < binEdges[midBin])
         {
@@ -229,18 +230,22 @@ Int_t DiJetAnalysis::BinBinarySearch(const std::vector<double> &binEdges, const 
 
 void DiJetAnalysis::SetUpTrackingEfficiency(const std::string &trackingEfficiencyTable)
 {
-
-    // std::cout << "Dijet Analysis::SetUpTrackingEfficiency Setting up Tracking EfficiencyT Tables" << std::endl;
+    // std::cout << "Dijet Analysis::SetUpTrackingEfficiency Setting up Tracking EfficiencyT Tables"
+    // << std::endl;
     if (fIsPbPb)
     {
-        std::cout << "Dijet Analysis::SetUpTrackingEfficiency Setting up Tracking Efficiency Tables for PbPb" << std::endl;
+        std::cout << "Dijet Analysis::SetUpTrackingEfficiency Setting up Tracking Efficiency "
+                     "Tables for PbPb"
+                  << std::endl;
         fTrkEffPbPb = new TrkEff2018PbPb("general", "", false, trackingEfficiencyTable);
         std::cout << "Tracking Efficiency Table Loaded Successfully" << std::endl;
         std::cout << "\t[Done]" << std::endl;
     }
     else if (fIspPb)
     {
-        std::cout << "Dijet Analysis::SetUpTrackingEfficiency Setting up Tracking Efficiency Tables for pPb" << std::endl;
+        std::cout << "Dijet Analysis::SetUpTrackingEfficiency Setting up Tracking Efficiency "
+                     "Tables for pPb"
+                  << std::endl;
         fTrkEffpPb = new TrkEfficiency2016pPb(trackingEfficiencyTable, fUEType);
         std::cout << "Tracking Efficiency Table Loaded Successfully" << std::endl;
         std::cout << "\t[Done]" << std::endl;
@@ -251,7 +256,9 @@ void DiJetAnalysis::SetUpTrackingEfficiency(const std::string &trackingEfficienc
     }
     else
     {
-        std::cerr << "Tracking efficiency table not found for the given system. Please Selected from pp, pPb or PbPb collision systems" << std::endl;
+        std::cerr << "Tracking efficiency table not found for the given system. Please Selected "
+                     "from pp, pPb or PbPb collision systems"
+                  << std::endl;
     }
 }
 
@@ -273,7 +280,8 @@ std::pair<Int_t, Float_t> DiJetAnalysis::RecoCorrectedMultiplicity(const Event *
         Bool_t isGoodTrack = (trackPt > fMinTrkPt && trackEta >= fTrkEtaRange[0] && trackEta <= fTrkEtaRange[1]);
         if (fDebug)
         {
-            Form("%5.2f < Track Pt: %5.2f , %5.2f < Track Eta: %5.2f < %5,2f \t %s \n", fMinTrkPt, trackPt, fTrkEtaRange[0], trackEta, fTrkEtaRange[1], (isGoodTrack) ? "True" : "False");
+            Form("%5.2f < Track Pt: %5.2f , %5.2f < Track Eta: %5.2f < %5,2f \t %s \n", fMinTrkPt, trackPt, fTrkEtaRange[0], trackEta, fTrkEtaRange[1],
+                 (isGoodTrack) ? "True" : "False");
         }
 
         if (isGoodTrack)
@@ -356,11 +364,16 @@ std::pair<Int_t, Int_t> DiJetAnalysis::GenSubeMultiplicity(const Event *event, c
         std::cout << "DiJetAnalysis::GenSubeMultiplicity Calculating Gen and Subevent Multiplicity" << std::endl;
         if (fIspp)
         {
-            std::cout << "DiJetAnalysis::GenSubeMultiplicity Calculating Only Gen Multiplicity for PYTHIA. Subevent multiplicity can not be calculated for PYTHIA" << std::endl;
+            std::cout << "DiJetAnalysis::GenSubeMultiplicity Calculating Only Gen Multiplicity for "
+                         "PYTHIA. Subevent multiplicity can not be calculated for PYTHIA"
+                      << std::endl;
         }
         if (fIspPb)
         {
-            std::cout << "DiJetAnalysis::GenSubeMultiplicity Calculating Only Gen Multiplicity for PYTHIA+EPOS. \n Subevent multiplicity can not be calculated for PYTHIA + EPOS as information is MISSING in the forest" << std::endl;
+            std::cout << "DiJetAnalysis::GenSubeMultiplicity Calculating Only Gen Multiplicity for "
+                         "PYTHIA+EPOS. \n Subevent multiplicity can not be calculated for PYTHIA + "
+                         "EPOS as information is MISSING in the forest"
+                      << std::endl;
         }
     }
     Int_t iGenMult = 0;
@@ -376,7 +389,10 @@ std::pair<Int_t, Int_t> DiJetAnalysis::GenSubeMultiplicity(const Event *event, c
         Bool_t isGoodTrack = (trackPt > fMinTrkPt && trackEta >= fTrkEtaRange[0] && trackEta <= fTrkEtaRange[1] && trackCharge != 0);
         if (fDebug)
         {
-            Form("%5.2f < Track Pt: %5.2f , %5.2f <= Track Eta: %5.2f <= %5.2f, Track Charge = %i /= 0 \t %s \n", fMinTrkPt, trackPt, fTrkEtaRange[0], trackEta, fTrkEtaRange[1], trackCharge, (isGoodTrack) ? "True" : "False");
+            Form(
+                "%5.2f < Track Pt: %5.2f , %5.2f <= Track Eta: %5.2f <= %5.2f, Track Charge = %i "
+                "/= 0 \t %s \n",
+                fMinTrkPt, trackPt, fTrkEtaRange[0], trackEta, fTrkEtaRange[1], trackCharge, (isGoodTrack) ? "True" : "False");
         }
 
         if (isGoodTrack)
@@ -448,7 +464,6 @@ Float_t DiJetAnalysis::DijetWeight(const Bool_t &ispPb, const Double_t &leadPt, 
     }
     if (fIsMC)
     {
-
         int xBin = BinBinarySearch(fXBinEdges, subLeadPt);
         int yBin = BinBinarySearch(fYBinEdges, leadPt);
         if (xBin < 0 || yBin < 0)
@@ -509,7 +524,7 @@ Double_t DiJetAnalysis::EventWeight(const Event *event)
         if (fDoVzWeight)
         {
             vzWeight = fVertexZWeight->Eval(vertexZ);
-            vzWeight = 1. / vzWeight; // Inverse of the vertex Z weight
+            vzWeight = 1. / vzWeight;  // Inverse of the vertex Z weight
         }
     }
     else if (fIspp || fIsPbPb)
@@ -533,18 +548,17 @@ Double_t DiJetAnalysis::pPbptHatWeight(const Double_t &pthat)
     // Each tuple is {ptHatMin, ptHatMax, factor, eventCount}
     // Magic numbers are (cross section x Nevents generated). These are derived manually and fixed
 
-    const std::vector<std::tuple<double, double, double, double>> ptHatBins = {
-        {15.0, 30.0, 1.0404701e-06, 961104},
-        {30.0, 50.0, 7.7966624e-08, 952110},
-        {50.0, 80.0, 1.0016052e-08, 952554},
-        {80.0, 120.0, 1.3018269e-09, 996844},
-        {120.0, 170.0, 2.2648493e-10, 964681},
-        {170.0, 220.0, 4.0879112e-11, 999260},
-        {220.0, 280.0, 1.1898939e-11, 964336},
-        {280.0, 370.0, 3.3364433e-12, 995036},
-        {370.0, 460.0, 7.6612402e-13, 958160},
-        {460.0, 540.0, 2.1341026e-13, 981427},
-        {540.0, std::numeric_limits<double>::infinity(), 7.9191586e-14, 1000000}};
+    const std::vector<std::tuple<double, double, double, double>> ptHatBins = {{15.0, 30.0, 1.0404701e-06, 961104},
+                                                                               {30.0, 50.0, 7.7966624e-08, 952110},
+                                                                               {50.0, 80.0, 1.0016052e-08, 952554},
+                                                                               {80.0, 120.0, 1.3018269e-09, 996844},
+                                                                               {120.0, 170.0, 2.2648493e-10, 964681},
+                                                                               {170.0, 220.0, 4.0879112e-11, 999260},
+                                                                               {220.0, 280.0, 1.1898939e-11, 964336},
+                                                                               {280.0, 370.0, 3.3364433e-12, 995036},
+                                                                               {370.0, 460.0, 7.6612402e-13, 958160},
+                                                                               {460.0, 540.0, 2.1341026e-13, 981427},
+                                                                               {540.0, std::numeric_limits<double>::infinity(), 7.9191586e-14, 1000000}};
 
     for (const auto &[min, max, factor, events] : ptHatBins)
     {
@@ -555,7 +569,7 @@ Double_t DiJetAnalysis::pPbptHatWeight(const Double_t &pthat)
     }
 
     std::cerr << "PtHat value " << pthat << " is out of range. Returning 1.0" << std::endl;
-    return 1.0; // fallback if ptHat is not in any range
+    return 1.0;  // fallback if ptHat is not in any range
 }
 
 Float_t DiJetAnalysis::DijetWeight(const Event *event)
@@ -618,19 +632,20 @@ Float_t DiJetAnalysis::DijetWeight(const Event *event)
             if (deltaPhi > fDeltaPhi)
             {
                 recoDijetPass = kTRUE;
-                // std::cout << "Reco Lead Jet Pt: " << leadJetPt << " Reco Sub Lead Jet Pt: " << subLeadJetPt << std::endl;
+                // std::cout << "Reco Lead Jet Pt: " << leadJetPt << " Reco Sub Lead Jet Pt: " <<
+                // subLeadJetPt << std::endl;
             }
         }
         if (recoDijetPass)
         {
             if (fRecoType)
             {
-
                 dijetWeight = DijetWeight(fIspPb, leadJetPt, subLeadJetPt);
             }
             else if (fRefType)
             {
-                // std::cout << "Ref Lead Jet Pt: " << leadJetPt << " Ref Sub Lead Jet Pt: " << subLeadJetPt << std::endl;
+                // std::cout << "Ref Lead Jet Pt: " << leadJetPt << " Ref Sub Lead Jet Pt: " <<
+                // subLeadJetPt << std::endl;
                 if (matchedLeadRefPt < matchedSubLeadRefPt)
                 {
                     std::swap(matchedLeadRefPt, matchedSubLeadRefPt);
@@ -676,7 +691,9 @@ Float_t DiJetAnalysis::DijetWeight(const Event *event)
             }
             else
             {
-                std::cerr << "Dijet Weight Type is not selected or wrong selection. Please select Dijet Weight type from Reco, Ref or Gen" << std::endl;
+                std::cerr << "Dijet Weight Type is not selected or wrong selection. Please select "
+                             "Dijet Weight type from Reco, Ref or Gen"
+                          << std::endl;
                 std::cerr << "Returning Dijet Weight = 0" << std::endl;
                 dijetWeight = 1.0;
             }
@@ -823,8 +840,7 @@ Double_t DiJetAnalysis::FindBin(const Int_t &multiplicity)
         throw std::runtime_error("Error: Bin configuration is empty!");
     }
 
-    if (multiplicity <= fBins.begin()->first)
-        return fBins.begin()->second;
+    if (multiplicity <= fBins.begin()->first) return fBins.begin()->second;
 
     auto it = fBins.lower_bound(multiplicity);
 
@@ -836,14 +852,19 @@ Double_t DiJetAnalysis::FindBin(const Int_t &multiplicity)
     return it->second;
 }
 
-Bool_t DiJetAnalysis::CheckDijet(const Float_t &leadpt, const Float_t &leadeta, const Float_t &subleadpt, const Float_t &subleadeta, const Bool_t &leadID, const Bool_t &subleadID)
+Bool_t DiJetAnalysis::CheckDijet(const Float_t &leadpt, const Float_t &leadeta, const Float_t &subleadpt, const Float_t &subleadeta, const Bool_t &leadID,
+                                 const Bool_t &subleadID)
 {
     Bool_t isDijetPt = kFALSE;
     if (leadpt > fLeadJetPtLow && subleadpt > fSubLeadJetPtLow)
     {
         if (fDebug)
         {
-            std::cout << Form("DiJet Pt Requirement Satisfied. Leading Jet pt = %f > %f and Sub Leading Jet Pt =  %f > %f", leadpt, fLeadJetPtLow, subleadpt, fSubLeadJetPtLow) << std::endl;
+            std::cout << Form(
+                             "DiJet Pt Requirement Satisfied. Leading Jet pt = %f > %f and Sub "
+                             "Leading Jet Pt =  %f > %f",
+                             leadpt, fLeadJetPtLow, subleadpt, fSubLeadJetPtLow)
+                      << std::endl;
         }
         isDijetPt = kTRUE;
     }
@@ -852,7 +873,11 @@ Bool_t DiJetAnalysis::CheckDijet(const Float_t &leadpt, const Float_t &leadeta, 
     {
         if (fDebug)
         {
-            std::cout << Form("DiJet Leading Jet Eta Requirement Satisfied. %f < Leading Jet Eta = %f < %f", fLeadJetEtaRange[0], leadeta, fLeadJetEtaRange[1]) << std::endl;
+            std::cout << Form(
+                             "DiJet Leading Jet Eta Requirement Satisfied. %f < Leading Jet Eta = "
+                             "%f < %f",
+                             fLeadJetEtaRange[0], leadeta, fLeadJetEtaRange[1])
+                      << std::endl;
         }
         isDijetLeadEta = kTRUE;
     }
@@ -861,7 +886,11 @@ Bool_t DiJetAnalysis::CheckDijet(const Float_t &leadpt, const Float_t &leadeta, 
     {
         if (fDebug)
         {
-            std::cout << Form("DiJet Subleading Jet Eta Requirement Satisfied. %f < Sub Leading Jet Eta = %f < %f", fSubLeadJetEtaRange[0], subleadeta, fSubLeadJetEtaRange[1]) << std::endl;
+            std::cout << Form(
+                             "DiJet Subleading Jet Eta Requirement Satisfied. %f < Sub Leading Jet "
+                             "Eta = %f < %f",
+                             fSubLeadJetEtaRange[0], subleadeta, fSubLeadJetEtaRange[1])
+                      << std::endl;
         }
         isDijetSubLeadEta = kTRUE;
     }
@@ -925,15 +954,15 @@ Double_t DiJetAnalysis::GetJetFlavor(const Int_t &partonFlavor)
 {
     if (partonFlavor == 21)
     {
-        return -1.; // Gluon
+        return -1.;  // Gluon
     }
     else if (partonFlavor == 0)
     {
-        return 0.; // Quark
+        return 0.;  // Quark
     }
     else
     {
-        return 1.; // Undefined
+        return 1.;  // Undefined
     }
 }
 
@@ -952,8 +981,10 @@ void DiJetAnalysis::processEvent(const Event *event)
     if (fEventCounter >= 50000)
     {
         fCycleCounter++;
-        std::cout << Form("DiJetAnalysis::processEvent [INFO] Events processed: %d out of %i. Processed Sample fraction: %3.2f%%",
-                          fCycleCounter * 50000, fNEventsInSample, static_cast<Double_t>(fCycleCounter * 50000) * 100. / fNEventsInSample)
+        std::cout << Form(
+                         "DiJetAnalysis::processEvent [INFO] Events processed: %d out of %i. "
+                         "Processed Sample fraction: %3.2f%%",
+                         fCycleCounter * 50000, fNEventsInSample, static_cast<Double_t>(fCycleCounter * 50000) * 100. / fNEventsInSample)
                   << std::endl;
         fEventCounter = {0};
     }
@@ -969,7 +1000,8 @@ void DiJetAnalysis::processEvent(const Event *event)
     if (fUseDijetWeight)
     {
         fDijetWeight = DijetWeight(event);
-        fDijetWeight = pow(fDijetWeight, 1.45); // std::cout << "Dijet Weight : " << fDijetWeight << std::endl;
+        fDijetWeight = pow(fDijetWeight,
+                           1.45);  // std::cout << "Dijet Weight : " << fDijetWeight << std::endl;
     }
     else
     {
@@ -1009,11 +1041,12 @@ void DiJetAnalysis::processEvent(const Event *event)
     }
 
     Double_t iMultiplicity;
-    iMultiplicity = (fMultiplicityType == 0) ? static_cast<Double_t>(iRecoMult) : (fMultiplicityType == 1)          ? static_cast<Double_t>(iGenSubeMult.first)
-                                                                              : (fMultiplicityType == 2)            ? static_cast<Double_t>(iRecoCorrectedMult.second)
-                                                                              : (fMultiplicityType == 3)            ? static_cast<Double_t>(fIspPb || fIspp ? iGenSubeMult.first : (fIsPbPb ? iGenSubeMult.second : 0))
-                                                                              : (fMultiplicityType == 4 && fIsPbPb) ? static_cast<Double_t>(event->hiBinWithShift())
-                                                                                                                    : 0;
+    iMultiplicity = (fMultiplicityType == 0)              ? static_cast<Double_t>(iRecoMult)
+                    : (fMultiplicityType == 1)            ? static_cast<Double_t>(iGenSubeMult.first)
+                    : (fMultiplicityType == 2)            ? static_cast<Double_t>(iRecoCorrectedMult.second)
+                    : (fMultiplicityType == 3)            ? static_cast<Double_t>(fIspPb || fIspp ? iGenSubeMult.first : (fIsPbPb ? iGenSubeMult.second : 0))
+                    : (fMultiplicityType == 4 && fIsPbPb) ? static_cast<Double_t>(event->hiBinWithShift())
+                                                          : 0;
 
     if (fIsMC)
     {
@@ -1051,7 +1084,13 @@ void DiJetAnalysis::processEvent(const Event *event)
     fHM->hVz->Fill(iVertexZ);
     fHM->hVz_W->Fill(iVertexZ, Event_Weight * fDijetWeight);
 
-    Double_t Multiplicities[7] = {static_cast<Double_t>(iRecoMult), static_cast<Double_t>(iGenSubeMult.first), static_cast<Double_t>(iRecoCorrectedMult.first), static_cast<Double_t>(iRecoCorrectedMult.second), static_cast<Double_t>(iGenSubeMult.second), static_cast<Double_t>(event->hiBinWithShift()), iMultiplicityBin};
+    Double_t Multiplicities[7] = {static_cast<Double_t>(iRecoMult),
+                                  static_cast<Double_t>(iGenSubeMult.first),
+                                  static_cast<Double_t>(iRecoCorrectedMult.first),
+                                  static_cast<Double_t>(iRecoCorrectedMult.second),
+                                  static_cast<Double_t>(iGenSubeMult.second),
+                                  static_cast<Double_t>(event->hiBinWithShift()),
+                                  iMultiplicityBin};
     fHM->hMultiplicities_W->Fill(Multiplicities, Event_Weight);
     if (fIsDiJetFound)
     {
@@ -1121,11 +1160,13 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
             refEta = (*recoJetIterator)->RefJetEta();
             refPhi = (*recoJetIterator)->RefJetPhi();
         }
-        // std::cout << Form("Raw Pt: %f, Jet Pt: %f, Jet Eta: %f, Jet Phi: %f", rawPt, jetPt, jetEta, jetPhi) << std::endl;
+        // std::cout << Form("Raw Pt: %f, Jet Pt: %f, Jet Eta: %f, Jet Phi: %f", rawPt, jetPt,
+        // jetEta, jetPhi) << std::endl;
 
         if (fIsMC && TMath::Abs(refEta) < 3.0)
         {
-            // std::cout << Form("Ref Pt: %f, Ref Eta: %f, Ref Phi: %f", refPt, refEta, refPhi) << std::endl;
+            // std::cout << Form("Ref Pt: %f, Ref Eta: %f, Ref Phi: %f", refPt, refEta, refPhi) <<
+            // std::endl;
 
             fHM->hRecoJES_W->Fill(jetPt / refPt, jetPt, multiplicityBin, event_Weight);
             fHM->hRefJES_W->Fill(jetPt / refPt, refPt, multiplicityBin, event_Weight);
@@ -1199,7 +1240,6 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
 
         if (fIsMC)
         {
-
             if (refPt > leadRefPt)
             {
                 subLeadRefPt = leadRefPt;
@@ -1212,7 +1252,6 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
             }
             else if (refPt > subLeadRefPt)
             {
-
                 subLeadRefPt = refPt;
                 subLeadRefEta = refEta;
                 subLeadRefPhi = refPhi;
@@ -1269,7 +1308,6 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
     Bool_t isDiJet = CheckDijet(leadJetPt, leadJetEtaCM, subLeadJetPt, subLeadJetEtaCM, leadJetID, subLeadJetID);
     if (leadJetPt > fLeadJetPtLow && subLeadJetPt > fSubLeadJetPtLow)
     {
-
         Double_t LeadSLeadJets[7] = {leadJetPt, leadJetEtaCM, leadJetPhi, subLeadJetPt, subLeadJetEtaCM, subLeadJetPhi, multiplicityBin};
         fHM->hLeadSubLeadJets->Fill(LeadSLeadJets);
         fHM->hLeadSubLeadJets_W->Fill(LeadSLeadJets, event_Weight);
@@ -1277,13 +1315,15 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
         {
             if (subLeadRefPt < leadRefPt)
             {
-                Double_t LeadSLeadRefJets[7] = {leadRefPt, MoveToCMFrame(leadRefEta), leadRefPhi, subLeadRefPt, MoveToCMFrame(subLeadRefEta), subLeadRefPhi, multiplicityBin};
+                Double_t LeadSLeadRefJets[7] = {leadRefPt,      MoveToCMFrame(leadRefEta), leadRefPhi, subLeadRefPt, MoveToCMFrame(subLeadRefEta), subLeadRefPhi,
+                                                multiplicityBin};
                 fHM->hRefLeadRefSubLeadJets->Fill(LeadSLeadRefJets);
                 fHM->hRefLeadRefSubLeadJets_W->Fill(LeadSLeadRefJets, event_Weight);
             }
             else if (subLeadRefPt > leadRefPt)
             {
-                Double_t LeadSLeadRefJets[7] = {subLeadRefPt, MoveToCMFrame(subLeadRefEta), subLeadRefPhi, leadRefPt, MoveToCMFrame(leadRefEta), leadRefPhi, multiplicityBin};
+                Double_t LeadSLeadRefJets[7] = {subLeadRefPt,   MoveToCMFrame(subLeadRefEta), subLeadRefPhi, leadRefPt, MoveToCMFrame(leadRefEta), leadRefPhi,
+                                                multiplicityBin};
                 fHM->hRefLeadRefSubLeadJets->Fill(LeadSLeadRefJets);
                 fHM->hRefLeadRefSubLeadJets_W->Fill(LeadSLeadRefJets, event_Weight);
             }
@@ -1292,7 +1332,6 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
 
     if (isDiJet)
     {
-
         Double_t LeadSLeadJetsMidRapidity[7] = {leadJetPt, leadJetEtaCM, leadJetPhi, subLeadJetPt, subLeadJetEtaCM, subLeadJetPhi, multiplicityBin};
         fHM->hLeadSubLeadJets_MidRapidity_W->Fill(LeadSLeadJetsMidRapidity, event_Weight);
 
@@ -1300,12 +1339,14 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
         {
             if (subLeadRefPt < leadRefPt)
             {
-                Double_t LeadSLeadRefJetsMidRapidity[7] = {leadRefPt, MoveToCMFrame(leadRefEta), leadRefPhi, subLeadRefPt, MoveToCMFrame(subLeadRefEta), subLeadRefPhi, multiplicityBin};
+                Double_t LeadSLeadRefJetsMidRapidity[7] = {
+                    leadRefPt, MoveToCMFrame(leadRefEta), leadRefPhi, subLeadRefPt, MoveToCMFrame(subLeadRefEta), subLeadRefPhi, multiplicityBin};
                 fHM->hRefLeadRefSubLeadJets_MidRapidity_W->Fill(LeadSLeadRefJetsMidRapidity, event_Weight);
             }
             else if (subLeadRefPt > leadRefPt)
             {
-                Double_t LeadSLeadRefJetsMidRapidity[7] = {subLeadRefPt, MoveToCMFrame(subLeadRefEta), subLeadRefPhi, leadRefPt, MoveToCMFrame(leadRefEta), leadRefPhi, multiplicityBin};
+                Double_t LeadSLeadRefJetsMidRapidity[7] = {subLeadRefPt,   MoveToCMFrame(subLeadRefEta), subLeadRefPhi, leadRefPt, MoveToCMFrame(leadRefEta), leadRefPhi,
+                                                           multiplicityBin};
                 fHM->hRefLeadRefSubLeadJets_MidRapidity_W->Fill(LeadSLeadRefJetsMidRapidity, event_Weight);
             }
         }
@@ -1330,18 +1371,19 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
 
         if (deltaPhi > fDeltaPhi)
         {
-            // std::cout << "Ref Lead : " << leadRefPt << " Ref SLead : " << subLeadRefPt << std::endl;
-            // std::cout << "Ref Matched Lead : " << leadMatchedJetPt << " Ref Matched SLead :  " << subLeadMatchedJetPt << std::endl;
-            // std::cout << "Lead Jet Pt: " << leadJetPt << " SubLead Jet Pt: " << subLeadJetPt << std::endl;
-            // std::cout << "Lead Jet Eta: " << leadJetEtaCM << " SubLead Jet Eta: " << subLeadJetEtaCM << std::endl;
+            // std::cout << "Ref Lead : " << leadRefPt << " Ref SLead : " << subLeadRefPt <<
+            // std::endl; std::cout << "Ref Matched Lead : " << leadMatchedJetPt << " Ref Matched
+            // SLead :  " << subLeadMatchedJetPt << std::endl; std::cout << "Lead Jet Pt: " <<
+            // leadJetPt << " SubLead Jet Pt: " << subLeadJetPt << std::endl; std::cout << "Lead Jet
+            // Eta: " << leadJetEtaCM << " SubLead Jet Eta: " << subLeadJetEtaCM << std::endl;
             // std::cout << "Xj : " << Xj << " Delta Phi : " << deltaPhi << std::endl;
             // std::cout << "Event Number : " << event->eventNumber() << std::endl;
             // std::cout << "Event Number : " << event->eventNumber() << std::endl;
             // std::cout << "Xj : " << Xj << " Delta Phi : " << deltaPhi << std::endl;
-            // std::cout << "Lead Jet Pt: " << leadJetPt << " SubLead Jet Pt: " << subLeadJetPt << std::endl;
-            // std::cout << "Lead Jet Eta: " << leadJetEtaCM << " SubLead Jet Eta: " << subLeadJetEtaCM << std::endl;
-            // std::cout << "Lead Jet Phi: " << leadJetPhi << " SubLead Jet Phi: " << subLeadJetPhi << std::endl;
-            // std::cout << std::endl;
+            // std::cout << "Lead Jet Pt: " << leadJetPt << " SubLead Jet Pt: " << subLeadJetPt <<
+            // std::endl; std::cout << "Lead Jet Eta: " << leadJetEtaCM << " SubLead Jet Eta: " <<
+            // subLeadJetEtaCM << std::endl; std::cout << "Lead Jet Phi: " << leadJetPhi << "
+            // SubLead Jet Phi: " << subLeadJetPhi << std::endl; std::cout << std::endl;
             fIsDiJetFound = kTRUE;
 
             fHM->hDeltaPhi_WithDiJet_W->Fill(deltaPhi, event_Weight);
@@ -1350,7 +1392,6 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
 
             if (fIsMC)
             {
-
                 if (refXj > 1.0)
                 {
                     refXj = 1. / refXj;
@@ -1371,7 +1412,6 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
 
     if (fIsDiJetFound)
     {
-
         Double_t LeadSLeadJetsWithDijet[7] = {leadJetPt, leadJetEtaCM, leadJetPhi, subLeadJetPt, subLeadJetEtaCM, subLeadJetPhi, multiplicityBin};
         fHM->hLeadSubLeadJets_WithDijet_W->Fill(LeadSLeadJetsWithDijet, event_Weight);
         fHM->hLeadSubLeadJets_WithDijet_DiJetW->Fill(LeadSLeadJetsWithDijet, event_Weight * fDijetWeight);
@@ -1379,14 +1419,15 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
         {
             if (subLeadRefPt < leadRefPt)
             {
-                Double_t LeadSLeadRefJetsWithDijet[7] = {leadRefPt, MoveToCMFrame(leadRefEta), leadRefPhi, subLeadRefPt, MoveToCMFrame(subLeadRefEta), subLeadRefPhi, multiplicityBin};
+                Double_t LeadSLeadRefJetsWithDijet[7] = {leadRefPt,      MoveToCMFrame(leadRefEta), leadRefPhi, subLeadRefPt, MoveToCMFrame(subLeadRefEta), subLeadRefPhi,
+                                                         multiplicityBin};
                 fHM->hRefLeadRefSubLeadJets_WithDijet_W->Fill(LeadSLeadRefJetsWithDijet, event_Weight);
                 fHM->hRefLeadRefSubLeadJets_WithDijet_DiJetW->Fill(LeadSLeadRefJetsWithDijet, event_Weight * fDijetWeight);
             }
             else if (subLeadRefPt > leadRefPt)
             {
-
-                Double_t LeadSLeadRefJetsWithDijet[7] = {subLeadRefPt, MoveToCMFrame(subLeadRefEta), subLeadRefPhi, leadRefPt, MoveToCMFrame(leadRefEta), leadRefPhi, multiplicityBin};
+                Double_t LeadSLeadRefJetsWithDijet[7] = {subLeadRefPt,   MoveToCMFrame(subLeadRefEta), subLeadRefPhi, leadRefPt, MoveToCMFrame(leadRefEta), leadRefPhi,
+                                                         multiplicityBin};
                 fHM->hRefLeadRefSubLeadJets_WithDijet_W->Fill(LeadSLeadRefJetsWithDijet, event_Weight);
                 fHM->hRefLeadRefSubLeadJets_WithDijet_DiJetW->Fill(LeadSLeadRefJetsWithDijet, event_Weight * fDijetWeight);
             }
@@ -1486,7 +1527,7 @@ void DiJetAnalysis::processGenJets(const Event *event, const Double_t &event_Wei
         }
 
         Float_t genJetEtaCM = MoveToCMFrame(genJetEta);
-        double_t jetFlavor = 1.0; // Placeholder for jet flavor in gen jets
+        double_t jetFlavor = 1.0;  // Placeholder for jet flavor in gen jets
         Double_t JetQuantities[5] = {genJetPt, genJetEtaCM, genJetPhi, jetFlavor, multiplicityBin};
         Double_t JetQuantitiesLab[5] = {genJetPt, MoveToLabFrame(genJetEta), genJetPhi, jetFlavor, multiplicityBin};
         fHM->hInclusiveGenJetsCMFrame->Fill(JetQuantities);
@@ -1504,8 +1545,8 @@ void DiJetAnalysis::processGenJets(const Event *event, const Double_t &event_Wei
 
     if (fIsDiJetFound)
     {
-        // std::cout << "Gen Lead : " << genLeadJetPt << "Gen SLead : " << genSubLeadJetPt << std::endl;
-        // std::cout << std::endl;
+        // std::cout << "Gen Lead : " << genLeadJetPt << "Gen SLead : " << genSubLeadJetPt <<
+        // std::endl; std::cout << std::endl;
 
         fHM->hGenLeadPtvsGenSubLeadPt_PtHatW->Fill(genSubLeadJetPt, genLeadJetPt, event_Weight);
         fHM->hGenLeadPtvsGenSubLeadPt_DiJetW->Fill(genSubLeadJetPt, genLeadJetPt, event_Weight * fDijetWeight);
@@ -1586,7 +1627,8 @@ void DiJetAnalysis::processRecoTracks(const Event *event, const Double_t &event_
         Bool_t isGoodTrack = (trackPt > fMinTrkPt && trackEta >= fTrkEtaRange[0] && trackEta <= fTrkEtaRange[1]);
         if (fDebug)
         {
-            Form("%5.2f < Track Pt: %5.2f , %5.2f < Track Eta: %5.2f < %5,2f \t %s \n", fMinTrkPt, trackPt, fTrkEtaRange[0], trackEta, fTrkEtaRange[1], (isGoodTrack) ? "True" : "False");
+            Form("%5.2f < Track Pt: %5.2f , %5.2f < Track Eta: %5.2f < %5,2f \t %s \n", fMinTrkPt, trackPt, fTrkEtaRange[0], trackEta, fTrkEtaRange[1],
+                 (isGoodTrack) ? "True" : "False");
         }
 
         if (isGoodTrack)
@@ -1630,7 +1672,10 @@ void DiJetAnalysis::processGenTracks(const Event *event, const Double_t &event_W
         Bool_t isGoodTrack = (trackPt > fMinTrkPt && trackEta >= fTrkEtaRange[0] && trackEta <= fTrkEtaRange[1] && trackCharge != 0);
         if (fDebug)
         {
-            Form("%5.2f < Track Pt: %5.2f , %5.2f <= Track Eta: %5.2f <= %5.2f, Track Charge = %i /= 0 \t %s \n", fMinTrkPt, trackPt, fTrkEtaRange[0], trackEta, fTrkEtaRange[1], trackCharge, (isGoodTrack) ? "True" : "False");
+            Form(
+                "%5.2f < Track Pt: %5.2f , %5.2f <= Track Eta: %5.2f <= %5.2f, Track Charge = %i "
+                "/= 0 \t %s \n",
+                fMinTrkPt, trackPt, fTrkEtaRange[0], trackEta, fTrkEtaRange[1], trackCharge, (isGoodTrack) ? "True" : "False");
         }
 
         if (isGoodTrack)

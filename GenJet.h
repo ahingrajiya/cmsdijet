@@ -22,32 +22,30 @@
 //________________
 class GenJet : public BaseJet
 {
-public:
-  /// @brief Constructor
-  GenJet();
-  /// @brief Destructor
-  virtual ~GenJet()
-  { /* Empty*/
-  }
+   public:
+    /// @brief Constructor
+    GenJet();
+    /// @brief Destructor
+    virtual ~GenJet() { /* Empty*/ }
 
-  //
-  // Setters
-  //
+    //
+    // Setters
+    //
 
-  void setPtWeight(const Float_t &w) { fPtWeight = {w}; }
-  /// @brief Print parameters of the given jet
-  void print();
+    void setPtWeight(const Float_t &w) { fPtWeight = {w}; }
+    /// @brief Print parameters of the given jet
+    void print();
 
-  //
-  // Getters
-  //
-  Float_t ptWeight() const { return fPtWeight; }
+    //
+    // Getters
+    //
+    Float_t ptWeight() const { return fPtWeight; }
 
-private:
-  /// @brief Transverse momentum weight
-  Float_t fPtWeight;
+   private:
+    /// @brief Transverse momentum weight
+    Float_t fPtWeight;
 
-  ClassDef(GenJet, 1)
+    ClassDef(GenJet, 1)
 };
 
 #endif

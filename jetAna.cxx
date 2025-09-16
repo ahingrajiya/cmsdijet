@@ -2,12 +2,12 @@
 #include <iostream>
 
 // Jet analysis headers
-#include "Manager.h"
-#include "ForestminiAODReader.h"
-#include "JetESRAnalysis.h"
-#include "HistoManagerJetESR.h"
 #include "EventCut.h"
+#include "ForestminiAODReader.h"
+#include "HistoManagerJetESR.h"
 #include "JetCut.h"
+#include "JetESRAnalysis.h"
+#include "Manager.h"
 
 // ROOT headers
 #include "TFile.h"
@@ -43,7 +43,7 @@ int main(int argc, char const *argv[])
         oFileName = "oTestReadForest_PbPb.root";
     }
     else
-    { // pp
+    {  // pp
         // inFileName = "../../../data/pp/HiForestAOD_1113.root";
         inFileName = "../../../data/HiForestAOD_pp.list";
         collEnergyGeV = {5020};
@@ -57,10 +57,8 @@ int main(int argc, char const *argv[])
     Long64_t nEventsToRead = 500;
 
     // Read input argument list
-    if (argc > 1)
-        inFileName = argv[1];
-    if (argc > 2)
-        oFileName = argv[2];
+    if (argc > 1) inFileName = argv[1];
+    if (argc > 2) oFileName = argv[2];
 
     Manager *manager = new Manager{};
     EventCut *eventCut = new EventCut{};
@@ -74,7 +72,7 @@ int main(int argc, char const *argv[])
         eventCut->usePClusterCompatibilityFilter();
     }
     else
-    { // pp case
+    {  // pp case
         eventCut->useHBHENoiseFilterResultRun2Loose();
         eventCut->usePPAprimaryVertexFilter();
         eventCut->usePBeamScrapingFilter();
@@ -107,7 +105,7 @@ int main(int argc, char const *argv[])
     JetESRAnalysis *analysis = new JetESRAnalysis{};
     HistoManagerJetESR *hm = new HistoManagerJetESR{};
     hm->setIsMc(kTRUE);
-    hm->init(kTRUE); // kTRUE stands up for use MC; need to FIX
+    hm->init(kTRUE);  // kTRUE stands up for use MC; need to FIX
     analysis->addHistoManager(hm);
     manager->addAnalysis(analysis);
 

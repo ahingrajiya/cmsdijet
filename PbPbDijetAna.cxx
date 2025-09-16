@@ -9,16 +9,15 @@
  *
  */
 
+#include "BaseAnalysis.h"
+#include "DiJetAnalysis.h"
+#include "Event.h"
+#include "EventCut.h"
+#include "ForestReader.h"
 #include "HistoManagerDiJet.h"
 #include "JetCut.h"
-#include "EventCut.h"
-#include "BaseAnalysis.h"
-#include "JetCut.h"
-#include "Event.h"
-#include "ForestReader.h"
-#include "TrackCut.h"
 #include "Manager.h"
-#include "DiJetAnalysis.h"
+#include "TrackCut.h"
 int main(int argc, char *argv[])
 {
     Bool_t isMC{kTRUE};
@@ -39,7 +38,8 @@ int main(int argc, char *argv[])
     Double_t ptHatCut[2]{15., 30.};
     // std::vector<std::pair<Int_t, Double_t>> multiplicityBins = {{10, 0.0}, {60, 1.0}, {120, 2.0}, {185, 3.0}, {250, 4.0}, {400, 5.0}};
     std::vector<std::pair<Int_t, Double_t>> multiplicityBins = {{-10, 0.0}, {0, 1.}, {20, 2.0}, {60, 3.0}, {100, 4.0}, {160, 5.0}, {180, 6.0}, {200, 7.0}};
-    std::vector<std::string> filters{"collisionEventSelectionAOD", "phfCoincFilter2Th4", "pclusterCompatibilityFilter", "pprimaryVertexFilter", "HBHENoiseFilterResultRun2Loose"};
+    std::vector<std::string> filters{"collisionEventSelectionAOD", "phfCoincFilter2Th4", "pclusterCompatibilityFilter", "pprimaryVertexFilter",
+                                     "HBHENoiseFilterResultRun2Loose"};
     std::vector<std::string> triggers{"HLT_HIPuAK4CaloJet80Eta5p1_v1"};
     std::string path2MultWeight = "../aux_files/PbPb_5020/Multiplicity_Weight/mult_weight_1p0.root";
     std::string path2DijetWeight = "../aux_files/pp_5020/Dijet_Weight/PYTHIA_DiJetWeight_Table.root";

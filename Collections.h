@@ -14,10 +14,10 @@
 
 // Jeta analysis headers
 #include "BaseAnalysis.h"
-#include "RecoJet.h"
 #include "GenJet.h"
-#include "Track.h"
 #include "GenTrack.h"
+#include "RecoJet.h"
+#include "Track.h"
 
 // C++ headers
 #include <vector>
@@ -42,4 +42,4 @@ typedef std::vector<Track *>::iterator TrackIterator;
 typedef std::vector<GenTrack *> GenTrackCollection;
 typedef std::vector<GenTrack *>::iterator GenTrackIterator;
 
-#endif // #define Collections_h
+#endif  // #define Collections_h

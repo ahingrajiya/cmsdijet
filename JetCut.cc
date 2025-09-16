@@ -11,6 +11,7 @@
 
 // Jet analysis headers
 #include "JetCut.h"
+
 #include "GenJet.h"
 
 // ROOT headers
@@ -23,8 +24,7 @@
 ClassImp(JetCut)
 
     //________________
-    JetCut::JetCut() : fPt{0., 1e6}, fEta{-1e6, 1e6},
-                       fJetsPassed{0}, fJetsFailed{0}, fVerbose{kFALSE}
+    JetCut::JetCut() : fPt{0., 1e6}, fEta{-1e6, 1e6}, fJetsPassed{0}, fJetsFailed{0}, fVerbose{kFALSE}
 {
     /* Empty */
 }
@@ -52,20 +52,16 @@ Bool_t JetCut::pass(const RecoJet *jet)
         std::cout << "\n----- Reco jet cut -----\n";
     }
 
-    Bool_t goodPt = (fPt[0] <= jet->pt() &&
-                     jet->pt() <= fPt[1]);
+    Bool_t goodPt = (fPt[0] <= jet->pt() && jet->pt() <= fPt[1]);
     if (fVerbose)
     {
-        std::cout << Form("pT raw : %5.2f <= %5.2f <= %5.2f \t %s \n",
-                          fPt[0], jet->pt(), fPt[1], (goodPt) ? "true" : "false");
+        std::cout << Form("pT raw : %5.2f <= %5.2f <= %5.2f \t %s \n", fPt[0], jet->pt(), fPt[1], (goodPt) ? "true" : "false");
     }
 
-    Bool_t goodEta = (fEta[0] <= jet->eta() &&
-                      jet->eta() <= fEta[1]);
+    Bool_t goodEta = (fEta[0] <= jet->eta() && jet->eta() <= fEta[1]);
     if (fVerbose)
     {
-        std::cout << Form("eta : %5.2f <= %5.2f <= %5.2f \t %s \n",
-                          fEta[0], jet->eta(), fEta[1], (goodEta) ? "true" : "false");
+        std::cout << Form("eta : %5.2f <= %5.2f <= %5.2f \t %s \n", fEta[0], jet->eta(), fEta[1], (goodEta) ? "true" : "false");
     }
 
     Bool_t isGood = goodPt && goodEta;
@@ -86,20 +82,16 @@ Bool_t JetCut::pass(const GenJet *jet)
         std::cout << "\n----- Gen jet cut -----\n";
     }
 
-    Bool_t goodPt = (fPt[0] <= jet->pt() &&
-                     jet->pt() <= fPt[1]);
+    Bool_t goodPt = (fPt[0] <= jet->pt() && jet->pt() <= fPt[1]);
     if (fVerbose)
     {
-        std::cout << Form("pT raw : %5.2f <= %5.2f <= %5.2f \t %s \n",
-                          fPt[0], jet->pt(), fPt[1], (goodPt) ? "true" : "false");
+        std::cout << Form("pT raw : %5.2f <= %5.2f <= %5.2f \t %s \n", fPt[0], jet->pt(), fPt[1], (goodPt) ? "true" : "false");
     }
 
-    Bool_t goodEta = (fEta[0] <= jet->eta() &&
-                      jet->eta() <= fEta[1]);
+    Bool_t goodEta = (fEta[0] <= jet->eta() && jet->eta() <= fEta[1]);
     if (fVerbose)
     {
-        std::cout << Form("eta : %5.2f <= %5.2f <= %5.2f \t %s \n",
-                          fEta[0], jet->eta(), fEta[1], (goodEta) ? "true" : "false");
+        std::cout << Form("eta : %5.2f <= %5.2f <= %5.2f \t %s \n", fEta[0], jet->eta(), fEta[1], (goodEta) ? "true" : "false");
     }
 
     Bool_t isGood = goodPt && goodEta;

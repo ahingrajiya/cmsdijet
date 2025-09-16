@@ -11,13 +11,13 @@
 
 // Jet analysis headers
 #include "Manager.h"
+
 #include "Event.h"
 
 ClassImp(Manager)
 
     //________________
-    Manager::Manager() : fAnalysisCollection{nullptr}, fEventReader{nullptr},
-                         fEventsInChain{0}
+    Manager::Manager() : fAnalysisCollection{nullptr}, fEventReader{nullptr}, fEventsInChain{0}
 {
     fAnalysisCollection = new AnalysisCollection;
 }
@@ -26,21 +26,17 @@ ClassImp(Manager)
 Manager::~Manager()
 {
     AnalysisIterator iter;
-    for (iter = fAnalysisCollection->begin();
-         iter != fAnalysisCollection->end();
-         iter++)
+    for (iter = fAnalysisCollection->begin(); iter != fAnalysisCollection->end(); iter++)
     {
         delete *iter;
         *iter = nullptr;
     }
-    if (fEventReader)
-        delete fEventReader;
+    if (fEventReader) delete fEventReader;
 }
 
 //________________
 void Manager::init()
 {
-
     if (fEventReader)
     {
         fEventReader->report();
@@ -50,9 +46,7 @@ void Manager::init()
     fEventsInChain = fEventReader->nEventsTotal();
 
     AnalysisIterator anaIter;
-    for (anaIter = fAnalysisCollection->begin();
-         anaIter != fAnalysisCollection->end();
-         anaIter++)
+    for (anaIter = fAnalysisCollection->begin(); anaIter != fAnalysisCollection->end(); anaIter++)
     {
         (*anaIter)->init();
     }
@@ -67,9 +61,7 @@ void Manager::finish()
     }
 
     AnalysisIterator anaIter;
-    for (anaIter = fAnalysisCollection->begin();
-         anaIter != fAnalysisCollection->end();
-         anaIter++)
+    for (anaIter = fAnalysisCollection->begin(); anaIter != fAnalysisCollection->end(); anaIter++)
     {
         (*anaIter)->finish();
     }
@@ -78,11 +70,9 @@ void Manager::finish()
 //________________
 void Manager::performAnalysis()
 {
-
     // Loop over all events available
     for (Long64_t iEvent = 0; iEvent < fEventsInChain; iEvent++)
     {
-
         // std::cout << "=================================" << std::endl;
         Event *currentEvent = fEventReader->returnEvent();
 
@@ -90,20 +80,15 @@ void Manager::performAnalysis()
         {
             if (fEventReader->status() != 0)
             {
-                std::cout << "Reader returned status: "
-                          << fEventReader->status()
-                          << ". Terminating\n";
+                std::cout << "Reader returned status: " << fEventReader->status() << ". Terminating\n";
             }
-        } // if ( !currentEvent)
+        }  // if ( !currentEvent)
         else
         {
             // Perform data processing by all analyses
             AnalysisIterator anaIter;
-            for (anaIter = fAnalysisCollection->begin();
-                 anaIter != fAnalysisCollection->end();
-                 anaIter++)
+            for (anaIter = fAnalysisCollection->begin(); anaIter != fAnalysisCollection->end(); anaIter++)
             {
-
                 (*anaIter)->processEvent(currentEvent);
             }
         }
@@ -113,7 +98,7 @@ void Manager::performAnalysis()
             delete currentEvent;
             currentEvent = nullptr;
         }
-    } // for (Long64_t iEvent=0; iEvent<fEventsInChain; iEvent++)
+    }  // for (Long64_t iEvent=0; iEvent<fEventsInChain; iEvent++)
 }
 
 //________________

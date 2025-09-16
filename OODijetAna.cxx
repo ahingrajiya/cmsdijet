@@ -10,13 +10,13 @@
  */
 
 // Jet Analysis Headers
-#include "ForestReader.h"
 #include "DiJetAnalysis.h"
-#include "HistoManagerDiJet.h"
-#include "Manager.h"
 #include "EventCut.h"
-#include "TrackCut.h"
+#include "ForestReader.h"
+#include "HistoManagerDiJet.h"
 #include "JetCut.h"
+#include "Manager.h"
+#include "TrackCut.h"
 
 // ROOT headers
 #include "TFile.h"
@@ -50,10 +50,10 @@ int main(int argc, char *argv[])
     std::vector<std::pair<Int_t, Double_t>> multiplicityBins = {{0, 0.0}, {10, 1.0}, {60, 2.0}, {120, 3.0}, {185, 4.0}, {250, 5.0}, {400, 6.0}, {500, 7.0}};
     std::vector<std::string> filters{"pprimaryVertexFilter", "pphfCoincFilterPF2Th4"};
     std::string UEType{"HIJING"};
-    Int_t smearType{0};            // 0 - Nominal Smearing, 1 - JER Smearing, 2 - JEC Smearing
-    Bool_t useJERSmearing{kFALSE}; // Use JER Smearing for MC
-    Bool_t useJEU{kFALSE};         // 0 - No JEC Uncertainty, 1 - JEC Uncertainty Up, -1 - JEC Uncertainty Down
-    Int_t JEUType{-1};             // 0 - No JEU, 1 - JEU Up, -1 - JEU Down
+    Int_t smearType{0};             // 0 - Nominal Smearing, 1 - JER Smearing, 2 - JEC Smearing
+    Bool_t useJERSmearing{kFALSE};  // Use JER Smearing for MC
+    Bool_t useJEU{kFALSE};          // 0 - No JEC Uncertainty, 1 - JEC Uncertainty Up, -1 - JEC Uncertainty Down
+    Int_t JEUType{-1};              // 0 - No JEU, 1 - JEU Up, -1 - JEU Down
     // Command line arguments
     /*
     inputFileList               - input file list with forest file paths

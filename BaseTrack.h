@@ -19,7 +19,7 @@
 
 class BaseTrack : public TObject
 {
-public:
+   public:
     ///@brief Constructor
     BaseTrack();
     ///@brief Destructor
@@ -55,7 +55,7 @@ public:
         return v;
     }
 
-private:
+   private:
     ///@brief  Track  Transverse Momentum
     Float_t fTrkPt;
     ///@brief Track Pseudorapidity

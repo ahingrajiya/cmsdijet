@@ -4,28 +4,29 @@
  * @brief Jet energy scale and resolution analysis
  * @version 0.1
  * @date 2023-10-19
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 
 #ifndef JetESRAnalysis_h
 #define JetESRAnalysis_h
 
 // Load ROOT libraries
-#include "TObject.h"
-#include "TString.h"
 #include "Rtypes.h"
 #include "TChain.h"
+#include "TObject.h"
+#include "TString.h"
 
 // Jet analysis headers
 #include "BaseAnalysis.h"
-#include "HistoManagerJetESR.h"
 #include "Event.h"
+#include "HistoManagerJetESR.h"
 
 //________________
-class JetESRAnalysis : public BaseAnalysis {
-  public:
+class JetESRAnalysis : public BaseAnalysis
+{
+   public:
     /// @brief Default constructor
     JetESRAnalysis();
     /// @brief Destructor
@@ -46,16 +47,15 @@ class JetESRAnalysis : public BaseAnalysis {
     /// @brief Set debug information
     void setDebug(const Bool_t debug) { fDebug = debug; }
     /// @brief Add histogram manager to the analysis
-    void addHistoManager(HistoManagerJetESR *hm) { fHM = hm; }
+    void addHistoManager(HistoManagerJetESR* hm) { fHM = hm; }
 
-  private:
-
+   private:
     /// @brief Pring debug information
     Bool_t fDebug;
     /// @brief Histogram manager
-    HistoManagerJetESR *fHM;
+    HistoManagerJetESR* fHM;
 
-  ClassDef(JetESRAnalysis, 0)
+    ClassDef(JetESRAnalysis, 0)
 };
 
-#endif // #define JetESRAnalysis_h
+#endif  // #define JetESRAnalysis_h

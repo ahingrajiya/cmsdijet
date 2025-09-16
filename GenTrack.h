@@ -13,41 +13,41 @@
 #define GenTrack_h
 
 // ROOT headers
-#include "TObject.h"
 #include "BaseTrack.h"
+#include "TObject.h"
 
 //_________________
 class GenTrack : public BaseTrack
 {
-public:
-  /// @brief constructor
-  GenTrack();
-  /// @brief destructor
-  virtual ~GenTrack() {}
+   public:
+    /// @brief constructor
+    GenTrack();
+    /// @brief destructor
+    virtual ~GenTrack() {}
 
-  /// Setter
+    /// Setter
 
-  ///@brief Set Particle Identification
-  void setTrackPDGID(const Int_t &pdg) { fPDGID = {pdg}; }
-  ///@brief Set Subevent
-  void setTrackSube(const Char_t &sube) { fSube = {sube}; }
-  ///@brief Print parameters of tracks
-  void print();
+    ///@brief Set Particle Identification
+    void setTrackPDGID(const Int_t &pdg) { fPDGID = {pdg}; }
+    ///@brief Set Subevent
+    void setTrackSube(const Char_t &sube) { fSube = {sube}; }
+    ///@brief Print parameters of tracks
+    void print();
 
-  // Getter
+    // Getter
 
-  ///@brief Get PDGID
-  Int_t TrackPDGID() const { return fPDGID; }
-  ///@brief Get Sube
-  Char_t TrackSube() const { return fSube; }
+    ///@brief Get PDGID
+    Int_t TrackPDGID() const { return fPDGID; }
+    ///@brief Get Sube
+    Char_t TrackSube() const { return fSube; }
 
-private:
-  ///@brief Particle ID
-  Int_t fPDGID;
-  ///@brief Subevent Identification
-  Char_t fSube;
+   private:
+    ///@brief Particle ID
+    Int_t fPDGID;
+    ///@brief Subevent Identification
+    Char_t fSube;
 
-  ClassDef(GenTrack, 1)
+    ClassDef(GenTrack, 1)
 };
 
-#endif // #define GenTrack_h
+#endif  // #define GenTrack_h

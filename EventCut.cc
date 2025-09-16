@@ -22,12 +22,9 @@
 ClassImp(EventCut)
 
     //________________
-    EventCut::EventCut() : fVz{-1e9, 1e9},
-                           fShiftVx{0}, fShiftVy{0}, fVR{1e9},
-                           fHiBin{-1000, 1000},
-                           fPtHat{-1e9, 1e9}, fPtHatWeight{-1e9, 1e9}, fVerbose{kFALSE},
-                           fEventsPassed{0}, fEventsFailed{0},
-                           fMultiplicity{-5000, 5000}
+    EventCut::EventCut() :
+    fVz{-1e9, 1e9}, fShiftVx{0}, fShiftVy{0}, fVR{1e9}, fHiBin{-1000, 1000}, fPtHat{-1e9, 1e9}, fPtHatWeight{-1e9, 1e9}, fVerbose{kFALSE}, fEventsPassed{0},
+    fEventsFailed{0}, fMultiplicity{-5000, 5000}
 {
     fLumi[0] = 0;
     fLumi[1] = std::numeric_limits<unsigned int>::max();
@@ -54,53 +51,41 @@ void EventCut::report()
 //________________
 Bool_t EventCut::pass(const Event *ev)
 {
-
     if (fVerbose)
     {
         std::cout << "\n----- Event cut -----\n";
     }
 
-    const Bool_t goodVz = (fVz[0] <= ev->vz()) &&
-                          (ev->vz() <= fVz[1]);
+    const Bool_t goodVz = (fVz[0] <= ev->vz()) && (ev->vz() <= fVz[1]);
     if (fVerbose)
     {
-        std::cout << Form("vz        : %5.2f <= %5.2f < %5.2f \t %s \n",
-                          fVz[0], ev->vz(), fVz[1], (goodVz) ? "true" : "false");
+        std::cout << Form("vz        : %5.2f <= %5.2f < %5.2f \t %s \n", fVz[0], ev->vz(), fVz[1], (goodVz) ? "true" : "false");
     }
 
-    const Bool_t goodHiBin = (fHiBin[0] <= ev->hiBin()) &&
-                             (ev->hiBin() <= fHiBin[1]);
+    const Bool_t goodHiBin = (fHiBin[0] <= ev->hiBin()) && (ev->hiBin() <= fHiBin[1]);
     if (fVerbose)
     {
-        std::cout << Form("hiBin        : %d <= %d <= %d \t %s \n",
-                          fHiBin[0], ev->hiBin(), fHiBin[1], (goodHiBin) ? "true" : "false");
+        std::cout << Form("hiBin        : %d <= %d <= %d \t %s \n", fHiBin[0], ev->hiBin(), fHiBin[1], (goodHiBin) ? "true" : "false");
     }
 
-    const Bool_t goodHiBinShifted = (fHiBin[0] <= ev->hiBinWithShift()) &&
-                                    (ev->hiBinWithShift() <= fHiBin[1]);
+    const Bool_t goodHiBinShifted = (fHiBin[0] <= ev->hiBinWithShift()) && (ev->hiBinWithShift() <= fHiBin[1]);
     if (fVerbose)
     {
-        std::cout << Form("hiBin With Shift        : %d <= %d <= %d \t %s \n",
-                          fHiBin[0], ev->hiBinWithShift(), fHiBin[1], (goodHiBin) ? "true" : "false");
+        std::cout << Form("hiBin With Shift        : %d <= %d <= %d \t %s \n", fHiBin[0], ev->hiBinWithShift(), fHiBin[1], (goodHiBin) ? "true" : "false");
     }
 
-    const Bool_t goodPtHat = ((fPtHat[0] < ev->ptHat()) &&
-                              (ev->ptHat() <= fPtHat[1])) ||
-                             (ev->ptHat() < 0);
+    const Bool_t goodPtHat = ((fPtHat[0] < ev->ptHat()) && (ev->ptHat() <= fPtHat[1])) || (ev->ptHat() < 0);
 
     if (fVerbose)
     {
-        std::cout << Form("ptHat        : %9.2f <= %9.2f < %9.2f or ptHat < 0 \t %s \n",
-                          fPtHat[0], ev->ptHat(), fPtHat[1], (goodPtHat) ? "true" : "false");
+        std::cout << Form("ptHat        : %9.2f <= %9.2f < %9.2f or ptHat < 0 \t %s \n", fPtHat[0], ev->ptHat(), fPtHat[1], (goodPtHat) ? "true" : "false");
     }
 
-    const Bool_t goodMultiplicity = (fMultiplicity[0] <= ev->multiplicity()) &&
-                                    (ev->multiplicity() <= fMultiplicity[1]);
+    const Bool_t goodMultiplicity = (fMultiplicity[0] <= ev->multiplicity()) && (ev->multiplicity() <= fMultiplicity[1]);
 
     if (fVerbose)
     {
-        std::cout << Form("multiplicty   : %i <= %i <= %i  \t %s \n",
-                          fMultiplicity[0], ev->multiplicity(), fMultiplicity[1], (goodMultiplicity) ? "true" : "false");
+        std::cout << Form("multiplicty   : %i <= %i <= %i  \t %s \n", fMultiplicity[0], ev->multiplicity(), fMultiplicity[1], (goodMultiplicity) ? "true" : "false");
     }
 
     Bool_t goodFilter = kTRUE;

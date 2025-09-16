@@ -11,8 +11,10 @@
 
 // Jet analysis headers
 #include "GenTrack.h"
-#include "TString.h"
+
 #include <iostream>
+
+#include "TString.h"
 ClassImp(GenTrack)
 
     //___________________
@@ -23,5 +25,6 @@ ClassImp(GenTrack)
 void GenTrack::print()
 {
     std::cout << "-- Generated Tracks Info --\n"
-              << Form("TrkPt: %5.2f TrkEta: %3.2f TrkPhi: %3.2f PDGID: %i Sube: %c", this->TrkPt(), this->TrkEta(), this->TrkPhi(), this->TrackPDGID(), this->TrackSube());
+              << Form("TrkPt: %5.2f TrkEta: %3.2f TrkPhi: %3.2f PDGID: %i Sube: %c", this->TrkPt(), this->TrkEta(), this->TrkPhi(), this->TrackPDGID(),
+                      this->TrackSube());
 }

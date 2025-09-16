@@ -18,20 +18,20 @@
 
 // ROOT Headers
 
-#include "TObject.h"
-#include "TList.h"
+#include "TDirectory.h"
 #include "TH1.h"
 #include "TH2.h"
 #include "TH3.h"
 #include "THnSparse.h"
-#include "TProfile.h"
+#include "TList.h"
 #include "TMath.h"
+#include "TObject.h"
+#include "TProfile.h"
 #include "TString.h"
-#include "TDirectory.h"
 
 class HistoManagerDiJet : public BaseHistoManager
 {
-public:
+   public:
     ///@brief Constructor
     HistoManagerDiJet();
     ///@brief Destructor
@@ -239,7 +239,7 @@ public:
     TH2D *hRefLeadRefSubLead_W;
     TH2D *hGenLeadGenSubLead_W;
 
-private:
+   private:
     Bool_t fIsMC;
 
     std::vector<float> fMultiplicityBins;

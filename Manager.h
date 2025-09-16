@@ -4,9 +4,9 @@
  * @brief Program manager - main entry point to the framework
  * @version 0.1
  * @date 2023-10-19
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 
 #ifndef Manager_h
@@ -18,12 +18,13 @@
 #include "Collections.h"
 
 // ROOT headers
-#include "TObject.h"
 #include "Rtypes.h"
+#include "TObject.h"
 
 //________________
-class Manager {
-  public:
+class Manager
+{
+   public:
     /// @brief Constructor
     Manager();
     /// @brief Destructor
@@ -44,15 +45,15 @@ class Manager {
     /// @brief Set event reader
     void setEventReader(BaseReader* reader) { fEventReader = reader; }
 
-  private:
+   private:
     /// @brief Pointer to analysis collection
-    AnalysisCollection *fAnalysisCollection;
+    AnalysisCollection* fAnalysisCollection;
     /// @brief Poiter to event reader
-    BaseReader *fEventReader;
+    BaseReader* fEventReader;
     /// Number of events in input
     Long64_t fEventsInChain;
 
-  ClassDef(Manager, 0)
+    ClassDef(Manager, 0)
 };
 
-#endif // #define ANALYSISMANAGER_H
+#endif  // #define ANALYSISMANAGER_H
