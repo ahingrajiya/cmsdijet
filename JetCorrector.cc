@@ -19,10 +19,10 @@
 
 #include "JetCorrector.h"
 
-ClassImp(JetCorrector) ClassImp(SingleJetCorrector)
+// ClassImp(JetCorrector) ClassImp(SingleJetCorrector)
 
-    //_________________
-    JetCorrector::JetCorrector() : JEC{}, JetPT{-999.}, JetEta{-999.}, JetPhi{-999.}, JetArea{-999.}, Rho{-999.}
+//_________________
+JetCorrector::JetCorrector() : JEC{}, JetPT{-999.}, JetEta{-999.}, JetPhi{-999.}, JetArea{-999.}, Rho{-999.}
 {
     /* Empty */
 }

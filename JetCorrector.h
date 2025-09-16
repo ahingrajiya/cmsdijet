@@ -81,7 +81,7 @@ class SingleJetCorrector
     std::vector<TF1 *> Functions;
     std::string Hack4(std::string Formula, char V, int N);
 
-    ClassDef(SingleJetCorrector, 0)
+    // ClassDef(SingleJetCorrector, 0)
 };
 
 //_________________
@@ -110,7 +110,7 @@ class JetCorrector
     double JetArea;
     double Rho;
 
-    ClassDef(JetCorrector, 0)
+    // ClassDef(JetCorrector, 0)
 };
 
 #endif  // #define JetCorrector_h
