@@ -128,7 +128,7 @@ int main(int argc, char *argv[])
         reader->setIsMc(isMC);
         reader->useGenTrackBranch();
         reader->setStoreLocation(kTRUE);
-        reader->setJetCollectionBranchName(jetBranchNameEmbedded.Data());
+        reader->setJetCollectionBranchName(jetBranchNameUnembedded.Data());
     }
     reader->useSkimmingBranch();
     reader->useTrackBranch();
