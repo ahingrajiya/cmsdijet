@@ -19,9 +19,9 @@ ClassImp(DiJetAnalysis)
     fUseCMFrame{kFALSE}, fEtaBoost{0.0}, fUseMultiplicityWeight{kFALSE}, fLeadJetPtLow{100.}, fSubLeadJetPtLow{50.}, fNEventsInSample{100000000}, fIsDiJetFound{kFALSE},
     fIsGenDiJetFound{kFALSE}, fVerbose{kFALSE}, fMinTrkPt{0.5}, fTrkEffPbPb{nullptr}, fTrkEffpPb{nullptr}, fTrkEffTable{""}, fEventCounter{0}, fCycleCounter{0},
     fDoInJetMult{kFALSE}, fMultiplicityType{0}, fUseDijetWeight{kFALSE}, fDijetWeightTable{""}, hDijetWeight{nullptr}, fDijetWeightFile{nullptr}, fDijetWeight{1.0},
-    fDijetWeightType{"Reco"}, fIspp{kFALSE}, fIsPbPb{kFALSE}, fCollSystem{""}, fUEType{""}, fDoTrackingClosures{kFALSE}, fVertexZWeight{nullptr}, fDoVzWeight{kFALSE},
-    fRecoType{kFALSE}, fRefType{kFALSE}, fGenType{kFALSE}, fMultWeightFunctions{nullptr}, fXBinEdges{}, fYBinEdges{}, fBinContent{}, fXBinCount{0}, fYBinCount{0},
-    fInclusiveCorrectedJetPtMin{50.}
+    fDijetWeightType{"Reco"}, fIspp{kFALSE}, fIsPbPb{kFALSE}, fIsOO{kFALSE}, fCollSystem{""}, fUEType{""}, fDoTrackingClosures{kFALSE}, fVertexZWeight{nullptr},
+    fDoVzWeight{kFALSE}, fRecoType{kFALSE}, fRefType{kFALSE}, fGenType{kFALSE}, fMultWeightFunctions{nullptr}, fXBinEdges{}, fYBinEdges{}, fBinContent{}, fXBinCount{0},
+    fYBinCount{0}, fInclusiveCorrectedJetPtMin{50.}
 {
     fLeadJetEtaRange[0] = {-1.};
     fLeadJetEtaRange[1] = {1.};
@@ -516,7 +516,7 @@ Double_t DiJetAnalysis::EventWeight(const Event *event)
             vzWeight = 1. / vzWeight;  // Inverse of the vertex Z weight
         }
     }
-    else if (fIspp || fIsPbPb)
+    else
     {
         ptHatWeight = event->ptHatWeight();
     }
@@ -719,6 +719,14 @@ void DiJetAnalysis::CollSystem(const TString &collSystem)
         if (fVerbose)
         {
             std::cout << "Collision System set to : PbPb" << std::endl;
+        }
+    }
+    else if (collSystem == "OO")
+    {
+        fIsOO = kTRUE;
+        if (fVerbose)
+        {
+            std::cout << "Collision System set to : OO" << std::endl;
         }
     }
     else

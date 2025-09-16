@@ -306,6 +306,8 @@ class DiJetAnalysis : public BaseAnalysis
     Bool_t fIspp;
     ///@brief If it is PbPb dataset
     Bool_t fIsPbPb;
+    ///@brief If it is OO dataset
+    Bool_t fIsOO;
     ///@brief Colliding system
     TString fCollSystem;
     ///@brief If it it MC
