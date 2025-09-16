@@ -1,0 +1,9 @@
+# ROOT/analysis outputs
+*.root
+*.png
+*.pdf
+
+# Temporary data
+data/
+outputs/
+build/
