@@ -1,0 +1,15 @@
+BasedOnStyle: Google
+IndentWidth: 4
+ColumnLimit: 170
+
+# Initializer list formatting
+ConstructorInitializerIndentWidth: 4
+BreakConstructorInitializers: AfterColon
+ConstructorInitializerAllOnOneLineOrOnePerLine: false
+
+# General preferences
+IndentCaseLabels: true
+SpacesInParentheses: false
+AllowAllParametersOfDeclarationOnNextLine: true
+AllowShortFunctionsOnASingleLine: InlineOnly
+BreakBeforeBraces: Allman

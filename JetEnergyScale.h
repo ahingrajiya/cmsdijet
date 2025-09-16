@@ -16,13 +16,13 @@
 
 class JetEnergyScale
 {
-public:
+   public:
     JetEnergyScale();
     virtual ~JetEnergyScale();
 
-private:
+   private:
     TFile *file_input;
     TFile *file_output;
 };
 
-#endif // JETENERGYSCALE_H
+#endif  // JETENERGYSCALE_H
