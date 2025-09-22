@@ -83,6 +83,8 @@ class DiJetAnalysis : public BaseAnalysis
         fMultiplicityRange[0] = low;
         fMultiplicityRange[1] = hi;
     }
+    ///@brief Set Reader
+    void setReader(ForestReader *reader) { fReader = reader; }
     /// @brief Set Center of mass reference frame for pPb
     void setUseCMFrame() { fUseCMFrame = kTRUE; }
     ///@brief Set Eta Boost
@@ -156,8 +158,6 @@ class DiJetAnalysis : public BaseAnalysis
     void doInJetMultiplicity() { fDoInJetMult = kTRUE; }
     ///@brief Set Dijet Weight type
     void setDijetWeightType(const std::string &dijetWeightType) { fDijetWeightType = dijetWeightType; }
-    ///@brief Set colliding system
-    void setCollSystem(const TString &collSystem) { fCollSystem = collSystem; }
     ///@brief set underlying event type
     void setUEType(const std::string &UEType) { fUEType = UEType; }
     ///@brief Do tracking closure plots
@@ -271,7 +271,7 @@ class DiJetAnalysis : public BaseAnalysis
     /// @brief Set up Dijet weight table
     void SetUpDijetWeight(const std::string &dijetWeightTable);
     ///@brief Set up collision system booleans
-    void CollSystem(const TString &collSystem);
+    void CollSystem(ForestReader &reader);
     ///@brief Set up weight functions
     void SetUpWeightFunctions();
     ///@brief Dijet weight calculator
@@ -407,6 +407,8 @@ class DiJetAnalysis : public BaseAnalysis
     Double_t fInclusiveCorrectedJetPtMin;
     ///@brief Inclusive Jet Eta
     Double_t fInclusiveJetEtaRange[2];
+    ///@brief Forest Reader
+    ForestReader *fReader;
 
     ///@brief Holds dynamic multiplicity or centrality bins
     std::map<Int_t, Double_t> fBins;

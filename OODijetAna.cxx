@@ -155,8 +155,8 @@ int main(int argc, char *argv[])
     // Dijet Analysis
     DiJetAnalysis *analysis = new DiJetAnalysis{};
     analysis->setIsMC(isMC);
-    analysis->setCollSystem(collSystem);
 
+    analysis->setReader(reader);
     if (isMC)
     {
         if (!isEmbedded)
@@ -178,7 +178,7 @@ int main(int argc, char *argv[])
     analysis->setBins(multiplicityBins);
     analysis->setUEType(UEType);
     analysis->setInclusiveCorrectedJetPtMin(50.);
-    analysis->setInclusiveJetEtaRange(-2.4, 2.4);
+    analysis->setInclusiveJetEtaRange(-1.6, 1.6);
 
     // Initialize Histomanager
     HistoManagerDiJet *hm = new HistoManagerDiJet{};

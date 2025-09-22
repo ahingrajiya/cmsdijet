@@ -130,6 +130,7 @@ int main(int argc, char *argv[])
     // Initialize analysis
     DiJetAnalysis *analysis = new DiJetAnalysis{};
     analysis->addHistoManager(hm);
+    analysis->setReader(reader);
     analysis->setIsMC(isMC);
     analysis->setLeadJetEtaRange(-1., 1.);
     analysis->setSubLeadJetEtaRange(-1., 1.);
@@ -144,7 +145,6 @@ int main(int argc, char *argv[])
     analysis->setTrkEtaRange(-2.4, 2.4);
     analysis->doInJetMultiplicity();
     analysis->setBins(multiplicityBins);
-    analysis->setCollSystem(collSystem);
     // if (isMC)
     // {
     //     analysis->setUseDijetWeight();

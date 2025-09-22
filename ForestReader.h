@@ -65,7 +65,8 @@ class ForestReader : public BaseReader
         pp,
         pPb,
         PbPb,
-        OO
+        OO,
+        kUndefined
     };
 
     /// @brief Set colliding system
@@ -79,21 +80,32 @@ class ForestReader : public BaseReader
         {
             case CollidingSystemType::pp:
                 fCollidingSystem = "pp";
+                fCollSysType = CollidingSystemType::pp;
+                fIs_pp = kTRUE;
                 break;
             case CollidingSystemType::pPb:
                 fCollidingSystem = "pPb";
+                fCollSysType = CollidingSystemType::pPb;
+                fIs_pPb = kTRUE;
                 break;
             case CollidingSystemType::PbPb:
                 fCollidingSystem = "PbPb";
+                fCollSysType = CollidingSystemType::PbPb;
+                fIs_PbPb = kTRUE;
                 break;
             case CollidingSystemType::OO:
                 fCollidingSystem = "OO";
+                fCollSysType = CollidingSystemType::OO;
+                fIs_OO = kTRUE;
                 break;
             default:
                 fCollidingSystem = "Unknown";
+                fCollSysType = CollidingSystemType::kUndefined;
                 break;
         }
     }
+
+    CollidingSystemType getCollidingSystem() const { return fCollSysType; }
 
     /// @brief  Initialize input
     Int_t init();
@@ -551,6 +563,8 @@ class ForestReader : public BaseReader
 
     /// @brief Colliding system: pp, pPb or PbPb
     TString fCollidingSystem;
+    ///@brief Colliding systemm class
+    CollidingSystemType fCollSysType;
     /// @brief Colliding energy
     Int_t fCollidingEnergyGeV;
     /// @brief Year of data taking

@@ -137,6 +137,7 @@ int main(int argc, char *argv[])
     hm->init();
 
     DiJetAnalysis *analysis = new DiJetAnalysis{};
+    analysis->setReader(reader);
     analysis->addHistoManager(hm);
     analysis->setIsMC(isMC);
     analysis->setLeadJetEtaRange(-1.6, 1.6);
@@ -150,12 +151,11 @@ int main(int argc, char *argv[])
     analysis->setMinTrkPt(1.0);
     analysis->setTrkEtaRange(-2.4, 2.4);
     analysis->doInJetMultiplicity();
-    analysis->setCollSystem(collSystem);
     analysis->setBins(multiplicityBins);
 
     manager->addAnalysis(analysis);
     manager->init();
-    // analysis->setNEventsInSample(reader->nEventsTotal());
+    analysis->setNEventsInSample(reader->nEventsTotal());
     manager->performAnalysis();
     manager->finish();
 

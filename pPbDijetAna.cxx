@@ -209,7 +209,6 @@ int main(int argc, char *argv[])
     // Dijet Analysis
     DiJetAnalysis *analysis = new DiJetAnalysis{};
     analysis->setIsMC(isMC);
-    analysis->setCollSystem(collSystem);
     if (isPbGoing)
     {
         analysis->setIsPbGoing();
@@ -242,18 +241,19 @@ int main(int argc, char *argv[])
     analysis->setDeltaPhi(5 * TMath::Pi() / 6);
     analysis->setUseCMFrame();
     analysis->setEtaBoost(etaBoost);
-    analysis->setLeadJetPt(120.);
+    analysis->setLeadJetPt(100.);
     analysis->setSubLeadJetPt(50.);
     analysis->setLeadJetEtaRange(-1.6, 1.6);
     analysis->setSubLeadJetEtaRange(-1.6, 1.6);
     analysis->setInclusiveJetEtaRange(-1.6, 1.6);
-    analysis->setInclusiveCorrectedJetPtMin(120.0);
+    analysis->setInclusiveCorrectedJetPtMin(50.0);
     analysis->doInJetMultiplicity();
     analysis->setBins(multiplicityBins);
     analysis->setUEType(UEType);
     analysis->setTrackingTable("../aux_files/pPb_8160/trk_eff_table/pPb_EPOS_2D_efftables.root");
     // analysis->setDebug(kTRUE);
     // analysis->setVzWeight();
+    analysis->setReader(reader);
 
     // Initialize Histomanager
     HistoManagerDiJet *hm = new HistoManagerDiJet{};

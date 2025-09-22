@@ -72,16 +72,22 @@ DiJetAnalysis::~DiJetAnalysis()
         fYBinEdges.clear();
         fBinContent.clear();
     }
+    if (fReader)
+    {
+        delete fReader;
+    }
 }
 
 void DiJetAnalysis::init()
 {
-    if (fVerbose)
-    {
-        std::cout << "DiJetAnalysis::init  Initializing DiJet Analysis" << std::endl;
-    }
+    std::cout << std::endl;
+    std::cout << "==================================================================================" << std::endl;
+    std::cout << "DiJetAnalysis::init  Initializing DiJet Analysis" << std::endl;
+    std::cout << "==================================================================================" << std::endl;
+    std::cout << std::endl;
+    report();
 
-    CollSystem(fCollSystem);
+    CollSystem(*fReader);
 
     SetUpTrackingEfficiency(fTrkEffTable);
 
@@ -90,11 +96,19 @@ void DiJetAnalysis::init()
         SetUpDijetWeight(fDijetWeightTable);
     }
     SetUpWeightFunctions();
+
+    std::cout << std::endl;
+    std::cout << "DiJetAnalysis::init Initializing Analysis Completed. Exiting DiJetAnalysis::init" << std::endl;
+    std::cout << "==================================[Done]================================" << std::endl;
 }
 
 void DiJetAnalysis::SetUpWeightFunctions()
 {
+    std::cout << std::endl;
+    std::cout << "==================================================================================" << std::endl;
     std::cout << "DiJetAnalysis::Setting up Weight Functions for " << fCollSystem << std::endl;
+    std::cout << "==================================================================================" << std::endl;
+    std::cout << std::endl;
     std::cout << "Use VertexZ Weights : " << std::boolalpha << fDoVzWeight << std::endl;
     std::cout << "Use Multiplicity Weights : " << std::boolalpha << fUseMultiplicityWeight << std::endl;
     if (fIspPb && fIsMC)
@@ -107,6 +121,7 @@ void DiJetAnalysis::SetUpWeightFunctions()
         }
         if (fUseMultiplicityWeight)
         {
+            std::cout << "DiJetAnalysis::SetUpWeightFunctions Setting up Multiplicity Weight Functions" << std::endl;
             fMultWeightFunctions[0] = new TF1("fMultWeightFunctions0", "pol2", 10, 60, TF1::EAddToList::kNo);
             fMultWeightFunctions[0]->SetParameters(9.94057e-01, -1.44680e-02, 2.23186e-04);
             fMultWeightFunctions[1] = new TF1("fMultWeightFunctions1", "pol3", 60, 250, TF1::EAddToList::kNo);
@@ -117,7 +132,7 @@ void DiJetAnalysis::SetUpWeightFunctions()
         }
     }
     std::cout << "DiJetAnalysis::SetUpWeightFunctions Setting up Weight Functions for " << fCollSystem << " completed." << std::endl;
-    std::cout << "\t[Done]" << std::endl;
+    std::cout << "==================================[Done]================================" << std::endl;
 }
 
 void DiJetAnalysis::SetUpDijetWeight(const std::string &dijetWeightTable)
@@ -127,8 +142,11 @@ void DiJetAnalysis::SetUpDijetWeight(const std::string &dijetWeightTable)
         std::cout << "DiJetAnalysis::SetUpDijetWeight Dijet Weighting is not enabled. Skipping setup." << std::endl;
         return;
     }
-
+    std::cout << std::endl;
+    std::cout << "============================================================================================" << std::endl;
     std::cout << "DiJetAnalysis::SetUpDijetWeight Setting up Dijet Weight with DiJet Weight Type : " << fDijetWeightType << std::endl;
+    std::cout << "============================================================================================" << std::endl;
+    std::cout << std::endl;
     std::cout << "Dijet Weight Table: " << dijetWeightTable << std::endl;
     fDijetWeightFile = TFile::Open(dijetWeightTable.c_str(), "OPEN");
     if (!fDijetWeightFile)
@@ -166,21 +184,30 @@ void DiJetAnalysis::SetUpDijetWeight(const std::string &dijetWeightTable)
         std::cerr << "Dijet weight histogram not found" << std::endl;
         throw std::runtime_error("Dijet weight histogram not found");
     }
+
     fXBinCount = hDijetWeight->GetNbinsX();
     fYBinCount = hDijetWeight->GetNbinsY();
-
+    std::cout << "Dijet Weight Histogram has " << fXBinCount << " bins in X and " << fYBinCount << " bins in Y" << std::endl;
     fXBinEdges.resize(fXBinCount + 1);
     fYBinEdges.resize(fYBinCount + 1);
     fBinContent.resize(fXBinCount * fYBinCount);
+    std::cout << "Dijet Weight Histogram X Axis Edges : " << std::endl;
+    std::cout << "\t\t\t\t\t";
 
     for (Int_t i = 0; i < fXBinCount + 1; i++)
     {
         fXBinEdges[i] = hDijetWeight->GetXaxis()->GetBinLowEdge(i + 1);
+        std::cout << fXBinEdges[i] << "  ";
     }
+    std::cout << std::endl;
+    std::cout << "Dijet Weight Histogram Y Axis Edges : " << std::endl;
+    std::cout << "\t\t\t\t\t";
     for (Int_t i = 0; i < fYBinCount + 1; i++)
     {
         fYBinEdges[i] = hDijetWeight->GetYaxis()->GetBinLowEdge(i + 1);
+        std::cout << fYBinEdges[i] << "  ";
     }
+    std::cout << std::endl;
     for (Int_t i = 1; i <= fXBinCount; i++)
     {
         for (Int_t j = 1; j <= fYBinCount; j++)
@@ -189,7 +216,7 @@ void DiJetAnalysis::SetUpDijetWeight(const std::string &dijetWeightTable)
         }
     }
     std::cout << "Dijet Weight Table Loaded Successfully" << std::endl;
-    std::cout << "\t[Done]" << std::endl;
+    std::cout << "==================================[Done]================================" << std::endl;
 }
 
 Int_t DiJetAnalysis::BinBinarySearch(const std::vector<double> &binEdges, const double &bin)
@@ -223,28 +250,42 @@ void DiJetAnalysis::SetUpTrackingEfficiency(const std::string &trackingEfficienc
     // << std::endl;
     if (fIsPbPb)
     {
+        std::cout << std::endl;
+        std::cout << "===================================================================================" << std::endl;
         std::cout << "Dijet Analysis::SetUpTrackingEfficiency Setting up Tracking Efficiency "
                      "Tables for PbPb"
                   << std::endl;
+        std::cout << "===================================================================================" << std::endl;
+        std::cout << std::endl;
+        std::cout << "Tracking Efficiency Table: " << trackingEfficiencyTable << std::endl;
         fTrkEffPbPb = new TrkEff2018PbPb("general", "", false, trackingEfficiencyTable);
         std::cout << "Tracking Efficiency Table Loaded Successfully" << std::endl;
-        std::cout << "\t[Done]" << std::endl;
+        std::cout << "==================================[Done]================================" << std::endl;
     }
     else if (fIspPb)
     {
+        std::cout << std::endl;
+        std::cout << "===================================================================================" << std::endl;
+
         std::cout << "Dijet Analysis::SetUpTrackingEfficiency Setting up Tracking Efficiency "
                      "Tables for pPb"
                   << std::endl;
+        std::cout << "===================================================================================" << std::endl;
+        std::cout << std::endl;
+        std::cout << "Tracking Efficiency Table: " << trackingEfficiencyTable << std::endl;
+
         fTrkEffpPb = new TrkEfficiency2016pPb(trackingEfficiencyTable, fUEType);
         std::cout << "Tracking Efficiency Table Loaded Successfully" << std::endl;
-        std::cout << "\t[Done]" << std::endl;
+        std::cout << "==================================[Done]================================" << std::endl;
     }
     else if (fIspp)
     {
+        std::cout << std::endl;
         std::cerr << "Tracking efficiency table not found for pp" << std::endl;
     }
     else
     {
+        std::cout << std::endl;
         std::cerr << "Tracking efficiency table not found for the given system. Please Selected "
                      "from pp, pPb or PbPb collision systems"
                   << std::endl;
@@ -691,47 +732,51 @@ Float_t DiJetAnalysis::DijetWeight(const Event *event)
     return dijetWeight;
 }
 
-void DiJetAnalysis::CollSystem(const TString &collSystem)
+void DiJetAnalysis::CollSystem(ForestReader &reader)
 {
-    if (fVerbose)
+    ForestReader::CollidingSystemType collSystem = reader.getCollidingSystem();
     {
-        std::cout << "Setting up collision system : " << collSystem << std::endl;
-    }
-    if (collSystem == "pp")
-    {
-        fIspp = kTRUE;
-        if (fVerbose)
+        std::cout << std::endl;
+        std::cout << "===================================================================================" << std::endl;
+        std::cout << "Setting up collision system from ForestReader::CollidingSystemType" << std::endl;
+        std::cout << "===================================================================================" << std::endl;
+        std::cout << std::endl;
+        if (collSystem == ForestReader::CollidingSystemType::pp)
         {
-            std::cout << "Collision System set to : pp" << std::endl;
+            fIspp = kTRUE;
+            fCollSystem = "pp";
+            std::cout << "Collision System set to be : pp" << std::endl;
         }
-    }
-    else if (collSystem == "pPb")
-    {
-        fIspPb = kTRUE;
-        if (fVerbose)
+        else if (collSystem == ForestReader::CollidingSystemType::pPb)
         {
-            std::cout << "Collision System set to : pPb" << std::endl;
+            fIspPb = kTRUE;
+            fCollSystem = "pPb";
+            std::cout << "Collision System set to be : pPb" << std::endl;
+            std::cout << "Using CM Frame for pPb : " << std::boolalpha << fUseCMFrame << std::endl;
+            std::cout << "Eta Boost for pPb : " << fEtaBoost << std::endl;
+            if (fIsPbGoing)
+                std::cout << "Pb going to positive Eta direction" << std::endl;
+
+            else
+                std::cout << "Proton going to positive Eta direction" << std::endl;
         }
-    }
-    else if (collSystem == "PbPb")
-    {
-        fIsPbPb = kTRUE;
-        if (fVerbose)
+        else if (collSystem == ForestReader::CollidingSystemType::PbPb)
         {
+            fIsPbPb = kTRUE;
+            fCollSystem = "PbPb";
             std::cout << "Collision System set to : PbPb" << std::endl;
         }
-    }
-    else if (collSystem == "OO")
-    {
-        fIsOO = kTRUE;
-        if (fVerbose)
+        else if (collSystem == ForestReader::CollidingSystemType::OO)
         {
-            std::cout << "Collision System set to : OO" << std::endl;
+            fIsOO = kTRUE;
+            fCollSystem = "OO";
+            std::cout << "Collision System set to be : OO" << std::endl;
         }
-    }
-    else
-    {
-        std::cerr << "Invalid collision system. Please choose from pp, pPb, PbPb" << std::endl;
+        else
+        {
+            std::cerr << "Invalid collision system. Please choose from pp, pPb, PbPb or OO" << std::endl;
+        }
+        std::cout << "==================================[Done]================================" << std::endl;
     }
 }
 
@@ -997,8 +1042,7 @@ void DiJetAnalysis::processEvent(const Event *event)
     if (fUseDijetWeight)
     {
         fDijetWeight = DijetWeight(event);
-        fDijetWeight = pow(fDijetWeight,
-                           1.45);  // std::cout << "Dijet Weight : " << fDijetWeight << std::endl;
+        fDijetWeight = pow(fDijetWeight, 1.45);  // std::cout << "Dijet Weight : " << fDijetWeight << std::endl;
     }
     else
     {
@@ -1684,6 +1728,32 @@ void DiJetAnalysis::processGenTracks(const Event *event, const Double_t &event_W
 
 void DiJetAnalysis::report()
 {
+    TString reportString = "\n===========DiJetAnalysis::Reporting Analysis Setup===============\n";
+    reportString += Form("Is MC :                            :  %s \n", (fIsMC) ? "True" : "False");
+    reportString += Form("Inclusive Jet Pt Cut               :  %5.2f \n", fInclusiveCorrectedJetPtMin);
+    reportString += Form("Inclusive Jet Eta Range            :  %5.2f < eta < %5.2f \n", fInclusiveJetEtaRange[0], fInclusiveJetEtaRange[1]);
+    reportString += Form("Leading Jet Pt Cut                 :  %5.2f \n", fLeadJetPtLow);
+    reportString += Form("SubLeading Jet Pt Cut              :  %5.2f \n", fSubLeadJetPtLow);
+    reportString += Form("Delta Phi Cut                      :  %5.2f \n", fDeltaPhi);
+    reportString += Form("Leading Jet Eta Range              :  %5.2f < eta < %5.2f \n", fLeadJetEtaRange[0], fLeadJetEtaRange[1]);
+    reportString += Form("SubLeading Jet Eta Range           :  %5.2f < eta < %5.2f \n", fSubLeadJetEtaRange[0], fSubLeadJetEtaRange[1]);
+    reportString += Form("Do Dijet Weight                    :  %s \n", (fUseDijetWeight) ? "True" : "False");
+    if (fUseDijetWeight)
+    {
+        reportString += Form("Dijet Weight Type                  :  %s \n", fDijetWeightType.c_str());
+    }
+    reportString += Form("Min Track Pt Cut                   :  %5.2f \n", fMinTrkPt);
+    reportString += Form("Track Eta Range                    :  %5.2f < eta < %5.2f \n", fTrkEtaRange[0], fTrkEtaRange[1]);
+    reportString += Form("Do InJet Multiplicity              :  %s \n", (fDoInJetMult) ? "True" : "False");
+    reportString += Form("Use Vz Weights                     :  %s \n", (fDoVzWeight) ? "True" : "False");
+    reportString += Form("Use Multiplicity Weights           :  %s \n", (fUseMultiplicityWeight) ? "True" : "False");
+    reportString += Form("Underlying Event Type              :  %s \n", fUEType.c_str());
+    reportString += Form("Do Tracking Closure                :  %s \n", (fDoTrackingClosures) ? "True" : "False");
+    reportString += "===============================================================\n";
+
+    std::cout << reportString.Data() << std::endl;
+
+    // if () reportString
 }
 
 TList *DiJetAnalysis::getOutputList()
