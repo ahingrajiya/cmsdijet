@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
     TString JEUFileName{};
     TString path2JEC = "..";
     Double_t ptHatCut[2]{15., 30.};
-    Bool_t isEmbedded{kFALSE};
+    Bool_t isEmbedded{kTRUE};
     std::vector<std::pair<Int_t, Double_t>> multiplicityBins = {{0, 0.0}, {10, 1.0}, {60, 2.0}, {120, 3.0}, {185, 4.0}, {250, 5.0}, {400, 6.0}, {500, 7.0}};
     std::vector<std::string> filters{"pprimaryVertexFilter", "pphfCoincFilterPF2Th4"};
     std::string UEType{"HIJING"};
