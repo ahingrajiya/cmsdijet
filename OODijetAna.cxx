@@ -26,7 +26,7 @@ using namespace std;
 
 void usage()
 {
-    std::cout << "./programName inputFileList oFileName isMC isEmbedded isPbGoing ptHatLow ptHatHi \n";
+    std::cout << "./programName inputFileList oFileName isMC isEmbedded \n";
 }
 int main(int argc, char *argv[])
 {
@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
     ptHatHigh                   - High PtHat cut (For MC Only)
     */
 
-    if (argc <= 1)
+    if (argc <= 4)
     {
         std::cout << "Too few arguments passed. Terminating !" << std::endl;
         usage();
@@ -75,6 +75,7 @@ int main(int argc, char *argv[])
         inFileName = argv[1];
         oFileName = argv[2];
         isMC = atoi(argv[3]);
+        isEmbedded = atoi(argv[4]);
     }
 
     if (isMC)
@@ -127,7 +128,7 @@ int main(int argc, char *argv[])
     {
         reader->setIsMc(isMC);
         reader->useGenTrackBranch();
-        reader->setStoreLocation(kTRUE);
+        // reader->setStoreLocation(kTRUE);
 
         if (isEmbedded)
         {
@@ -145,7 +146,7 @@ int main(int argc, char *argv[])
     reader->setCollidingEnergy(collEnergyGeV);
     reader->setCollidingSystem(ForestReader::CollidingSystemType::OO);
     reader->setYearOfDataTaking(collYear);
-    reader->addJECFile(JECFileName.Data());
+    // reader->addJECFile(JECFileName.Data());
     reader->setPath2JetAnalysis(path2JEC.Data());
     // reader->setUseJetID();
     // reader->setJetIDType(2);
@@ -166,17 +167,7 @@ int main(int argc, char *argv[])
     analysis->setIsMC(isMC);
 
     analysis->setReader(reader);
-    if (isMC)
-    {
-        if (!isEmbedded)
-        {
-            analysis->setMultiplicityRange(0, 500);
-        }
-        if (isEmbedded)
-        {
-            analysis->setMultiplicityRange(10, 500);
-        }
-    }
+    analysis->setMultiplicityRange(10, 500);
     analysis->setMultiplicityType(0);
     analysis->setMinTrkPt(1.0);
     analysis->setDeltaPhi(5 * TMath::Pi() / 6);

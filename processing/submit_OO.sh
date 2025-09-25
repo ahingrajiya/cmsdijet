@@ -29,6 +29,8 @@ if [ "$DataSet" -eq 1 ]; then
     input_files_list="${EXEC_PATH}/files_input/OO5360/MC/Unembedded/"
     output_path="/eos/user/a/ahingraj/outputs/OO_MC_Unembedded/"
     isMC=1
+    isEmbedded=0
+
 fi
 
 if [ "$DataSet" -eq 2 ]; then
@@ -38,6 +40,8 @@ if [ "$DataSet" -eq 2 ]; then
     input_files_list="${EXEC_PATH}/files_input/OO5360/MC/Embedded/"
     output_path="/eos/user/a/ahingraj/outputs/OO_MC_Embedded/"
     isMC=1
+    isEmbedded=1
+
 fi
 
 if [ "$DataSet" -eq 3 ]; then
@@ -82,7 +86,7 @@ EOF
     for file in ${file_list}/*.txt; do
         cat <<EOF >> processing/OO_${subfile%.*}.sub
 
-	    arguments   = ${file_list}/$(basename "$file") ${output_path}${sample_prefix}_${jobid}.root ${isMC}
+	    arguments   = ${file_list}/$(basename "$file") ${output_path}${sample_prefix}_${jobid}.root ${isMC} ${isEmbedded}
         output      = processing/condor/logs/${sample_prefix}_${jobid}.out
         error       = processing/condor/logs/${sample_prefix}_${jobid}.err
         log         = processing/condor/logs/${sample_prefix}_${jobid}.log

@@ -236,8 +236,11 @@ void ForestReader::setupJEC()
 
     if (fJECFiles.empty())
     {
-        std::cout << "[WARNING] Default JEC file with parameters will be used" << std::endl;
-        addJECFile();
+        std::cout << "[WARNING] No JEC file is given. Reader will skip JEC for this scan. " << std::endl;
+        if (fJEC) delete fJEC;
+        std::cout << "=============Setting Up JEC \t[DONE]==================" << std::endl;
+        std::cout << std::endl;
+        return;
     }
 
     std::vector<std::string> tmp;
@@ -1359,8 +1362,7 @@ Event *ForestReader::returnEvent()
             }
             else
             {  // If no JEC available
-
-                pTcorr = fRecoJetPt[iJet];
+                pTcorr = fRawJetPt[iJet];
             }
             if (fIsMc && fDoJetPtSmearing)
             {
