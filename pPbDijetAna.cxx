@@ -229,7 +229,7 @@ int main(int argc, char *argv[])
         if (isEmbedded)
         {
             analysis->setMultiplicityRange(10, 400);
-            // analysis->setUseMultiplicityWeigth();
+            analysis->setUseMultiplicityWeigth();
             // analysis->doTrackingClosure();
             // analysis->setUseDijetWeight();
             // analysis->setDijetWeightType(dijetWeightType);
