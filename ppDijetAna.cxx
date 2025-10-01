@@ -19,7 +19,7 @@
 #include "Manager.h"
 #include "TrackCut.h"
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     Bool_t isMC{kTRUE};
     Bool_t ispPb{kFALSE};
@@ -63,10 +63,10 @@ int main(int argc, char *argv[])
     }
 
     // Initialize package manager
-    Manager *manager = new Manager{};
+    Manager* manager = new Manager{};
 
     // Initialize event cuts
-    EventCut *eventCut = new EventCut{};
+    EventCut* eventCut = new EventCut{};
     eventCut->setVz(-15., 15.);
     eventCut->setMultiplicty(0, 10000);
     if (isMC)
@@ -76,13 +76,13 @@ int main(int argc, char *argv[])
     // eventCut->setVerbose();
 
     // Initialize jet cuts
-    JetCut *jetCut = new JetCut{};
+    JetCut* jetCut = new JetCut{};
     jetCut->setEta(-5.0, 5.0);
     jetCut->setPt(0., 5020.);
     // jetCut->setVerbose();
 
     // Initialize track cuts
-    TrackCut *trackCut = new TrackCut{};
+    TrackCut* trackCut = new TrackCut{};
     trackCut->setPt(0.5, 1000.);
     trackCut->setEta(-2.4, 2.4);
     trackCut->setPtErr(0.1);
@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
     trackCut->setDZ(3.0);
     trackCut->setHighPurity();
 
-    ForestReader *reader = new ForestReader{inFileName};
+    ForestReader* reader = new ForestReader{inFileName};
     reader->setForestFileType(ForestReader::ForestFileType::MiniAOD);
     if (isMC)
     {
@@ -121,14 +121,14 @@ int main(int argc, char *argv[])
 
     manager->setEventReader(reader);
 
-    HistoManagerDiJet *hm = new HistoManagerDiJet{};
+    HistoManagerDiJet* hm = new HistoManagerDiJet{};
     hm->setIsMC(isMC);
     hm->setMultiplicityBins(multiplicityBins);
     hm->setCollSystem(collSystem);
     hm->init();
 
     // Initialize analysis
-    DiJetAnalysis *analysis = new DiJetAnalysis{};
+    DiJetAnalysis* analysis = new DiJetAnalysis{};
     analysis->addHistoManager(hm);
     analysis->setReader(reader);
     analysis->setIsMC(isMC);
@@ -145,6 +145,8 @@ int main(int argc, char *argv[])
     analysis->setTrkEtaRange(-2.4, 2.4);
     analysis->doInJetMultiplicity();
     analysis->setBins(multiplicityBins);
+    analysis->setInclusiveCorrectedJetPtMin(50.);
+    analysis->setInclusiveJetEtaRange(-1.6, 1.6);
     // if (isMC)
     // {
     //     analysis->setUseDijetWeight();
@@ -157,7 +159,7 @@ int main(int argc, char *argv[])
     manager->performAnalysis();
     manager->finish();
 
-    TFile *outFile = new TFile{oFileName, "RECREATE"};
+    TFile* outFile = new TFile{oFileName, "RECREATE"};
     hm->projectHistograms();
     hm->writeOutput();
     outFile->Close();
