@@ -994,6 +994,10 @@ Float_t DiJetAnalysis::FlipVertexZ(const Float_t &vertexz)
 
 Double_t DiJetAnalysis::GetJetFlavor(const Int_t &partonFlavor)
 {
+    if (!fIsMC)
+    {
+        return 1.0;
+    }
     if (partonFlavor == 21)
     {
         return -1.;  // Gluon

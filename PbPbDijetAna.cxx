@@ -18,7 +18,7 @@
 #include "JetCut.h"
 #include "Manager.h"
 #include "TrackCut.h"
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     Bool_t isMC{kTRUE};
     Bool_t ispPb{kFALSE};
@@ -67,10 +67,10 @@ int main(int argc, char *argv[])
     }
 
     // Initialize analysis manager
-    Manager *manager = new Manager{};
+    Manager* manager = new Manager{};
 
     // Initialize event cuts
-    EventCut *eventCut = new EventCut{};
+    EventCut* eventCut = new EventCut{};
     eventCut->setVz(-15., 15.);
     eventCut->setMultiplicty(0, 10000);
     if (isMC)
@@ -79,12 +79,12 @@ int main(int argc, char *argv[])
     }
     eventCut->setHiBin(0, 200);
     // eventCut->setVerbose();
-    JetCut *jetCut = new JetCut{};
+    JetCut* jetCut = new JetCut{};
     jetCut->setPt(0., 1000.);
     jetCut->setEta(-5., 5.);
 
     // Initialize track cuts
-    TrackCut *trackCut = new TrackCut{};
+    TrackCut* trackCut = new TrackCut{};
     trackCut->setPt(0.5, 1000.);
     trackCut->setEta(-2.4, 2.4);
     trackCut->setPtErr(0.1);
@@ -98,13 +98,14 @@ int main(int argc, char *argv[])
     trackCut->setMVAAlgo();
     // trackCut->setVerbose();
 
-    ForestReader *reader = new ForestReader{inFileName};
+    ForestReader* reader = new ForestReader{inFileName};
     reader->setForestFileType(ForestReader::ForestFileType::AOD);
     if (isMC)
     {
         reader->setIsMc(isMC);
         reader->useGenTrackBranch();
         reader->setShiftInHiBin(-10);
+        reader->setStoreLocation(kTRUE);
     }
     reader->useSkimmingBranch();
     reader->useTrackBranch();
@@ -130,13 +131,13 @@ int main(int argc, char *argv[])
     }
     manager->setEventReader(reader);
 
-    HistoManagerDiJet *hm = new HistoManagerDiJet{};
+    HistoManagerDiJet* hm = new HistoManagerDiJet{};
     hm->setIsMC(isMC);
     hm->setMultiplicityBins(multiplicityBins);
     hm->setCollSystem(collSystem);
     hm->init();
 
-    DiJetAnalysis *analysis = new DiJetAnalysis{};
+    DiJetAnalysis* analysis = new DiJetAnalysis{};
     analysis->setReader(reader);
     analysis->addHistoManager(hm);
     analysis->setIsMC(isMC);
@@ -145,13 +146,15 @@ int main(int argc, char *argv[])
     analysis->setMultiplicityRange(0., 10000.);
     analysis->setMultiplicityType(4);
     analysis->setDeltaPhi(2. * TMath::Pi() / 3);
-    analysis->setLeadJetPt(120.);
+    analysis->setLeadJetPt(100.);
     analysis->setSubLeadJetPt(50.);
     analysis->setTrackingTable("../PbPb_TrackingEfficiencies/");
     analysis->setMinTrkPt(1.0);
     analysis->setTrkEtaRange(-2.4, 2.4);
     analysis->doInJetMultiplicity();
     analysis->setBins(multiplicityBins);
+    analysis->setInclusiveCorrectedJetPtMin(150.);
+    analysis->setInclusiveJetEtaRange(-1.6, 1.6);
 
     manager->addAnalysis(analysis);
     manager->init();
@@ -159,7 +162,7 @@ int main(int argc, char *argv[])
     manager->performAnalysis();
     manager->finish();
 
-    TFile *oFile = new TFile(oFileName, "RECREATE");
+    TFile* oFile = new TFile(oFileName, "RECREATE");
     hm->projectHistograms();
     hm->writeOutput();
     oFile->Close();

@@ -45,6 +45,8 @@ class HistoManagerDiJet : public BaseHistoManager
     void projectHistograms();
     ///@brief Write all historgams to output file
     void writeOutput();
+    ///@brief Histogram manager report
+    void report();
     ///@brief Set Multiplicity bins
     void setMultiplicityBins(const std::vector<std::pair<Int_t, Double_t>> &bins)
     {

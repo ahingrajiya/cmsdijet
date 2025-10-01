@@ -599,8 +599,13 @@ void HistoManagerDiJet::init()
 
 void HistoManagerDiJet::projectHistograms()
 {
-    TH1D *iProjection;
+    std::cout << std::endl;
+    std::cout << "====================================" << std::endl;
+    std::cout << "Projecting Histograms" << std::endl;
+    std::cout << "====================================" << std::endl;
 
+    TH1D *iProjection;
+    std::cout << "====>Reco level histograms being projected" << std::endl;
     iProjection = hInclusiveRecoJetsCMFrame->Projection(0);
     hInclusiveRecoJetPt = (TH1D *)iProjection->Clone("hInclusiveRecoJetPt");
     hInclusiveRecoJetPt->SetTitle("Inclusive Reco Jet Pt");
@@ -681,8 +686,20 @@ void HistoManagerDiJet::projectHistograms()
     hSubLeadingRecoJetPtWithDijet_DiJetW->SetTitle("SubLeading Reco Jet Pt With Dijet Present With DiJetWeighted");
     delete iProjection;
 
+    iProjection = hMultVsXj_W->ProjectionX();
+    hXj_C0_W = (TH1D *)iProjection->Clone("hXj_W");
+    hXj_C0_W->SetTitle("Xj Projection C0 Weighted");
+    delete iProjection;
+
+    iProjection = hMultVsXj_DiJetW->ProjectionX();
+    hXj_C0_DiJetW = (TH1D *)iProjection->Clone("hXj_DiJetW");
+    hXj_C0_DiJetW->SetTitle("Xj Projection C0 Dijet Weighted");
+    delete iProjection;
+
     if (fIsMC)
     {
+        std::cout << "====>Gen level histograms being projected" << std::endl;
+
         iProjection = hInclusiveGenJetsCMFrame->Projection(0);
         hInclusiveGenJetPt = (TH1D *)iProjection->Clone("hInclusiveGenJetPt");
         hInclusiveGenJetPt->SetTitle("Inclusive Gen Jet Pt");
@@ -817,19 +834,7 @@ void HistoManagerDiJet::projectHistograms()
         hSubLeadingRefJetPtWithDijet_DiJetW = (TH1D *)iProjection->Clone("hSubLeadingRefJetPtWithDijet_DiJetW");
         hSubLeadingRefJetPtWithDijet_DiJetW->SetTitle("SubLeading Ref Jet Pt With Dijet Present With DiJetWeighted");
         delete iProjection;
-    }
-    iProjection = hMultVsXj_W->ProjectionX();
-    hXj_C0_W = (TH1D *)iProjection->Clone("hXj_W");
-    hXj_C0_W->SetTitle("Xj Projection C0 Weighted");
-    delete iProjection;
 
-    iProjection = hMultVsXj_DiJetW->ProjectionX();
-    hXj_C0_DiJetW = (TH1D *)iProjection->Clone("hXj_DiJetW");
-    hXj_C0_DiJetW->SetTitle("Xj Projection C0 Dijet Weighted");
-    delete iProjection;
-
-    if (fIsMC)
-    {
         iProjection = hMultVsGenXj_W->ProjectionX();
         hGenXj_C0_W = (TH1D *)iProjection->Clone("hGenXj_W");
         hGenXj_C0_W->SetTitle("Gen Xj Projection C0 Weighted");
@@ -840,11 +845,12 @@ void HistoManagerDiJet::projectHistograms()
         hGenXj_C0_DiJetW->SetTitle("Gen Xj Projection C0 Dijet Weighted");
         delete iProjection;
     }
+
     hXj_Projection_W.clear();
     hXj_Projection_DiJetW.clear();
     hGenXj_Projection_W.clear();
     hGenXj_Projection_DiJetW.clear();
-
+    std::cout << " ====> Projecting Xj Histograms in Multiplicity Bins" << std::endl;
     for (Int_t i = 0; i < fMultiplicityBins.size() - 1; i++)
     {
         hXj_Projection_W.push_back(hMultVsXj_W->ProjectionX(Form("hXj_C%i_W", i), hMultVsXj_W->GetYaxis()->FindBin(i), hMultVsXj_W->GetYaxis()->FindBin(i)));
@@ -882,10 +888,17 @@ void HistoManagerDiJet::projectHistograms()
                                                                  static_cast<int>(fMultiplicityBinThresholds.at(i + 1))));
         }
     }
+    std::cout << "Projecting Histograms Complete" << std::endl;
+    std::cout << "====================================" << std::endl;
 }
 
 void HistoManagerDiJet ::writeOutput()
 {
+    std::cout << std::endl;
+    std::cout << "====================================" << std::endl;
+    std::cout << "Writing Histograms to File" << std::endl;
+    std::cout << "====================================" << std::endl;
+    std::cout << "  ===> Writing Event Histograms" << std::endl;
     gDirectory->mkdir("Events");
     gDirectory->cd("Events");
     if (fCollSystem == "PbPb")
@@ -913,6 +926,8 @@ void HistoManagerDiJet ::writeOutput()
         hSubEventMultiplicity_W->Write();
     }
     hNEventsInMult->Write();
+
+    std::cout << "  ===> Writing Jets Histograms" << std::endl;
 
     gDirectory->cd("..");
     gDirectory->mkdir("Jets");
@@ -1001,6 +1016,7 @@ void HistoManagerDiJet ::writeOutput()
             hRefLeadPtVsRefSubLeadPtMatched_PtHatW->Write();
         }
     }
+    std::cout << "  ===> Writing Track Histograms" << std::endl;
 
     gDirectory->cd("..");
     gDirectory->mkdir("Tracks");
@@ -1020,6 +1036,8 @@ void HistoManagerDiJet ::writeOutput()
         hGenTracks_W->Write();
         hGenTracks_Pt1_W->Write();
     }
+
+    std::cout << "  ===> Writing Quenching Histograms" << std::endl;
 
     gDirectory->cd("..");
     gDirectory->mkdir("Quenching");
@@ -1050,6 +1068,8 @@ void HistoManagerDiJet ::writeOutput()
             hMultVsGenXj_DiJetW->Write();
         }
     }
+
+    std::cout << "  ===> Writing Projections Histograms" << std::endl;
 
     gDirectory->cd("..");
     gDirectory->mkdir("Projections");

@@ -1397,8 +1397,16 @@ Event *ForestReader::returnEvent()
                 jet->setJetPartonFlavor(fRefJetPartonFlavor[iJet]);
                 jet->setJetPartonFlavorForB(fRefJetPartonFlavorForB[iJet]);
             }
+            else
+            {
+                jet->setRefJetPt(-1);
+                jet->setRefJetEta(-99);
+                jet->setRefJetPhi(-99);
+                jet->setJetPartonFlavor(-99);
+                jet->setJetPartonFlavorForB(-99);
+            }
 
-            // Check fronе-loaded cut
+            // Check front-loaded cut
             if (fJetCut && !fJetCut->pass(jet))
             {
                 delete jet;
