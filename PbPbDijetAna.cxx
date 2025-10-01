@@ -34,7 +34,7 @@ int main(int argc, char* argv[])
     TString collSystem{"PbPb"};
     Int_t collYear{2018};
     Bool_t useCentWeight{kFALSE};
-    TString jetBranchName{"akCs4PFJetAnalyzer"};
+    TString jetBranchName{"ak4PFJetAnalyzer"};
     Double_t ptHatCut[2]{15., 30.};
     // std::vector<std::pair<Int_t, Double_t>> multiplicityBins = {{10, 0.0}, {60, 1.0}, {120, 2.0}, {185, 3.0}, {250, 4.0}, {400, 5.0}};
     std::vector<std::pair<Int_t, Double_t>> multiplicityBins = {{-10, 0.0}, {0, 1.}, {20, 2.0}, {60, 3.0}, {100, 4.0}, {160, 5.0}, {180, 6.0}, {200, 7.0}};
