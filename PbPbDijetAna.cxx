@@ -153,7 +153,7 @@ int main(int argc, char* argv[])
     analysis->setTrkEtaRange(-2.4, 2.4);
     analysis->doInJetMultiplicity();
     analysis->setBins(multiplicityBins);
-    analysis->setInclusiveCorrectedJetPtMin(150.);
+    analysis->setInclusiveCorrectedJetPtMin(50.);
     analysis->setInclusiveJetEtaRange(-1.6, 1.6);
 
     manager->addAnalysis(analysis);
