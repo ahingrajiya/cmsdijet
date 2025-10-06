@@ -110,8 +110,8 @@ int main(int argc, char* argv[])
     reader->useSkimmingBranch();
     reader->useTrackBranch();
     reader->useJets();
-    reader->useHltBranch();
-    reader->setTriggers(triggers);
+    // reader->useHltBranch();
+    // reader->setTriggers(triggers);
     reader->setFilters(filters);
     reader->setJetCollectionBranchName(jetBranchName.Data());
     reader->setCollidingEnergy(collEnergyGeV);
