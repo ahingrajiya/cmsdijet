@@ -28,7 +28,7 @@ void usage()
 {
     std::cout << "./programName inputFileList oFileName isMC isEmbedded \n";
 }
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     Bool_t isMC{kTRUE};
     TString inFileName;
@@ -91,10 +91,10 @@ int main(int argc, char *argv[])
     }
 
     // Initialize package manager
-    Manager *manager = new Manager{};
+    Manager* manager = new Manager{};
 
     // Initialize event cuts
-    EventCut *eventCut = new EventCut{};
+    EventCut* eventCut = new EventCut{};
     eventCut->setVz(-15., 15.);
     if (isMC)
     {
@@ -103,14 +103,14 @@ int main(int argc, char *argv[])
     // eventCut->setVerbose();
 
     // Initialize jet cuts
-    JetCut *jetCut = new JetCut{};
+    JetCut* jetCut = new JetCut{};
     jetCut->setEta(-5.0, 5.0);
     jetCut->setPt(0., 5360.);
     // jetCut->setVerbose();
 
     // Initiazlize Track Cuts
 
-    TrackCut *trackCut = new TrackCut{};
+    TrackCut* trackCut = new TrackCut{};
     trackCut->setPt(0.4, 1000.);
     trackCut->setEta(-2.4, 2.4);
     trackCut->setPtErr(0.1);
@@ -122,7 +122,7 @@ int main(int argc, char *argv[])
 
     // Initialize Forest Reader
 
-    ForestReader *reader = new ForestReader{inFileName};
+    ForestReader* reader = new ForestReader{inFileName};
     reader->setForestFileType(ForestReader::ForestFileType::MiniAOD);
     if (isMC)
     {
@@ -163,7 +163,7 @@ int main(int argc, char *argv[])
     manager->setEventReader(reader);
 
     // Dijet Analysis
-    DiJetAnalysis *analysis = new DiJetAnalysis{};
+    DiJetAnalysis* analysis = new DiJetAnalysis{};
     analysis->setIsMC(isMC);
 
     analysis->setReader(reader);
@@ -177,11 +177,11 @@ int main(int argc, char *argv[])
     analysis->setSubLeadJetEtaRange(-1.6, 1.6);
     analysis->setBins(multiplicityBins);
     analysis->setUEType(UEType);
-    analysis->setInclusiveCorrectedJetPtMin(50.);
+    analysis->setInclusiveCorrectedJetPtMin(100.);
     analysis->setInclusiveJetEtaRange(-1.6, 1.6);
 
     // Initialize Histomanager
-    HistoManagerDiJet *hm = new HistoManagerDiJet{};
+    HistoManagerDiJet* hm = new HistoManagerDiJet{};
     hm->setMultiplicityBins(multiplicityBins);
     hm->setCollSystem(collSystem);
     hm->setIsMC(isMC);
@@ -194,7 +194,7 @@ int main(int argc, char *argv[])
     manager->performAnalysis();
     manager->finish();
 
-    TFile *oFile = new TFile(oFileName, "RECREATE");
+    TFile* oFile = new TFile(oFileName, "RECREATE");
     hm->projectHistograms();
     hm->writeOutput();
     oFile->Close();
