@@ -54,7 +54,7 @@ DiJetAnalysis::~DiJetAnalysis()
     }
     if (fUseMultiplicityWeight)
     {
-        for (auto &weightFunction : fMultWeightFunctions)
+        for (auto& weightFunction : fMultWeightFunctions)
         {
             if (weightFunction)
             {
@@ -135,7 +135,7 @@ void DiJetAnalysis::SetUpWeightFunctions()
     std::cout << "==================================[Done]================================" << std::endl;
 }
 
-void DiJetAnalysis::SetUpDijetWeight(const std::string &dijetWeightTable)
+void DiJetAnalysis::SetUpDijetWeight(const std::string& dijetWeightTable)
 {
     if (!fUseDijetWeight)
     {
@@ -156,18 +156,18 @@ void DiJetAnalysis::SetUpDijetWeight(const std::string &dijetWeightTable)
     }
     if (fDijetWeightType == "Reco")
     {
-        hDijetWeight = (TH2D *)fDijetWeightFile->Get("Reco");
+        hDijetWeight = (TH2D*)fDijetWeightFile->Get("Reco");
         fRecoType = kTRUE;
     }
     else if (fDijetWeightType == "Ref")
     {
-        hDijetWeight = (TH2D *)fDijetWeightFile->Get("Ref");
+        hDijetWeight = (TH2D*)fDijetWeightFile->Get("Ref");
 
         fRefType = kTRUE;
     }
     else if (fDijetWeightType == "Gen")
     {
-        hDijetWeight = (TH2D *)fDijetWeightFile->Get("Gen");
+        hDijetWeight = (TH2D*)fDijetWeightFile->Get("Gen");
         fGenType = kTRUE;
     }
     else
@@ -219,7 +219,7 @@ void DiJetAnalysis::SetUpDijetWeight(const std::string &dijetWeightTable)
     std::cout << "==================================[Done]================================" << std::endl;
 }
 
-Int_t DiJetAnalysis::BinBinarySearch(const std::vector<double> &binEdges, const double &bin)
+Int_t DiJetAnalysis::BinBinarySearch(const std::vector<double>& binEdges, const double& bin)
 {
     Int_t lowBin = 0;
     Int_t highBin = binEdges.size() - 2;
@@ -244,7 +244,7 @@ Int_t DiJetAnalysis::BinBinarySearch(const std::vector<double> &binEdges, const 
     return -1;
 }
 
-void DiJetAnalysis::SetUpTrackingEfficiency(const std::string &trackingEfficiencyTable)
+void DiJetAnalysis::SetUpTrackingEfficiency(const std::string& trackingEfficiencyTable)
 {
     // std::cout << "Dijet Analysis::SetUpTrackingEfficiency Setting up Tracking EfficiencyT Tables"
     // << std::endl;
@@ -292,7 +292,7 @@ void DiJetAnalysis::SetUpTrackingEfficiency(const std::string &trackingEfficienc
     }
 }
 
-std::pair<Int_t, Float_t> DiJetAnalysis::RecoCorrectedMultiplicity(const Event *event, const Double_t &eventWeight, const Double_t &multiplicityBin)
+std::pair<Int_t, Float_t> DiJetAnalysis::RecoCorrectedMultiplicity(const Event* event, const Double_t& eventWeight, const Double_t& multiplicityBin)
 {
     if (fDebug)
     {
@@ -382,7 +382,7 @@ std::pair<Int_t, Float_t> DiJetAnalysis::RecoCorrectedMultiplicity(const Event *
     return {iRecoMult, iCorrectedMult};
 }
 
-std::pair<Int_t, Int_t> DiJetAnalysis::GenSubeMultiplicity(const Event *event, const Double_t &eventWeight, const Double_t &multiplicityBin)
+std::pair<Int_t, Int_t> DiJetAnalysis::GenSubeMultiplicity(const Event* event, const Double_t& eventWeight, const Double_t& multiplicityBin)
 {
     if (!fIsMC)
     {
@@ -446,7 +446,7 @@ std::pair<Int_t, Int_t> DiJetAnalysis::GenSubeMultiplicity(const Event *event, c
     return {iGenMult, iSubeMult};
 }
 
-Double_t DiJetAnalysis::MultiplicityWeight(const Double_t &multiplicity)
+Double_t DiJetAnalysis::MultiplicityWeight(const Double_t& multiplicity)
 {
     if (!fIsMC || !fIspPb)
     {
@@ -480,7 +480,7 @@ Double_t DiJetAnalysis::MultiplicityWeight(const Double_t &multiplicity)
     }
 }
 
-Float_t DiJetAnalysis::DijetWeight(const Bool_t &ispPb, const Double_t &leadPt, const Double_t &subLeadPt)
+Float_t DiJetAnalysis::DijetWeight(const Bool_t& ispPb, const Double_t& leadPt, const Double_t& subLeadPt)
 {
     if (fDebug)
     {
@@ -523,7 +523,7 @@ Float_t DiJetAnalysis::DijetWeight(const Bool_t &ispPb, const Double_t &leadPt, 
     }
 }
 
-Double_t DiJetAnalysis::EventWeight(const Event *event)
+Double_t DiJetAnalysis::EventWeight(const Event* event)
 {
     if (fDebug)
     {
@@ -573,7 +573,7 @@ Double_t DiJetAnalysis::EventWeight(const Event *event)
     return eventWeight;
 }
 
-Double_t DiJetAnalysis::pPbptHatWeight(const Double_t &pthat)
+Double_t DiJetAnalysis::pPbptHatWeight(const Double_t& pthat)
 {
     // Each tuple is {ptHatMin, ptHatMax, factor, eventCount}
     // Magic numbers are (cross section x Nevents generated). These are derived manually and fixed
@@ -590,7 +590,7 @@ Double_t DiJetAnalysis::pPbptHatWeight(const Double_t &pthat)
                                                                                {460.0, 540.0, 2.1341026e-13, 981427},
                                                                                {540.0, std::numeric_limits<double>::infinity(), 7.9191586e-14, 1000000}};
 
-    for (const auto &[min, max, factor, events] : ptHatBins)
+    for (const auto& [min, max, factor, events] : ptHatBins)
     {
         if (pthat > min && pthat <= max)
         {
@@ -602,7 +602,7 @@ Double_t DiJetAnalysis::pPbptHatWeight(const Double_t &pthat)
     return 1.0;  // fallback if ptHat is not in any range
 }
 
-Float_t DiJetAnalysis::DijetWeight(const Event *event)
+Float_t DiJetAnalysis::DijetWeight(const Event* event)
 {
     Float_t dijetWeight = 1.0;
 
@@ -732,7 +732,7 @@ Float_t DiJetAnalysis::DijetWeight(const Event *event)
     return dijetWeight;
 }
 
-void DiJetAnalysis::CollSystem(ForestReader &reader)
+void DiJetAnalysis::CollSystem(ForestReader& reader)
 {
     ForestReader::CollidingSystemType collSystem = reader.getCollidingSystem();
     {
@@ -780,7 +780,7 @@ void DiJetAnalysis::CollSystem(ForestReader &reader)
     }
 }
 
-Double_t DiJetAnalysis::DeltaPhi(const Double_t &phi1, const Double_t &phi2)
+Double_t DiJetAnalysis::DeltaPhi(const Double_t& phi1, const Double_t& phi2)
 {
     Double_t dPhi = phi1 - phi2;
     while (dPhi > TMath::Pi())
@@ -798,7 +798,7 @@ Double_t DiJetAnalysis::DeltaPhi(const Double_t &phi1, const Double_t &phi2)
     return dPhi;
 }
 
-Double_t DiJetAnalysis::Asymmetry(const Float_t &leadJetPt, const Float_t &subLeadJetPt)
+Double_t DiJetAnalysis::Asymmetry(const Float_t& leadJetPt, const Float_t& subLeadJetPt)
 {
     if (fDebug)
     {
@@ -807,7 +807,7 @@ Double_t DiJetAnalysis::Asymmetry(const Float_t &leadJetPt, const Float_t &subLe
     return subLeadJetPt / leadJetPt;
 }
 
-Float_t DiJetAnalysis::MoveToCMFrame(const Float_t &jetEta)
+Float_t DiJetAnalysis::MoveToCMFrame(const Float_t& jetEta)
 {
     if (!fIspPb)
     {
@@ -841,7 +841,7 @@ Float_t DiJetAnalysis::MoveToCMFrame(const Float_t &jetEta)
     return jetEtaCM;
 }
 
-Float_t DiJetAnalysis::MoveToLabFrame(const Float_t &jetEta)
+Float_t DiJetAnalysis::MoveToLabFrame(const Float_t& jetEta)
 {
     Float_t jetEtaLab = jetEta;
     if (fIspPb)
@@ -875,7 +875,7 @@ Float_t DiJetAnalysis::MoveToLabFrame(const Float_t &jetEta)
     return jetEtaLab;
 }
 
-Double_t DiJetAnalysis::FindBin(const Int_t &multiplicity)
+Double_t DiJetAnalysis::FindBin(const Int_t& multiplicity)
 {
     if (fBins.empty())
     {
@@ -894,8 +894,8 @@ Double_t DiJetAnalysis::FindBin(const Int_t &multiplicity)
     return it->second;
 }
 
-Bool_t DiJetAnalysis::CheckDijet(const Float_t &leadpt, const Float_t &leadeta, const Float_t &subleadpt, const Float_t &subleadeta, const Bool_t &leadID,
-                                 const Bool_t &subleadID)
+Bool_t DiJetAnalysis::CheckDijet(const Float_t& leadpt, const Float_t& leadeta, const Float_t& subleadpt, const Float_t& subleadeta, const Bool_t& leadID,
+                                 const Bool_t& subleadID)
 {
     Bool_t isDijetPt = kFALSE;
     if (leadpt > fLeadJetPtLow && subleadpt > fSubLeadJetPtLow)
@@ -949,7 +949,7 @@ Bool_t DiJetAnalysis::CheckDijet(const Float_t &leadpt, const Float_t &leadeta, 
     return (isDijetPt && isDijetLeadEta && isDijetSubLeadEta && isDijetID);
 }
 
-Int_t DiJetAnalysis::GetDiJetRegion(const Float_t &jetEta)
+Int_t DiJetAnalysis::GetDiJetRegion(const Float_t& jetEta)
 {
     if (jetEta > -3.3 && jetEta < -1.2)
     {
@@ -969,7 +969,7 @@ Int_t DiJetAnalysis::GetDiJetRegion(const Float_t &jetEta)
     }
 }
 
-Float_t DiJetAnalysis::FlipVertexZ(const Float_t &vertexz)
+Float_t DiJetAnalysis::FlipVertexZ(const Float_t& vertexz)
 {
     if (fIspPb)
     {
@@ -992,7 +992,7 @@ Float_t DiJetAnalysis::FlipVertexZ(const Float_t &vertexz)
     }
 }
 
-Double_t DiJetAnalysis::GetJetFlavor(const Int_t &partonFlavor)
+Double_t DiJetAnalysis::GetJetFlavor(const Int_t& partonFlavor)
 {
     if (!fIsMC)
     {
@@ -1012,7 +1012,7 @@ Double_t DiJetAnalysis::GetJetFlavor(const Int_t &partonFlavor)
     }
 }
 
-void DiJetAnalysis::processEvent(const Event *event)
+void DiJetAnalysis::processEvent(const Event* event)
 {
     if (fVerbose)
     {
@@ -1149,7 +1149,7 @@ void DiJetAnalysis::processEvent(const Event *event)
     }
 }
 
-void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_Weight, const Double_t &multiplicityBin)
+void DiJetAnalysis::processRecoJets(const Event* event, const Double_t& event_Weight, const Double_t& multiplicityBin)
 {
     if (event->recoJetCollection()->empty())
     {
@@ -1341,7 +1341,7 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
                 fHM->hInclusiveRefJetsLabFrame->Fill(RefJetQuantitiesLab);
                 fHM->hInclusiveRefJetsLabFrame_W->Fill(RefJetQuantitiesLab, event_Weight);
             }
-            if (jetPt > fInclusiveCorrectedJetPtMin && jetEtaCM < fInclusiveJetEtaRange[1] && jetEtaCM > fInclusiveJetEtaRange[0])
+            if (refPt > fInclusiveCorrectedJetPtMin && refEta < fInclusiveJetEtaRange[1] && refEta > fInclusiveJetEtaRange[0])
             {
                 fHM->hSelectedInclusiveRefJetsMidRapidity_W->Fill(RefJetQuantities, event_Weight);
             }
@@ -1501,7 +1501,7 @@ void DiJetAnalysis::processRecoJets(const Event *event, const Double_t &event_We
     }
 }
 
-void DiJetAnalysis::processGenJets(const Event *event, const Double_t &event_Weight, const Double_t &multiplicityBin)
+void DiJetAnalysis::processGenJets(const Event* event, const Double_t& event_Weight, const Double_t& multiplicityBin)
 {
     if (event->genJetCollection()->empty())
     {
@@ -1639,7 +1639,7 @@ void DiJetAnalysis::processGenJets(const Event *event, const Double_t &event_Wei
     }
 }
 
-void DiJetAnalysis::processRecoTracks(const Event *event, const Double_t &event_Weight, const Double_t &multiplicityBin)
+void DiJetAnalysis::processRecoTracks(const Event* event, const Double_t& event_Weight, const Double_t& multiplicityBin)
 {
     if (event->trackCollection()->empty())
     {
@@ -1683,7 +1683,7 @@ void DiJetAnalysis::processRecoTracks(const Event *event, const Double_t &event_
     }
 }
 
-void DiJetAnalysis::processGenTracks(const Event *event, const Double_t &event_Weight, const Double_t &multiplicityBin)
+void DiJetAnalysis::processGenTracks(const Event* event, const Double_t& event_Weight, const Double_t& multiplicityBin)
 {
     if (event->genTrackCollection()->empty())
     {
@@ -1760,9 +1760,9 @@ void DiJetAnalysis::report()
     // if () reportString
 }
 
-TList *DiJetAnalysis::getOutputList()
+TList* DiJetAnalysis::getOutputList()
 {
-    TList *outputList = new TList();
+    TList* outputList = new TList();
     return outputList;
 }
 
