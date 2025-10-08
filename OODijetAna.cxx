@@ -45,7 +45,7 @@ int main(int argc, char* argv[])
     TString JECFileDataName{};
     TString JEUFileName{};
     TString path2JEC = "..";
-    Double_t ptHatCut[2]{15., 30.};
+    Double_t ptHatCut[2]{15., 10000.};
     Bool_t isEmbedded{kTRUE};
     std::vector<std::pair<Int_t, Double_t>> multiplicityBins = {{0, 0.0}, {10, 1.0}, {60, 2.0}, {120, 3.0}, {185, 4.0}, {250, 5.0}, {400, 6.0}, {500, 7.0}};
     std::vector<std::string> filters{"pprimaryVertexFilter", "pphfCoincFilterPF2Th4"};
@@ -98,7 +98,7 @@ int main(int argc, char* argv[])
     eventCut->setVz(-15., 15.);
     if (isMC)
     {
-        // eventCut->setPtHat(ptHatCut[0], ptHatCut[1]);
+        eventCut->setPtHat(ptHatCut[0], ptHatCut[1]);
     }
     // eventCut->setVerbose();
 
@@ -146,7 +146,7 @@ int main(int argc, char* argv[])
     reader->setCollidingEnergy(collEnergyGeV);
     reader->setCollidingSystem(ForestReader::CollidingSystemType::OO);
     reader->setYearOfDataTaking(collYear);
-    // reader->addJECFile(JECFileName.Data());
+    reader->addJECFile(JECFileName.Data());
     reader->setPath2JetAnalysis(path2JEC.Data());
     // reader->setUseJetID();
     // reader->setJetIDType(2);
