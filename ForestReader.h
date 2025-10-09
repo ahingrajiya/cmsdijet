@@ -41,10 +41,10 @@ class ForestReader : public BaseReader
     ForestReader();
     /// @brief Constructor for ForestAODReader
     /// @param inputStream Input file (.root) or list of ROOT files that contain CMS ForestAOD
-    ForestReader(const Char_t *inputStream, const Bool_t &isAOD = kFALSE, const Bool_t &isMiniAOD = kFALSE, const Bool_t &useHltBranch = kFALSE,
-                 const Bool_t &useSkimmingBranch = kFALSE, const Char_t *jetCollection = "ak4PFJetAnalyzer", const Bool_t &useJets = kFALSE,
-                 const Bool_t &useTrackBranch = kFALSE, const Bool_t &useGenTrackBranch = kFALSE, const Bool_t &isMc = kFALSE, const Bool_t &setStoreLocation = kFALSE,
-                 const Bool_t &useMatchedJets = kFALSE);
+    ForestReader(const Char_t* inputStream, const Bool_t& isAOD = kFALSE, const Bool_t& isMiniAOD = kFALSE, const Bool_t& useHltBranch = kFALSE,
+                 const Bool_t& useSkimmingBranch = kFALSE, const Char_t* jetCollection = "ak4PFJetAnalyzer", const Bool_t& useJets = kFALSE,
+                 const Bool_t& useTrackBranch = kFALSE, const Bool_t& useGenTrackBranch = kFALSE, const Bool_t& isMc = kFALSE, const Bool_t& setStoreLocation = kFALSE,
+                 const Bool_t& useMatchedJets = kFALSE);
     /// @brief Destructor
     virtual ~ForestReader();
 
@@ -112,7 +112,7 @@ class ForestReader : public BaseReader
     /// @brief Finish (print final information)
     void finish();
     /// Read event and fill objects
-    Event *returnEvent();
+    Event* returnEvent();
     /// @brief Report event from reader
     void report();
 
@@ -122,7 +122,7 @@ class ForestReader : public BaseReader
     void useSkimmingBranch() { fUseSkimmingBranch = {kTRUE}; }
     /// Turn-on particle flow branch to be read
     ///@brief Set Jet Collection name
-    void setJetCollectionBranchName(const Char_t *name = "ak4PFJetAnalyzer") { fJetCollection = name; }
+    void setJetCollectionBranchName(const Char_t* name = "ak4PFJetAnalyzer") { fJetCollection = name; }
     /// @brief Turn on the usage of jets for the analysis
     void useJets() { fUseJets = {kTRUE}; }
 
@@ -132,36 +132,36 @@ class ForestReader : public BaseReader
     void useTrackBranch() { fUseTrackBranch = {kTRUE}; }
 
     /// @brief Set colliding energy
-    void setCollidingEnergy(const Int_t &ene = 5020) { fCollidingEnergyGeV = {ene}; }
+    void setCollidingEnergy(const Int_t& ene = 5020) { fCollidingEnergyGeV = {ene}; }
     /// @brief Set year of data taking
-    void setYearOfDataTaking(const Int_t &year = 2018) { fYearOfDataTaking = {year}; }
+    void setYearOfDataTaking(const Int_t& year = 2018) { fYearOfDataTaking = {year}; }
     ///@brief Set Path to jet analysis directory
-    void setPath2JetAnalysis(const Char_t *name = "../") { fJECPath = name; }
+    void setPath2JetAnalysis(const Char_t* name = "../") { fJECPath = name; }
     ///@brief Add JEC files to the list of JEC files
-    void addJECFile(const Char_t *name = "Autumn18_HI_V8_MC_L2Relative_AK4PF") { fJECFiles.push_back(name); }
+    void addJECFile(const Char_t* name = "Autumn18_HI_V8_MC_L2Relative_AK4PF") { fJECFiles.push_back(name); }
     ///@brief Add JEU files to the list of JEU files
-    void addJEUFile(const Char_t *name = "Autumn18_HI_V8_MC_L2Relative_AK4PF") { fJEUFiles.push_back(name); }
+    void addJEUFile(const Char_t* name = "Autumn18_HI_V8_MC_L2Relative_AK4PF") { fJEUFiles.push_back(name); }
     /// @brief Apply jet pT-smearing
-    void setJetPtSmearing(const Bool_t &isSmear = kFALSE, const Int_t &smearType = 0)
+    void setJetPtSmearing(const Bool_t& isSmear = kFALSE, const Int_t& smearType = 0)
     {
         fDoJetPtSmearing = {isSmear};
         fSmearType = {smearType};
     }
     /// @brief Set event cut
-    void setEventCut(EventCut *cut) { fEventCut = {cut}; }
+    void setEventCut(EventCut* cut) { fEventCut = {cut}; }
     /// @brief Set jet cut
-    void setJetCut(JetCut *cut) { fJetCut = {cut}; }
+    void setJetCut(JetCut* cut) { fJetCut = {cut}; }
     /// @brief Is the dataset from MC
-    void setIsMc(const Bool_t &isMc) { fIsMc = {isMc}; }
+    void setIsMc(const Bool_t& isMc) { fIsMc = {isMc}; }
     /// @brief Fix jet arrays
     void fixJetArrays() { fFixJetArrays = {kTRUE}; }
     ///@brief Set Track Cut
-    void setTrackCut(TrackCut *cut) { fTrackCut = {cut}; }
+    void setTrackCut(TrackCut* cut) { fTrackCut = {cut}; }
     ///@brief Set Use Matched Jets
     void setMatchedJets() { fUseMatchedJets = {kTRUE}; }
 
     ///@brief Events to process
-    void eventsToProcess(const Long64_t &nEvents) { fEventsToProcess = {nEvents}; }
+    void eventsToProcess(const Long64_t& nEvents) { fEventsToProcess = {nEvents}; }
     /// @brief Return amount of events to read
     Long64_t nEventsTotal() const { return fEvents2Read; }
 
@@ -171,21 +171,21 @@ class ForestReader : public BaseReader
     void setUseJetID() { fUseJetID = {kTRUE}; }
 
     /// @brief Set Jet ID Type
-    void setJetIDType(const Int_t &jetIDType) { fJetIDType = {jetIDType}; }
+    void setJetIDType(const Int_t& jetIDType) { fJetIDType = {jetIDType}; }
 
     ///@brief Set Shift in HiBin
-    void setShiftInHiBin(const Int_t &shift) { fHiBinShift = {shift}; }
+    void setShiftInHiBin(const Int_t& shift) { fHiBinShift = {shift}; }
 
     ///@brief Set Filter names
-    void setFilters(const std::vector<std::string> &filters) { fFilters = filters; }
+    void setFilters(const std::vector<std::string>& filters) { fFilters = filters; }
 
     ///@brief Set Trigger names
-    void setTriggers(const std::vector<std::string> &triggers) { fTriggers = triggers; }
+    void setTriggers(const std::vector<std::string>& triggers) { fTriggers = triggers; }
 
     /// @brief Set JES corrections
     void setJESCorrections() { fApplyJetJESCorrections = kTRUE; }
 
-    void setJEU(const Bool_t &doJEU = kFALSE, const Int_t &useJEU = 0)
+    void setJEU(const Bool_t& doJEU = kFALSE, const Int_t& useJEU = 0)
     {
         fDoJEU = {doJEU};
         fJEUType = {useJEU};
@@ -193,10 +193,10 @@ class ForestReader : public BaseReader
 
    private:
     /// @brief Setup input stream (either single file or a list of files)
-    void setInputStream(const Char_t *inputStream) { fInFileName = {inputStream}; }
+    void setInputStream(const Char_t* inputStream) { fInFileName = {inputStream}; }
 
     /// Setup input all input
-    void setupInput(TString input, TChain *hltChain, TChain *eveChain, TChain *partFlowChain, TChain *trkChain, Bool_t useMC, TChain *genTrkChain);
+    void setupInput(TString input, TChain* hltChain, TChain* eveChain, TChain* partFlowChain, TChain* trkChain, Bool_t useMC, TChain* genTrkChain);
     /// Setup chains to be filled
     Int_t setupChains();
     /// Setup branches
@@ -204,8 +204,6 @@ class ForestReader : public BaseReader
 
     /// @brief Clear variables for reading
     void clearVariables();
-    /// @brief Fix jet arrays
-    void fixIndices();
 
     /// @brief Call read event
     void readEvent();
@@ -225,34 +223,34 @@ class ForestReader : public BaseReader
     /// @param mult Charge particle multiplicity
     /// @param weighttree PtHat of the event (for MC only)
     /// @param leadjetpt Leading jet pT
-    Float_t eventWeight(const Bool_t &isMC, const Bool_t &use_centrality, const std::string &system, const Int_t &year, const Int_t &energy, const Float_t &vz,
-                        const Int_t mult, const Float_t &weighttree, const Float_t &leadjetpt) const;
+    Float_t eventWeight(const Bool_t& isMC, const Bool_t& use_centrality, const std::string& system, const Int_t& year, const Int_t& energy, const Float_t& vz,
+                        const Int_t mult, const Float_t& weighttree, const Float_t& leadjetpt) const;
     /// @brief For compatibility between MC reco and data
     /// @param isMC
     /// @param system
     /// @param year
     /// @param energy
     /// @param jetpt
-    Float_t jetPtWeight(const Bool_t &isMC, const std::string &system, const Int_t &year, const Int_t &energy, float jetpt) const;
+    Float_t jetPtWeight(const Bool_t& isMC, const std::string& system, const Int_t& year, const Int_t& energy, float jetpt) const;
     /// @brief For compatibility between MC RECO and Data
     /// @param isMC Is MC sample
     /// @param system Colliding system (pp, pPb or PbPb)
     /// @param year Year of the data taking
     /// @param energy Colliding energy (in GeV)
     /// @param leadjetpt Leading jet pT
-    Float_t leadJetPtWeight(const Bool_t &isMC, const std::string &system, const Int_t &year, const Int_t &energy, const Float_t &leadjetpt) const;
+    Float_t leadJetPtWeight(const Bool_t& isMC, const std::string& system, const Int_t& year, const Int_t& energy, const Float_t& leadjetpt) const;
     /// @brief For compatibility between MC RECO and Data
     /// @param isMC Is MC sample
     /// @param system Colliding system (pp, pPb or PbPb)
     /// @param year Year of the data taking
     /// @param energy Colliding energy (in GeV)
     /// @param subleadjetpt Leading jet pT
-    Float_t subleadJetPtWeight(const Bool_t &isMC, const std::string &system, const Int_t &year, const Int_t &energy, const Float_t &subleadjetpt) const;
+    Float_t subleadJetPtWeight(const Bool_t& isMC, const std::string& system, const Int_t& year, const Int_t& energy, const Float_t& subleadjetpt) const;
     /// @brief Jet smearing resolution effect
     /// @param refPt RefPt for the reco Jet Pt
     /// @param jeteta Jet eta
     /// @param dosmearing Apply smearing
-    Float_t jetPtSmering(const Float_t &refPt, const Float_t &jeteta, const Bool_t &dosmearing) const;
+    Float_t jetPtSmering(const Float_t& refPt, const Float_t& jeteta, const Bool_t& dosmearing) const;
     /// @brief Track mixing effect (Seagull)
     /// @param isMC True for MC and false for Data
     /// @param system Colliding system (pp, pPb or PbPb)
@@ -260,7 +258,7 @@ class ForestReader : public BaseReader
     /// @param energy Colliding energy (in GeV)
     /// @param trketa Track eta
     /// @param reco Is reco track
-    Float_t trkEtaMixWeight(const Bool_t &isMC, const std::string &system, const Int_t &year, const Int_t &energy, const Float_t &trketa, const Bool_t &reco) const;
+    Float_t trkEtaMixWeight(const Bool_t& isMC, const std::string& system, const Int_t& year, const Int_t& energy, const Float_t& trketa, const Bool_t& reco) const;
 
     /// @brief ppJetID Functions
     /// @param jtNHF Neutral Hadron Fraction
@@ -275,23 +273,23 @@ class ForestReader : public BaseReader
     /// @param jtMUM Muon Multiplicity
     /// @param jetEta Jet Eta
     /// @return Return True if jet passes the ID
-    Bool_t JetIDType2(const Float_t &jtNHF, const Float_t &jtNEF, const Float_t &jtCHF, const Float_t &jtMUF, const Float_t &jtCEF, const Int_t &jtCHM,
-                      const Int_t &jtCEM, const Int_t &jtNHM, const Int_t &jtNEM, const Int_t &jtMUM, const Float_t &jetEta);
+    Bool_t JetIDType2(const Float_t& jtNHF, const Float_t& jtNEF, const Float_t& jtCHF, const Float_t& jtMUF, const Float_t& jtCEF, const Int_t& jtCHM,
+                      const Int_t& jtCEM, const Int_t& jtNHM, const Int_t& jtNEM, const Int_t& jtMUM, const Float_t& jetEta);
     /// @brief PbPbJetID Functions
     /// @param jetTrackMax pt track in the jet
     /// @param jetRawPt raw jet pt
-    Bool_t JetIDType1(const Float_t &jetTrackMax, const Float_t &jetRawPt);
+    Bool_t JetIDType1(const Float_t& jetTrackMax, const Float_t& jetRawPt);
     /// @brief Jet JES Correction applied to akCs4PF ONLY to pPb
     /// @param jetPt corrected jet pT
     /// @return A correction factor that needs to be applied to the jet pT
-    Float_t JetJESCorrections(const Float_t &jetPt);
+    Float_t JetJESCorrections(const Float_t& jetPt);
     /// @brief Set Up all the functions for weighting
     void SetUpWeightFunctions();
     /// @brief Setting Up jet Smearing
     void setUpJER();
     /// @brief JER resolution factor retrival
     /// @param jeteta Jet Eta
-    Double_t retriveResolutionFactor(const Float_t &jeteta) const;
+    Double_t retriveResolutionFactor(const Float_t& jeteta) const;
 
     /// @brief Flag indicating if the input is AOD
     Bool_t fIsAOD;
@@ -299,9 +297,9 @@ class ForestReader : public BaseReader
     Bool_t fIsMiniAOD;
 
     /// @brief Event with jets and other variables
-    Event *fEvent;
+    Event* fEvent;
     /// @brief Input filename (name.root) or file with list of ROOT files
-    const Char_t *fInFileName;
+    const Char_t* fInFileName;
     ///@brief If input file is in store/user location then add the string to file path to open the file
     Bool_t fIsInStore;
     /// @brief Number of events to process from input file(s)
@@ -328,17 +326,17 @@ class ForestReader : public BaseReader
     Bool_t fUseGenTrackBranch;
 
     /// @brief Chain conaining HLT information (used to friend other trees)
-    TChain *fHltTree;
+    TChain* fHltTree;
     /// @brief Chain containing skimming information
-    TChain *fSkimTree;
+    TChain* fSkimTree;
     /// @brief Chain containing event information
-    TChain *fEventTree;
+    TChain* fEventTree;
     /// @brief Chain containing jets
-    TChain *fJetTree;
+    TChain* fJetTree;
     /// @brief Chain containing tracks
-    TChain *fTrkTree;
+    TChain* fTrkTree;
     /// @brief Chain containing Monte Carlo tracks
-    TChain *fGenTrkTree;
+    TChain* fGenTrkTree;
 
     /// @brief Name of the particle flow tree (e.g. akCs4PFJetAnalyzer for PbPb or ak4PFJetAnalyzer for pp)
     TString fJetCollection;
@@ -372,11 +370,11 @@ class ForestReader : public BaseReader
     // Trigger and skimming information
 
     std::vector<std::string> fTriggers;
-    Int_t *fTriggerPointers;
+    Int_t* fTriggerPointers;
 
     // Skimanalysis part
     std::vector<std::string> fFilters;
-    Int_t *fFilterPointers;
+    Int_t* fFilterPointers;
 
     //
     // Jet information
@@ -500,64 +498,64 @@ class ForestReader : public BaseReader
     //
 
     /// @brief Track transverse momentum
-    std::vector<Float_t> *fTrackPtVec = new std::vector<Float_t>();
+    std::vector<Float_t>* fTrackPtVec = new std::vector<Float_t>();
     /// @brief Track pseudorapidity
-    std::vector<Float_t> *fTrackEtaVec = new std::vector<Float_t>();
+    std::vector<Float_t>* fTrackEtaVec = new std::vector<Float_t>();
     /// @brief Track azimuthal angle
-    std::vector<Float_t> *fTrackPhiVec = new std::vector<Float_t>();
+    std::vector<Float_t>* fTrackPhiVec = new std::vector<Float_t>();
     /// @brief Track pT error (uncertainty)
-    std::vector<Float_t> *fTrackPtErrVec = new std::vector<Float_t>();
+    std::vector<Float_t>* fTrackPtErrVec = new std::vector<Float_t>();
     /// @brief Track distance of closest approach in transverse plane (XY)
-    std::vector<Float_t> *fTrackDcaXYVec = new std::vector<Float_t>();
+    std::vector<Float_t>* fTrackDcaXYVec = new std::vector<Float_t>();
     /// @brief Track distance of closest approach in beam direction (z)
-    std::vector<Float_t> *fTrackDcaZVec = new std::vector<Float_t>();
+    std::vector<Float_t>* fTrackDcaZVec = new std::vector<Float_t>();
     /// @brief Track distance of closest approach error in transverse plane (XY)
-    std::vector<Float_t> *fTrackDcaXYErrVec = new std::vector<Float_t>();
+    std::vector<Float_t>* fTrackDcaXYErrVec = new std::vector<Float_t>();
     /// @brief Track distance of closest approach error in beam direction (z)
-    std::vector<Float_t> *fTrackDcaZErrVec = new std::vector<Float_t>();
+    std::vector<Float_t>* fTrackDcaZErrVec = new std::vector<Float_t>();
     /// @brief Track fitting (reconstruction) chi2
-    std::vector<Float_t> *fTrackChi2Vec = new std::vector<Float_t>();
+    std::vector<Float_t>* fTrackChi2Vec = new std::vector<Float_t>();
     /// @brief Track number of degrees of freedom in the fitting
-    std::vector<UChar_t> *fTrackNDOFVec = new std::vector<UChar_t>();
+    std::vector<UChar_t>* fTrackNDOFVec = new std::vector<UChar_t>();
     /// @brief Particle flow energy deposited in ECAL from the given track
-    std::vector<Float_t> *fTrackPartFlowEcalVec = new std::vector<Float_t>();
+    std::vector<Float_t>* fTrackPartFlowEcalVec = new std::vector<Float_t>();
     /// @brief Particle flow energy deposited in HCAL from the given track
-    std::vector<Float_t> *fTrackPartFlowHcalVec = new std::vector<Float_t>();
+    std::vector<Float_t>* fTrackPartFlowHcalVec = new std::vector<Float_t>();
     /// @brief Track charge
-    std::vector<Char_t> *fTrackChargeVec = new std::vector<Char_t>();
+    std::vector<Char_t>* fTrackChargeVec = new std::vector<Char_t>();
     /// @brief Number of hits in the tracker
-    std::vector<Char_t> *fTrackNHitsVec = new std::vector<Char_t>();
+    std::vector<Char_t>* fTrackNHitsVec = new std::vector<Char_t>();
     /// @brief Number of layers with measurement in the tracker
-    std::vector<Char_t> *fTrackNLayersVec = new std::vector<Char_t>();
+    std::vector<Char_t>* fTrackNLayersVec = new std::vector<Char_t>();
     /// @brief Tracker steps MVA selection
-    std::vector<bool> *fTrackHighPurityVec = new std::vector<bool>();
+    std::vector<bool>* fTrackHighPurityVec = new std::vector<bool>();
 
     //
     // Monte Carlo tracks
     //
 
     /// @brief Generated particle transverse momentum
-    std::vector<Float_t> *fGenTrackPt = new std::vector<Float_t>();
+    std::vector<Float_t>* fGenTrackPt = new std::vector<Float_t>();
     /// @brief Generated particle pseudorapidity
-    std::vector<Float_t> *fGenTrackEta = new std::vector<Float_t>();
+    std::vector<Float_t>* fGenTrackEta = new std::vector<Float_t>();
     /// @brief Generated particle azimuthal angle
-    std::vector<Float_t> *fGenTrackPhi = new std::vector<Float_t>();
+    std::vector<Float_t>* fGenTrackPhi = new std::vector<Float_t>();
     /// @brief Generated particle charge
-    std::vector<Int_t> *fGenTrackCharge = new std::vector<Int_t>();
+    std::vector<Int_t>* fGenTrackCharge = new std::vector<Int_t>();
     /// @brief Generated particle PID
-    std::vector<Int_t> *fGenTrackPid = new std::vector<Int_t>();
+    std::vector<Int_t>* fGenTrackPid = new std::vector<Int_t>();
     /// @brief Generated particle sube (?)
-    std::vector<Int_t> *fGenTrackSube = new std::vector<Int_t>();
+    std::vector<Int_t>* fGenTrackSube = new std::vector<Int_t>();
 
     /// @brief Jet Energy Corrector instance
-    JetCorrector *fJEC;
+    JetCorrector* fJEC;
     /// @brief Path to jetAnalysis directory
     TString fJECPath;
     /// @brief List of files with JEC
     std::vector<std::string> fJECFiles;
 
     /// @brief Jet Energy Uncertainty instance
-    JetUncertainty *fJEU;
+    JetUncertainty* fJEU;
     /// @brief List of files with JEU
     std::vector<std::string> fJEUFiles;
 
@@ -572,11 +570,11 @@ class ForestReader : public BaseReader
     /// @brief Fix indices
     Bool_t fFixJetArrays;
     /// @brief Event cut
-    EventCut *fEventCut;
+    EventCut* fEventCut;
     /// @brief Jet cut
-    JetCut *fJetCut;
+    JetCut* fJetCut;
     ///@brief Track cut
-    TrackCut *fTrackCut;
+    TrackCut* fTrackCut;
 
     ///@brief Use Jet ID cut
     Bool_t fUseJetID;
@@ -598,7 +596,7 @@ class ForestReader : public BaseReader
     Bool_t fIs_OO;
 
     /// @brief Jet JES Corrections function applied only to AKCS4PF jets in pPb systems
-    TF1 *fJetJESCorrectionsFunction;
+    TF1* fJetJESCorrectionsFunction;
 
     /// @brief Boolean to set if jet energy scale corrections needs to be applied
     Bool_t fApplyJetJESCorrections;
@@ -616,9 +614,9 @@ class ForestReader : public BaseReader
     ///@brief Smearing resolution factor up, down or nominal
     Int_t fSmearType;
     ///@brief Smear Function
-    TF1 *fJetPtSmearingFunction;
+    TF1* fJetPtSmearingFunction;
     ///@brief Trandom number generator
-    TRandom3 *fRandom;
+    TRandom3* fRandom;
 
     /// @brief Use JEU
     Int_t fJEUType;  // 0 - no, 1 - Up, -1 - down

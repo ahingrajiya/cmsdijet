@@ -177,7 +177,7 @@ int main(int argc, char* argv[])
     analysis->setSubLeadJetEtaRange(-1.6, 1.6);
     analysis->setBins(multiplicityBins);
     analysis->setUEType(UEType);
-    analysis->setInclusiveCorrectedJetPtMin(100.);
+    analysis->setInclusiveCorrectedJetPtMin(50.);
     analysis->setInclusiveJetEtaRange(-1.6, 1.6);
 
     // Initialize Histomanager
