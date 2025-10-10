@@ -53,7 +53,7 @@ if [ "$DataSet" -eq 3 ]; then
     isMC=0
 fi
 
-if [ "$DataSet" -gt 2 ]; then
+if [ "$DataSet" -gt 3 ]; then
     echo "No Data Set Selected. Use numbers from 1 to 5"
     exit 1
 fi
