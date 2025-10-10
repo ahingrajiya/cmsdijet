@@ -26,11 +26,12 @@ Event::Event() :
 }
 
 //________________
-Event::Event(const UInt_t &runId, const ULong64_t &eventId, const UInt_t &lumi, const Float_t &vx, const Float_t &vy, const Float_t &vz, const Int_t &hiBin,
-             const Int_t &hiBinShifted, const Float_t &ptHat, const Float_t &w, const Int_t &nBadJets, const Int_t &mult, const Int_t &genMult,
-             const Long64_t &eveNumber) :
+Event::Event(const UInt_t& runId, const ULong64_t& eventId, const UInt_t& lumi, const Float_t& vx, const Float_t& vy, const Float_t& vz, const Int_t& hiBin,
+             const Int_t& hiBinShifted, const Float_t& ptHat, const Float_t& w, const Int_t& nBadJets, const Int_t& mult, const Int_t& genMult, const Long64_t& eveNumber,
+             const Float_t& hiHFPlus, const Float_t& hiHFMinus) :
     TObject(), fRunId{runId}, fEventId{eventId}, fLumi{lumi}, fVx{vx}, fVy{vy}, fVz{vz}, fHiBin{(Short_t)hiBin}, fHiBinShifted{(Short_t)hiBinShifted}, fPtHat{ptHat},
-    fPtHatWeight{w}, fNBadJets{(UChar_t)nBadJets}, fMult{(UShort_t)mult}, fGenMult{(UShort_t)genMult}, fGenJetsCollectionIsFilled{kFALSE}, fEventNumber{eveNumber}
+    fPtHatWeight{w}, fNBadJets{(UChar_t)nBadJets}, fMult{(UShort_t)mult}, fGenMult{(UShort_t)genMult}, fGenJetsCollectionIsFilled{kFALSE}, fEventNumber{eveNumber},
+    fHiHFMinus{hiHFMinus}, fHiHFPlus{hiHFPlus}
 {
     // Create new collections
     fRecoJetCollection = new RecoJetCollection{};

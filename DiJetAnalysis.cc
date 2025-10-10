@@ -1137,9 +1137,12 @@ void DiJetAnalysis::processEvent(const Event* event)
                                   static_cast<Double_t>(event->hiBinWithShift()),
                                   iMultiplicityBin};
     fHM->hMultiplicities_W->Fill(Multiplicities, Event_Weight);
+    fHM->hHiHFPlusVsHiHFMinus->Fill(event->hiHFMinus(), event->hiHFPlus());
+    fHM->hHiHFPlusVsHiHFMinus_W->Fill(event->hiHFMinus(), event->hiHFPlus(), Event_Weight);
     if (fIsDiJetFound)
     {
         fHM->hMultiplicities_DiJet_W->Fill(Multiplicities, Event_Weight);
+        fHM->hHiHFPlusVsHiHFMinus_WithDijet_W->Fill(event->hiHFMinus(), event->hiHFPlus(), Event_Weight);
     }
 
     processRecoTracks(event, Event_Weight, iMultiplicityBin);

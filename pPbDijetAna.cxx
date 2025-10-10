@@ -28,7 +28,7 @@ void usage()
 {
     std::cout << "./programName inputFileList oFileName isMC isEmbedded isPbGoing ptHatLow ptHatHi \n";
 }
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     Bool_t isMC{kTRUE};
     Bool_t isPbGoing{};
@@ -129,10 +129,10 @@ int main(int argc, char *argv[])
     }
 
     // Initialize package manager
-    Manager *manager = new Manager{};
+    Manager* manager = new Manager{};
 
     // Initialize event cuts
-    EventCut *eventCut = new EventCut{};
+    EventCut* eventCut = new EventCut{};
     eventCut->setVz(-15., 15.);
     if (isMC)
     {
@@ -141,14 +141,14 @@ int main(int argc, char *argv[])
     // eventCut->setVerbose();
 
     // Initialize jet cuts
-    JetCut *jetCut = new JetCut{};
+    JetCut* jetCut = new JetCut{};
     jetCut->setEta(-5.0, 5.0);
     jetCut->setPt(0., 8160.);
     // jetCut->setVerbose();
 
     // Initiazlize Track Cuts
 
-    TrackCut *trackCut = new TrackCut{};
+    TrackCut* trackCut = new TrackCut{};
     trackCut->setPt(0.4, 1000.);
     trackCut->setEta(-2.4, 2.4);
     trackCut->setPtErr(0.1);
@@ -160,7 +160,7 @@ int main(int argc, char *argv[])
 
     // Initialize Forest Reader
 
-    ForestReader *reader = new ForestReader{inFileName};
+    ForestReader* reader = new ForestReader{inFileName};
     reader->setForestFileType(ForestReader::ForestFileType::AOD);
     if (isMC)
     {
@@ -184,7 +184,7 @@ int main(int argc, char *argv[])
     // reader->useHltBranch();
     // reader->setTriggers(triggers);
     reader->setCollidingEnergy(collEnergyGeV);
-    reader->setCollidingSystem(ForestReader::CollidingSystemType::pPb);
+    reader->setCollidingSystem(ForestReader::CollidingSystemType::pPb, isPbGoing);
     reader->setYearOfDataTaking(collYear);
     reader->addJECFile(JECFileName.Data());
     reader->setPath2JetAnalysis(path2JEC.Data());
@@ -207,7 +207,7 @@ int main(int argc, char *argv[])
     manager->setEventReader(reader);
 
     // Dijet Analysis
-    DiJetAnalysis *analysis = new DiJetAnalysis{};
+    DiJetAnalysis* analysis = new DiJetAnalysis{};
     analysis->setIsMC(isMC);
     if (isPbGoing)
     {
@@ -256,7 +256,7 @@ int main(int argc, char *argv[])
     analysis->setReader(reader);
 
     // Initialize Histomanager
-    HistoManagerDiJet *hm = new HistoManagerDiJet{};
+    HistoManagerDiJet* hm = new HistoManagerDiJet{};
     hm->setMultiplicityBins(multiplicityBins);
     hm->setCollSystem(collSystem);
     hm->setIsMC(isMC);
@@ -270,7 +270,7 @@ int main(int argc, char *argv[])
     manager->performAnalysis();
     manager->finish();
 
-    TFile *oFile = new TFile(oFileName, "RECREATE");
+    TFile* oFile = new TFile(oFileName, "RECREATE");
     hm->projectHistograms();
     hm->writeOutput();
     oFile->Close();

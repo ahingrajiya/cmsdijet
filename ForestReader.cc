@@ -23,7 +23,7 @@ ClassImp(ForestReader)
     fTrackCut{nullptr}, fUseMatchedJets{kFALSE}, fEventsToProcess{-1}, fUseJetID{kFALSE}, fJetIDType{0}, fHiBinShift{0}, fIs_pp{kFALSE}, fIs_PbPb{kFALSE},
     fIs_pPb{kFALSE}, fJetJESCorrectionsFunction{nullptr}, fApplyJetJESCorrections{kFALSE}, fJEUType{0}, fSmearType{0}, fJetPtSmearingFunction{nullptr},
     fJERSmearingNomial{0}, fJERSmearingUp{0}, fJERSmearingDown{0}, fJERSmearingEtaEdges{0}, fRandom{nullptr}, fDoJEU{kFALSE}, fIsAOD{kFALSE}, fIsMiniAOD{kFALSE},
-    fIs_OO{kFALSE}
+    fIs_OO{kFALSE}, fIsPbGoingSide{kFALSE}
 {
     // Initialize many variables
     clearVariables();
@@ -75,6 +75,8 @@ void ForestReader::clearVariables()
     fHiBin = {-1};
     fPtHatWeight = {-1.f};
     fPtHat = {-1.f};
+    fHiHFMinus = {-1.f};
+    fHiHFPlus = {-1.f};
 
     // bad jets and multiplicity to be added
 
@@ -826,6 +828,27 @@ void ForestReader::setupBranches()
     fEventTree->SetBranchAddress("evt", &fEventId);
     fEventTree->SetBranchAddress("lumi", &fLumi);
     fEventTree->SetBranchAddress("vz", &fVertexZ);
+    fEventTree->SetBranchStatus("hiHFplus", 1);
+    fEventTree->SetBranchStatus("hiHFminus", 1);
+
+    if (fIs_pPb)
+    {
+        if (fIsPbGoingSide)
+        {
+            fEventTree->SetBranchAddress("hiHFplus", &fHiHFMinus);
+            fEventTree->SetBranchAddress("hiHFminus", &fHiHFPlus);
+        }
+        else
+        {
+            fEventTree->SetBranchAddress("hiHFplus", &fHiHFPlus);
+            fEventTree->SetBranchAddress("hiHFminus", &fHiHFMinus);
+        }
+    }
+    else
+    {
+        fEventTree->SetBranchAddress("hiHFplus", &fHiHFPlus);
+        fEventTree->SetBranchAddress("hiHFminus", &fHiHFMinus);
+    }
 
     if (fIsMc)
     {
@@ -1172,6 +1195,8 @@ Event* ForestReader::returnEvent()
     fEvent->setEventId(fEventId);
     fEvent->setLumi(fLumi);
     fEvent->setVz(fVertexZ);
+    fEvent->setHiHFPlus(fHiHFPlus);
+    fEvent->setHiHFMinus(fHiHFMinus);
     if (fIsMc)
     {
         fEvent->setPtHat(fPtHat);
@@ -1183,7 +1208,6 @@ Event* ForestReader::returnEvent()
     }
     fEvent->setHiBin(fHiBin);
     fEvent->setHiBinShifted(fHiBin + fHiBinShift);
-    // fEvent->setHiBin(100);
     // Fill HLT branch
     if (fUseHltBranch)
     {

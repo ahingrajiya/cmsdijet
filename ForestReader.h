@@ -70,7 +70,7 @@ class ForestReader : public BaseReader
     };
 
     /// @brief Set colliding system
-    void setCollidingSystem(CollidingSystemType sys)
+    void setCollidingSystem(CollidingSystemType sys, const Bool_t isPbGoingSide = kFALSE)
     {
         fIs_pp = (sys == CollidingSystemType::pp);
         fIs_pPb = (sys == CollidingSystemType::pPb);
@@ -87,6 +87,7 @@ class ForestReader : public BaseReader
                 fCollidingSystem = "pPb";
                 fCollSysType = CollidingSystemType::pPb;
                 fIs_pPb = kTRUE;
+                fIsPbGoingSide = isPbGoingSide;
                 break;
             case CollidingSystemType::PbPb:
                 fCollidingSystem = "PbPb";
@@ -366,6 +367,15 @@ class ForestReader : public BaseReader
     /// @brief ptHat (initial parton pT) - from generator level
     Float_t fPtHat;
 
+    ///@note
+    ///  HiHFPlus/Minus is set up such a way Pb should always refere to fHiHFMinus
+    ///  and p should always refere to fHiHFPlus. Depending on beam orientation branch addresses needs to change to reflect this. In Pbgoing Pb  ion
+    ///  is going to positive eta and in p-going case proton is going to positive eta. Hence in Pbgoing case fHiHFminus should read hiHFplus branch and vice versa
+    ///  for p-going case.
+    /// @brief Forward Calorimetere positive eta energy
+    Float_t fHiHFPlus;
+    /// @brief Forward Calorimetere negative eta energy
+    Float_t fHiHFMinus;
     //
     // Trigger and skimming information
 
@@ -622,6 +632,9 @@ class ForestReader : public BaseReader
     Int_t fJEUType;  // 0 - no, 1 - Up, -1 - down
     /// @brief Do JEU
     Bool_t fDoJEU;
+
+    ///@brief if Pb is going to positive eta
+    Bool_t fIsPbGoingSide;
 
     ClassDef(ForestReader, 1)
 };

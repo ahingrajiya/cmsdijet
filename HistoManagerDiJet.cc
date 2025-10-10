@@ -56,7 +56,8 @@ ClassImp(HistoManagerDiJet)
     hRefLeadRefSubLeadJets_WithDijet_DiJetW{nullptr}, hLeadingGenJetPtWithDijet_DiJetW{nullptr}, hSubLeadingGenJetPtWithDijet_DiJetW{nullptr},
     hLeadingRefJetPtWithDijet_DiJetW{nullptr}, hSubLeadingRefJetPtWithDijet_DiJetW{nullptr}, hLeadingRecoJetPtWithDijet_DiJetW{nullptr},
     hSubLeadingRecoJetPtWithDijet_DiJetW{nullptr}, hRefLeadRefSubLead_W{nullptr}, hGenLeadGenSubLead_W{nullptr}, hRefLeadPtVsRefSubLeadPtMatched_DiJetW{nullptr},
-    hRefLeadPtVsRefSubLeadPtMatched_PtHatW{nullptr}
+    hRefLeadPtVsRefSubLeadPtMatched_PtHatW{nullptr}, hHiHFPlusVsHiHFMinus{nullptr}, hHiHFPlusVsHiHFMinus_W{nullptr}, hHiHFPlusVsHiHFMinus_WithDijet_W{nullptr},
+    hHiHFPlus{nullptr}, hHiHFPlus_W{nullptr}, hHiHFMinus{nullptr}, hHiHFMinus_W{nullptr}, hHiHFPlus_WithDijet_W{nullptr}, hHiHFMinus_WithDijet_W{nullptr}
 {
     /* Empty*/
 }
@@ -227,6 +228,16 @@ HistoManagerDiJet::~HistoManagerDiJet()
     if (hXj_C0_W) delete hXj_C0_W;
     if (hGenXj_C0_DiJetW) delete hGenXj_C0_DiJetW;
     if (hGenXj_C0_W) delete hGenXj_C0_W;
+
+    if (hHiHFPlusVsHiHFMinus) delete hHiHFPlusVsHiHFMinus;
+    if (hHiHFPlusVsHiHFMinus_W) delete hHiHFPlusVsHiHFMinus_W;
+    if (hHiHFPlusVsHiHFMinus_WithDijet_W) delete hHiHFPlusVsHiHFMinus_WithDijet_W;
+    if (hHiHFPlus) delete hHiHFPlus;
+    if (hHiHFPlus_W) delete hHiHFPlus_W;
+    if (hHiHFMinus) delete hHiHFMinus;
+    if (hHiHFMinus_W) delete hHiHFMinus_W;
+    if (hHiHFPlus_WithDijet_W) delete hHiHFPlus_WithDijet_W;
+    if (hHiHFMinus_WithDijet_W) delete hHiHFMinus_WithDijet_W;
 
     for (auto hist : hXj_Projection_W) delete hist;
     for (auto hist : hXj_Projection_DiJetW) delete hist;
@@ -595,6 +606,17 @@ void HistoManagerDiJet::init()
     hTrackPtVsEtaCorrected_W =
         new TH3D("hRecoTrackPtVsEtaCorrected_W", "Reco Track Pt vs Eta Corrected Weighted", nEtaBins, trkEtaBins, nPtBins, trkPtBins, nMultiplicityBins, multBinArray);
     hTrackPtVsEtaCorrected_W->Sumw2();
+
+    hHiHFPlusVsHiHFMinus =
+        new TH2D("hHiHFPlusVsHiHFMinus", "Forward Calorimeter in Positive Eta (p-going)  vs Forward Calorimeter in Minus Eta (Pb-going)", 1000, 0., 500., 1000, 0., 500.);
+    hHiHFPlusVsHiHFMinus->Sumw2();
+    hHiHFPlusVsHiHFMinus_W = new TH2D("hHiHFPlusVsHiHFMinus_W", "Forward Calorimeter in Positive Eta (p-going)  vs Forward Calorimeter in Minus Eta (Pb-going) Weighted",
+                                      1000, 0., 500., 1000, 0., 500.);
+    hHiHFPlusVsHiHFMinus_W->Sumw2();
+    hHiHFPlusVsHiHFMinus_WithDijet_W = new TH2D(
+        "hHiHFPlusVsHiHFMinus_WithDijet_W", "Forward Calorimeter in Positive Eta (p-going)  vs Forward Calorimeter in Minus Eta (Pb-going) With Dijet Present Weighted",
+        1000, 0., 500., 1000, 0., 500.);
+    hHiHFPlusVsHiHFMinus_WithDijet_W->Sumw2();
 }
 
 void HistoManagerDiJet::projectHistograms()
@@ -604,96 +626,126 @@ void HistoManagerDiJet::projectHistograms()
     std::cout << "Projecting Histograms" << std::endl;
     std::cout << "====================================" << std::endl;
 
-    TH1D *iProjection;
+    TH1D* iProjection;
     std::cout << "====>Reco level histograms being projected" << std::endl;
     iProjection = hInclusiveRecoJetsCMFrame->Projection(0);
-    hInclusiveRecoJetPt = (TH1D *)iProjection->Clone("hInclusiveRecoJetPt");
+    hInclusiveRecoJetPt = (TH1D*)iProjection->Clone("hInclusiveRecoJetPt");
     hInclusiveRecoJetPt->SetTitle("Inclusive Reco Jet Pt");
     delete iProjection;
 
     iProjection = hInclusiveRecoJetsCMFrame_W->Projection(0);
-    hInclusiveRecoJetPt_W = (TH1D *)iProjection->Clone("hInclusiveRecoJetPt_W");
+    hInclusiveRecoJetPt_W = (TH1D*)iProjection->Clone("hInclusiveRecoJetPt_W");
     hInclusiveRecoJetPt_W->SetTitle("Inclusive Reco Jet Pt Weighted");
     delete iProjection;
 
     iProjection = hSelectedInclusiveRecoJetsMidRapidity_W->Projection(0);
-    hSelectedInclusiveRecoJetPt_MidRapidity_W = (TH1D *)iProjection->Clone("hSelectedInclusiveRecoJetPt_MidRapidity_W");
+    hSelectedInclusiveRecoJetPt_MidRapidity_W = (TH1D*)iProjection->Clone("hSelectedInclusiveRecoJetPt_MidRapidity_W");
     hSelectedInclusiveRecoJetPt_MidRapidity_W->SetTitle("Selected (Jet Pt > 50) Inclusive Reco Jet Pt MidRapidity Weighted");
     delete iProjection;
 
     iProjection = hInclusiveRecoJetsCMFrame->Projection(1);
-    hInclusiveRecoJetEtaCMFrame = (TH1D *)iProjection->Clone("hInclusiveRecoJetEtaCMFrame");
+    hInclusiveRecoJetEtaCMFrame = (TH1D*)iProjection->Clone("hInclusiveRecoJetEtaCMFrame");
     hInclusiveRecoJetEtaCMFrame->SetTitle("Inclusive Reco Jet Eta CM Frame");
     delete iProjection;
 
     iProjection = hInclusiveRecoJetsCMFrame_W->Projection(1);
-    hInclusiveRecoJetEtaCMFrame_W = (TH1D *)iProjection->Clone("hInclusiveRecoJetEtaCMFrame_W");
+    hInclusiveRecoJetEtaCMFrame_W = (TH1D*)iProjection->Clone("hInclusiveRecoJetEtaCMFrame_W");
     hInclusiveRecoJetEtaCMFrame_W->SetTitle("Inclusive Reco Jet Eta CM Frame Weighted");
     delete iProjection;
 
     iProjection = hInclusiveRecoJetsLabFrame->Projection(1);
-    hInclusiveRecoJetEtaLabFrame = (TH1D *)iProjection->Clone("hInclusiveRecoJetEtaLabFrame");
+    hInclusiveRecoJetEtaLabFrame = (TH1D*)iProjection->Clone("hInclusiveRecoJetEtaLabFrame");
     hInclusiveRecoJetEtaLabFrame->SetTitle("Inclusive Reco Jet Eta Lab Frame");
     delete iProjection;
 
     iProjection = hInclusiveRecoJetsLabFrame_W->Projection(1);
-    hInclusiveRecoJetEtaLabFrame_W = (TH1D *)iProjection->Clone("hInclusiveRecoJetEtaLabFrame_W");
+    hInclusiveRecoJetEtaLabFrame_W = (TH1D*)iProjection->Clone("hInclusiveRecoJetEtaLabFrame_W");
     hInclusiveRecoJetEtaLabFrame_W->SetTitle("Inclusive Reco Jet Eta Lab Frame Weighted");
     delete iProjection;
 
     iProjection = hSelectedInclusiveRecoJetsMidRapidity_W->Projection(1);
-    hSelectedInclusiveRecoJetEtaMidRapidity_W = (TH1D *)iProjection->Clone("hSelectedInclusiveRecoJetEtaMidRapidity_W");
+    hSelectedInclusiveRecoJetEtaMidRapidity_W = (TH1D*)iProjection->Clone("hSelectedInclusiveRecoJetEtaMidRapidity_W");
     hSelectedInclusiveRecoJetEtaMidRapidity_W->SetTitle("Selected (Jet Pt > 50) Inclusive Reco Jet Eta MidRapidity Weighted");
     delete iProjection;
 
     iProjection = hLeadSubLeadJets->Projection(0);
-    hLeadingRecoJetPt = (TH1D *)iProjection->Clone("hLeadingRecoJetPt");
+    hLeadingRecoJetPt = (TH1D*)iProjection->Clone("hLeadingRecoJetPt");
     hLeadingRecoJetPt->SetTitle("Leading Reco Jet Pt");
     delete iProjection;
 
     iProjection = hLeadSubLeadJets_W->Projection(0);
-    hLeadingRecoJetPt_W = (TH1D *)iProjection->Clone("hLeadingRecoJetPt_W");
+    hLeadingRecoJetPt_W = (TH1D*)iProjection->Clone("hLeadingRecoJetPt_W");
     hLeadingRecoJetPt_W->SetTitle("Leading Reco Jet Pt Weighted");
     delete iProjection;
 
     iProjection = hLeadSubLeadJets->Projection(3);
-    hSubLeadingRecoJetPt = (TH1D *)iProjection->Clone("hSubLeadingRecoJetPt");
+    hSubLeadingRecoJetPt = (TH1D*)iProjection->Clone("hSubLeadingRecoJetPt");
     hSubLeadingRecoJetPt->SetTitle("SubLeading Reco Jet Pt");
     delete iProjection;
 
     iProjection = hLeadSubLeadJets_W->Projection(3);
-    hSubLeadingRecoJetPt_W = (TH1D *)iProjection->Clone("hSubLeadingRecoJetPt_W");
+    hSubLeadingRecoJetPt_W = (TH1D*)iProjection->Clone("hSubLeadingRecoJetPt_W");
     hSubLeadingRecoJetPt_W->SetTitle("SubLeading Reco Jet Pt Weighted");
     delete iProjection;
 
     iProjection = hLeadSubLeadJets_WithDijet_W->Projection(0);
-    hLeadingRecoJetPtWithDijet_W = (TH1D *)iProjection->Clone("hLeadingRecoJetPtWithDijet_W");
+    hLeadingRecoJetPtWithDijet_W = (TH1D*)iProjection->Clone("hLeadingRecoJetPtWithDijet_W");
     hLeadingRecoJetPtWithDijet_W->SetTitle("Leading Reco Jet Pt With Dijet Present Weighted");
     delete iProjection;
 
     iProjection = hLeadSubLeadJets_WithDijet_W->Projection(3);
-    hSubLeadingRecoJetPtWithDijet_W = (TH1D *)iProjection->Clone("hSubLeadingRecoJetPtWithDijet_W");
+    hSubLeadingRecoJetPtWithDijet_W = (TH1D*)iProjection->Clone("hSubLeadingRecoJetPtWithDijet_W");
     hSubLeadingRecoJetPtWithDijet_W->SetTitle("SubLeading Reco Jet Pt With Dijet Present Weighted");
     delete iProjection;
 
     iProjection = hLeadSubLeadJets_WithDijet_DiJetW->Projection(0);
-    hLeadingRecoJetPtWithDijet_DiJetW = (TH1D *)iProjection->Clone("hLeadingRecoJetPtWithDijet_DiJetW");
+    hLeadingRecoJetPtWithDijet_DiJetW = (TH1D*)iProjection->Clone("hLeadingRecoJetPtWithDijet_DiJetW");
     hLeadingRecoJetPtWithDijet_DiJetW->SetTitle("Leading Reco Jet Pt With Dijet Present With DiJetWeighted");
     delete iProjection;
 
     iProjection = hLeadSubLeadJets_WithDijet_DiJetW->Projection(3);
-    hSubLeadingRecoJetPtWithDijet_DiJetW = (TH1D *)iProjection->Clone("hSubLeadingRecoJetPtWithDijet_DiJetW");
+    hSubLeadingRecoJetPtWithDijet_DiJetW = (TH1D*)iProjection->Clone("hSubLeadingRecoJetPtWithDijet_DiJetW");
     hSubLeadingRecoJetPtWithDijet_DiJetW->SetTitle("SubLeading Reco Jet Pt With Dijet Present With DiJetWeighted");
     delete iProjection;
 
     iProjection = hMultVsXj_W->ProjectionX();
-    hXj_C0_W = (TH1D *)iProjection->Clone("hXj_W");
+    hXj_C0_W = (TH1D*)iProjection->Clone("hXj_W");
     hXj_C0_W->SetTitle("Xj Projection C0 Weighted");
     delete iProjection;
 
     iProjection = hMultVsXj_DiJetW->ProjectionX();
-    hXj_C0_DiJetW = (TH1D *)iProjection->Clone("hXj_DiJetW");
+    hXj_C0_DiJetW = (TH1D*)iProjection->Clone("hXj_DiJetW");
     hXj_C0_DiJetW->SetTitle("Xj Projection C0 Dijet Weighted");
+    delete iProjection;
+
+    iProjection = hHiHFPlusVsHiHFMinus->ProjectionX();
+    hHiHFMinus = (TH1D*)iProjection->Clone("hHiHFMinus");
+    hHiHFMinus->SetTitle("Forward Calorimeter in Minus Eta (Pb-going)");
+    delete iProjection;
+
+    iProjection = hHiHFPlusVsHiHFMinus->ProjectionY();
+    hHiHFPlus = (TH1D*)iProjection->Clone("hHiHFPlus");
+    hHiHFPlus->SetTitle("Forward Calorimeter in Positive Eta (p-going)");
+    delete iProjection;
+
+    iProjection = hHiHFPlusVsHiHFMinus_W->ProjectionX();
+    hHiHFMinus_W = (TH1D*)iProjection->Clone("hHiHFMinus_W");
+    hHiHFMinus_W->SetTitle("Forward Calorimeter in Minus Eta (Pb-going) Weighted");
+    delete iProjection;
+
+    iProjection = hHiHFPlusVsHiHFMinus_W->ProjectionY();
+    hHiHFPlus_W = (TH1D*)iProjection->Clone("hHiHFPlus_W");
+    hHiHFPlus_W->SetTitle("Forward Calorimeter in Positive Eta (p-going) Weighted");
+    delete iProjection;
+
+    iProjection = hHiHFPlusVsHiHFMinus_WithDijet_W->ProjectionX();
+    hHiHFMinus_WithDijet_W = (TH1D*)iProjection->Clone("hHiHFMinus_WithDijet_W");
+    hHiHFMinus_WithDijet_W->SetTitle("Forward Calorimeter in Minus Eta (Pb-going) With Dijet Present Weighted");
+    delete iProjection;
+
+    iProjection = hHiHFPlusVsHiHFMinus_WithDijet_W->ProjectionY();
+    hHiHFPlus_WithDijet_W = (TH1D*)iProjection->Clone("hHiHFPlus_WithDijet_W");
+    hHiHFPlus_WithDijet_W->SetTitle("Forward Calorimeter in Positive Eta (p-going) With Dijet Present Weighted");
     delete iProjection;
 
     if (fIsMC)
@@ -701,147 +753,147 @@ void HistoManagerDiJet::projectHistograms()
         std::cout << "====>Gen level histograms being projected" << std::endl;
 
         iProjection = hInclusiveGenJetsCMFrame->Projection(0);
-        hInclusiveGenJetPt = (TH1D *)iProjection->Clone("hInclusiveGenJetPt");
+        hInclusiveGenJetPt = (TH1D*)iProjection->Clone("hInclusiveGenJetPt");
         hInclusiveGenJetPt->SetTitle("Inclusive Gen Jet Pt");
         delete iProjection;
 
         iProjection = hInclusiveGenJetsCMFrame_W->Projection(0);
-        hInclusiveGenJetPt_W = (TH1D *)iProjection->Clone("hInclusiveGenJetPt_W");
+        hInclusiveGenJetPt_W = (TH1D*)iProjection->Clone("hInclusiveGenJetPt_W");
         hInclusiveGenJetPt_W->SetTitle("Inclusive Gen Jet Pt Weighted");
         delete iProjection;
 
         iProjection = hSelectedInclusiveGenJetsMidRapidity_W->Projection(0);
-        hSelectedInclusiveGenJetPt_MidRapidity_W = (TH1D *)iProjection->Clone("hSelectedInclusiveGenJetPt_MidRapidity_W");
+        hSelectedInclusiveGenJetPt_MidRapidity_W = (TH1D*)iProjection->Clone("hSelectedInclusiveGenJetPt_MidRapidity_W");
         hSelectedInclusiveGenJetPt_MidRapidity_W->SetTitle("Selected (Jet Pt > 50) Inclusive Gen Jet Pt MidRapidity Weighted");
         delete iProjection;
 
         iProjection = hInclusiveGenJetsCMFrame->Projection(1);
-        hInclusiveGenJetEtaCMFrame = (TH1D *)iProjection->Clone("hInclusiveGenJetEtaCMFrame");
+        hInclusiveGenJetEtaCMFrame = (TH1D*)iProjection->Clone("hInclusiveGenJetEtaCMFrame");
         hInclusiveGenJetEtaCMFrame->SetTitle("Inclusive Gen Jet Eta CM Frame");
         delete iProjection;
 
         iProjection = hInclusiveGenJetsCMFrame_W->Projection(1);
-        hInclusiveGenJetEtaCMFrame_W = (TH1D *)iProjection->Clone("hInclusiveGenJetEtaCMFrame_W");
+        hInclusiveGenJetEtaCMFrame_W = (TH1D*)iProjection->Clone("hInclusiveGenJetEtaCMFrame_W");
         hInclusiveGenJetEtaCMFrame_W->SetTitle("Inclusive Gen Jet Eta CM Frame Weighted");
         delete iProjection;
 
         iProjection = hInclusiveGenJetsLabFrame->Projection(1);
-        hInclusiveGenJetEtaLabFrame = (TH1D *)iProjection->Clone("hInclusiveGenJetEtaLabFrame");
+        hInclusiveGenJetEtaLabFrame = (TH1D*)iProjection->Clone("hInclusiveGenJetEtaLabFrame");
         hInclusiveGenJetEtaLabFrame->SetTitle("Inclusive Gen Jet Eta Lab Frame");
         delete iProjection;
 
         iProjection = hInclusiveGenJetsLabFrame_W->Projection(1);
-        hInclusiveGenJetEtaLabFrame_W = (TH1D *)iProjection->Clone("hInclusiveGenJetEtaLabFrame_W");
+        hInclusiveGenJetEtaLabFrame_W = (TH1D*)iProjection->Clone("hInclusiveGenJetEtaLabFrame_W");
         hInclusiveGenJetEtaLabFrame_W->SetTitle("Inclusive Gen Jet Eta Lab Frame Weighted");
         delete iProjection;
 
         iProjection = hSelectedInclusiveGenJetsMidRapidity_W->Projection(1);
-        hSelectedInclusiveGenJetEtaMidRapidity_W = (TH1D *)iProjection->Clone("hSelectedInclusiveGenJetEtaMidRapidity_W");
+        hSelectedInclusiveGenJetEtaMidRapidity_W = (TH1D*)iProjection->Clone("hSelectedInclusiveGenJetEtaMidRapidity_W");
         hSelectedInclusiveGenJetEtaMidRapidity_W->SetTitle("Selected (Jet Pt > 50) Inclusive Gen Jet Eta MidRapidity Weighted");
         delete iProjection;
 
         iProjection = hGenLeadGenSubLeadJets->Projection(0);
-        hLeadingGenJetPt = (TH1D *)iProjection->Clone("hLeadingGenJetPt");
+        hLeadingGenJetPt = (TH1D*)iProjection->Clone("hLeadingGenJetPt");
         hLeadingGenJetPt->SetTitle("Leading Gen Jet Pt");
         delete iProjection;
 
         iProjection = hGenLeadGenSubLeadJets_W->Projection(0);
-        hLeadingGenJetPt_W = (TH1D *)iProjection->Clone("hLeadingGenJetPt_W");
+        hLeadingGenJetPt_W = (TH1D*)iProjection->Clone("hLeadingGenJetPt_W");
         hLeadingGenJetPt_W->SetTitle("Leading Gen Jet Pt Weighted");
         delete iProjection;
 
         iProjection = hGenLeadGenSubLeadJets->Projection(3);
-        hSubLeadingGenJetPt = (TH1D *)iProjection->Clone("hSubLeadingGenJetPt");
+        hSubLeadingGenJetPt = (TH1D*)iProjection->Clone("hSubLeadingGenJetPt");
         hSubLeadingGenJetPt->SetTitle("SubLeading Gen Jet Pt");
         delete iProjection;
 
         iProjection = hGenLeadGenSubLeadJets_W->Projection(3);
-        hSubLeadingGenJetPt_W = (TH1D *)iProjection->Clone("hSubLeadingGenJetPt_W");
+        hSubLeadingGenJetPt_W = (TH1D*)iProjection->Clone("hSubLeadingGenJetPt_W");
         hSubLeadingGenJetPt_W->SetTitle("SubLeading Gen Jet Pt Weighted");
         delete iProjection;
 
         iProjection = hGenLeadGenSubLeadJets_WithDijet_W->Projection(0);
-        hLeadingGenJetPtWithDijet_W = (TH1D *)iProjection->Clone("hLeadingGenJetPtWithDijet_W");
+        hLeadingGenJetPtWithDijet_W = (TH1D*)iProjection->Clone("hLeadingGenJetPtWithDijet_W");
         hLeadingGenJetPtWithDijet_W->SetTitle("Leading Gen Jet Pt With Dijet Present Weighted");
         delete iProjection;
 
         iProjection = hGenLeadGenSubLeadJets_WithDijet_W->Projection(3);
-        hSubLeadingGenJetPtWithDijet_W = (TH1D *)iProjection->Clone("hSubLeadingGenJetPtWithDijet_W");
+        hSubLeadingGenJetPtWithDijet_W = (TH1D*)iProjection->Clone("hSubLeadingGenJetPtWithDijet_W");
         hSubLeadingGenJetPtWithDijet_W->SetTitle("SubLeading Gen Jet Pt With Dijet Present Weighted");
         delete iProjection;
 
         iProjection = hGenLeadGenSubLeadJets_WithDijet_DiJetW->Projection(0);
-        hLeadingGenJetPtWithDijet_DiJetW = (TH1D *)iProjection->Clone("hLeadingGenJetPtWithDijet_DiJetW");
+        hLeadingGenJetPtWithDijet_DiJetW = (TH1D*)iProjection->Clone("hLeadingGenJetPtWithDijet_DiJetW");
         hLeadingGenJetPtWithDijet_DiJetW->SetTitle("Leading Gen Jet Pt With Dijet Present With DiJetWeighted");
         delete iProjection;
 
         iProjection = hGenLeadGenSubLeadJets_WithDijet_DiJetW->Projection(3);
-        hSubLeadingGenJetPtWithDijet_DiJetW = (TH1D *)iProjection->Clone("hSubLeadingGenJetPtWithDijet_DiJetW");
+        hSubLeadingGenJetPtWithDijet_DiJetW = (TH1D*)iProjection->Clone("hSubLeadingGenJetPtWithDijet_DiJetW");
         hSubLeadingGenJetPtWithDijet_DiJetW->SetTitle("SubLeading Gen Jet Pt With Dijet Present With DiJetWeighted");
         delete iProjection;
 
         iProjection = hInclusiveRefJetsCMFrame->Projection(0);
-        hInclusiveRefJetPt = (TH1D *)iProjection->Clone("hInclusiveRefJetPt");
+        hInclusiveRefJetPt = (TH1D*)iProjection->Clone("hInclusiveRefJetPt");
         hInclusiveRefJetPt->SetTitle("Inclusive Ref Jet Pt");
         delete iProjection;
 
         iProjection = hInclusiveRefJetsCMFrame_W->Projection(0);
-        hInclusiveRefJetPt_W = (TH1D *)iProjection->Clone("hInclusiveRefJetPt_W");
+        hInclusiveRefJetPt_W = (TH1D*)iProjection->Clone("hInclusiveRefJetPt_W");
         hInclusiveRefJetPt_W->SetTitle("Inclusive Ref Jet Pt Weighted");
         delete iProjection;
 
         iProjection = hSelectedInclusiveRefJetsMidRapidity_W->Projection(0);
-        hSelectedInclusiveRefJetPt_MidRapidity_W = (TH1D *)iProjection->Clone("hSelectedInclusiveRefJetPt_MidRapidity_W");
+        hSelectedInclusiveRefJetPt_MidRapidity_W = (TH1D*)iProjection->Clone("hSelectedInclusiveRefJetPt_MidRapidity_W");
         hSelectedInclusiveRefJetPt_MidRapidity_W->SetTitle("Selected (Jet Pt > 50) Inclusive Ref Jet Pt MidRapidity Weighted");
         delete iProjection;
 
         iProjection = hRefLeadRefSubLeadJets->Projection(0);
-        hLeadingRefJetPt = (TH1D *)iProjection->Clone("hLeadingRefJetPt");
+        hLeadingRefJetPt = (TH1D*)iProjection->Clone("hLeadingRefJetPt");
         hLeadingRefJetPt->SetTitle("Leading Ref Jet Pt");
         delete iProjection;
 
         iProjection = hRefLeadRefSubLeadJets_W->Projection(0);
-        hLeadingRefJetPt_W = (TH1D *)iProjection->Clone("hLeadingRefJetPt_W");
+        hLeadingRefJetPt_W = (TH1D*)iProjection->Clone("hLeadingRefJetPt_W");
         hLeadingRefJetPt_W->SetTitle("Leading Ref Jet Pt Weighted");
         delete iProjection;
 
         iProjection = hRefLeadRefSubLeadJets->Projection(3);
-        hSubLeadingRefJetPt = (TH1D *)iProjection->Clone("hSubLeadingRefJetPt");
+        hSubLeadingRefJetPt = (TH1D*)iProjection->Clone("hSubLeadingRefJetPt");
         hSubLeadingRefJetPt->SetTitle("SubLeading Ref Jet Pt");
         delete iProjection;
 
         iProjection = hRefLeadRefSubLeadJets_W->Projection(3);
-        hSubLeadingRefJetPt_W = (TH1D *)iProjection->Clone("hSubLeadingRefJetPt_W");
+        hSubLeadingRefJetPt_W = (TH1D*)iProjection->Clone("hSubLeadingRefJetPt_W");
         hSubLeadingRefJetPt_W->SetTitle("SubLeading Ref Jet Pt Weighted");
         delete iProjection;
 
         iProjection = hRefLeadRefSubLeadJets_WithDijet_W->Projection(0);
-        hLeadingRefJetPtWithDijet_W = (TH1D *)iProjection->Clone("hLeadingRefJetPtWithDijet_W");
+        hLeadingRefJetPtWithDijet_W = (TH1D*)iProjection->Clone("hLeadingRefJetPtWithDijet_W");
         hLeadingRefJetPtWithDijet_W->SetTitle("Leading Ref Jet Pt With Dijet Present Weighted");
         delete iProjection;
 
         iProjection = hRefLeadRefSubLeadJets_WithDijet_W->Projection(3);
-        hSubLeadingRefJetPtWithDijet_W = (TH1D *)iProjection->Clone("hSubLeadingRefJetPtWithDijet_W");
+        hSubLeadingRefJetPtWithDijet_W = (TH1D*)iProjection->Clone("hSubLeadingRefJetPtWithDijet_W");
         hSubLeadingRefJetPtWithDijet_W->SetTitle("SubLeading Ref Jet Pt With Dijet Present Weighted");
         delete iProjection;
 
         iProjection = hRefLeadRefSubLeadJets_WithDijet_DiJetW->Projection(0);
-        hLeadingRefJetPtWithDijet_DiJetW = (TH1D *)iProjection->Clone("hLeadingRefJetPtWithDijet_DiJetW");
+        hLeadingRefJetPtWithDijet_DiJetW = (TH1D*)iProjection->Clone("hLeadingRefJetPtWithDijet_DiJetW");
         hLeadingRefJetPtWithDijet_DiJetW->SetTitle("Leading Ref Jet Pt With Dijet Present With DiJetWeighted");
         delete iProjection;
 
         iProjection = hRefLeadRefSubLeadJets_WithDijet_DiJetW->Projection(3);
-        hSubLeadingRefJetPtWithDijet_DiJetW = (TH1D *)iProjection->Clone("hSubLeadingRefJetPtWithDijet_DiJetW");
+        hSubLeadingRefJetPtWithDijet_DiJetW = (TH1D*)iProjection->Clone("hSubLeadingRefJetPtWithDijet_DiJetW");
         hSubLeadingRefJetPtWithDijet_DiJetW->SetTitle("SubLeading Ref Jet Pt With Dijet Present With DiJetWeighted");
         delete iProjection;
 
         iProjection = hMultVsGenXj_W->ProjectionX();
-        hGenXj_C0_W = (TH1D *)iProjection->Clone("hGenXj_W");
+        hGenXj_C0_W = (TH1D*)iProjection->Clone("hGenXj_W");
         hGenXj_C0_W->SetTitle("Gen Xj Projection C0 Weighted");
         delete iProjection;
 
         iProjection = hMultVsGenXj_DiJetW->ProjectionX();
-        hGenXj_C0_DiJetW = (TH1D *)iProjection->Clone("hGenXj_DiJetW");
+        hGenXj_C0_DiJetW = (TH1D*)iProjection->Clone("hGenXj_DiJetW");
         hGenXj_C0_DiJetW->SetTitle("Gen Xj Projection C0 Dijet Weighted");
         delete iProjection;
     }
@@ -926,6 +978,9 @@ void HistoManagerDiJet ::writeOutput()
         hSubEventMultiplicity_W->Write();
     }
     hNEventsInMult->Write();
+    hHiHFPlusVsHiHFMinus->Write();
+    hHiHFPlusVsHiHFMinus_W->Write();
+    hHiHFPlusVsHiHFMinus_WithDijet_W->Write();
 
     std::cout << "  ===> Writing Jets Histograms" << std::endl;
 
@@ -1074,6 +1129,12 @@ void HistoManagerDiJet ::writeOutput()
     gDirectory->cd("..");
     gDirectory->mkdir("Projections");
     gDirectory->cd("Projections");
+    hHiHFPlus->Write();
+    hHiHFMinus->Write();
+    hHiHFPlus_W->Write();
+    hHiHFMinus_W->Write();
+    hHiHFPlus_WithDijet_W->Write();
+    hHiHFMinus_WithDijet_W->Write();
     hInclusiveRecoJetPt->Write();
     hInclusiveRecoJetPt_W->Write();
     hSelectedInclusiveRecoJetPt_MidRapidity_W->Write();
