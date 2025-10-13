@@ -9,9 +9,11 @@
  *
  */
 
-#ifndef BaseAnalysis_h
-#define BaseAnalysis_h
+#ifndef BASE_ANALYSIS_H
+#define BASE_ANALYSIS_H
 
+#include <memory>
+#include <string>
 // ROOT headers
 #include "TList.h"
 #include "TObject.h"
@@ -24,9 +26,9 @@ class BaseAnalysis
 {
    public:
     /// @brief Default constructor
-    BaseAnalysis() { /* noop */ }
+    BaseAnalysis() = default;
     /// @brief Destructor
-    virtual ~BaseAnalysis() { /* noop */ }
+    virtual ~BaseAnalysis() = default;
 
     /// @brief Initialize analysis
     virtual void init() = 0;  ///<
@@ -35,15 +37,13 @@ class BaseAnalysis
     virtual void report() = 0;  //!<
 
     /// @brief Obtain number of objects to be written as an output
-    virtual TList *getOutputList() = 0;  ///<
+    virtual TList* getOutputList() = 0;  ///<
 
     /// @brief Event processing
-    virtual void processEvent(const Event *) = 0;  ///<
+    virtual void processEvent(std::unique_ptr<Event>) = 0;  ///<
 
     /// @brief Finish analysis
     virtual void finish() = 0;  ///<
-
-    ClassDef(BaseAnalysis, 0)
 };
 
 #endif  // #define BaseAnalysis_h

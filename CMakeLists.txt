@@ -72,9 +72,6 @@ set(SRC
         GenTrack.cc
         RecoJet.cc
         GenJet.cc
-        BaseReader.cc
-        BaseJet.cc
-        BaseTrack.cc
         HistoManagerDiJet.cc
         ForestReader.cc
         JetCorrector.cc

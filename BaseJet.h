@@ -9,72 +9,64 @@
  *
  */
 
-#ifndef BaseJet_h
-#define BaseJet_h
+#ifndef BASE_JET_H
+#define BASE_JET_H
 
 // ROOT headers
 #include "TObject.h"
 #include "TVector3.h"
 
 //________________
-class BaseJet : public TObject
+class BaseJet
 {
    public:
     /// @brief Constructor
-    BaseJet();
+    BaseJet() noexcept = default;
     /// @brief Destructor
-    virtual ~BaseJet() { /* Empty */ }
+    ~BaseJet() noexcept = default;
 
     //
     // Setters
     //
 
     /// @brief Set jet-matched generated jet transverse momentum
-    void setPt(const Float_t &pt) { fPt = {pt}; }
+    void setPt(float pt) noexcept { fPt = pt; }
     /// @brief Set jet-matched generated jet eta
-    void setEta(const Float_t &eta) { fEta = {eta}; }
+    void setEta(float eta) noexcept { fEta = eta; }
     /// @brief Set jet-matched generated jet phi
-    void setPhi(const Float_t &phi) { fPhi = {phi}; }
+    void setPhi(float phi) noexcept { fPhi = phi; }
     /// @brief Set jet-matched generated jet WTA eta
-    void setWTAEta(const Float_t &eta) { fWTAEta = {eta}; }
+    void setWTAEta(float eta) noexcept { fWTAEta = eta; }
     /// @brief Set jet-matched generated jet WTA phi
-    void setWTAPhi(const Float_t &phi) { fWTAPhi = {phi}; }
+    void setWTAPhi(float phi) noexcept { fWTAPhi = phi; }
 
     //
     // Getters
     //
 
     /// @brief Transverse momentum
-    Float_t pt() const { return fPt; }
+    float pt() const noexcept { return fPt; }
     /// @brief Pseudorapidity
-    Float_t eta() const { return fEta; }
+    float eta() const noexcept { return fEta; }
     /// @brief Azimuthal angle
-    Float_t phi() const { return fPhi; }
-    /// @brief Return reconstructed jet parameters
-    TVector3 vec() const
-    {
-        TVector3 v;
-        v.SetPtEtaPhi(fPt, fEta, fPhi);
-        return v;
-    }
+    float phi() const noexcept { return fPhi; }
+
     /// @brief Pseudorapidity of the WTA axis
-    Float_t WTAEta() const { return fWTAEta; }
+    float WTAEta() const noexcept { return fWTAEta; }
     /// @brief Azimuthal angle of the WTA axis
-    Float_t WTAPhi() const { return fWTAPhi; }
+    float WTAPhi() const noexcept { return fWTAPhi; }
 
    private:
     /// @brief  Transverse momentum
-    Float_t fPt;
+    float fPt{0.f};
     /// @brief Pseudorapidity
-    Float_t fEta;
+    float fEta{0.f};
     /// @brief Azimuthal angle
-    Float_t fPhi;
+    float fPhi{0.f};
     /// @brief Pseudorapidity of the WTA axis
-    Float_t fWTAEta;
+    float fWTAEta{0.f};
     /// @brief Azimuthal angle of the WTA axis
-    Float_t fWTAPhi;
-
-    ClassDef(BaseJet, 1)
+    float fWTAPhi{0.f};
 };
 
 #endif

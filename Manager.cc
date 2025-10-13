@@ -74,7 +74,7 @@ void Manager::performAnalysis()
     for (Long64_t iEvent = 0; iEvent < fEventsInChain; iEvent++)
     {
         // std::cout << "=================================" << std::endl;
-        Event *currentEvent = fEventReader->returnEvent();
+        std::unique_ptr<Event> currentEvent = fEventReader->returnEvent();
 
         if (!currentEvent)
         {
@@ -89,15 +89,10 @@ void Manager::performAnalysis()
             AnalysisIterator anaIter;
             for (anaIter = fAnalysisCollection->begin(); anaIter != fAnalysisCollection->end(); anaIter++)
             {
-                (*anaIter)->processEvent(currentEvent);
+                (*anaIter)->processEvent(std::move(currentEvent));
             }
         }
 
-        if (currentEvent)
-        {
-            delete currentEvent;
-            currentEvent = nullptr;
-        }
     }  // for (Long64_t iEvent=0; iEvent<fEventsInChain; iEvent++)
 }
 

@@ -9,62 +9,51 @@
  *
  */
 
-#ifndef BaseTrack_h
-#define BaseTrack_h
+#ifndef BASE_TRACK_H
+#define BASE_TRACK_H
 
 // ROOT Headers
 
-#include "TObject.h"
-#include "TVector3.h"
-
-class BaseTrack : public TObject
+class BaseTrack
 {
    public:
     ///@brief Constructor
-    BaseTrack();
+    BaseTrack() noexcept = default;
     ///@brief Destructor
-    virtual ~BaseTrack();
+    ~BaseTrack() noexcept = default;
 
     ///
     /// Setters
     ///
     ///@brief  Set track transverse momentum
-    void setTrackPt(const Float_t &pt) { fTrkPt = {pt}; }
+    void setTrackPt(float pt) noexcept { fTrkPt = pt; }
     ///@brief Set track pseudorapidity
-    void setTrackEta(const Float_t &eta) { fTrkEta = {eta}; }
+    void setTrackEta(float eta) noexcept { fTrkEta = eta; }
     ///@brief Set track phi
-    void setTrackPhi(const Float_t &phi) { fTrkPhi = {phi}; }
+    void setTrackPhi(float phi) noexcept { fTrkPhi = phi; }
     ///@brief Set Track Charge
-    void setTrackChg(const Int_t &chg) { fTrkChg = {chg}; }
+    void setTrackChg(int chg) noexcept { fTrkChg = chg; }
     ///
     /// Getter
     ///
     ///@brief Transverse momentum
-    Float_t TrkPt() const { return fTrkPt; }
+    float TrkPt() const noexcept { return fTrkPt; }
     ///@brief Pseudorapidity
-    Float_t TrkEta() const { return fTrkEta; }
+    float TrkEta() const noexcept { return fTrkEta; }
     ///@brief Azimuthal Angle
-    Float_t TrkPhi() const { return fTrkPhi; }
+    float TrkPhi() const noexcept { return fTrkPhi; }
     ///@brief Track Charge
-    Int_t TrkChg() const { return fTrkChg; }
+    int TrkChg() const noexcept { return fTrkChg; }
     ///@brief Return three vectors of tracks
-    TVector3 vec() const
-    {
-        TVector3 v;
-        v.SetPtEtaPhi(fTrkPt, fTrkEta, fTrkPhi);
-        return v;
-    }
 
    private:
     ///@brief  Track  Transverse Momentum
-    Float_t fTrkPt;
+    float fTrkPt{0.0f};
     ///@brief Track Pseudorapidity
-    Float_t fTrkEta;
+    float fTrkEta{0.0f};
     ///@brief Track azimuthal angle
-    Float_t fTrkPhi;
+    float fTrkPhi{0.0f};
     ///@brief Track Charge
-    Int_t fTrkChg;
-
-    ClassDef(BaseTrack, 1)
+    int fTrkChg{0};
 };
 #endif

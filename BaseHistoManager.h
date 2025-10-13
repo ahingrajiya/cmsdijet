@@ -9,8 +9,11 @@
  *
  */
 
-#ifndef BaseHistoManager_h
-#define BaseHistoManager_h
+#ifndef BASE_HISTO_MANAGER_H
+#define BASE_HISTO_MANAGER_H
+
+#include <memory>
+#include <string>
 
 // ROOT headers
 #include "TList.h"
@@ -20,9 +23,9 @@ class BaseHistoManager
 {
    public:
     /// @brief Constructor
-    BaseHistoManager() { /* empty */ }
+    BaseHistoManager() = default;
     /// @brief Destructor
-    virtual ~BaseHistoManager() { /* empty */ }
+    virtual ~BaseHistoManager() = default;
 
     // // @brief Return list of objects (histograms, profiles, graphs, etc...)
     // virtual TList *getOutputList() = 0;

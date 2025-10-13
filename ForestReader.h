@@ -108,13 +108,13 @@ class ForestReader : public BaseReader
     CollidingSystemType getCollidingSystem() const { return fCollSysType; }
 
     /// @brief  Initialize input
-    Int_t init();
+    int init() override;
     /// @brief Finish (print final information)
-    void finish();
+    void finish() override;
     /// Read event and fill objects
-    Event* returnEvent();
+    std::unique_ptr<Event> returnEvent() override;
     /// @brief Report event from reader
-    void report();
+    void report() override;
 
     /// Turn-on HLT branch to be read
     void useHltBranch() { fUseHltBranch = {kTRUE}; }
@@ -163,7 +163,7 @@ class ForestReader : public BaseReader
     ///@brief Events to process
     void eventsToProcess(const Long64_t& nEvents) { fEventsToProcess = {nEvents}; }
     /// @brief Return amount of events to read
-    Long64_t nEventsTotal() const { return fEvents2Read; }
+    long long nEventsTotal() const noexcept override { return fEvents2Read; }
 
     void setStoreLocation(const Bool_t isInStore) { fIsInStore = {isInStore}; }
     /// @brief  Seet to use Jet ID
@@ -297,7 +297,7 @@ class ForestReader : public BaseReader
     Bool_t fIsMiniAOD;
 
     /// @brief Event with jets and other variables
-    Event* fEvent;
+    std::unique_ptr<Event> fEvent;
     /// @brief Input filename (name.root) or file with list of ROOT files
     const Char_t* fInFileName;
     ///@brief If input file is in store/user location then add the string to file path to open the file

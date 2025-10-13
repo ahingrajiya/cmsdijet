@@ -9,36 +9,31 @@
  *
  */
 
-#ifndef BaseReader_h
-#define BaseReader_h
-
-// ROOT headers
-#include "Rtypes.h"
-#include "TObject.h"
-#include "TString.h"
+#ifndef BASE_READER_H
+#define BASE_READER_H
 
 // JetAnalysis headers
 #include "Event.h"
-
 // C++ headers
 #include <iostream>
+#include <memory>
 
 //_________________
 class BaseReader
 {
    public:
     /// @brief Default constructor
-    BaseReader();
+    BaseReader() : fReaderStatus{0} {};
     /// @brief Destructor
-    virtual ~BaseReader() { /* empty */ }
+    virtual ~BaseReader() noexcept = default;
 
     /// @brief Read and return a pointer to the Event from the given event
     /// @return Instance of Event class
-    virtual Event *returnEvent() = 0;
+    virtual std::unique_ptr<Event> returnEvent() = 0;
 
     /// @brief Initialize event reader
     /// @return Base return function
-    virtual Int_t init()
+    virtual int init()
     {
         std::cout << "BaseReader::init() - Do nothing\n";
         return 0;
@@ -49,18 +44,16 @@ class BaseReader
 
     /// @brief Return reader status
     /// @return 0 - good, else - bad
-    Int_t status() const { return fReaderStatus; }
+    int status() const noexcept { return fReaderStatus; }
 
     /// @brief Report reader status including cuts
-    virtual void report();
+    virtual void report() { std::cout << "\nReporting from the BaseReader class\n" << std::endl; }
 
-    virtual Long64_t nEventsTotal() const { return 0; }
+    virtual long long nEventsTotal() const noexcept { return 0; }
 
    protected:
     /// @brief Reader status. 0 - good, 1 - error, 2 - EOF
-    Int_t fReaderStatus;
-
-    ClassDef(BaseReader, 0)
+    int fReaderStatus;
 };
 
-#endif  // #define BaseReader_h
+#endif  // #define BASE_READER_H

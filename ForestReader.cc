@@ -51,7 +51,6 @@ ForestReader::ForestReader(const Char_t* inputStream, const Bool_t& isAOD, const
 //_________________
 ForestReader::~ForestReader()
 {
-    if (fEvent) delete fEvent;
     if (fHltTree) delete fHltTree;
     if (fSkimTree) delete fSkimTree;
     if (fEventTree) delete fEventTree;
@@ -1153,7 +1152,7 @@ void ForestReader::readEvent()
 }
 
 //_________________
-Event* ForestReader::returnEvent()
+std::unique_ptr<Event> ForestReader::returnEvent()
 {
     // std::cout << "ForestReader::returnEvent" << std::endl;
 
@@ -1165,7 +1164,7 @@ Event* ForestReader::returnEvent()
     // {
     //     fixIndices();
     // }
-    fEvent = new Event();
+    fEvent = std::make_unique<Event>();
     fEvent->setEventNumber(fEventsProcessed + 1);
 
     fEvent->setRunId(fRunId);
@@ -1207,11 +1206,11 @@ Event* ForestReader::returnEvent()
         }
         fEvent->setSkimFilterNameAndValue(iFilterPairs);
     }
-    if (fEventCut && !fEventCut->pass(fEvent))
+    if (fEventCut && !fEventCut->pass(fEvent.get()))
     {
-        delete fEvent;
-        fEvent = nullptr;
-        return fEvent;
+        fEvent.reset();
+
+        return nullptr;
     }
     // Create particle flow jet instances
     if (fUseJets)
@@ -1456,5 +1455,5 @@ Event* ForestReader::returnEvent()
     }
 
     fEvent->setMultiplicity(iRecoMult);
-    return fEvent;
+    return std::move(fEvent);
 }
