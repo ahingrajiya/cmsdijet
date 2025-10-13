@@ -51,6 +51,7 @@ if [ "$DataSet" -eq 3 ]; then
     input_files_list="${EXEC_PATH}/files_input/OO5360/DATA/"
     output_path="/eos/user/a/ahingraj/outputs/OO_Data/"
     isMC=0
+    isEmbedded=1
 fi
 
 if [ "$DataSet" -gt 3 ]; then
