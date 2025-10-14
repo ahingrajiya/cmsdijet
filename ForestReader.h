@@ -184,7 +184,7 @@ class ForestReader : public BaseReader
     void setTriggers(const std::vector<std::string>& triggers) { fTriggers = triggers; }
 
     /// @brief Set JES corrections
-    void setJESCorrections() { fApplyJetJESCorrections = kTRUE; }
+    void setJESCorrections() { fApplyJetJESCorrections = kFALSE; }
 
     void setJEU(const Bool_t& doJEU = kFALSE, const Int_t& useJEU = 0)
     {
