@@ -98,7 +98,7 @@ int main(int argc, char* argv[])
         reader->useGenTrackBranch();
     }
     reader->useSkimmingBranch();
-    reader->useTrackBranch();
+    // reader->useTrackBranch();
     reader->useJets();
     reader->setFilters(filters);
     reader->setJetCollectionBranchName(jetBranchName.Data());
@@ -145,7 +145,7 @@ int main(int argc, char* argv[])
     analysis->setTrkEtaRange(-2.4, 2.4);
     analysis->doInJetMultiplicity();
     analysis->setBins(multiplicityBins);
-    analysis->setInclusiveCorrectedJetPtMin(100.);
+    analysis->setInclusiveCorrectedJetPtMin(50.);
     analysis->setInclusiveJetEtaRange(-1.6, 1.6);
     // if (isMC)
     // {
