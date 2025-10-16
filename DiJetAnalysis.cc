@@ -21,7 +21,7 @@ ClassImp(DiJetAnalysis)
     fDoInJetMult{kFALSE}, fMultiplicityType{0}, fUseDijetWeight{kFALSE}, fDijetWeightTable{""}, hDijetWeight{nullptr}, fDijetWeightFile{nullptr}, fDijetWeight{1.0},
     fDijetWeightType{"Reco"}, fIspp{kFALSE}, fIsPbPb{kFALSE}, fIsOO{kFALSE}, fCollSystem{""}, fUEType{""}, fDoTrackingClosures{kFALSE}, fVertexZWeight{nullptr},
     fDoVzWeight{kFALSE}, fRecoType{kFALSE}, fRefType{kFALSE}, fGenType{kFALSE}, fMultWeightFunctions{nullptr}, fXBinEdges{}, fYBinEdges{}, fBinContent{}, fXBinCount{0},
-    fYBinCount{0}, fInclusiveCorrectedJetPtMin{50.}
+    fYBinCount{0}, fInclusiveCorrectedJetPtMin{50.}, fUseHiHFWeight{kFALSE}, fHiHFWeight{nullptr}
 {
     fLeadJetEtaRange[0] = {-1.};
     fLeadJetEtaRange[1] = {1.};
@@ -76,6 +76,11 @@ DiJetAnalysis::~DiJetAnalysis()
     {
         delete fReader;
     }
+    if (fHiHFWeight)
+    {
+        delete fHiHFWeight;
+        fHiHFWeight = nullptr;
+    }
 }
 
 void DiJetAnalysis::init()
@@ -111,6 +116,7 @@ void DiJetAnalysis::SetUpWeightFunctions()
     std::cout << std::endl;
     std::cout << "Use VertexZ Weights : " << std::boolalpha << fDoVzWeight << std::endl;
     std::cout << "Use Multiplicity Weights : " << std::boolalpha << fUseMultiplicityWeight << std::endl;
+    std::cout << "Use HiHF Weights : " << std::boolalpha << fUseHiHFWeight << std::endl;
     if (fIspPb && fIsMC)
     {
         if (fDoVzWeight)
@@ -129,6 +135,15 @@ void DiJetAnalysis::SetUpWeightFunctions()
             // fMultWeightFunctions[2] = new TF1("fMultWeightFunctions2", "pol2", 186, 260,
             // TF1::EAddToList::kNo);
             // fMultWeightFunctions[2]->SetParameters(-1.76375e+00, 1.13405e-02, 1.22664e-05);
+        }
+    }
+    if (fIsOO && !fIsMC)
+    {
+        if (fUseHiHFWeight)
+        {
+            std::cout << "DiJetAnalysis::SetUpWeightFunctions Setting up HiHF Weight Function" << std::endl;
+            fHiHFWeight = new TF1("fHiHFWeight", "pol3", 20, 150, TF1::EAddToList::kNo);
+            fHiHFWeight->SetParameters(9.03662e+00, -1.76712e-01, 1.18221e-03, -2.68303e-06);
         }
     }
     std::cout << "DiJetAnalysis::SetUpWeightFunctions Setting up Weight Functions for " << fCollSystem << " completed." << std::endl;
@@ -807,6 +822,23 @@ Double_t DiJetAnalysis::Asymmetry(const Float_t& leadJetPt, const Float_t& subLe
     return subLeadJetPt / leadJetPt;
 }
 
+Double_t DiJetAnalysis::HiHFWeight(const Double_t& hiHF)
+{
+    if (!fIsOO) return 1.0;
+    if (fHiHFWeight == nullptr)
+    {
+        return 1.0;
+    }
+    if (hiHF < 20 || hiHF > 150)
+    {
+        return 1.0;
+    }
+    else
+    {
+        return fHiHFWeight->Eval(hiHF);
+    }
+}
+
 Float_t DiJetAnalysis::MoveToCMFrame(const Float_t& jetEta)
 {
     if (!fIspPb)
@@ -1139,10 +1171,14 @@ void DiJetAnalysis::processEvent(const Event* event)
     fHM->hMultiplicities_W->Fill(Multiplicities, Event_Weight);
     fHM->hHiHFPlusVsHiHFMinus->Fill(event->hiHFMinus(), event->hiHFPlus());
     fHM->hHiHFPlusVsHiHFMinus_W->Fill(event->hiHFMinus(), event->hiHFPlus(), Event_Weight);
+    fHM->hHiHFPlusVsMultiplicity_W->Fill(iMultiplicity, event->hiHFPlus(), Event_Weight);
+    fHM->hHiHFMinusVsMultiplicity_W->Fill(iMultiplicity, event->hiHFMinus(), Event_Weight);
     if (fIsDiJetFound)
     {
         fHM->hMultiplicities_DiJet_W->Fill(Multiplicities, Event_Weight);
-        fHM->hHiHFPlusVsHiHFMinus_WithDijet_W->Fill(event->hiHFMinus(), event->hiHFPlus(), Event_Weight);
+        fHM->hHiHFPlusVsHiHFMinus_WithDijet_W->Fill(event->hiHFMinus(), event->hiHFPlus(), Event_Weight * HiHFWeight(event->hiHFPlus()));
+        fHM->hHiHFPlusVsMultiplicity_WithDijet_W->Fill(iRecoMult, event->hiHFPlus(), Event_Weight);
+        fHM->hHiHFMinusVsMultiplicity_WithDijet_W->Fill(iRecoMult, event->hiHFMinus(), Event_Weight);
     }
 
     processRecoTracks(event, Event_Weight, iMultiplicityBin);
@@ -1436,7 +1472,7 @@ void DiJetAnalysis::processRecoJets(const Event* event, const Double_t& event_We
 
             fHM->hDeltaPhi_WithDiJet_W->Fill(deltaPhi, event_Weight);
             fHM->hMultVsXj_W->Fill(Xj, multiplicityBin, event_Weight);
-            fHM->hMultVsXj_DiJetW->Fill(Xj, multiplicityBin, event_Weight * fDijetWeight);
+            fHM->hMultVsXj_DiJetW->Fill(Xj, multiplicityBin, event_Weight * fDijetWeight * HiHFWeight(event->hiHFPlus()));
 
             if (fIsMC)
             {

@@ -179,6 +179,9 @@ class HistoManagerDiJet : public BaseHistoManager
     TH2D* hHiHFPlusVsHiHFMinus_W;
     TH2D* hHiHFPlusVsHiHFMinus_WithDijet_W;
 
+    TH2D *hHiHFPlusVsMultiplicity_W, *hHiHFMinusVsMultiplicity_W;
+    TH2D *hHiHFPlusVsMultiplicity_WithDijet_W, *hHiHFMinusVsMultiplicity_WithDijet_W;
+
     TH2D* hRefLeadRefSubLead_W;
     TH2D* hGenLeadGenSubLead_W;
 

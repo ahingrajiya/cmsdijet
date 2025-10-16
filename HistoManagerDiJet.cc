@@ -57,7 +57,8 @@ ClassImp(HistoManagerDiJet)
     hLeadingRefJetPtWithDijet_DiJetW{nullptr}, hSubLeadingRefJetPtWithDijet_DiJetW{nullptr}, hLeadingRecoJetPtWithDijet_DiJetW{nullptr},
     hSubLeadingRecoJetPtWithDijet_DiJetW{nullptr}, hRefLeadRefSubLead_W{nullptr}, hGenLeadGenSubLead_W{nullptr}, hRefLeadPtVsRefSubLeadPtMatched_DiJetW{nullptr},
     hRefLeadPtVsRefSubLeadPtMatched_PtHatW{nullptr}, hHiHFPlusVsHiHFMinus{nullptr}, hHiHFPlusVsHiHFMinus_W{nullptr}, hHiHFPlusVsHiHFMinus_WithDijet_W{nullptr},
-    hHiHFPlus{nullptr}, hHiHFPlus_W{nullptr}, hHiHFMinus{nullptr}, hHiHFMinus_W{nullptr}, hHiHFPlus_WithDijet_W{nullptr}, hHiHFMinus_WithDijet_W{nullptr}
+    hHiHFPlus{nullptr}, hHiHFPlus_W{nullptr}, hHiHFMinus{nullptr}, hHiHFMinus_W{nullptr}, hHiHFPlus_WithDijet_W{nullptr}, hHiHFMinus_WithDijet_W{nullptr},
+    hHiHFPlusVsMultiplicity_W{nullptr}, hHiHFMinusVsMultiplicity_W{nullptr}, hHiHFPlusVsMultiplicity_WithDijet_W{nullptr}, hHiHFMinusVsMultiplicity_WithDijet_W{nullptr}
 {
     /* Empty*/
 }
@@ -238,6 +239,10 @@ HistoManagerDiJet::~HistoManagerDiJet()
     if (hHiHFMinus_W) delete hHiHFMinus_W;
     if (hHiHFPlus_WithDijet_W) delete hHiHFPlus_WithDijet_W;
     if (hHiHFMinus_WithDijet_W) delete hHiHFMinus_WithDijet_W;
+    if (hHiHFPlusVsMultiplicity_W) delete hHiHFPlusVsMultiplicity_W;
+    if (hHiHFMinusVsMultiplicity_W) delete hHiHFMinusVsMultiplicity_W;
+    if (hHiHFPlusVsMultiplicity_WithDijet_W) delete hHiHFPlusVsMultiplicity_WithDijet_W;
+    if (hHiHFMinusVsMultiplicity_WithDijet_W) delete hHiHFMinusVsMultiplicity_WithDijet_W;
 
     for (auto hist : hXj_Projection_W) delete hist;
     for (auto hist : hXj_Projection_DiJetW) delete hist;
@@ -617,6 +622,20 @@ void HistoManagerDiJet::init()
         "hHiHFPlusVsHiHFMinus_WithDijet_W", "Forward Calorimeter in Positive Eta (p-going)  vs Forward Calorimeter in Minus Eta (Pb-going) With Dijet Present Weighted",
         1000, 0., 500., 1000, 0., 500.);
     hHiHFPlusVsHiHFMinus_WithDijet_W->Sumw2();
+    hHiHFPlusVsMultiplicity_W =
+        new TH2D("hHiHFPlusVsMultiplicity_W", "Forward Calorimeter in Positive Eta (p-going)  vs Multiplicity Weighted", 500, 0.0, 500., 1000, 0.0, 500.);
+    hHiHFPlusVsMultiplicity_W->Sumw2();
+    hHiHFMinusVsMultiplicity_W =
+        new TH2D("hHiHFMinusVsMultiplicity_W", "Forward Calorimeter in Minus Eta (Pb-going)  vs Multiplicity Weighted", 500, 0.0, 500., 1000, 0.0, 500.);
+    hHiHFMinusVsMultiplicity_W->Sumw2();
+    hHiHFPlusVsMultiplicity_WithDijet_W =
+        new TH2D("hHiHFPlusVsMultiplicity_WithDijet_W", "Forward Calorimeter in Positive Eta (p-going)  vs Multiplicity With Dijet Present Weighted", 500, 0.0, 500.,
+                 1000, 0.0, 500.);
+    hHiHFPlusVsMultiplicity_WithDijet_W->Sumw2();
+    hHiHFMinusVsMultiplicity_WithDijet_W =
+        new TH2D("hHiHFMinusVsMultiplicity_WithDijet_W", "Forward Calorimeter in Minus Eta (Pb-going)  vs Multiplicity With Dijet Present Weighted", 500, 0.0, 500., 1000,
+                 0.0, 500.);
+    hHiHFMinusVsMultiplicity_WithDijet_W->Sumw2();
 }
 
 void HistoManagerDiJet::projectHistograms()
@@ -981,6 +1000,10 @@ void HistoManagerDiJet ::writeOutput()
     hHiHFPlusVsHiHFMinus->Write();
     hHiHFPlusVsHiHFMinus_W->Write();
     hHiHFPlusVsHiHFMinus_WithDijet_W->Write();
+    hHiHFPlusVsMultiplicity_W->Write();
+    hHiHFMinusVsMultiplicity_W->Write();
+    hHiHFPlusVsMultiplicity_WithDijet_W->Write();
+    hHiHFMinusVsMultiplicity_WithDijet_W->Write();
 
     std::cout << "  ===> Writing Jets Histograms" << std::endl;
 
