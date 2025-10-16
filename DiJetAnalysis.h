@@ -173,6 +173,8 @@ class DiJetAnalysis : public BaseAnalysis
         fInclusiveJetEtaRange[0] = low;
         fInclusiveJetEtaRange[1] = high;
     }
+    ///@brief Set hihf rewighting
+    void useHiHFWeight(bool useWeight = false) noexcept { fUseHiHFWeight = useWeight; }
 
    private:
     /// @brief Reco and Corrected Multiplicity calculator with custom track pt and track eta cuts

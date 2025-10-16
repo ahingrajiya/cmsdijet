@@ -179,7 +179,10 @@ int main(int argc, char* argv[])
     analysis->setUEType(UEType);
     analysis->setInclusiveCorrectedJetPtMin(50.);
     analysis->setInclusiveJetEtaRange(-1.6, 1.6);
-
+    if (!isMC)
+    {
+        analysis->useHiHFWeight(true);
+    }
     // Initialize Histomanager
     HistoManagerDiJet* hm = new HistoManagerDiJet{};
     hm->setMultiplicityBins(multiplicityBins);
