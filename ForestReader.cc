@@ -833,15 +833,31 @@ void ForestReader::setupBranches()
 
     if (fIs_pPb)
     {
-        if (fIsPbGoingSide)
+        if (!fIsMc)
         {
-            fEventTree->SetBranchAddress("hiHFplus", &fHiHFMinus);
-            fEventTree->SetBranchAddress("hiHFminus", &fHiHFPlus);
+            if (fIsPbGoingSide)
+            {
+                fEventTree->SetBranchAddress("hiHFplus", &fHiHFMinus);
+                fEventTree->SetBranchAddress("hiHFminus", &fHiHFPlus);
+            }
+            else
+            {
+                fEventTree->SetBranchAddress("hiHFplus", &fHiHFPlus);
+                fEventTree->SetBranchAddress("hiHFminus", &fHiHFMinus);
+            }
         }
         else
         {
-            fEventTree->SetBranchAddress("hiHFplus", &fHiHFPlus);
-            fEventTree->SetBranchAddress("hiHFminus", &fHiHFMinus);
+            if (!fIsPbGoingSide)
+            {
+                fEventTree->SetBranchAddress("hiHFplus", &fHiHFMinus);
+                fEventTree->SetBranchAddress("hiHFminus", &fHiHFPlus);
+            }
+            else
+            {
+                fEventTree->SetBranchAddress("hiHFplus", &fHiHFPlus);
+                fEventTree->SetBranchAddress("hiHFminus", &fHiHFMinus);
+            }
         }
     }
     else

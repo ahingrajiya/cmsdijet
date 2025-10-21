@@ -71,7 +71,7 @@ int main(int argc, char* argv[])
     eventCut->setMultiplicty(0, 10000);
     if (isMC)
     {
-        eventCut->setPtHat(15., 1000.);
+        eventCut->setPtHat(30., 1000.);
     }
     // eventCut->setVerbose();
 
