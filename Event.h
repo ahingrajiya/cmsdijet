@@ -9,74 +9,74 @@
  *
  */
 
-#ifndef Event_h
-#define Event_h
+#ifndef EVENT_H
+#define EVENT_H
 
-// ROOT headers
+#include <iomanip>
+#include <iostream>
+#include <memory>
+#include <string>
+#include <vector>
+
 #include "Collections.h"
-#include "TObject.h"
-#include "TString.h"
-
 // C++ headers
 #include <iostream>
 
 //________________
-class Event : public TObject
+class Event
 {
    public:
     /// @brief Default constructor
-    Event();
+    Event() noexcept;
     /// @brief Parametrized constructor
-    Event(const UInt_t &runId, const ULong64_t &eventId, const UInt_t &lumi, const Float_t &vx, const Float_t &vy, const Float_t &vz, const Int_t &hiBin,
-          const Int_t &hiBinShifted, const Float_t &ptHat, const Float_t &w, const Int_t &nBadJets, const Int_t &mult, const Int_t &genMult, const Long64_t &eveNumber);
+    Event(unsigned int runId, unsigned long long eventId, unsigned int lumi, float vx, float vy, float vz, int hiBin, int hiBinShifted, float ptHat, float weight,
+          int nBadJets, int mult, int genMult, long long eveNumber) noexcept;
     /// @brief Destructor
-    virtual ~Event();
+    ~Event() noexcept = default;
 
     //
     // Setters
     //
 
     /// @brief Set run index
-    void setRunId(const UInt_t &id) { fRunId = id; }
+    void setRunId(unsigned int id) noexcept { fRunId = id; }
     /// @brief Set event index
-    void setEventId(const ULong64_t &id) { fEventId = id; }
+    void setEventId(unsigned long long id) noexcept { fEventId = id; }
     /// @brief Set luminosity
-    void setLumi(const UInt_t &lumi) { fLumi = lumi; }
+    void setLumi(unsigned int lumi) noexcept { fLumi = lumi; }
     /// @brief Set vertex x position
-    void setVx(const Float_t &vx) { fVx = vx; }
+    void setVx(float vx) noexcept { fVx = vx; }
     /// @brief Set vertex y position
-    void setVy(const Float_t &vy) { fVy = vy; }
+    void setVy(float vy) noexcept { fVy = vy; }
     /// @brief Set vertex z position
-    void setVz(const Float_t &vz) { fVz = vz; }
+    void setVz(float vz) noexcept { fVz = vz; }
     /// @brief Set vertex x, y, and z coordinates
-    void setVertex(const Float_t &x, const Float_t &y, const Float_t &z)
+    void setVertex(float x, float y, float z) noexcept
     {
         fVx = x;
         fVy = y;
         fVz = z;
     }
     /// @brief Set centrality bin (0-200)
-    void setHiBin(const Int_t &hiBin) { fHiBin = hiBin; }
+    void setHiBin(int hiBin) noexcept { fHiBin = hiBin; }
     ///@brief Set Shifted Centrality Bin
-    void setHiBinShifted(const Int_t &hiBinShifted) { fHiBinShifted = hiBinShifted; }
+    void setHiBinShifted(int hiBinShifted) noexcept { fHiBinShifted = hiBinShifted; }
     /// @brief Set ptHat
-    void setPtHat(const Float_t &ptHat) { fPtHat = ptHat; }
+    void setPtHat(float ptHat) noexcept { fPtHat = ptHat; }
     /// @brief Set event weight
-    void setPtHatWeight(const Float_t &w) { fPtHatWeight = w; }
+    void setPtHatWeight(float w) noexcept { fPtHatWeight = w; }
     /// @brief Set number of particle flow jets with pT > pThat
-    void setNumberOfOverscaledPFJets(const Int_t &n) { fNBadJets = (UChar_t)n; }
+    void setNumberOfOverscaledPFJets(int n) noexcept { fNBadJets = (UChar_t)n; }
     /// @brief Set reference multiplicity (CMS way)
-    void setMultiplicity(const Int_t &mult) { fMult = (UShort_t)mult; }
+    void setMultiplicity(int mult) noexcept { fMult = (UShort_t)mult; }
     /// @brief Set reference multiplicity (CMS way)
-    void setGenMultiplicity(const Int_t &genMult) { fGenMult = (UShort_t)genMult; }
-    /// @brief Set the flag that generated jet collection is filled to true
-    void setGenJetCollectionIsFilled() { fGenJetsCollectionIsFilled = kTRUE; }
+    void setGenMultiplicity(int genMult) noexcept { fGenMult = (UShort_t)genMult; }
     /// @brief Set event number in the process
-    void setEventNumber(const Long64_t &eventNumber) { fEventNumber = eventNumber; }
+    void setEventNumber(long long eventNumber) noexcept { fEventNumber = eventNumber; }
     /// @brief Set trigger name and value
-    void setTriggerNameAndValue(const std::vector<std::pair<std::string, Int_t>> &triggerNameValuePair) { fTriggerNamesAndValues = triggerNameValuePair; }
+    void setTriggerNameAndValue(const std::vector<std::pair<std::string, int>>& triggerNameValuePair) noexcept { fTriggerNamesAndValues = triggerNameValuePair; }
     /// @brief Set skim filter name and value
-    void setSkimFilterNameAndValue(const std::vector<std::pair<std::string, Int_t>> &filterNameValuePair) { fSkimFilterNamesAndValues = filterNameValuePair; }
+    void setSkimFilterNameAndValue(const std::vector<std::pair<std::string, int>>& filterNameValuePair) noexcept { fSkimFilterNamesAndValues = filterNameValuePair; }
 
     /// @brief  Print event information
     void print();
@@ -86,47 +86,44 @@ class Event : public TObject
     //
 
     /// @brief Return run index
-    UInt_t runId() const { return fRunId; }
+    unsigned int runId() const noexcept { return fRunId; }
     /// @brief Return event index
-    ULong64_t eventId() const { return fEventId; }
+    unsigned long long eventId() const noexcept { return fEventId; }
     /// @brief Return luminosity
-    UInt_t lumi() const { return fLumi; }
+    unsigned int lumi() const noexcept { return fLumi; }
     /// @brief Return vertex z
-    Float_t vz() const { return fVz; }
+    float vz() const noexcept { return fVz; }
     /// @brief Return hiBin bin
-    Int_t hiBin() const { return (Int_t)fHiBin; }
+    int hiBin() const noexcept { return static_cast<int>(fHiBin); }
     /// @brief Return hiBin bin for PYTHIA+HYDJET. This hiBin is -5% shifted to match multiplicity
     /// distribution with MB PbPb data
-    Int_t hiBinWithShift() const { return (fHiBinShifted); }
+    int hiBinWithShift() const noexcept { return (fHiBinShifted); }
     /// @brief Return centrality bin
-    Double_t centrality() const { return (fHiBin < 0) ? -5 : 100. - Double_t(200 - fHiBin) * 0.5; }
+    double centrality() const noexcept { return (fHiBin < 0) ? -5 : 100. - double(200 - fHiBin) * 0.5; }
     /// @brief Return ptHat
-    Float_t ptHat() const { return fPtHat; }
+    float ptHat() const noexcept { return fPtHat; }
     /// @brief Return event weight
-    Float_t ptHatWeight() const { return fPtHatWeight; }
-    /// @brief Return number of particle flow jets in even with pT > pThat
-    Int_t numberOfOverscaledPFJets() const { return (Int_t)fNBadJets; }
+    float ptHatWeight() const noexcept { return fPtHatWeight; }
     /// @brief Return reference multiplicity (CMS way)
-    Int_t multiplicity() const { return (Int_t)fMult; }
+    int multiplicity() const noexcept { return static_cast<int>(fMult); }
     /// @brief Return gen multiplicity (CMS way)
-    Int_t genMultiplicity() const { return (Int_t)fGenMult; }
-    /// @brief Return if generated jet collection filled
-    Bool_t isGenJetCollectionFilled() const { return fGenJetsCollectionIsFilled; }
+    int genMultiplicity() const noexcept { return static_cast<int>(fGenMult); }
     /// @brief Return number of particle flow jets
-    UInt_t numberOfRecoJets() const { return this->recoJetCollection()->size(); }
+    unsigned int numberOfRecoJets() const noexcept { return static_cast<unsigned int>(fRecoJetCollection->size()); }
     /// @brief Return number of generated jets
-    UInt_t numberOfGenJets() const { return this->genJetCollection()->size(); }
+    unsigned int numberOfGenJets() const noexcept { return static_cast<unsigned int>(fGenJetCollection->size()); }
     /// @brief Return event number in the process
-    Long64_t eventNumber() const { return fEventNumber; }
+    long long eventNumber() const noexcept { return fEventNumber; }
 
     /// @brief Return pointer to a collection of tracks
-    TrackCollection *trackCollection() const { return fTrackCollection; }
+    TrackCollection* trackCollection() const { return fTrackCollection; }
     /// @brief Return pointer to a collection of MC tracks
-    GenTrackCollection *genTrackCollection() const { return fGenTrackCollection; }
+    GenTrackCollection* genTrackCollection() const { return fGenTrackCollection; }
     /// @brief Return pointer to a collection of reco jets
-    RecoJetCollection *recoJetCollection() const { return fRecoJetCollection; }
+    RecoJetCollection& recoJetCollection() noexcept { return *fRecoJetCollection; }
     /// @brief Return pointer to a collection of generated jets
-    GenJetCollection *genJetCollection() const { return fGenJetCollection; }
+    GenJetCollection& genJetCollection() noexcept { return *fGenJetCollection; }
+
     /// @brief Return trigger name and value vector
     std::vector<std::pair<std::string, Int_t>> triggerNamesAndValues() const { return fTriggerNamesAndValues; }
     /// @brief Return skim filter name and value vector
@@ -169,14 +166,14 @@ class Event : public TObject
     std::vector<std::pair<std::string, Int_t>> fSkimFilterNamesAndValues;
 
     /// @brief Reco jet collection
-    RecoJetCollection *fRecoJetCollection;
+    RecoJetCollection* fRecoJetCollection;
     /// @brief Generated jet collection
-    GenJetCollection *fGenJetCollection;
+    GenJetCollection* fGenJetCollection;
 
     /// @brief Track collection
-    TrackCollection *fTrackCollection;
+    TrackCollection* fTrackCollection;
     /// @brief MC track collection
-    GenTrackCollection *fGenTrackCollection;
+    GenTrackCollection* fGenTrackCollection;
 
     ClassDef(Event, 1)
 };

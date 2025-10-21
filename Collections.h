@@ -9,8 +9,8 @@
  *
  */
 
-#ifndef Collections_h
-#define Collections_h
+#ifndef COLLECTIONS_H
+#define COLLECTIONS_H
 
 // Jeta analysis headers
 #include "BaseAnalysis.h"
@@ -20,26 +20,24 @@
 #include "Track.h"
 
 // C++ headers
+#include <memory>
 #include <vector>
 
-// Analysis collection
-typedef std::vector<BaseAnalysis *> AnalysisCollection;
-typedef std::vector<BaseAnalysis *>::iterator AnalysisIterator;
+// ============================================================================
+// Analysis collections
+// ============================================================================
+using AnalysisCollection = std::vector<std::unique_ptr<BaseAnalysis>>;
 
-// Particle flow jet collection
-typedef std::vector<RecoJet *> RecoJetCollection;
-typedef std::vector<RecoJet *>::iterator RecoJetIterator;
+// ============================================================================
+// Jet collections
+// ============================================================================
+using RecoJetCollection = std::vector<std::unique_ptr<RecoJet>>;
+using GenJetCollection = std::vector<std::unique_ptr<GenJet>>;
 
-// Generated jet collection
-typedef std::vector<GenJet *> GenJetCollection;
-typedef std::vector<GenJet *>::iterator GenJetIterator;
+// ============================================================================
+// Track collections
+// ============================================================================
+using TrackCollection = std::vector<std::unique_ptr<Track>>;
+using GenTrackCollection = std::vector<std::unique_ptr<GenTrack>>;
 
-// Reconstructed track collection
-typedef std::vector<Track *> TrackCollection;
-typedef std::vector<Track *>::iterator TrackIterator;
-
-// Generated track collection
-typedef std::vector<GenTrack *> GenTrackCollection;
-typedef std::vector<GenTrack *>::iterator GenTrackIterator;
-
-#endif  // #define Collections_h
+#endif  // #define COLLECTIONS_H
