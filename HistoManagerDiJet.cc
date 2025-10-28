@@ -1124,7 +1124,7 @@ void HistoManagerDiJet ::writeOutput()
     hDeltaPhi_W->Write();
     hDeltaPhi_WithDiJet_W->Write();
     hMultVsXj_W->Write();
-    if (fCollSystem == "pPb" || fCollSystem == "pp")
+    if (fCollSystem == "pPb" || fCollSystem == "pp" || fCollSystem == "OO")
     {
         hMultVsXj_DiJetW->Write();
     }
@@ -1214,7 +1214,7 @@ void HistoManagerDiJet ::writeOutput()
         hSubLeadingRefJetPtWithDijet_DiJetW->Write();
     }
     hXj_C0_W->Write();
-    if (fCollSystem == "pPb" || fCollSystem == "pp")
+    if (fCollSystem == "pPb" || fCollSystem == "pp" || fCollSystem == "OO")
     {
         hXj_C0_DiJetW->Write();
     }
@@ -1229,7 +1229,7 @@ void HistoManagerDiJet ::writeOutput()
     for (Int_t i = 0; i < hXj_Projection_W.size(); i++)
     {
         hXj_Projection_W[i]->Write();
-        if (fCollSystem == "pPb" || fCollSystem == "pp")
+        if (fCollSystem == "pPb" || fCollSystem == "pp" || fCollSystem == "OO")
         {
             hXj_Projection_DiJetW[i]->Write();
         }
