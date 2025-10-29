@@ -47,7 +47,9 @@ int main(int argc, char* argv[])
     TString path2JEC = "..";
     Double_t ptHatCut[2]{15., 10000.};
     Bool_t isEmbedded{kTRUE};
-    std::vector<std::pair<Int_t, Double_t>> multiplicityBins = {{0, 0.0}, {10, 1.0}, {60, 2.0}, {120, 3.0}, {185, 4.0}, {250, 5.0}, {400, 6.0}, {500, 7.0}};
+    std::vector<std::pair<double, double>> multiplicityBins = {{0, 0.0}, {10, 1.0}, {60, 2.0}, {120, 3.0}, {185, 4.0}, {250, 5.0}, {400, 6.0}, {500, 7.0}};
+    std::vector<std::pair<double, double>> hiHFBins = {{0., 0.0},  {10., 1.0}, {20., 2.0},  {30., 3.0},  {40., 4.0},   {50., 5.0},
+                                                       {70., 6.0}, {90., 7.0}, {120., 8.0}, {150., 9.0}, {1000., 10.0}};
     std::vector<std::string> filters{"pprimaryVertexFilter", "pphfCoincFilterPF2Th4"};
     std::string UEType{"HIJING"};
     Int_t smearType{0};             // 0 - Nominal Smearing, 1 - JER Smearing, 2 - JEC Smearing
@@ -175,7 +177,8 @@ int main(int argc, char* argv[])
     analysis->setSubLeadJetPt(50.);
     analysis->setLeadJetEtaRange(-1.6, 1.6);
     analysis->setSubLeadJetEtaRange(-1.6, 1.6);
-    analysis->setBins(multiplicityBins);
+    analysis->setMultBins(multiplicityBins);
+    analysis->setHiHFBins(hiHFBins);
     analysis->setUEType(UEType);
     analysis->setInclusiveCorrectedJetPtMin(50.);
     analysis->setInclusiveJetEtaRange(-1.6, 1.6);
@@ -186,6 +189,7 @@ int main(int argc, char* argv[])
     // Initialize Histomanager
     HistoManagerDiJet* hm = new HistoManagerDiJet{};
     hm->setMultiplicityBins(multiplicityBins);
+    hm->setHiHFEnergyBins(hiHFBins);
     hm->setCollSystem(collSystem);
     hm->setIsMC(isMC);
     hm->init();

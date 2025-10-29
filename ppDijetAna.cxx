@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
     Int_t collYear{2018};
     Bool_t useCentWeight{kFALSE};
     TString jetBranchName{"ak4PFJetAnalyzer"};
-    std::vector<std::pair<Int_t, Double_t>> multiplicityBins = {{10, 0.0}, {60, 1.0}, {120, 2.0}, {185, 3.0}, {400, 4.0}};
+    std::vector<std::pair<Double_t, Double_t>> multiplicityBins = {{10, 0.0}, {60, 1.0}, {120, 2.0}, {185, 3.0}, {400, 4.0}};
     std::vector<std::string> filters{"pPAprimaryVertexFilter", "pBeamScrapingFilter", "HBHENoiseFilterResultRun2Loose"};
     std::string path2DijetWeight = "../aux_files/pp_5020/Dijet_Weight/PYTHIA_DiJetWeight_Table.root";
     std::string dijetWeightType{"Gen"};
@@ -144,7 +144,7 @@ int main(int argc, char* argv[])
     analysis->setMinTrkPt(0.5);
     analysis->setTrkEtaRange(-2.4, 2.4);
     analysis->doInJetMultiplicity();
-    analysis->setBins(multiplicityBins);
+    analysis->setMultBins(multiplicityBins);
     analysis->setInclusiveCorrectedJetPtMin(50.);
     analysis->setInclusiveJetEtaRange(-1.6, 1.6);
     // if (isMC)

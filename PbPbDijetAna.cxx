@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
     TString jetBranchName{"akCs4PFJetAnalyzer"};
     Double_t ptHatCut[2]{15., 30.};
     // std::vector<std::pair<Int_t, Double_t>> multiplicityBins = {{10, 0.0}, {60, 1.0}, {120, 2.0}, {185, 3.0}, {250, 4.0}, {400, 5.0}};
-    std::vector<std::pair<Int_t, Double_t>> multiplicityBins = {{-10, 0.0}, {0, 1.}, {20, 2.0}, {60, 3.0}, {100, 4.0}, {160, 5.0}, {180, 6.0}, {200, 7.0}};
+    std::vector<std::pair<Double_t, Double_t>> multiplicityBins = {{-10, 0.0}, {0, 1.}, {20, 2.0}, {60, 3.0}, {100, 4.0}, {160, 5.0}, {180, 6.0}, {200, 7.0}};
     std::vector<std::string> filters{"collisionEventSelectionAOD", "phfCoincFilter2Th4", "pclusterCompatibilityFilter", "pprimaryVertexFilter",
                                      "HBHENoiseFilterResultRun2Loose"};
     std::vector<std::string> triggers{"HLT_HIPuAK4CaloJet80Eta5p1_v1"};
@@ -152,7 +152,7 @@ int main(int argc, char* argv[])
     analysis->setMinTrkPt(1.0);
     analysis->setTrkEtaRange(-2.4, 2.4);
     analysis->doInJetMultiplicity();
-    analysis->setBins(multiplicityBins);
+    analysis->setMultBins(multiplicityBins);
     analysis->setInclusiveCorrectedJetPtMin(50.);
     analysis->setInclusiveJetEtaRange(-1.6, 1.6);
 

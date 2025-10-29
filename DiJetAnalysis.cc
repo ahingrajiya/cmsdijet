@@ -907,7 +907,7 @@ Float_t DiJetAnalysis::MoveToLabFrame(const Float_t& jetEta)
     return jetEtaLab;
 }
 
-Double_t DiJetAnalysis::FindBin(const Int_t& multiplicity)
+Double_t DiJetAnalysis::FindBin(const double& multiplicity, const std::map<Double_t, Double_t>& fBins)
 {
     if (fBins.empty())
     {
@@ -1094,11 +1094,11 @@ void DiJetAnalysis::processEvent(const Event* event)
     Double_t iMultiplicityBin;
     if (fMultiplicityType != 4)
     {
-        iMultiplicityBin = FindBin(event->multiplicity());
+        iMultiplicityBin = FindBin(static_cast<double>(event->multiplicity()), fMultBins);
     }
     else if (fMultiplicityType == 4)
     {
-        iMultiplicityBin = FindBin(event->hiBinWithShift());
+        iMultiplicityBin = FindBin(static_cast<double>(event->hiBinWithShift()), fMultBins);
     }
 
     Double_t iVertexZ = event->vz();
@@ -1157,6 +1157,9 @@ void DiJetAnalysis::processEvent(const Event* event)
     {
         processGenJets(event, Event_Weight, iMultiplicityBin);
     }
+    // std::cout << "HiHFPlus : " << event->hiHFPlus() << " HiHFMinus : " << event->hiHFMinus() << std::endl;
+    // std::cout << "HiHFBins : " << FindBin(event->hiHFPlus(), fHiHFBins) << std::endl;
+    // std::cout << "Multiplicity : " << iMultiplicity << " Multiplicity Bins : " << iMultiplicityBin << std::endl;
 
     fHM->hVz->Fill(iVertexZ);
     fHM->hVz_W->Fill(iVertexZ, Event_Weight * fDijetWeight);
@@ -1469,11 +1472,12 @@ void DiJetAnalysis::processRecoJets(const Event* event, const Double_t& event_We
             // subLeadJetEtaCM << std::endl; std::cout << "Lead Jet Phi: " << leadJetPhi << "
             // SubLead Jet Phi: " << subLeadJetPhi << std::endl; std::cout << std::endl;
             fIsDiJetFound = kTRUE;
-
             fHM->hDeltaPhi_WithDiJet_W->Fill(deltaPhi, event_Weight);
             fHM->hMultVsXj_W->Fill(Xj, multiplicityBin, event_Weight);
-            fHM->hMultVsXj_DiJetW->Fill(Xj, multiplicityBin, event_Weight * fDijetWeight * HiHFWeight(event->hiHFPlus()));
-
+            fHM->hMultVsXj_DiJetW->Fill(Xj, multiplicityBin, event_Weight * fDijetWeight);
+            fHM->hMultVsXj_HiHFW->Fill(Xj, multiplicityBin, event_Weight * HiHFWeight(event->hiHFPlus()));
+            fHM->hHiHFVsXj_W->Fill(Xj, FindBin(static_cast<double>(event->hiHFPlus()), fHiHFBins), event_Weight);
+            fHM->hHiHFVsXj_HiHFW->Fill(Xj, FindBin(static_cast<double>(event->hiHFPlus()), fHiHFBins), event_Weight * HiHFWeight(event->hiHFPlus()));
             if (fIsMC)
             {
                 if (refXj > 1.0)

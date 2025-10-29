@@ -48,14 +48,25 @@ class HistoManagerDiJet : public BaseHistoManager
     ///@brief Histogram manager report
     void report();
     ///@brief Set Multiplicity bins
-    void setMultiplicityBins(const std::vector<std::pair<Int_t, Double_t>>& bins)
+    void setMultiplicityBins(const std::vector<std::pair<Double_t, Double_t>>& bins)
     {
         fMultiplicityBins.clear();
         fMultiplicityBinThresholds.clear();
         for (const auto& [threshold, value] : bins)
         {
             fMultiplicityBins.push_back(static_cast<float>(value));
-            fMultiplicityBinThresholds.push_back(threshold);
+            fMultiplicityBinThresholds.push_back(static_cast<int>(threshold));
+        }
+    }
+
+    void setHiHFEnergyBins(const std::vector<std::pair<Double_t, Double_t>>& bins)
+    {
+        fHiHFEnergyBins.clear();
+        fHiHFEnergyBinThresholds.clear();
+        for (const auto& [threshold, value] : bins)
+        {
+            fHiHFEnergyBins.push_back(static_cast<float>(value));
+            fHiHFEnergyBinThresholds.push_back(static_cast<int>(threshold));
         }
     }
     ///@brief Set Collision System
@@ -148,6 +159,9 @@ class HistoManagerDiJet : public BaseHistoManager
     THnSparseD* hGenQuenching_W;
     TH2D* hMultVsXj_W;
     TH2D* hMultVsXj_DiJetW;
+    TH2D* hMultVsXj_HiHFW;
+    TH2D* hHiHFVsXj_W;
+    TH2D* hHiHFVsXj_HiHFW;
     TH2D* hMultVsRefXj_W;
     TH2D* hMultVsMatchedRefXj_W;
     TH2D* hMultVsRefXj_DiJetW;
@@ -190,6 +204,8 @@ class HistoManagerDiJet : public BaseHistoManager
 
     std::vector<float> fMultiplicityBins;
     std::vector<int> fMultiplicityBinThresholds;
+    std::vector<float> fHiHFEnergyBins;
+    std::vector<int> fHiHFEnergyBinThresholds;
     TString fCollSystem;
 
     // Projection Histograms
@@ -255,13 +271,18 @@ class HistoManagerDiJet : public BaseHistoManager
     TH1D* hHiHFMinus_WithDijet_W;
 
     std::vector<TH1D*> hXj_Projection_W;
+    std::vector<TH1D*> hXj_ProjectionHiHF_W;
+    std::vector<TH1D*> hXj_Projection_HiHFW;
     std::vector<TH1D*> hXj_Projection_DiJetW;
+    std::vector<TH1D*> hXj_ProjectionHiHF_HiHFW;
     std::vector<TH1D*> hGenXj_Projection_W;
     std::vector<TH1D*> hGenXj_Projection_DiJetW;
     std::vector<TH1D*> hRefXj_Projection_W;
     std::vector<TH1D*> hRefXj_Projection_DiJetW;
     std::vector<TH1D*> hMatchedRefXj_Projection_W;
     std::vector<TH1D*> hMatchedRefXj_Projection_DiJetW;
+
+    // static constexpr double HiHFEnergyBins[] = {0.0, 10.0, 20.0, 30.0, 40.0, 50.0, 70.0, 90.0, 120.0, 150.0, 1000.0};
 
     ClassDef(HistoManagerDiJet, 1)
 };

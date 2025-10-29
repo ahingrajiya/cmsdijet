@@ -58,7 +58,9 @@ ClassImp(HistoManagerDiJet)
     hSubLeadingRecoJetPtWithDijet_DiJetW{nullptr}, hRefLeadRefSubLead_W{nullptr}, hGenLeadGenSubLead_W{nullptr}, hRefLeadPtVsRefSubLeadPtMatched_DiJetW{nullptr},
     hRefLeadPtVsRefSubLeadPtMatched_PtHatW{nullptr}, hHiHFPlusVsHiHFMinus{nullptr}, hHiHFPlusVsHiHFMinus_W{nullptr}, hHiHFPlusVsHiHFMinus_WithDijet_W{nullptr},
     hHiHFPlus{nullptr}, hHiHFPlus_W{nullptr}, hHiHFMinus{nullptr}, hHiHFMinus_W{nullptr}, hHiHFPlus_WithDijet_W{nullptr}, hHiHFMinus_WithDijet_W{nullptr},
-    hHiHFPlusVsMultiplicity_W{nullptr}, hHiHFMinusVsMultiplicity_W{nullptr}, hHiHFPlusVsMultiplicity_WithDijet_W{nullptr}, hHiHFMinusVsMultiplicity_WithDijet_W{nullptr}
+    hHiHFPlusVsMultiplicity_W{nullptr}, hHiHFMinusVsMultiplicity_W{nullptr}, hHiHFPlusVsMultiplicity_WithDijet_W{nullptr}, hHiHFMinusVsMultiplicity_WithDijet_W{nullptr},
+    hHiHFVsXj_W{nullptr}, hHiHFVsXj_HiHFW{nullptr}, hXj_ProjectionHiHF_W{nullptr}, hXj_ProjectionHiHF_HiHFW{nullptr}, hMultVsXj_HiHFW{nullptr},
+    hXj_Projection_HiHFW{nullptr}
 {
     /* Empty*/
 }
@@ -79,7 +81,10 @@ HistoManagerDiJet::~HistoManagerDiJet()
     if (hVzWithDijet_W) delete hVzWithDijet_W;
     if (hDeltaPhi_W) delete hDeltaPhi_W;
     if (hMultVsXj_W) delete hMultVsXj_W;
+    if (hHiHFVsXj_W) delete hHiHFVsXj_W;
     if (hMultVsXj_DiJetW) delete hMultVsXj_DiJetW;
+    if (hHiHFVsXj_HiHFW) delete hHiHFVsXj_HiHFW;
+    if (hMultVsXj_HiHFW) delete hMultVsXj_HiHFW;
     if (hMultVsRefXj_W) delete hMultVsRefXj_W;
     if (hMultVsRefXj_DiJetW) delete hMultVsRefXj_DiJetW;
     if (hMultVsMatchedRefXj_W) delete hMultVsMatchedRefXj_W;
@@ -245,18 +250,22 @@ HistoManagerDiJet::~HistoManagerDiJet()
     if (hHiHFMinusVsMultiplicity_WithDijet_W) delete hHiHFMinusVsMultiplicity_WithDijet_W;
 
     for (auto hist : hXj_Projection_W) delete hist;
+    for (auto hist : hXj_ProjectionHiHF_W) delete hist;
     for (auto hist : hXj_Projection_DiJetW) delete hist;
+    for (auto hist : hXj_ProjectionHiHF_HiHFW) delete hist;
     for (auto hist : hGenXj_Projection_W) delete hist;
     for (auto hist : hGenXj_Projection_DiJetW) delete hist;
     for (auto hist : hRefXj_Projection_W) delete hist;
     for (auto hist : hRefXj_Projection_DiJetW) delete hist;
     for (auto hist : hMatchedRefXj_Projection_W) delete hist;
     for (auto hist : hMatchedRefXj_Projection_DiJetW) delete hist;
+    for (auto hist : hXj_Projection_HiHFW) delete hist;
 }
 
 void HistoManagerDiJet::init()
 {
     int nMultiplicityBins = fMultiplicityBins.size() - 1;
+    int nHiHFEnergyBins = fHiHFEnergyBins.size() - 1;
 
     hRecoMultiplicity_W = new TH1D("hRecoMultiplicity_W", "Reco Multiplicity Weighted", 600, 0.0, 600.0);
     hRecoMultiplicity_W->Sumw2();
@@ -494,6 +503,9 @@ void HistoManagerDiJet::init()
     double multBinArray[fMultiplicityBins.size() + 1];
     copy(fMultiplicityBins.begin(), fMultiplicityBins.end(), multBinArray);
     multBinArray[fMultiplicityBins.size()] = fMultiplicityBins[fMultiplicityBins.size() - 1] + 1;
+    double hiHFEnergyBinArray[fHiHFEnergyBins.size() + 1];
+    copy(fHiHFEnergyBins.begin(), fHiHFEnergyBins.end(), hiHFEnergyBinArray);
+    hiHFEnergyBinArray[fHiHFEnergyBins.size()] = fHiHFEnergyBins[fHiHFEnergyBins.size() - 1] + 1;
 
     hRecoQuenching_W = new THnSparseD("hRecoQuenching_W", "Reco Quenching", 5, QuenchBins, QuenchMin, QuenchMax);
     hRecoQuenching_W->GetAxis(0)->Set(QuenchBins[0], XjBins);
@@ -507,6 +519,12 @@ void HistoManagerDiJet::init()
     hMultVsXj_W->Sumw2();
     hMultVsXj_DiJetW = new TH2D("hMultVsXj_DiJetW", "Xj Distribution DijetWeighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
     hMultVsXj_DiJetW->Sumw2();
+    hMultVsXj_HiHFW = new TH2D("hMultVsXj_HiHFW", "Xj Distribution HiHFWeighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
+    hMultVsXj_HiHFW->Sumw2();
+    hHiHFVsXj_W = new TH2D("hHiHFVsXj_W", "Xj Distribution vs HiHF Energy Weighted", nXjAjBins, XjBins, nHiHFEnergyBins, hiHFEnergyBinArray);
+    hHiHFVsXj_W->Sumw2();
+    hHiHFVsXj_HiHFW = new TH2D("hHiHFVsXj_HiHFW", "Xj Distribution vs HiHF Energy HiHFWeighted", nXjAjBins, XjBins, nHiHFEnergyBins, hiHFEnergyBinArray);
+    hHiHFVsXj_HiHFW->Sumw2();
 
     if (fIsMC)
     {
@@ -531,8 +549,8 @@ void HistoManagerDiJet::init()
         hMultVsGenXj_DiJetW = new TH2D("hMultVsGenXj_DiJetW", "Gen Xj Distribution DijetWeighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
         hMultVsGenXj_DiJetW->Sumw2();
     }
-    // Float_t LeadSubLeadPtBins[] = {0.0, 50., 60., 70., 80., 90., 100., 110., 120., 130., 140., 150., 160., 170., 180., 190., 200., 220., 240., 260., 280., 300., 350.,
-    // 400., 450., 500., 600., 700., 1200.};
+    // Float_t LeadSubLeadPtBins[] = {0.0, 50., 60., 70., 80., 90., 100., 110., 120., 130., 140., 150., 160., 170., 180., 190., 200., 220., 240., 260., 280., 300.,
+    // 350., 400., 450., 500., 600., 700., 1200.};
     Float_t LeadSubLeadPtBins[] = {0.0,  10.,  20.,  30.,  40.,  50.,  60.,  70.,  80.,  90.,  100., 110., 120.,
                                    130., 140., 150., 160., 170., 180., 190., 200., 220., 250., 300., 350., 400.};
     Int_t nLeadSubLeadPtBins = sizeof(LeadSubLeadPtBins) / sizeof(Float_t) - 1;
@@ -919,8 +937,13 @@ void HistoManagerDiJet::projectHistograms()
 
     hXj_Projection_W.clear();
     hXj_Projection_DiJetW.clear();
+    hXj_Projection_HiHFW.clear();
     hGenXj_Projection_W.clear();
     hGenXj_Projection_DiJetW.clear();
+    hRefXj_Projection_W.clear();
+    hRefXj_Projection_DiJetW.clear();
+    hMatchedRefXj_Projection_W.clear();
+    hMatchedRefXj_Projection_DiJetW.clear();
     std::cout << " ====> Projecting Xj Histograms in Multiplicity Bins" << std::endl;
     for (Int_t i = 0; i < fMultiplicityBins.size() - 1; i++)
     {
@@ -931,6 +954,11 @@ void HistoManagerDiJet::projectHistograms()
             hMultVsXj_DiJetW->ProjectionX(Form("hXj_C%i_DiJetW", i), hMultVsXj_DiJetW->GetYaxis()->FindBin(i), hMultVsXj_DiJetW->GetYaxis()->FindBin(i)));
         hXj_Projection_DiJetW.at(i)->SetTitle(
             Form("Xj Projection %i-%i Dijet Weighted", static_cast<int>(fMultiplicityBinThresholds.at(i)), static_cast<int>(fMultiplicityBinThresholds.at(i + 1))));
+        hXj_Projection_HiHFW.push_back(
+            hMultVsXj_HiHFW->ProjectionX(Form("hXj_C%i_HiHFW", i), hMultVsXj_HiHFW->GetYaxis()->FindBin(i), hMultVsXj_HiHFW->GetYaxis()->FindBin(i)));
+        hXj_Projection_HiHFW.at(i)->SetTitle(
+            Form("Xj Projection %i-%i HiHF Weighted", static_cast<int>(fMultiplicityBinThresholds.at(i)), static_cast<int>(fMultiplicityBinThresholds.at(i + 1))));
+
         if (fIsMC)
         {
             hGenXj_Projection_W.push_back(
@@ -958,6 +986,19 @@ void HistoManagerDiJet::projectHistograms()
             hMatchedRefXj_Projection_DiJetW.at(i)->SetTitle(Form("Matched Ref Xj Projection %i-%i Dijet Weighted", static_cast<int>(fMultiplicityBinThresholds.at(i)),
                                                                  static_cast<int>(fMultiplicityBinThresholds.at(i + 1))));
         }
+    }
+    std::cout << "=======>Projecting Xj Histograms in HiHFBins" << std::endl;
+    hXj_ProjectionHiHF_W.clear();
+    hXj_ProjectionHiHF_HiHFW.clear();
+    for (int i = 0; i < fHiHFEnergyBins.size() - 1; i++)
+    {
+        hXj_ProjectionHiHF_W.push_back(hHiHFVsXj_W->ProjectionX(Form("hXj_HiHFC%i_W", i), hHiHFVsXj_W->GetYaxis()->FindBin(i), hHiHFVsXj_W->GetYaxis()->FindBin(i)));
+        hXj_ProjectionHiHF_W.at(i)->SetTitle(Form("Xj Projection for HiHF %0.1f-%0.1f Weighted", static_cast<float>(fHiHFEnergyBinThresholds.at(i)),
+                                                  static_cast<float>(fHiHFEnergyBinThresholds.at(i + 1))));
+        hXj_ProjectionHiHF_HiHFW.push_back(
+            hHiHFVsXj_HiHFW->ProjectionX(Form("hXj_HiHFC%i_HiHFW", i), hHiHFVsXj_HiHFW->GetYaxis()->FindBin(i), hHiHFVsXj_HiHFW->GetYaxis()->FindBin(i)));
+        hXj_ProjectionHiHF_HiHFW.at(i)->SetTitle(Form("Xj Projection HiHF %0.1f-%0.1f HiHF Weighted", static_cast<float>(fHiHFEnergyBinThresholds.at(i)),
+                                                      static_cast<float>(fHiHFEnergyBinThresholds.at(i + 1))));
     }
     std::cout << "Projecting Histograms Complete" << std::endl;
     std::cout << "====================================" << std::endl;
@@ -1124,9 +1165,12 @@ void HistoManagerDiJet ::writeOutput()
     hDeltaPhi_W->Write();
     hDeltaPhi_WithDiJet_W->Write();
     hMultVsXj_W->Write();
+    hHiHFVsXj_W->Write();
     if (fCollSystem == "pPb" || fCollSystem == "pp" || fCollSystem == "OO")
     {
         hMultVsXj_DiJetW->Write();
+        hMultVsXj_HiHFW->Write();
+        hHiHFVsXj_HiHFW->Write();
     }
     hNDijetEvent->Write();
 
@@ -1232,6 +1276,7 @@ void HistoManagerDiJet ::writeOutput()
         if (fCollSystem == "pPb" || fCollSystem == "pp" || fCollSystem == "OO")
         {
             hXj_Projection_DiJetW[i]->Write();
+            hXj_Projection_HiHFW[i]->Write();
         }
         if (fIsMC)
         {
@@ -1246,4 +1291,14 @@ void HistoManagerDiJet ::writeOutput()
             }
         }
     }
+    if (fCollSystem == "pPb" || fCollSystem == "OO")
+    {
+        for (size_t i = 0; i < hXj_ProjectionHiHF_W.size(); i++)
+        {
+            hXj_ProjectionHiHF_W[i]->Write();
+            hXj_ProjectionHiHF_HiHFW[i]->Write();
+        }
+    }
+    std::cout << "Writing Histograms Complete" << std::endl;
+    std::cout << "====================================" << std::endl;
 }

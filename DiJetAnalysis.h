@@ -58,11 +58,19 @@ class DiJetAnalysis : public BaseAnalysis
     virtual TList* getOutputList();
 
     ///@brief Set Multiplicity or Centrality bins
-    void setBins(const std::vector<std::pair<Int_t, Double_t>>& Bins)
+    void setMultBins(const std::vector<std::pair<Double_t, Double_t>>& Bins)
     {
         for (const auto& [threshold, value] : Bins)
         {
-            fBins[threshold] = value;
+            fMultBins[threshold] = value;
+        }
+    }
+
+    void setHiHFBins(const std::vector<std::pair<Double_t, Double_t>>& Bins)
+    {
+        for (const auto& [threshold, value] : Bins)
+        {
+            fHiHFBins[threshold] = value;
         }
     }
     ///@brief Set debug information
@@ -261,9 +269,9 @@ class DiJetAnalysis : public BaseAnalysis
     /// @return Xj value Xj = Suleading jet pt / Leading Jet pt
     Double_t Asymmetry(const Float_t& leadJetPt, const Float_t& subLeadJetPt);
     /// @brief  Find Multiplicity Bin
-    /// @param multiplicity
+    /// @param multiplicity or HiHF energy
     /// @return Multiplicity Bin. 1 for 60-120, 2 for 120-185, 3 for 185-250, 4 for 250-400
-    Double_t FindBin(const Int_t& multiplicity);
+    Double_t FindBin(const double& multiplicity, const std::map<Double_t, Double_t>& Bins);
     /// @brief Move to Center of Mass Frame
     /// @param jetEta Jet Eta
     Float_t MoveToCMFrame(const Float_t& jetEta);
@@ -421,7 +429,10 @@ class DiJetAnalysis : public BaseAnalysis
     bool fUseHiHFWeight;
 
     ///@brief Holds dynamic multiplicity or centrality bins
-    std::map<Int_t, Double_t> fBins;
+    std::map<Double_t, Double_t> fMultBins;
+
+    ///@brief Holds dynamic multiplicity or centrality bins
+    std::map<Double_t, Double_t> fHiHFBins;
 
     ClassDef(DiJetAnalysis, 0)
 };

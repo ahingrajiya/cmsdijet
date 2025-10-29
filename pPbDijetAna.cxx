@@ -51,9 +51,9 @@ int main(int argc, char* argv[])
     TString path2JEC = "..";
     Double_t ptHatCut[2]{15., 30.};
     Bool_t isEmbedded{kTRUE};
-    std::vector<std::pair<Int_t, Double_t>> multiplicityBins = {{0, 0.0}, {10, 1.0}, {60, 2.0}, {120, 3.0}, {185, 4.0}, {250, 5.0}, {400, 6.0}};
-    // std::vector<std::pair<Int_t, Double_t>> multiplicityBins = {{0, 0.0}, {10, 1.0}, {20, 2.0}, {30, 3.0}, {40, 4.0}, {50, 5.0}, {60, 6.0}, {120, 7.0}, {185, 8.0},
-    // {250, 9.0}, {400, 10.0}};
+    std::vector<std::pair<double, double>> multiplicityBins = {{0, 0.0}, {10, 1.0}, {60, 2.0}, {120, 3.0}, {185, 4.0}, {250, 5.0}, {400, 6.0}};
+    std::vector<std::pair<double, double>> hiHFBins = {{0., 0.0},  {10., 1.0}, {20., 2.0},  {30., 3.0},  {40., 4.0},   {50., 5.0},
+                                                       {70., 6.0}, {90., 7.0}, {120., 8.0}, {150., 9.0}, {1000., 10.0}};
     std::string path2DijetWeight = "../aux_files/pPb_8160/Dijet_Weight/DJWEPOS.root";
     std::vector<std::string> filters{"pBeamScrapingFilter", "pPAprimaryVertexFilter", "HBHENoiseFilterResultRun2Loose", "phfCoincFilter", "pVertexFilterCutdz1p0"};
     std::vector<std::string> triggers{"HLT_PAAK4PFJet80_Eta5p1_v3"};
@@ -190,7 +190,7 @@ int main(int argc, char* argv[])
     reader->setPath2JetAnalysis(path2JEC.Data());
     reader->setUseJetID();
     reader->setJetIDType(2);
-    reader->eventsToProcess(-1);
+    reader->eventsToProcess(10000);
     reader->setJetCut(jetCut);
     reader->setTrackCut(trackCut);
     reader->setEventCut(eventCut);
@@ -248,7 +248,8 @@ int main(int argc, char* argv[])
     analysis->setInclusiveJetEtaRange(-1.6, 1.6);
     analysis->setInclusiveCorrectedJetPtMin(50.0);
     analysis->doInJetMultiplicity();
-    analysis->setBins(multiplicityBins);
+    analysis->setMultBins(multiplicityBins);
+    analysis->setHiHFBins(hiHFBins);
     analysis->setUEType(UEType);
     analysis->setTrackingTable("../aux_files/pPb_8160/trk_eff_table/pPb_EPOS_2D_efftables.root");
     // analysis->setDebug(kTRUE);
@@ -258,6 +259,7 @@ int main(int argc, char* argv[])
     // Initialize Histomanager
     HistoManagerDiJet* hm = new HistoManagerDiJet{};
     hm->setMultiplicityBins(multiplicityBins);
+    hm->setHiHFEnergyBins(hiHFBins);
     hm->setCollSystem(collSystem);
     hm->setIsMC(isMC);
     hm->init();
