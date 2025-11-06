@@ -144,7 +144,7 @@ int main(int argc, char* argv[])
     }
     reader->useSkimmingBranch();
     reader->useTrackBranch();
-    reader->useJets();
+    // reader->useJets();
     reader->setCollidingEnergy(collEnergyGeV);
     reader->setCollidingSystem(ForestReader::CollidingSystemType::OO);
     reader->setYearOfDataTaking(collYear);
