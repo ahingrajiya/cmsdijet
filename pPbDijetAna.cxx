@@ -237,7 +237,7 @@ int main(int argc, char* argv[])
         }
     }
     analysis->setMultiplicityType(0);
-    analysis->setMinTrkPt(1.0);
+    analysis->setMinTrkPt(0.40);
     analysis->setDeltaPhi(5 * TMath::Pi() / 6);
     analysis->setUseCMFrame();
     analysis->setEtaBoost(etaBoost);

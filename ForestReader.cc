@@ -681,8 +681,7 @@ Int_t ForestReader::setupChains()
         }
         if (fIsMiniAOD)
         {
-            // fTrkTree = new TChain("PbPbTracks/trackTree");
-            fTrkTree = new TChain("ppTrack/trackTree");
+            fTrkTree = new TChain("PbPbTracks/trackTree");
         }
         std::cout << "Setting Tree for Reconstructed Tracks : " << fTrkTree->GetName() << "\t [Done]" << std::endl;
     }

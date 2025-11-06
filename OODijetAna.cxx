@@ -130,7 +130,7 @@ int main(int argc, char* argv[])
     {
         reader->setIsMc(isMC);
         reader->useGenTrackBranch();
-        // reader->setStoreLocation(kTRUE);
+        reader->setStoreLocation(kTRUE);
 
         if (isEmbedded)
         {
@@ -144,7 +144,7 @@ int main(int argc, char* argv[])
     }
     reader->useSkimmingBranch();
     reader->useTrackBranch();
-    // reader->useJets();
+    reader->useJets();
     reader->setCollidingEnergy(collEnergyGeV);
     reader->setCollidingSystem(ForestReader::CollidingSystemType::OO);
     reader->setYearOfDataTaking(collYear);
@@ -171,7 +171,7 @@ int main(int argc, char* argv[])
     analysis->setReader(reader);
     analysis->setMultiplicityRange(10, 500);
     analysis->setMultiplicityType(0);
-    analysis->setMinTrkPt(1.0);
+    analysis->setMinTrkPt(0.40);
     analysis->setDeltaPhi(5 * TMath::Pi() / 6);
     analysis->setLeadJetPt(100.);
     analysis->setSubLeadJetPt(50.);
