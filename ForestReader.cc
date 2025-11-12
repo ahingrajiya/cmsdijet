@@ -762,6 +762,9 @@ Int_t ForestReader::setupChains()
                     TFile* ftmp = TFile::Open(file.c_str());
 
                     // Check file is not zombie and contains information
+                    std::cout << ftmp << std::endl;
+                    std::cout << ftmp->IsZombie() << std::endl;
+                    std::cout << ftmp->GetNkeys() << std::endl;
                     if (ftmp && !ftmp->IsZombie() && ftmp->GetNkeys())
                     {
                         std::cout << Form("Adding file to chain: %s\n", file.c_str());
