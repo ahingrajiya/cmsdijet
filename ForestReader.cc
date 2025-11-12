@@ -1406,10 +1406,7 @@ Event* ForestReader::returnEvent()
             track->setTrackPhi(fGenTrackPhi->at(iGenTrack));
             track->setTrackChg(fGenTrackCharge->at(iGenTrack));
             track->setTrackPDGID(fGenTrackPid->at(iGenTrack));
-            if (fIs_PbPb)
-            {
-                track->setTrackSube(fGenTrackSube->at(iGenTrack));
-            }
+            track->setTrackSube(fGenTrackSube->at(iGenTrack));
 
             if (fTrackCut && !fTrackCut->GenPass(track))
             {
