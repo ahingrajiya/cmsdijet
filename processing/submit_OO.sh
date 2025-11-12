@@ -74,7 +74,7 @@ for filename in ${input_files_list}/*.txt; do
     cat <<EOF > processing/OO_${subfile%.*}.sub
         universe        = vanilla
         executable      = ${EXEC_PATH}/processing/run_DijetAnaOO.sh
-        +JobFlavour     = "longlunch"
+        +JobFlavour     = "workday"
         getenv          = True
         requirements    =((OpSysAndVer =?= "AlmaLinux9") && (CERNEnvironment =?= "qa"))
         RequestCpus     = 1
