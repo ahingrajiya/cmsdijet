@@ -448,7 +448,7 @@ std::pair<Int_t, Int_t> DiJetAnalysis::GenSubeMultiplicity(const Event* event, c
                 fHM->hGenTrackPtVsEta->Fill(trackEta, trackPt, multiplicityBin);
                 fHM->hGenTrackPtVsEta_W->Fill(trackEta, trackPt, multiplicityBin, eventWeight);
             }
-            if (fIsPbPb && trackSube > 0)
+            if (trackSube > 0)
             {
                 iSubeMult++;
             }
