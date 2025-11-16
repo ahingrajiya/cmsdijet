@@ -90,8 +90,8 @@ EOF
 
 	    arguments   = ${file_list}/$(basename "$file") ${output_path}${sample_prefix}_PD${PD_Number}_${jobid}.root ${isMC} ${isEmbedded}
         output      = processing/condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.out
-        error       = processing/condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.err
-        log         = processing/condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.log
+        error       = processing/condor/err/${sample_prefix}_PD${PD_Number}_${jobid}.err
+        log         = processing/condor/out/${sample_prefix}_PD${PD_Number}_${jobid}.log
         queue
 
 EOF
