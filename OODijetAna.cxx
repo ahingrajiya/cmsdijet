@@ -47,10 +47,14 @@ int main(int argc, char* argv[])
     TString path2JEC = "..";
     Double_t ptHatCut[2]{15., 10000.};
     Bool_t isEmbedded{kTRUE};
-    std::vector<std::pair<double, double>> multiplicityBins = {{0, 0.0}, {10, 1.0}, {60, 2.0}, {120, 3.0}, {185, 4.0}, {250, 5.0}, {400, 6.0}, {500, 7.0}};
-    std::vector<std::pair<double, double>> hiHFBins = {{0., 0.0},  {10., 1.0}, {20., 2.0},  {30., 3.0},  {40., 4.0},   {50., 5.0},
-                                                       {70., 6.0}, {90., 7.0}, {120., 8.0}, {150., 9.0}, {1000., 10.0}};
-    std::vector<std::string> filters{"pprimaryVertexFilter"};
+    // std::vector<std::pair<double, double>> multiplicityBins = {{0, 0.0}, {10, 1.0}, {60, 2.0}, {120, 3.0}, {185, 4.0}, {250, 5.0}, {400, 6.0}, {500, 7.0}};
+    std::vector<std::pair<double, double>> multiplicityBins = {{0, 0.0},   {10, 1.0},  {20, 2.0},  {40, 3.0},  {60, 4.0},   {80, 5.0},
+                                                               {100, 6.0}, {120, 7.0}, {140, 8.0}, {160, 9.0}, {180, 10.0}, {200, 11.0}};
+    std::vector<std::pair<double, double>> hiHFBins = {{0., 0.0},    {10., 1.0},   {20., 2.0},   {30., 3.0},   {40., 4.0},   {50., 5.0},   {70., 6.0},
+                                                       {90., 7.0},   {120., 8.0},  {150., 9.0},  {180., 10.0}, {210., 11.0}, {250., 12.0}, {300., 13.0},
+                                                       {350., 14.0}, {400., 15.0}, {450., 16.0}, {500., 17.0}, {550., 18.0}, {1000., 19.0}};
+    std::vector<std::string> filters{"pprimaryVertexFilter", "pphfCoincFilterPF2Th4"};
+    std::vector<std::string> filtersmc{"pprimaryVertexFilter"};
     std::string UEType{"HIJING"};
     Int_t smearType{0};             // 0 - Nominal Smearing, 1 - JER Smearing, 2 - JEC Smearing
     Bool_t useJERSmearing{kFALSE};  // Use JER Smearing for MC
@@ -132,6 +136,7 @@ int main(int argc, char* argv[])
     {
         reader->setIsMc(isMC);
         reader->useGenTrackBranch();
+        reader->setFilters(filtersmc);
 
         if (isEmbedded)
         {
@@ -157,10 +162,10 @@ int main(int argc, char* argv[])
     reader->setJetCut(jetCut);
     reader->setTrackCut(trackCut);
     reader->setEventCut(eventCut);
-    reader->setFilters(filters);
     if (!isMC)
     {
         reader->setJetCollectionBranchName(jetBranchNameEmbedded.Data());
+        reader->setFilters(filters);
     }
 
     manager->setEventReader(reader);
@@ -171,7 +176,7 @@ int main(int argc, char* argv[])
 
     analysis->setReader(reader);
     analysis->setMultiplicityRange(10, 500);
-    analysis->setMultiplicityType(0);
+    analysis->setMultiplicityType(4);
     analysis->setMinTrkPt(0.40);
     analysis->setDeltaPhi(5 * TMath::Pi() / 6);
     analysis->setLeadJetPt(100.);

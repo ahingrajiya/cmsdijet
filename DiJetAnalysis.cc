@@ -1118,12 +1118,12 @@ void DiJetAnalysis::processEvent(const Event* event)
     }
 
     Double_t iMultiplicity;
-    iMultiplicity = (fMultiplicityType == 0)              ? static_cast<Double_t>(iRecoMult)
-                    : (fMultiplicityType == 1)            ? static_cast<Double_t>(iGenSubeMult.first)
-                    : (fMultiplicityType == 2)            ? static_cast<Double_t>(iRecoCorrectedMult.second)
-                    : (fMultiplicityType == 3)            ? static_cast<Double_t>(fIspPb || fIspp ? iGenSubeMult.first : (fIsPbPb ? iGenSubeMult.second : 0))
-                    : (fMultiplicityType == 4 && fIsPbPb) ? static_cast<Double_t>(event->hiBinWithShift())
-                                                          : 0;
+    iMultiplicity = (fMultiplicityType == 0)   ? static_cast<Double_t>(iRecoMult)
+                    : (fMultiplicityType == 1) ? static_cast<Double_t>(iGenSubeMult.first)
+                    : (fMultiplicityType == 2) ? static_cast<Double_t>(iRecoCorrectedMult.second)
+                    : (fMultiplicityType == 3) ? static_cast<Double_t>(fIspPb || fIspp ? iGenSubeMult.first : (fIsPbPb ? iGenSubeMult.second : 0))
+                    : (fMultiplicityType == 4) ? static_cast<Double_t>(event->hiBinWithShift())
+                                               : 0;
 
     if (fIsMC)
     {

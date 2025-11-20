@@ -291,6 +291,9 @@ class ForestReader : public BaseReader
     /// @brief JER resolution factor retrival
     /// @param jeteta Jet Eta
     Double_t retriveResolutionFactor(const Float_t& jeteta) const;
+    /// @brief Centrality bin Calculation for the OO data
+    /// @param hiHFplus HiHF plus value
+    int getHiBin(const double& hiHFplus, std::vector<double> bins) const;
 
     /// @brief Flag indicating if the input is AOD
     Bool_t fIsAOD;
@@ -376,6 +379,9 @@ class ForestReader : public BaseReader
     Float_t fHiHFPlus;
     /// @brief Forward Calorimetere negative eta energy
     Float_t fHiHFMinus;
+    ///@brief HJiHF particle flow branch
+    Float_t fHiHFPF;
+
     //
     // Trigger and skimming information
 
@@ -635,6 +641,9 @@ class ForestReader : public BaseReader
 
     ///@brief if Pb is going to positive eta
     Bool_t fIsPbGoingSide;
+
+    /// @brief HiHFPF based Centrality bins for OO Data
+    std::vector<double> fHiHFPFBins;
 
     ClassDef(ForestReader, 1)
 };

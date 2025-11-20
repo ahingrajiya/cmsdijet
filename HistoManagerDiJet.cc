@@ -1013,7 +1013,7 @@ void HistoManagerDiJet ::writeOutput()
     std::cout << "  ===> Writing Event Histograms" << std::endl;
     gDirectory->mkdir("Events");
     gDirectory->cd("Events");
-    if (fCollSystem == "PbPb")
+    if (fCollSystem == "PbPb" || fCollSystem == "OO")
     {
         hHiBin->Write();
         hHiBin_W->Write();
