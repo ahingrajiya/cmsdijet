@@ -71,8 +71,8 @@ for filename in ${input_files_list}/*.txt; do
     processing/split_files.sh ${input_files_list} $(basename "$filename") $files_per_job
     file_list=$(processing/split_files.sh ${input_files_list} $(basename "$filename") $files_per_job)
     subfile=$(basename "$filename")
-    echo "Submission file with name OO_${subfile%.*}.sub is Created"
-    cat <<EOF > processing/OO_${subfile%.*}.sub
+    echo "Submission file with name ${subfile%.*}.sub is Created"
+    cat <<EOF > processing/${subfile%.*}.sub
         universe        = vanilla
         executable      = ${EXEC_PATH}/processing/run_DijetAnaOO.sh
         +JobFlavour     = "workday"
