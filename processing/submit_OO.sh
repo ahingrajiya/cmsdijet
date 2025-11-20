@@ -12,6 +12,7 @@ EXEC_PATH=${HOME}/private/analysis/CMSSW_13_0_5/src/cmsdijet
 DataSet=$1
 files_per_job=$2
 doBuild=$3
+blockNumber=$4
 
 if [ "$doBuild" -eq 1 ]; then
     echo "Building the code"
@@ -48,7 +49,7 @@ if [ "$DataSet" -eq 3 ]; then
     echo "OO Data is Selected"    
     cd ${EXEC_PATH}   
     sample_prefix="OO_Data"
-    input_files_list="${EXEC_PATH}/files_input/OO5360/DATA/"
+    input_files_list="${EXEC_PATH}/files_input/OO5360/DATA/${blockNumber}/"
     output_path="/eos/user/a/ahingraj/outputs/OO_Data/"
     isMC=0
     isEmbedded=1
@@ -86,7 +87,7 @@ for filename in ${input_files_list}/*.txt; do
 EOF
     jobid=0
     for file in ${file_list}/*.txt; do
-        cat <<EOF >> processing/OO_${subfile%.*}.sub
+        cat <<EOF >> processing/${subfile%.*}.sub
 
 	    arguments   = ${file_list}/$(basename "$file") ${output_path}${sample_prefix}_PD${PD_Number}_${jobid}.root ${isMC} ${isEmbedded}
         output      = processing/condor/out/${sample_prefix}_PD${PD_Number}_${jobid}.out
@@ -98,7 +99,7 @@ EOF
         jobid=$((jobid+1))
     done
     PD_Number=$((PD_Number+1))
-    condor_submit processing/OO_${subfile%.*}.sub
+    # condor_submit processing/${subfile%.*}.sub
 done
 
 
