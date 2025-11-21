@@ -50,7 +50,7 @@ if [ "$DataSet" -eq 3 ]; then
     cd ${EXEC_PATH}   
     sample_prefix="OO_Data"
     input_files_list="${EXEC_PATH}/files_input/OO5360/DATA/${blockNumber}/"
-    output_path="/eos/user/a/ahingraj/outputs/OO_Data/"
+    output_path="/eos/user/a/ahingraj/outputs/OO_Data/${blockNumber}/"
     isMC=0
     isEmbedded=1
 fi
@@ -90,16 +90,16 @@ EOF
         cat <<EOF >> processing/${subfile%.*}.sub
 
 	    arguments   = ${file_list}/$(basename "$file") ${output_path}${sample_prefix}_PD${PD_Number}_${jobid}.root ${isMC} ${isEmbedded}
-        output      = processing/condor/out/${sample_prefix}_PD${PD_Number}_${jobid}.out
-        error       = processing/condor/err/${sample_prefix}_PD${PD_Number}_${jobid}.err
-        log         = processing/condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.log
+        output      = processing/condor/${sample_prefix}_PD${PD_Number}_${jobid}.out
+        error       = processing/condor/${sample_prefix}_PD${PD_Number}_${jobid}.err
+        log         = processing/condor/${sample_prefix}_PD${PD_Number}_${jobid}.log
         queue
 
 EOF
         jobid=$((jobid+1))
     done
     PD_Number=$((PD_Number+1))
-    # condor_submit processing/${subfile%.*}.sub
+    condor_submit processing/${subfile%.*}.sub
 done
 
 
