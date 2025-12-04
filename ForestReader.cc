@@ -23,7 +23,7 @@ ClassImp(ForestReader)
     fTrackCut{nullptr}, fUseMatchedJets{kFALSE}, fEventsToProcess{-1}, fUseJetID{kFALSE}, fJetIDType{0}, fHiBinShift{0}, fIs_pp{kFALSE}, fIs_PbPb{kFALSE},
     fIs_pPb{kFALSE}, fJetJESCorrectionsFunction{nullptr}, fApplyJetJESCorrections{kFALSE}, fJEUType{0}, fSmearType{0}, fJetPtSmearingFunction{nullptr},
     fJERSmearingNomial{0}, fJERSmearingUp{0}, fJERSmearingDown{0}, fJERSmearingEtaEdges{0}, fRandom{nullptr}, fDoJEU{kFALSE}, fIsAOD{kFALSE}, fIsMiniAOD{kFALSE},
-    fIs_OO{kFALSE}, fIsPbGoingSide{kFALSE}
+    fIs_OO{kFALSE}, fIsPbGoingSide{kFALSE}, fIsSkim{false}
 {
     // Initialize many variables
     clearVariables();
@@ -33,14 +33,14 @@ ClassImp(ForestReader)
 //_________________
 ForestReader::ForestReader(const Char_t* inputStream, const Bool_t& isAOD, const Bool_t& isMiniAOD, const Bool_t& useHltBranch, const Bool_t& useSkimmingBranch,
                            const Char_t* jetCollection, const Bool_t& useJets, const Bool_t& useTrackBranch, const Bool_t& useGenTrackBranch, const Bool_t& isMc,
-                           const Bool_t& setStoreLocation, const Bool_t& useMatchedJets) :
+                           const Bool_t& setStoreLocation, const Bool_t& useMatchedJets, const bool& isSkim) :
     fEvent{nullptr}, fInFileName{inputStream}, fIsAOD{isAOD}, fIsMiniAOD{isMiniAOD}, fEvents2Read{0}, fEventsProcessed{0}, fIsMc{isMc}, fUseHltBranch{useHltBranch},
     fUseSkimmingBranch{useSkimmingBranch}, fJetCollection{"ak4PFJetAnalyzer"}, fUseJets{useJets}, fUseTrackBranch{useTrackBranch}, fUseGenTrackBranch{useGenTrackBranch},
     fJEC{nullptr}, fJECFiles{}, fJEU{nullptr}, fJEUFiles{}, fCollidingSystem{Form("PbPb")}, fCollidingEnergyGeV{5020}, fYearOfDataTaking{2018}, fDoJetPtSmearing{kFALSE},
     fFixJetArrays{kFALSE}, fEventCut{nullptr}, fJetCut{nullptr}, fIsInStore{setStoreLocation}, fTrackCut{nullptr}, fUseMatchedJets{useMatchedJets}, fEventsToProcess{-1},
     fUseJetID{kFALSE}, fJetIDType{0}, fHiBinShift{0}, fIs_pp{kFALSE}, fIs_PbPb{kFALSE}, fIs_pPb{kFALSE}, fJetJESCorrectionsFunction{nullptr},
     fApplyJetJESCorrections{kFALSE}, fJEUType{0}, fSmearType{0}, fJetPtSmearingFunction{nullptr}, fJERSmearingNomial{0}, fJERSmearingUp{0}, fJERSmearingDown{0},
-    fJERSmearingEtaEdges{0}, fRandom{nullptr}, fDoJEU{kFALSE}, fIs_OO{kFALSE}
+    fJERSmearingEtaEdges{0}, fRandom{nullptr}, fDoJEU{kFALSE}, fIs_OO{kFALSE}, fIsSkim{isSkim}
 
 {
     // Initialize many variables
@@ -78,7 +78,9 @@ void ForestReader::clearVariables()
     fHiHFMinus = {-1.f};
     fHiHFPlus = {-1.f};
     fHiHFPF = {-1.f};
-
+    fGenNtrkOff = {-1};
+    fNtrkOff = {-1};
+    fHiHFPlus = {-1.f};
     // bad jets and multiplicity to be added
 
     fNRecoJets = {0};
@@ -795,9 +797,9 @@ Int_t ForestReader::setupChains()
                     TFile* ftmp = TFile::Open(file.c_str());
 
                     // Check file is not zombie and contains information
-                    std::cout << ftmp << std::endl;
-                    std::cout << ftmp->IsZombie() << std::endl;
-                    std::cout << ftmp->GetNkeys() << std::endl;
+                    // std::cout << ftmp << std::endl;
+                    // std::cout << ftmp->IsZombie() << std::endl;
+                    // std::cout << ftmp->GetNkeys() << std::endl;
                     if (ftmp && !ftmp->IsZombie() && ftmp->GetNkeys())
                     {
                         std::cout << Form("Adding file to chain: %s\n", file.c_str());
@@ -864,6 +866,13 @@ void ForestReader::setupBranches()
     {
         fEventTree->SetBranchStatus("hiHF_pf", 1);
         fEventTree->SetBranchAddress("hiHF_pf", &fHiHFPF);
+    }
+    if (fIs_OO && fIsSkim)
+    {
+        fEventTree->SetBranchStatus("nTrkOff", 1);
+        fEventTree->SetBranchAddress("nTrkOff", &fNtrkOff);
+        fEventTree->SetBranchStatus(":gennTrkOff", 1);
+        fEventTree->SetBranchAddress("gennTrkOff", &fGenNtrkOff);
     }
     fEventTree->SetBranchAddress("run", &fRunId);
     fEventTree->SetBranchAddress("evt", &fEventId);
@@ -1536,8 +1545,14 @@ Event* ForestReader::returnEvent()
                 fEvent->trackCollection()->push_back(track);
             }
         }
+        fEvent->setMultiplicity(iRecoMult);
     }
 
-    fEvent->setMultiplicity(iRecoMult);
+    if (fIs_OO && fIsSkim)
+    {
+        fEvent->setMultiplicity(fNtrkOff);
+        fEvent->setCorrectedNtrkoff(fGenNtrkOff);
+    }
+
     return fEvent;
 }

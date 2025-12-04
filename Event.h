@@ -29,7 +29,7 @@ class Event : public TObject
     /// @brief Parametrized constructor
     Event(const UInt_t& runId, const ULong64_t& eventId, const UInt_t& lumi, const Float_t& vx, const Float_t& vy, const Float_t& vz, const Int_t& hiBin,
           const Int_t& hiBinShifted, const Float_t& ptHat, const Float_t& w, const Int_t& nBadJets, const Int_t& mult, const Int_t& genMult, const Long64_t& eveNumber,
-          const Float_t& hiHFPlus, const Float_t& hiHFMinus);
+          const Float_t& hiHFPlus, const Float_t& hiHFMinus, const int& corrNtrkoff);
     /// @brief Destructor
     virtual ~Event();
 
@@ -82,6 +82,8 @@ class Event : public TObject
     void setHiHFPlus(const Float_t& hiHFPlus) { fHiHFPlus = hiHFPlus; }
     /// @brief Set HiHFMinus
     void setHiHFMinus(const Float_t& hiHFMinus) { fHiHFMinus = hiHFMinus; }
+    ///@brief Set Corrected Multiplicity
+    void setCorrectedNtrkoff(const int& corrNtrkoff) { fCorrectedNtrkoff = corrNtrkoff; }
 
     /// @brief  Print event information
     void print();
@@ -127,6 +129,8 @@ class Event : public TObject
     Float_t hiHFPlus() const { return fHiHFPlus; }
     /// @brief Return HiHFMinus
     Float_t hiHFMinus() const { return fHiHFMinus; }
+    ///@brief Return Corrected Ntrkoff
+    int correctedNtrkoff() const { return fCorrectedNtrkoff; }
 
     /// @brief Return pointer to a collection of tracks
     TrackCollection* trackCollection() const { return fTrackCollection; }
@@ -168,6 +172,8 @@ class Event : public TObject
     UShort_t fMult;
     /// @brief Reference Gen Charged track multiplicity (CMS way)
     UShort_t fGenMult;
+    ///@brief Corrected Ntrkoff
+    int fCorrectedNtrkoff;
     /// @brief Check if collection of generated jets is filled
     Bool_t fGenJetsCollectionIsFilled;
     ///@brief Event number in the process

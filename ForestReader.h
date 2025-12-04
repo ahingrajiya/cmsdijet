@@ -44,7 +44,7 @@ class ForestReader : public BaseReader
     ForestReader(const Char_t* inputStream, const Bool_t& isAOD = kFALSE, const Bool_t& isMiniAOD = kFALSE, const Bool_t& useHltBranch = kFALSE,
                  const Bool_t& useSkimmingBranch = kFALSE, const Char_t* jetCollection = "ak4PFJetAnalyzer", const Bool_t& useJets = kFALSE,
                  const Bool_t& useTrackBranch = kFALSE, const Bool_t& useGenTrackBranch = kFALSE, const Bool_t& isMc = kFALSE, const Bool_t& setStoreLocation = kFALSE,
-                 const Bool_t& useMatchedJets = kFALSE);
+                 const Bool_t& useMatchedJets = kFALSE, const bool& isSkim = false);
     /// @brief Destructor
     virtual ~ForestReader();
 
@@ -117,6 +117,8 @@ class ForestReader : public BaseReader
     /// @brief Report event from reader
     void report();
 
+    /// @brief Set input file or list of files
+    void setIsSkim(const bool& isSkim) { fIsSkim = isSkim; }
     /// Turn-on HLT branch to be read
     void useHltBranch() { fUseHltBranch = {kTRUE}; }
 
@@ -328,6 +330,8 @@ class ForestReader : public BaseReader
     Bool_t fUseTrackBranch;
     /// @brief Switch MC track branch ON
     Bool_t fUseGenTrackBranch;
+    ///@brief If forests are skim with non standard tree structure
+    bool fIsSkim;
 
     /// @brief Chain conaining HLT information (used to friend other trees)
     TChain* fHltTree;
@@ -381,6 +385,12 @@ class ForestReader : public BaseReader
     Float_t fHiHFMinus;
     ///@brief HJiHF particle flow branch
     Float_t fHiHFPF;
+    ///@brief Ntrkoff from skims
+    int fNtrkOff;
+    ///@brief Efficiency Corrected Ntrkoff
+    int fGenNtrkOff;
+    ///@brief HiHF combined
+    float fHiHF;
 
     //
     // Trigger and skimming information

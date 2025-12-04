@@ -1116,6 +1116,12 @@ void DiJetAnalysis::processEvent(const Event* event)
     {
         iGenSubeMult = GenSubeMultiplicity(event, Event_Weight, iMultiplicityBin);
     }
+    if (fIsOO && !fIsMC)
+    {
+        iRecoMult = event->multiplicity();
+        iRecoCorrectedMult.first = event->multiplicity();
+        iRecoCorrectedMult.second = event->correctedNtrkoff();
+    }
 
     Double_t iMultiplicity;
     iMultiplicity = (fMultiplicityType == 0)   ? static_cast<Double_t>(iRecoMult)
