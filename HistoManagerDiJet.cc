@@ -60,7 +60,7 @@ ClassImp(HistoManagerDiJet)
     hHiHFPlus{nullptr}, hHiHFPlus_W{nullptr}, hHiHFMinus{nullptr}, hHiHFMinus_W{nullptr}, hHiHFPlus_WithDijet_W{nullptr}, hHiHFMinus_WithDijet_W{nullptr},
     hHiHFPlusVsMultiplicity_W{nullptr}, hHiHFMinusVsMultiplicity_W{nullptr}, hHiHFPlusVsMultiplicity_WithDijet_W{nullptr}, hHiHFMinusVsMultiplicity_WithDijet_W{nullptr},
     hHiHFVsXj_W{nullptr}, hHiHFVsXj_HiHFW{nullptr}, hXj_ProjectionHiHF_W{nullptr}, hXj_ProjectionHiHF_HiHFW{nullptr}, hMultVsXj_HiHFW{nullptr},
-    hXj_Projection_HiHFW{nullptr}
+    hXj_Projection_HiHFW{nullptr}, hHiHF_PF{nullptr}, hHiHF_PF_W{nullptr}
 {
     /* Empty*/
 }
@@ -97,6 +97,8 @@ HistoManagerDiJet::~HistoManagerDiJet()
     if (hNEventsInMult) delete hNEventsInMult;
     if (hDeltaPhi_WithDiJet_W) delete hDeltaPhi_WithDiJet_W;
     if (hGenDeltaPhi_WithDiJet_W) delete hGenDeltaPhi_WithDiJet_W;
+    if (hHiHF_PF) delete hHiHF_PF;
+    if (hHiHF_PF_W) delete hHiHF_PF_W;
 
     if (hInJetMultiplicity_W) delete hInJetMultiplicity_W;
     if (hGenInJetMultiplicity_W) delete hGenInJetMultiplicity_W;
@@ -290,7 +292,10 @@ void HistoManagerDiJet::init()
     hNEventsInMult->Sumw2();
     hNDijetEvent = new TH1I("hNDijetEvent", "Number of Dijet Events", 2, 0, 2);
     hNDijetEvent->Sumw2();
-
+    hHiHF_PF = new TH1D("hHiHF_PF", "HiHF PF Distribution", 100, 0.0, 1000.0);
+    hHiHF_PF->Sumw2();
+    hHiHF_PF_W = new TH1D("hHiHF_PF_W", "HiHF PF Distribution Weighted", 100, 0.0, 1000.0);
+    hHiHF_PF_W->Sumw2();
     if (fIsMC)
     {
         hGenMultiplicity_W = new TH1D("hGenMultiplicity_W", "Gen Multiplicity Weighted", 600, 0.0, 600.0);
@@ -1028,6 +1033,8 @@ void HistoManagerDiJet ::writeOutput()
     hMultiplicities_W->Write();
     hInJetMultiplicity_W->Write();
     hMultiplicities_DiJet_W->Write();
+    hHiHF_PF->Write();
+    hHiHF_PF_W->Write();
 
     if (fIsMC)
     {

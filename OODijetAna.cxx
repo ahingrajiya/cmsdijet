@@ -130,14 +130,14 @@ int main(int argc, char* argv[])
 
     ForestReader* reader = new ForestReader{inFileName};
     reader->setForestFileType(ForestReader::ForestFileType::MiniAOD);
+    reader->setIsSkim(true);
 
     if (isMC)
     {
         reader->setIsMc(isMC);
-        reader->useGenTrackBranch();
+        // reader->useGenTrackBranch();
         reader->setFilters(filtersmc);
-        reader->setStoreLocation(kTRUE);
-        reader->useTrackBranch();
+        // reader->setStoreLocation(kTRUE);
 
         if (isEmbedded)
         {
@@ -147,6 +147,7 @@ int main(int argc, char* argv[])
         else
         {
             reader->setJetCollectionBranchName(jetBranchNameUnembedded.Data());
+            // reader->useTrackBranch();
         }
     }
     reader->useSkimmingBranch();
@@ -166,7 +167,6 @@ int main(int argc, char* argv[])
     {
         reader->setJetCollectionBranchName(jetBranchNameEmbedded.Data());
         reader->setFilters(filters);
-        reader->setIsSkim(true);
     }
 
     manager->setEventReader(reader);

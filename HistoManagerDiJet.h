@@ -84,6 +84,8 @@ class HistoManagerDiJet : public BaseHistoManager
     TH1D* hGenMultiplicity_W;
     TH1D* hSubEventMultiplicity_W;
     TH1D* hSelectedMultiplicity_W;
+    TH1D* hHiHF_PF;
+    TH1D* hHiHF_PF_W;
 
     TH2D* hInJetMultiplicity_W;
     TH2D* hGenInJetMultiplicity_W;

@@ -81,6 +81,9 @@ void ForestReader::clearVariables()
     fGenNtrkOff = {-1};
     fNtrkOff = {-1};
     fHiHFPlus = {-1.f};
+    fGenMultiplicity = {-1};
+    fSubEventMultiplicity = {-1};
+    fPYTHIAMultiplicity = {-1};
     // bad jets and multiplicity to be added
 
     fNRecoJets = {0};
@@ -871,8 +874,14 @@ void ForestReader::setupBranches()
     {
         fEventTree->SetBranchStatus("nTrkOff", 1);
         fEventTree->SetBranchAddress("nTrkOff", &fNtrkOff);
-        fEventTree->SetBranchStatus(":gennTrkOff", 1);
+        fEventTree->SetBranchStatus("gennTrkOff", 1);
         fEventTree->SetBranchAddress("gennTrkOff", &fGenNtrkOff);
+        fEventTree->SetBranchStatus("genSubEMult", 1);
+        fEventTree->SetBranchAddress("genSubEMult", &fSubEventMultiplicity);
+        fEventTree->SetBranchStatus("genPythiaMult", 1);
+        fEventTree->SetBranchAddress("genPythiaMult", &fPYTHIAMultiplicity);
+        fEventTree->SetBranchStatus("genMult", 1);
+        fEventTree->SetBranchAddress("genMult", &fGenMultiplicity);
     }
     fEventTree->SetBranchAddress("run", &fRunId);
     fEventTree->SetBranchAddress("evt", &fEventId);
@@ -1037,15 +1046,19 @@ void ForestReader::setupBranches()
 
             // Matching Jets
             fJetTree->SetBranchStatus("refpt", 1);
-            fJetTree->SetBranchStatus("refeta", 1);
-            fJetTree->SetBranchStatus("refphi", 1);
             fJetTree->SetBranchStatus("refparton_flavor", 1);
             fJetTree->SetBranchStatus("refparton_flavorForB", 1);
             fJetTree->SetBranchAddress("refpt", &fRefJetPt);
-            fJetTree->SetBranchAddress("refeta", &fRefJetEta);
-            fJetTree->SetBranchAddress("refphi", &fRefJetPhi);
             fJetTree->SetBranchAddress("refparton_flavor", &fRefJetPartonFlavor);
             fJetTree->SetBranchAddress("refparton_flavorForB", &fRefJetPartonFlavorForB);
+
+            if (!fIsSkim)
+            {
+                fJetTree->SetBranchStatus("refeta", 1);
+                fJetTree->SetBranchStatus("refphi", 1);
+                fJetTree->SetBranchAddress("refeta", &fRefJetEta);
+                fJetTree->SetBranchAddress("refphi", &fRefJetPhi);
+            }
         }
 
     }  // if ( fUsePartFlowJetBranch )
@@ -1277,6 +1290,7 @@ Event* ForestReader::returnEvent()
         int iHiBin = getHiBin(fHiHFPF, fHiHFPFBins);
         fHiBin = iHiBin;
     }
+    fEvent->setHiHFPF(fHiHFPF);
     fEvent->setHiBin(fHiBin);
     fEvent->setHiBinShifted(fHiBin + fHiBinShift);
     // Fill HLT branch
@@ -1472,11 +1486,8 @@ Event* ForestReader::returnEvent()
             fEvent->genTrackCollection()->push_back(track);
         }
         fEvent->setGenMultiplicity(iGenMult);
-    }
-    Int_t iRecoMult = 0;
 
-    if (fUseTrackBranch)
-    {
+        Int_t iRecoMult = 0;
         if (fIsAOD)
         {
             for (Int_t iTrack{0}; iTrack < fNTracks; iTrack++)
@@ -1552,6 +1563,9 @@ Event* ForestReader::returnEvent()
     {
         fEvent->setMultiplicity(fNtrkOff);
         fEvent->setCorrectedNtrkoff(fGenNtrkOff);
+        fEvent->setSubEventMultiplicity(fSubEventMultiplicity);
+        fEvent->setPYTHIAMultiplicity(fPYTHIAMultiplicity);
+        fEvent->setGenMultiplicity(fGenMultiplicity);
     }
 
     return fEvent;

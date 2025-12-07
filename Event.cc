@@ -15,7 +15,8 @@
 //________________
 Event::Event() :
     TObject(), fRunId{0}, fEventId{0}, fLumi{0}, fVx{0}, fVy{0}, fVz{0}, fHiBin{-1}, fHiBinShifted{-10}, fPtHat{-1}, fPtHatWeight{-1}, fNBadJets{0}, fMult{0},
-    fGenMult{0}, fEventNumber{0}, fGenJetsCollectionIsFilled{kFALSE}, fCorrectedNtrkoff{0}, fHiHFMinus{0}, fHiHFPlus{0}
+    fGenMult{0}, fEventNumber{0}, fGenJetsCollectionIsFilled{kFALSE}, fCorrectedNtrkoff{0}, fHiHFMinus{0}, fHiHFPlus{0}, fSubEventMultiplicity{-1},
+    fPYTHIAMultiplicity{-1}, fHiHFPF{0.}
 {
     fRecoJetCollection = new RecoJetCollection{};
     fGenJetCollection = new GenJetCollection{};
@@ -28,10 +29,10 @@ Event::Event() :
 //________________
 Event::Event(const UInt_t& runId, const ULong64_t& eventId, const UInt_t& lumi, const Float_t& vx, const Float_t& vy, const Float_t& vz, const Int_t& hiBin,
              const Int_t& hiBinShifted, const Float_t& ptHat, const Float_t& w, const Int_t& nBadJets, const Int_t& mult, const Int_t& genMult, const Long64_t& eveNumber,
-             const Float_t& hiHFPlus, const Float_t& hiHFMinus, const int& corrNtrkoff) :
+             const Float_t& hiHFPlus, const Float_t& hiHFMinus, const int& corrNtrkoff, const int& subEventMult, const int& pythiaMult, const Float_t& hiHFPF) :
     TObject(), fRunId{runId}, fEventId{eventId}, fLumi{lumi}, fVx{vx}, fVy{vy}, fVz{vz}, fHiBin{(Short_t)hiBin}, fHiBinShifted{(Short_t)hiBinShifted}, fPtHat{ptHat},
     fPtHatWeight{w}, fNBadJets{(UChar_t)nBadJets}, fMult{(UShort_t)mult}, fGenMult{(UShort_t)genMult}, fGenJetsCollectionIsFilled{kFALSE}, fEventNumber{eveNumber},
-    fHiHFMinus{hiHFMinus}, fHiHFPlus{hiHFPlus}, fCorrectedNtrkoff{corrNtrkoff}
+    fHiHFMinus{hiHFMinus}, fHiHFPlus{hiHFPlus}, fCorrectedNtrkoff{corrNtrkoff}, fSubEventMultiplicity{subEventMult}, fPYTHIAMultiplicity{pythiaMult}, fHiHFPF{hiHFPF}
 {
     // Create new collections
     fRecoJetCollection = new RecoJetCollection{};

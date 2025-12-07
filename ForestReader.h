@@ -391,6 +391,12 @@ class ForestReader : public BaseReader
     int fGenNtrkOff;
     ///@brief HiHF combined
     float fHiHF;
+    /// @brief Gen Multiplicity
+    int fGenMultiplicity;
+    ///@brief SubEvent Multiplicity
+    int fSubEventMultiplicity;
+    ///@brief PYTHIA Multiplicity
+    int fPYTHIAMultiplicity;
 
     //
     // Trigger and skimming information

@@ -1116,11 +1116,14 @@ void DiJetAnalysis::processEvent(const Event* event)
     {
         iGenSubeMult = GenSubeMultiplicity(event, Event_Weight, iMultiplicityBin);
     }
-    if (fIsOO && !fIsMC)
+
+    if (fIsOO)
     {
         iRecoMult = event->multiplicity();
         iRecoCorrectedMult.first = event->multiplicity();
         iRecoCorrectedMult.second = event->correctedNtrkoff();
+        iGenSubeMult.first = event->genMultiplicity();
+        iGenSubeMult.second = event->subEventMultiplicity();
     }
 
     Double_t iMultiplicity;
@@ -1140,6 +1143,8 @@ void DiJetAnalysis::processEvent(const Event* event)
     fHM->hNEventsInMult->Fill(iMultiplicityBin);
     fHM->hHiBin->Fill(event->hiBinWithShift());
     fHM->hHiBin_W->Fill(event->hiBinWithShift(), Event_Weight);
+    fHM->hHiHF_PF->Fill(event->hiHFPF());
+    fHM->hHiHF_PF_W->Fill(event->hiHFPF(), Event_Weight);
 
     fHM->hRecoMultiplicity_W->Fill(iRecoMult, Event_Weight * fDijetWeight);
     fHM->hCorrectedMultiplicity_W->Fill(iRecoCorrectedMult.second, Event_Weight * fDijetWeight);
