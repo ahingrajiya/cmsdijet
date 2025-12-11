@@ -63,6 +63,17 @@ DiJetAnalysis::~DiJetAnalysis()
             }
         }
     }
+    if (fUseCentralityWeight)
+    {
+        for (auto& centWeightFunction : fCentWeightFunctions)
+        {
+            if (centWeightFunction)
+            {
+                delete centWeightFunction;
+                centWeightFunction = nullptr;
+            }
+        }
+    }
     if (fUseDijetWeight)
     {
         fDijetWeightFile->Close();
@@ -137,13 +148,21 @@ void DiJetAnalysis::SetUpWeightFunctions()
             // fMultWeightFunctions[2]->SetParameters(-1.76375e+00, 1.13405e-02, 1.22664e-05);
         }
     }
-    if (fIsOO && !fIsMC)
+    if (fIsOO)
     {
-        if (fUseHiHFWeight)
+        if (fUseHiHFWeight && !fIsMC)
         {
             std::cout << "DiJetAnalysis::SetUpWeightFunctions Setting up HiHF Weight Function" << std::endl;
             fHiHFWeight = new TF1("fHiHFWeight", "pol3", 20, 150, TF1::EAddToList::kNo);
             fHiHFWeight->SetParameters(9.03662e+00, -1.76712e-01, 1.18221e-03, -2.68303e-06);
+        }
+        if (fUseCentralityWeight && fIsMC)
+        {
+            std::cout << "DiJetAnalysis::SetUpWeightFunctions Setting up Centrality Weight Functions" << std::endl;
+            fCentWeightFunctions[0] = new TF1("fCentWeightFunctions0", "pol3", 0, 30, TF1::EAddToList::kNo);
+            fCentWeightFunctions[0]->SetParameters(1.19999e+01, 7.01699e-01, -4.39143e-02, 6.78303e-04);
+            fCentWeightFunctions[1] = new TF1("fCentWeightFunctions1", "pol3", 30, 180, TF1::EAddToList::kNo);
+            fCentWeightFunctions[1]->SetParameters(2.27178e+01, -4.09285e-01, 2.53942e-03, -5.29161e-06);
         }
     }
     std::cout << "DiJetAnalysis::SetUpWeightFunctions Setting up Weight Functions for " << fCollSystem << " completed." << std::endl;
@@ -559,6 +578,7 @@ Double_t DiJetAnalysis::EventWeight(const Event* event)
     Double_t vzWeight{1.};
     Double_t ptHat = event->ptHat();
     Double_t vertexZ = event->vz();
+    Double_t centWeight{1.};
     if (ptHat < 0)
     {
         return 1.0;
@@ -576,8 +596,9 @@ Double_t DiJetAnalysis::EventWeight(const Event* event)
     {
         ptHatWeight = event->ptHatWeight();
     }
+    centWeight = CentralityWeight(event->hiBin());
 
-    eventWeight = ptHatWeight * vzWeight;
+    eventWeight = ptHatWeight * vzWeight * centWeight;
     if (fDebug)
     {
         std::cout << "PtHat Weight : " << ptHatWeight << std::endl;
@@ -905,6 +926,17 @@ Float_t DiJetAnalysis::MoveToLabFrame(const Float_t& jetEta)
     }
 
     return jetEtaLab;
+}
+
+Double_t DiJetAnalysis::CentralityWeight(const int& centrality)
+{
+    if (!fIsOO || !fIsMC || !fUseCentralityWeight) return 1.0;
+    if (centrality <= 30)
+        return fCentWeightFunctions[0]->Eval(centrality);
+    else if (centrality > 30 && centrality <= 180)
+        return fCentWeightFunctions[1]->Eval(centrality);
+    else
+        return 1.0;
 }
 
 Double_t DiJetAnalysis::FindBin(const double& multiplicity, const std::map<Double_t, Double_t>& fBins)

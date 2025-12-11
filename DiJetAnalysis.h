@@ -309,7 +309,10 @@ class DiJetAnalysis : public BaseAnalysis
     ///@param hiHF HiHF value
     ///@return Returns HiHF weight
     Double_t HiHFWeight(const Double_t& hiHF);
-
+    ///@brief Centrality Weight
+    ///@param hiBin Centrality Bin
+    ///@return Returns Centrality weight
+    Double_t CentralityWeight(const Int_t& hiBin);
     ///@brief Print debug information
     Bool_t fDebug;
     ///@brief Delta Phi selection for dijet
@@ -407,6 +410,8 @@ class DiJetAnalysis : public BaseAnalysis
     Bool_t fDoVzWeight;
     ///@brief Holds multiplicity weight functions
     TF1* fMultWeightFunctions[4];
+    ///@brief Centrality reweight
+    TF1* fCentWeightFunctions[2];
     ///@brief Bin Edges for DijetWeight Histogram
     std::vector<double> fXBinEdges;
     ///@brief Bin Edges for DijetWeight Histogram
