@@ -355,14 +355,10 @@ void ForestReader::SetUpWeightFunctions()
 
 int ForestReader::getHiBin(const double& hiHFplus, std::vector<double> boundaries) const
 {
+    if (hiHFplus > boundaries.back()) return 200;
     auto it = std::upper_bound(boundaries.begin(), boundaries.end(), hiHFplus);
-
     int idx = it - boundaries.begin();
-    if (idx < 0) idx = 0;                   // below first
-    if (idx >= (int)boundaries.size() - 1)  // above last
-        idx = boundaries.size() - 2;
-
-    return 201 - idx;
+    return 200 - idx;
 }
 
 //________________
