@@ -31,13 +31,15 @@ int main(int argc, char* argv[])
     TString JECFileName;
     TString JECFileDataName;
     TString path2JEC = "..";
-    Int_t collEnergyGeV{5020};
+    Int_t collEnergyGeV{5360};
     TString collSystem{"pp"};
-    Int_t collYear{2018};
+    Int_t collYear{2025};
     Bool_t useCentWeight{kFALSE};
     TString jetBranchName{"ak4PFJetAnalyzer"};
-    std::vector<std::pair<Double_t, Double_t>> multiplicityBins = {{10, 0.0}, {60, 1.0}, {120, 2.0}, {185, 3.0}, {400, 4.0}};
-    std::vector<std::string> filters{"pPAprimaryVertexFilter", "pBeamScrapingFilter", "HBHENoiseFilterResultRun2Loose"};
+    std::vector<std::pair<Double_t, Double_t>> multiplicityBins = {{0, 0.0}, {10, 1.0}, {60, 2.0}, {120, 3.0}, {185, 4.0}, {250, 5.0}, {400, 6.0}};
+    std::vector<std::pair<double, double>> hiHFBins = {{0., 0.0},  {10., 1.0}, {20., 2.0},  {30., 3.0},  {40., 4.0},   {50., 5.0},
+                                                       {70., 6.0}, {90., 7.0}, {120., 8.0}, {150., 9.0}, {1000., 10.0}};
+    std::vector<std::string> filters{"pprimaryVertexFilter"};
     std::string path2DijetWeight = "../aux_files/pp_5020/Dijet_Weight/PYTHIA_DiJetWeight_Table.root";
     std::string dijetWeightType{"Gen"};
 
@@ -54,12 +56,12 @@ int main(int argc, char* argv[])
 
     if (isMC)
     {
-        JECFileName = "Spring18_ppRef5TeV_V6_MC_L2Relative_AK4PF.txt";
+        JECFileName = "2024ppRef_withPU_L2Relative_AK4PF.txt";
     }
     else
     {
-        JECFileName = "Spring18_ppRef5TeV_V6_MC_L2Relative_AK4PF.txt";
-        JECFileDataName = "Spring18_ppRef5TeV_V6_DATA_L2L3Residual_AK4PF.txt";
+        JECFileName = "2024ppRef_withPU_L2Relative_AK4PF.txt";
+        // JECFileDataName = "2024ppRef_withPU_L2L3Residual_AK4PF.txt";
     }
 
     // Initialize package manager
@@ -71,7 +73,7 @@ int main(int argc, char* argv[])
     eventCut->setMultiplicty(0, 10000);
     if (isMC)
     {
-        eventCut->setPtHat(30., 1000.);
+        eventCut->setPtHat(50., 1000.);
     }
     // eventCut->setVerbose();
 
@@ -95,12 +97,10 @@ int main(int argc, char* argv[])
     if (isMC)
     {
         reader->setIsMc(isMC);
-        reader->useGenTrackBranch();
+        // reader->useGenTrackBranch();
     }
-    reader->useSkimmingBranch();
     // reader->useTrackBranch();
     reader->useJets();
-    reader->setFilters(filters);
     reader->setJetCollectionBranchName(jetBranchName.Data());
     reader->setCollidingEnergy(collEnergyGeV);
     reader->setCollidingSystem(ForestReader::CollidingSystemType::pp);
@@ -110,8 +110,10 @@ int main(int argc, char* argv[])
     reader->addJECFile(JECFileName.Data());
     if (!isMC)
     {
-        reader->addJECFile(JECFileDataName.Data());
-        reader->setStoreLocation(kTRUE);
+        // reader->addJECFile(JECFileDataName.Data());
+        // reader->setStoreLocation(kTRUE);
+        reader->useSkimmingBranch();
+        reader->setFilters(filters);
     }
     reader->setPath2JetAnalysis(path2JEC.Data());
     reader->setTrackCut(trackCut);
@@ -125,6 +127,7 @@ int main(int argc, char* argv[])
     hm->setIsMC(isMC);
     hm->setMultiplicityBins(multiplicityBins);
     hm->setCollSystem(collSystem);
+    hm->setHiHFEnergyBins(hiHFBins);
     hm->init();
 
     // Initialize analysis
@@ -147,6 +150,7 @@ int main(int argc, char* argv[])
     analysis->setMultBins(multiplicityBins);
     analysis->setInclusiveCorrectedJetPtMin(50.);
     analysis->setInclusiveJetEtaRange(-1.6, 1.6);
+    analysis->setHiHFBins(hiHFBins);
     // if (isMC)
     // {
     //     analysis->setUseDijetWeight();
