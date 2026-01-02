@@ -28,7 +28,7 @@ if [ "$DataSet" -eq 1 ]; then
     cd ${EXEC_PATH}   
     sample_prefix="PYTHIA"
     input_files_list="${EXEC_PATH}/files_input/pp${energy}/PYTHIA/"
-    output_path="/eos/user/a/ahingraj/outputs/PYTHIA/"
+    output_path="/eos/user/a/ahingraj/outputs/PYTHIA/${energy}/"
     isMC=1
 fi
 
@@ -37,7 +37,7 @@ if [ "$DataSet" -eq 2 ]; then
     cd ${EXEC_PATH}   
     sample_prefix="ppRefData"
     input_files_list="${EXEC_PATH}/files_input/pp${energy}/DATA/"
-    output_path="/eos/user/a/ahingraj/outputs/PYTHIA/"
+    output_path="/eos/user/a/ahingraj/outputs/ppRefData/${energy}/"
     isMC=0
 fi
 
