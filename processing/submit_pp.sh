@@ -84,7 +84,7 @@ EOF
         jobid=$((jobid+1))
     done
     PD_Number=$((PD_Number+1))
-    #condor_submit processing/pp_${subfile%.*}.sub
+    condor_submit processing/pp_${subfile%.*}.sub
 done
 
 
