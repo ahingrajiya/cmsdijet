@@ -11,7 +11,8 @@ EXEC_PATH=${HOME}/private/analysis/CMSSW_13_0_5/src/cmsdijet
 
 DataSet=$1
 files_per_job=$2
-doBuild=$3
+energy=$3
+doBuild=$4
 
 if [ "$doBuild" -eq 1 ]; then
     echo "Building the code"
@@ -26,7 +27,7 @@ if [ "$DataSet" -eq 1 ]; then
     echo "PYTHIA  Datasset is selected"    
     cd ${EXEC_PATH}   
     sample_prefix="PYTHIA"
-    input_files_list="${EXEC_PATH}/files_input/pp5020/PYTHIA/"
+    input_files_list="${EXEC_PATH}/files_input/pp/${energy}/PYTHIA/"
     output_path="/eos/user/a/ahingraj/outputs/PYTHIA/"
     isMC=1
 fi
@@ -35,13 +36,13 @@ if [ "$DataSet" -eq 2 ]; then
     echo "ppRef Datasset is selected"    
     cd ${EXEC_PATH}   
     sample_prefix="ppRefData"
-    input_files_list="${EXEC_PATH}/files_input/pp5020/DATA/"
+    input_files_list="${EXEC_PATH}/files_input/pp/${energy}/DATA/"
     output_path="/eos/user/a/ahingraj/outputs/PYTHIA/"
     isMC=0
 fi
 
 if [ "$DataSet" -gt 2 ]; then
-    echo "No Data Set Selected. Use numbers from 1 to 5"
+    echo "No Data Set Selected. Use numbers from 1 to 2"
     exit 1
 fi
 
@@ -81,7 +82,7 @@ EOF
 EOF
         jobid=$((jobid+1))
     done
-    condor_submit processing/pp_${subfile%.*}.sub
+    #condor_submit processing/pp_${subfile%.*}.sub
 done
 
 
