@@ -50,6 +50,7 @@ echo "Input File List : ${input_files_list}"
 
 mkdir -p processing/condor/logs
 
+PD_Number=1
 for filename in ${input_files_list}/*.txt; do
     echo "Processing file: $(basename "$filename")"
     echo "$PWD"
@@ -74,14 +75,15 @@ EOF
         cat <<EOF >> processing/pp_${subfile%.*}.sub
 
 	    arguments   = ${file_list}/$(basename "$file") ${output_path}${sample_prefix}_${jobid}.root ${isMC}
-        output      = processing/condor/logs/${sample_prefix}_${jobid}.out
-        error       = processing/condor/logs/${sample_prefix}_${jobid}.err
-        log         = processing/condor/logs/${sample_prefix}_${jobid}.log
+        output      = processing/condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.out
+        error       = processing/condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.err
+        log         = processing/condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.log
         queue
 
 EOF
         jobid=$((jobid+1))
     done
+    PD_Number=$((PD_Number+1))
     #condor_submit processing/pp_${subfile%.*}.sub
 done
 
