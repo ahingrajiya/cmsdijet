@@ -27,7 +27,7 @@ if [ "$DataSet" -eq 1 ]; then
     echo "PYTHIA  Datasset is selected"    
     cd ${EXEC_PATH}   
     sample_prefix="PYTHIA"
-    input_files_list="${EXEC_PATH}/files_input/pp/${energy}/PYTHIA/"
+    input_files_list="${EXEC_PATH}/files_input/pp${energy}/PYTHIA/"
     output_path="/eos/user/a/ahingraj/outputs/PYTHIA/"
     isMC=1
 fi
@@ -36,7 +36,7 @@ if [ "$DataSet" -eq 2 ]; then
     echo "ppRef Datasset is selected"    
     cd ${EXEC_PATH}   
     sample_prefix="ppRefData"
-    input_files_list="${EXEC_PATH}/files_input/pp/${energy}/DATA/"
+    input_files_list="${EXEC_PATH}/files_input/pp${energy}/DATA/"
     output_path="/eos/user/a/ahingraj/outputs/PYTHIA/"
     isMC=0
 fi
