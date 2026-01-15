@@ -597,8 +597,8 @@ Double_t DiJetAnalysis::EventWeight(const Event* event)
         ptHatWeight = event->ptHatWeight();
     }
     centWeight = CentralityWeight(event->hiBin());
-
     eventWeight = ptHatWeight * vzWeight * centWeight;
+
     if (fDebug)
     {
         std::cout << "PtHat Weight : " << ptHatWeight << std::endl;
@@ -1530,11 +1530,13 @@ void DiJetAnalysis::processRecoJets(const Event* event, const Double_t& event_We
                 if (matchedRefXj > 1.0)
                 {
                     matchedRefXj = 1. / matchedRefXj;
+                    std::swap(leadMatchedJetPt, subLeadMatchedJetPt);
                 }
                 fHM->hMultVsRefXj_W->Fill(refXj, multiplicityBin, event_Weight);
                 fHM->hMultVsRefXj_DiJetW->Fill(refXj, multiplicityBin, event_Weight * fDijetWeight);
                 fHM->hMultVsMatchedRefXj_W->Fill(matchedRefXj, multiplicityBin, event_Weight);
                 fHM->hMultVsMatchedRefXj_DiJetW->Fill(matchedRefXj, multiplicityBin, event_Weight * fDijetWeight);
+                fHM->hUnfoldingRefXjVsRecoXjVsMultiplicity_W->Fill(matchedRefXj, Xj, multiplicityBin, event_Weight);
             }
 
             fHM->hNDijetEvent->Fill(1);

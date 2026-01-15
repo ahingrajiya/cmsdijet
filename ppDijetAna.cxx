@@ -107,7 +107,7 @@ int main(int argc, char* argv[])
     reader->setYearOfDataTaking(collYear);
     reader->setUseJetID();
     reader->setJetIDType(2);
-    reader->addJECFile(JECFileName.Data());
+    // reader->addJECFile(JECFileName.Data());
     if (!isMC)
     {
         // reader->addJECFile(JECFileDataName.Data());
@@ -115,7 +115,7 @@ int main(int argc, char* argv[])
         reader->useSkimmingBranch();
         reader->setFilters(filters);
     }
-    reader->setPath2JetAnalysis(path2JEC.Data());
+    // reader->setPath2JetAnalysis(path2JEC.Data());
     reader->setTrackCut(trackCut);
     reader->setJetCut(jetCut);
     reader->setEventCut(eventCut);
@@ -139,8 +139,8 @@ int main(int argc, char* argv[])
     analysis->setSubLeadJetEtaRange(-1., 1.);
     analysis->setMultiplicityRange(0., 10000.);
     analysis->setMultiplicityType(0);
-    analysis->setLeadJetPt(70.);
-    analysis->setSubLeadJetPt(40.);
+    analysis->setLeadJetPt(100.);
+    analysis->setSubLeadJetPt(50.);
     analysis->setDeltaPhi(5. * TMath::Pi() / 6);
     analysis->setInclusiveCorrectedJetPtMin(50.);
     analysis->setInclusiveJetEtaRange(-1.6, 1.6);

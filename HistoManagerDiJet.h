@@ -201,6 +201,8 @@ class HistoManagerDiJet : public BaseHistoManager
     TH2D* hRefLeadRefSubLead_W;
     TH2D* hGenLeadGenSubLead_W;
 
+    TH3D* hUnfoldingRefXjVsRecoXjVsMultiplicity_W;
+
    private:
     Bool_t fIsMC;
 

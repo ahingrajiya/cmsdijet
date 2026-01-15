@@ -60,7 +60,7 @@ ClassImp(HistoManagerDiJet)
     hHiHFPlus{nullptr}, hHiHFPlus_W{nullptr}, hHiHFMinus{nullptr}, hHiHFMinus_W{nullptr}, hHiHFPlus_WithDijet_W{nullptr}, hHiHFMinus_WithDijet_W{nullptr},
     hHiHFPlusVsMultiplicity_W{nullptr}, hHiHFMinusVsMultiplicity_W{nullptr}, hHiHFPlusVsMultiplicity_WithDijet_W{nullptr}, hHiHFMinusVsMultiplicity_WithDijet_W{nullptr},
     hHiHFVsXj_W{nullptr}, hHiHFVsXj_HiHFW{nullptr}, hXj_ProjectionHiHF_W{nullptr}, hXj_ProjectionHiHF_HiHFW{nullptr}, hMultVsXj_HiHFW{nullptr},
-    hXj_Projection_HiHFW{nullptr}, hHiHF_PF{nullptr}, hHiHF_PF_W{nullptr}
+    hXj_Projection_HiHFW{nullptr}, hHiHF_PF{nullptr}, hHiHF_PF_W{nullptr}, hUnfoldingRefXjVsRecoXjVsMultiplicity_W{nullptr}
 {
     /* Empty*/
 }
@@ -250,6 +250,7 @@ HistoManagerDiJet::~HistoManagerDiJet()
     if (hHiHFMinusVsMultiplicity_W) delete hHiHFMinusVsMultiplicity_W;
     if (hHiHFPlusVsMultiplicity_WithDijet_W) delete hHiHFPlusVsMultiplicity_WithDijet_W;
     if (hHiHFMinusVsMultiplicity_WithDijet_W) delete hHiHFMinusVsMultiplicity_WithDijet_W;
+    if (hUnfoldingRefXjVsRecoXjVsMultiplicity_W) delete hUnfoldingRefXjVsRecoXjVsMultiplicity_W;
 
     for (auto hist : hXj_Projection_W) delete hist;
     for (auto hist : hXj_ProjectionHiHF_W) delete hist;
@@ -553,6 +554,8 @@ void HistoManagerDiJet::init()
         hMultVsGenXj_W->Sumw2();
         hMultVsGenXj_DiJetW = new TH2D("hMultVsGenXj_DiJetW", "Gen Xj Distribution DijetWeighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
         hMultVsGenXj_DiJetW->Sumw2();
+        hUnfoldingRefXjVsRecoXjVsMultiplicity_W = new TH3D("hUnfoldingRefXjVsRecoXjVsMultiplicity_W", "Unfolding RefXj vs RecoXj vs Multiplicity Weighted", nXjAjBins,
+                                                           XjBins, nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
     }
     // Float_t LeadSubLeadPtBins[] = {0.0, 50., 60., 70., 80., 90., 100., 110., 120., 130., 140., 150., 160., 170., 180., 190., 200., 220., 240., 260., 280., 300.,
     // 350., 400., 450., 500., 600., 700., 1200.};
@@ -1306,6 +1309,11 @@ void HistoManagerDiJet ::writeOutput()
             hXj_ProjectionHiHF_HiHFW[i]->Write();
         }
     }
+
+    gDirectory->cd("..");
+    gDirectory->mkdir("Unfolding");
+    gDirectory->cd("Unfolding");
+    hUnfoldingRefXjVsRecoXjVsMultiplicity_W->Write();
     std::cout << "Writing Histograms Complete" << std::endl;
     std::cout << "====================================" << std::endl;
 }
