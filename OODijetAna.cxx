@@ -181,7 +181,7 @@ int main(int argc, char* argv[])
     analysis->setMinTrkPt(0.40);
     analysis->setDeltaPhi(5 * TMath::Pi() / 6);
     analysis->setLeadJetPt(70.);
-    analysis->setSubLeadJetPt(40.);
+    analysis->setSubLeadJetPt(30.);
     analysis->setLeadJetEtaRange(-1.6, 1.6);
     analysis->setSubLeadJetEtaRange(-1.6, 1.6);
     analysis->setMultBins(multiplicityBins);

@@ -97,6 +97,7 @@ int main(int argc, char* argv[])
     if (isMC)
     {
         reader->setIsMc(isMC);
+        reader->setStoreLocation(kTRUE);
         // reader->useGenTrackBranch();
     }
     // reader->useTrackBranch();
@@ -139,8 +140,8 @@ int main(int argc, char* argv[])
     analysis->setSubLeadJetEtaRange(-1., 1.);
     analysis->setMultiplicityRange(0., 10000.);
     analysis->setMultiplicityType(0);
-    analysis->setLeadJetPt(100.);
-    analysis->setSubLeadJetPt(50.);
+    analysis->setLeadJetPt(70.);
+    analysis->setSubLeadJetPt(30.);
     analysis->setDeltaPhi(5. * TMath::Pi() / 6);
     analysis->setInclusiveCorrectedJetPtMin(50.);
     analysis->setInclusiveJetEtaRange(-1.6, 1.6);
