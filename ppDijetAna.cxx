@@ -136,8 +136,8 @@ int main(int argc, char* argv[])
     analysis->addHistoManager(hm);
     analysis->setReader(reader);
     analysis->setIsMC(isMC);
-    analysis->setLeadJetEtaRange(-1., 1.);
-    analysis->setSubLeadJetEtaRange(-1., 1.);
+    analysis->setLeadJetEtaRange(-1.6, 1.6);
+    analysis->setSubLeadJetEtaRange(-1.6, 1.6);
     analysis->setMultiplicityRange(0., 10000.);
     analysis->setMultiplicityType(0);
     analysis->setLeadJetPt(100.);
