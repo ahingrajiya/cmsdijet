@@ -108,7 +108,7 @@ int main(int argc, char* argv[])
     reader->setYearOfDataTaking(collYear);
     reader->setUseJetID();
     reader->setJetIDType(2);
-    // reader->addJECFile(JECFileName.Data());
+    reader->addJECFile(JECFileName.Data());
     if (!isMC)
     {
         // reader->addJECFile(JECFileDataName.Data());
@@ -116,7 +116,7 @@ int main(int argc, char* argv[])
         reader->useSkimmingBranch();
         reader->setFilters(filters);
     }
-    // reader->setPath2JetAnalysis(path2JEC.Data());
+    reader->setPath2JetAnalysis(path2JEC.Data());
     reader->setTrackCut(trackCut);
     reader->setJetCut(jetCut);
     reader->setEventCut(eventCut);
