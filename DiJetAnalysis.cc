@@ -1527,6 +1527,7 @@ void DiJetAnalysis::processRecoJets(const Event* event, const Double_t& event_We
                 {
                     refXj = 1. / refXj;
                 }
+                fHM->hUnfoldingRefXjVsRecoXjVsMultiplicity_Unflipped_W->Fill(Xj, matchedRefXj, multiplicityBin, event_Weight);
                 if (matchedRefXj > 1.0)
                 {
                     matchedRefXj = 1. / matchedRefXj;
@@ -1536,7 +1537,15 @@ void DiJetAnalysis::processRecoJets(const Event* event, const Double_t& event_We
                 fHM->hMultVsRefXj_DiJetW->Fill(refXj, multiplicityBin, event_Weight * fDijetWeight);
                 fHM->hMultVsMatchedRefXj_W->Fill(matchedRefXj, multiplicityBin, event_Weight);
                 fHM->hMultVsMatchedRefXj_DiJetW->Fill(matchedRefXj, multiplicityBin, event_Weight * fDijetWeight);
-                fHM->hUnfoldingRefXjVsRecoXjVsMultiplicity_W->Fill(matchedRefXj, Xj, multiplicityBin, event_Weight);
+
+                if (matchedRefXj > 0)
+                {
+                    fHM->hUnfoldingRefXjVsRecoXjVsMultiplicity_W->Fill(Xj, matchedRefXj, multiplicityBin, event_Weight);
+                }
+                else if (matchedRefXj < 0)
+                {
+                    fHM->hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W->Fill(Xj, matchedRefXj, multiplicityBin, event_Weight);
+                }
             }
 
             fHM->hNDijetEvent->Fill(1);

@@ -60,7 +60,8 @@ ClassImp(HistoManagerDiJet)
     hHiHFPlus{nullptr}, hHiHFPlus_W{nullptr}, hHiHFMinus{nullptr}, hHiHFMinus_W{nullptr}, hHiHFPlus_WithDijet_W{nullptr}, hHiHFMinus_WithDijet_W{nullptr},
     hHiHFPlusVsMultiplicity_W{nullptr}, hHiHFMinusVsMultiplicity_W{nullptr}, hHiHFPlusVsMultiplicity_WithDijet_W{nullptr}, hHiHFMinusVsMultiplicity_WithDijet_W{nullptr},
     hHiHFVsXj_W{nullptr}, hHiHFVsXj_HiHFW{nullptr}, hXj_ProjectionHiHF_W{nullptr}, hXj_ProjectionHiHF_HiHFW{nullptr}, hMultVsXj_HiHFW{nullptr},
-    hXj_Projection_HiHFW{nullptr}, hHiHF_PF{nullptr}, hHiHF_PF_W{nullptr}, hUnfoldingRefXjVsRecoXjVsMultiplicity_W{nullptr}
+    hXj_Projection_HiHFW{nullptr}, hHiHF_PF{nullptr}, hHiHF_PF_W{nullptr}, hUnfoldingRefXjVsRecoXjVsMultiplicity_W{nullptr},
+    hUnfoldingRefXjVsRecoXjVsMultiplicity_Unflipped_W{nullptr}, hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W{nullptr}
 {
     /* Empty*/
 }
@@ -499,9 +500,11 @@ void HistoManagerDiJet::init()
     // double XjBins[nXjAjBins + 1] = {0.0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9,
     // 0.95, 1.0, 1.05, 1.1, 1.15, 1.2, 1.25, 1.3, 1.35, 1.4, 1.45, 1.5, 1.55, 1.6, 1.65, 1.7, 1.75, 1.8, 1.85, 1.9, 1.95, 2.0};
 
-    const int nXjAjBins_ER = 26;  // number of bins
-    double XjBins_ER[nXjAjBins_ER + 1] = {0.0, 0.1,  0.2, 0.3,  0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85,
-                                          0.9, 0.95, 1.0, 1.05, 1.1, 1.15, 1.2, 1.25, 1.3, 1.35, 1.4, 1.45, 1.5};
+    const int nXjAjBins_ER = 15;  // number of bins
+    double XjBins_ER[nXjAjBins_ER + 1] = {0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5};
+
+    const int nXjAjBinsUnfolding = 10;  // number of bins
+    double XjBinsUnfolding[nXjAjBinsUnfolding + 1] = {0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.80, 0.9, 1.0};
 
     int QuenchBins[5] = {nXjAjBins, nDphiBins, 100, 100, nMultiplicityBins + 1};
     Double_t QuenchMin[5] = {0.0, 0.0, 0.0, 0.0, fMultiplicityBins[0]};
@@ -554,8 +557,17 @@ void HistoManagerDiJet::init()
         hMultVsGenXj_W->Sumw2();
         hMultVsGenXj_DiJetW = new TH2D("hMultVsGenXj_DiJetW", "Gen Xj Distribution DijetWeighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
         hMultVsGenXj_DiJetW->Sumw2();
-        hUnfoldingRefXjVsRecoXjVsMultiplicity_W = new TH3D("hUnfoldingRefXjVsRecoXjVsMultiplicity_W", "Unfolding RefXj vs RecoXj vs Multiplicity Weighted", nXjAjBins,
-                                                           XjBins, nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
+        hUnfoldingRefXjVsRecoXjVsMultiplicity_W = new TH3D("hUnfoldingRefXjVsRecoXjVsMultiplicity_W", "Unfolding RefXj vs RecoXj vs Multiplicity Weighted",
+                                                           nXjAjBinsUnfolding, XjBinsUnfolding, nXjAjBinsUnfolding, XjBinsUnfolding, nMultiplicityBins, multBinArray);
+        hUnfoldingRefXjVsRecoXjVsMultiplicity_W->Sumw2();
+        hUnfoldingRefXjVsRecoXjVsMultiplicity_Unflipped_W =
+            new TH3D("hUnfoldingRefXjVsRecoXjVsMultiplicity_Unflipped_W", "Unfolding RefXj vs RecoXj vs Multiplicity Unflipped Weighted", nXjAjBinsUnfolding,
+                     XjBinsUnfolding, nXjAjBins_ER, XjBins_ER, nMultiplicityBins, multBinArray);
+        hUnfoldingRefXjVsRecoXjVsMultiplicity_Unflipped_W->Sumw2();
+        hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W =
+            new TH3D("hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W", "Unfolding RefXj vs RecoXj vs Multiplicity Missing Jets Weighted", nXjAjBinsUnfolding,
+                     XjBinsUnfolding, nXjAjBinsUnfolding, XjBinsUnfolding, nMultiplicityBins, multBinArray);
+        hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W->Sumw2();
     }
     // Float_t LeadSubLeadPtBins[] = {0.0, 50., 60., 70., 80., 90., 100., 110., 120., 130., 140., 150., 160., 170., 180., 190., 200., 220., 240., 260., 280., 300.,
     // 350., 400., 450., 500., 600., 700., 1200.};
@@ -1314,6 +1326,8 @@ void HistoManagerDiJet ::writeOutput()
     gDirectory->mkdir("Unfolding");
     gDirectory->cd("Unfolding");
     hUnfoldingRefXjVsRecoXjVsMultiplicity_W->Write();
+    hUnfoldingRefXjVsRecoXjVsMultiplicity_Unflipped_W->Write();
+    hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W->Write();
     std::cout << "Writing Histograms Complete" << std::endl;
     std::cout << "====================================" << std::endl;
 }
