@@ -13,7 +13,7 @@
 #define DiJetAnalysis_h
 
 #include <iostream>
-
+#include <random>
 // ROOT libraries
 #include "TObject.h"
 #include "TString.h"
@@ -313,6 +313,9 @@ class DiJetAnalysis : public BaseAnalysis
     ///@param hiBin Centrality Bin
     ///@return Returns Centrality weight
     Double_t CentralityWeight(const Int_t& hiBin);
+    ///@brief Random number generator
+    ///@return Returns random number
+    double uniform01();
     ///@brief Print debug information
     Bool_t fDebug;
     ///@brief Delta Phi selection for dijet
@@ -438,6 +441,10 @@ class DiJetAnalysis : public BaseAnalysis
 
     ///@brief Holds dynamic multiplicity or centrality bins
     std::map<Double_t, Double_t> fHiHFBins;
+    ///@brief SEED FOR RANDOM NUMBER GENERATION
+    static constexpr uint64_t SEED = 1729;
+    std::mt19937_64 gen_;
+    std::uniform_real_distribution<double> dist_;
 
     ClassDef(DiJetAnalysis, 0)
 };

@@ -204,6 +204,10 @@ class HistoManagerDiJet : public BaseHistoManager
     TH3D* hUnfoldingRefXjVsRecoXjVsMultiplicity_W;
     TH3D* hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W;
     TH3D* hUnfoldingRefXjVsRecoXjVsMultiplicity_Unflipped_W;
+    TH2D* hMultVsRecoXjToBeUnfolded_W;
+    TH2D* hMultVsRecoXjForTesting_W;
+    TH2D* hMultVsRefXjToBeUnfolded_W;
+    TH2D* hMultVsRefXjForTesting_W;
 
    private:
     Bool_t fIsMC;

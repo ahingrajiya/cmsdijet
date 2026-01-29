@@ -21,7 +21,7 @@ ClassImp(DiJetAnalysis)
     fDoInJetMult{kFALSE}, fMultiplicityType{0}, fUseDijetWeight{kFALSE}, fDijetWeightTable{""}, hDijetWeight{nullptr}, fDijetWeightFile{nullptr}, fDijetWeight{1.0},
     fDijetWeightType{"Reco"}, fIspp{kFALSE}, fIsPbPb{kFALSE}, fIsOO{kFALSE}, fCollSystem{""}, fUEType{""}, fDoTrackingClosures{kFALSE}, fVertexZWeight{nullptr},
     fDoVzWeight{kFALSE}, fRecoType{kFALSE}, fRefType{kFALSE}, fGenType{kFALSE}, fMultWeightFunctions{nullptr}, fXBinEdges{}, fYBinEdges{}, fBinContent{}, fXBinCount{0},
-    fYBinCount{0}, fInclusiveCorrectedJetPtMin{50.}, fUseHiHFWeight{kFALSE}, fHiHFWeight{nullptr}
+    fYBinCount{0}, fInclusiveCorrectedJetPtMin{50.}, fUseHiHFWeight{kFALSE}, fHiHFWeight{nullptr}, gen_{SEED}, dist_{0.0, 1.0}
 {
     fLeadJetEtaRange[0] = {-1.};
     fLeadJetEtaRange[1] = {1.};
@@ -276,6 +276,11 @@ Int_t DiJetAnalysis::BinBinarySearch(const std::vector<double>& binEdges, const 
         }
     }
     return -1;
+}
+
+double DiJetAnalysis::uniform01()
+{
+    return dist_(gen_);
 }
 
 void DiJetAnalysis::SetUpTrackingEfficiency(const std::string& trackingEfficiencyTable)
@@ -1537,12 +1542,26 @@ void DiJetAnalysis::processRecoJets(const Event* event, const Double_t& event_We
                 fHM->hMultVsRefXj_DiJetW->Fill(refXj, multiplicityBin, event_Weight * fDijetWeight);
                 fHM->hMultVsMatchedRefXj_W->Fill(matchedRefXj, multiplicityBin, event_Weight);
                 fHM->hMultVsMatchedRefXj_DiJetW->Fill(matchedRefXj, multiplicityBin, event_Weight * fDijetWeight);
-
-                if (matchedRefXj > 0)
+                double rndm = uniform01();
+                if (rndm <= 0.5)
                 {
-                    fHM->hUnfoldingRefXjVsRecoXjVsMultiplicity_W->Fill(Xj, matchedRefXj, multiplicityBin, event_Weight);
+                    if (matchedRefXj > 0)
+                    {
+                        fHM->hUnfoldingRefXjVsRecoXjVsMultiplicity_W->Fill(Xj, matchedRefXj, multiplicityBin, event_Weight);
+                        fHM->hMultVsRecoXjForTesting_W->Fill(Xj, multiplicityBin, event_Weight);
+                        fHM->hMultVsRefXjForTesting_W->Fill(matchedRefXj, multiplicityBin, event_Weight);
+                    }
                 }
-                else if (matchedRefXj < 0)
+                else
+                {
+                    if (matchedRefXj > 0)
+                    {
+                        fHM->hMultVsRecoXjToBeUnfolded_W->Fill(Xj, multiplicityBin, event_Weight);
+                        fHM->hMultVsRefXjToBeUnfolded_W->Fill(matchedRefXj, multiplicityBin, event_Weight);
+                    }
+                }
+
+                if (matchedRefXj < 0)
                 {
                     fHM->hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W->Fill(Xj, matchedRefXj, multiplicityBin, event_Weight);
                 }

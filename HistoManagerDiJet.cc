@@ -61,7 +61,8 @@ ClassImp(HistoManagerDiJet)
     hHiHFPlusVsMultiplicity_W{nullptr}, hHiHFMinusVsMultiplicity_W{nullptr}, hHiHFPlusVsMultiplicity_WithDijet_W{nullptr}, hHiHFMinusVsMultiplicity_WithDijet_W{nullptr},
     hHiHFVsXj_W{nullptr}, hHiHFVsXj_HiHFW{nullptr}, hXj_ProjectionHiHF_W{nullptr}, hXj_ProjectionHiHF_HiHFW{nullptr}, hMultVsXj_HiHFW{nullptr},
     hXj_Projection_HiHFW{nullptr}, hHiHF_PF{nullptr}, hHiHF_PF_W{nullptr}, hUnfoldingRefXjVsRecoXjVsMultiplicity_W{nullptr},
-    hUnfoldingRefXjVsRecoXjVsMultiplicity_Unflipped_W{nullptr}, hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W{nullptr}
+    hUnfoldingRefXjVsRecoXjVsMultiplicity_Unflipped_W{nullptr}, hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W{nullptr}, hMultVsRecoXjForTesting_W{nullptr},
+    hMultVsRecoXjToBeUnfolded_W{nullptr}, hMultVsRefXjForTesting_W{nullptr}, hMultVsRefXjToBeUnfolded_W{nullptr}
 {
     /* Empty*/
 }
@@ -252,6 +253,10 @@ HistoManagerDiJet::~HistoManagerDiJet()
     if (hHiHFPlusVsMultiplicity_WithDijet_W) delete hHiHFPlusVsMultiplicity_WithDijet_W;
     if (hHiHFMinusVsMultiplicity_WithDijet_W) delete hHiHFMinusVsMultiplicity_WithDijet_W;
     if (hUnfoldingRefXjVsRecoXjVsMultiplicity_W) delete hUnfoldingRefXjVsRecoXjVsMultiplicity_W;
+    if (hMultVsRecoXjForTesting_W) delete hMultVsRecoXjForTesting_W;
+    if (hMultVsRecoXjToBeUnfolded_W) delete hMultVsRecoXjToBeUnfolded_W;
+    if (hMultVsRefXjForTesting_W) delete hMultVsRefXjForTesting_W;
+    if (hMultVsRefXjToBeUnfolded_W) delete hMultVsRefXjToBeUnfolded_W;
 
     for (auto hist : hXj_Projection_W) delete hist;
     for (auto hist : hXj_ProjectionHiHF_W) delete hist;
@@ -503,8 +508,12 @@ void HistoManagerDiJet::init()
     const int nXjAjBins_ER = 15;  // number of bins
     double XjBins_ER[nXjAjBins_ER + 1] = {0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5};
 
-    const int nXjAjBinsUnfolding = 10;  // number of bins
-    double XjBinsUnfolding[nXjAjBinsUnfolding + 1] = {0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.80, 0.9, 1.0};
+    // const int nXjAjBinsUnfolding = 10;  // number of bins
+    // double XjBinsUnfolding[nXjAjBinsUnfolding + 1] = {0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.80, 0.9, 1.0};
+    const int nXjAjBinsUnfolding = 40;  // number of bins
+    double XjBinsUnfolding[nXjAjBinsUnfolding + 1] = {0.0,  0.025, 0.05, 0.075, 0.1,  0.125, 0.15, 0.175, 0.2,  0.225, 0.25, 0.275, 0.3,  0.325,
+                                                      0.35, 0.375, 0.4,  0.425, 0.45, 0.475, 0.5,  0.525, 0.55, 0.575, 0.6,  0.625, 0.65, 0.675,
+                                                      0.7,  0.725, 0.75, 0.775, 0.8,  0.825, 0.85, 0.875, 0.9,  0.925, 0.95, 0.975, 1.0};
 
     int QuenchBins[5] = {nXjAjBins, nDphiBins, 100, 100, nMultiplicityBins + 1};
     Double_t QuenchMin[5] = {0.0, 0.0, 0.0, 0.0, fMultiplicityBins[0]};
@@ -568,6 +577,18 @@ void HistoManagerDiJet::init()
             new TH3D("hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W", "Unfolding RefXj vs RecoXj vs Multiplicity Missing Jets Weighted", nXjAjBinsUnfolding,
                      XjBinsUnfolding, nXjAjBinsUnfolding, XjBinsUnfolding, nMultiplicityBins, multBinArray);
         hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W->Sumw2();
+        hMultVsRecoXjForTesting_W =
+            new TH2D("hMultVsRecoXjForTesting_W", "Reco Xj Distribution Weighted", nXjAjBinsUnfolding, XjBinsUnfolding, nMultiplicityBins, multBinArray);
+        hMultVsRecoXjForTesting_W->Sumw2();
+        hMultVsRecoXjToBeUnfolded_W =
+            new TH2D("hMultVsRecoXjToBeUnfolded_W", "Reco Xj Distribution To Be Unfolded Weighted", nXjAjBinsUnfolding, XjBinsUnfolding, nMultiplicityBins, multBinArray);
+        hMultVsRecoXjToBeUnfolded_W->Sumw2();
+        hMultVsRefXjForTesting_W =
+            new TH2D("hMultVsRefXjForTesting_W", "Ref Xj Distribution Weighted", nXjAjBinsUnfolding, XjBinsUnfolding, nMultiplicityBins, multBinArray);
+        hMultVsRefXjForTesting_W->Sumw2();
+        hMultVsRefXjToBeUnfolded_W =
+            new TH2D("hMultVsRefXjToBeUnfolded_W", "Ref Xj Distribution To Be Unfolded Weighted", nXjAjBinsUnfolding, XjBinsUnfolding, nMultiplicityBins, multBinArray);
+        hMultVsRefXjToBeUnfolded_W->Sumw2();
     }
     // Float_t LeadSubLeadPtBins[] = {0.0, 50., 60., 70., 80., 90., 100., 110., 120., 130., 140., 150., 160., 170., 180., 190., 200., 220., 240., 260., 280., 300.,
     // 350., 400., 450., 500., 600., 700., 1200.};
@@ -1328,6 +1349,11 @@ void HistoManagerDiJet ::writeOutput()
     hUnfoldingRefXjVsRecoXjVsMultiplicity_W->Write();
     hUnfoldingRefXjVsRecoXjVsMultiplicity_Unflipped_W->Write();
     hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W->Write();
+    hMultVsRecoXjForTesting_W->Write();
+    hMultVsRefXjForTesting_W->Write();
+    hMultVsRecoXjToBeUnfolded_W->Write();
+    hMultVsRefXjToBeUnfolded_W->Write();
+
     std::cout << "Writing Histograms Complete" << std::endl;
     std::cout << "====================================" << std::endl;
 }
