@@ -45,7 +45,7 @@ int main(int argc, char* argv[])
     TString JECFileDataName{};
     TString JEUFileName{};
     TString path2JEC = "..";
-    Double_t ptHatCut[2]{15., 10000.};
+    Double_t ptHatCut[2]{50., 10000.};
     Bool_t isEmbedded{kTRUE};
     // std::vector<std::pair<double, double>> multiplicityBins = {{0, 0.0}, {10, 1.0}, {60, 2.0}, {120, 3.0}, {185, 4.0}, {250, 5.0}, {400, 6.0}, {500, 7.0}};
     std::vector<std::pair<double, double>> multiplicityBins = {{0, 0.0},   {10, 1.0},  {20, 2.0},  {40, 3.0},  {60, 4.0},   {80, 5.0},
