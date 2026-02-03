@@ -60,9 +60,10 @@ ClassImp(HistoManagerDiJet)
     hHiHFPlus{nullptr}, hHiHFPlus_W{nullptr}, hHiHFMinus{nullptr}, hHiHFMinus_W{nullptr}, hHiHFPlus_WithDijet_W{nullptr}, hHiHFMinus_WithDijet_W{nullptr},
     hHiHFPlusVsMultiplicity_W{nullptr}, hHiHFMinusVsMultiplicity_W{nullptr}, hHiHFPlusVsMultiplicity_WithDijet_W{nullptr}, hHiHFMinusVsMultiplicity_WithDijet_W{nullptr},
     hHiHFVsXj_W{nullptr}, hHiHFVsXj_HiHFW{nullptr}, hXj_ProjectionHiHF_W{nullptr}, hXj_ProjectionHiHF_HiHFW{nullptr}, hMultVsXj_HiHFW{nullptr},
-    hXj_Projection_HiHFW{nullptr}, hHiHF_PF{nullptr}, hHiHF_PF_W{nullptr}, hUnfoldingRefXjVsRecoXjVsMultiplicity_W{nullptr},
-    hUnfoldingRefXjVsRecoXjVsMultiplicity_Unflipped_W{nullptr}, hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W{nullptr}, hMultVsRecoXjForTesting_W{nullptr},
-    hMultVsRecoXjToBeUnfolded_W{nullptr}, hMultVsRefXjForTesting_W{nullptr}, hMultVsRefXjToBeUnfolded_W{nullptr}
+    hXj_Projection_HiHFW{nullptr}, hHiHF_PF{nullptr}, hHiHF_PF_W{nullptr}, hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W{nullptr},
+    hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W{nullptr}, hUnfoldingRefXjVsRecoXjVsMultiplicity_Unflipped_W{nullptr},
+    hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W{nullptr}, hMultVsRecoXjForTesting_W{nullptr}, hMultVsRecoXjToBeUnfolded_W{nullptr},
+    hMultVsRefXjForTesting_W{nullptr}, hMultVsRefXjToBeUnfolded_W{nullptr}
 {
     /* Empty*/
 }
@@ -252,7 +253,8 @@ HistoManagerDiJet::~HistoManagerDiJet()
     if (hHiHFMinusVsMultiplicity_W) delete hHiHFMinusVsMultiplicity_W;
     if (hHiHFPlusVsMultiplicity_WithDijet_W) delete hHiHFPlusVsMultiplicity_WithDijet_W;
     if (hHiHFMinusVsMultiplicity_WithDijet_W) delete hHiHFMinusVsMultiplicity_WithDijet_W;
-    if (hUnfoldingRefXjVsRecoXjVsMultiplicity_W) delete hUnfoldingRefXjVsRecoXjVsMultiplicity_W;
+    if (hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W) delete hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W;
+    if (hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W) delete hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W;
     if (hMultVsRecoXjForTesting_W) delete hMultVsRecoXjForTesting_W;
     if (hMultVsRecoXjToBeUnfolded_W) delete hMultVsRecoXjToBeUnfolded_W;
     if (hMultVsRefXjForTesting_W) delete hMultVsRefXjForTesting_W;
@@ -566,9 +568,13 @@ void HistoManagerDiJet::init()
         hMultVsGenXj_W->Sumw2();
         hMultVsGenXj_DiJetW = new TH2D("hMultVsGenXj_DiJetW", "Gen Xj Distribution DijetWeighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
         hMultVsGenXj_DiJetW->Sumw2();
-        hUnfoldingRefXjVsRecoXjVsMultiplicity_W = new TH3D("hUnfoldingRefXjVsRecoXjVsMultiplicity_W", "Unfolding RefXj vs RecoXj vs Multiplicity Weighted",
-                                                           nXjAjBinsUnfolding, XjBinsUnfolding, nXjAjBinsUnfolding, XjBinsUnfolding, nMultiplicityBins, multBinArray);
-        hUnfoldingRefXjVsRecoXjVsMultiplicity_W->Sumw2();
+        hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W =
+            new TH3D("hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W", "Unfolding RefXj vs RecoXj vs Multiplicity Weighted To Be Unfolded", nXjAjBinsUnfolding,
+                     XjBinsUnfolding, nXjAjBinsUnfolding, XjBinsUnfolding, nMultiplicityBins, multBinArray);
+        hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W->Sumw2();
+        hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W =
+            new TH3D("hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W", "Unfolding RefXj vs RecoXj vs Multiplicity Weighted For Testing", nXjAjBinsUnfolding,
+                     XjBinsUnfolding, nXjAjBinsUnfolding, XjBinsUnfolding, nMultiplicityBins, multBinArray);
         hUnfoldingRefXjVsRecoXjVsMultiplicity_Unflipped_W =
             new TH3D("hUnfoldingRefXjVsRecoXjVsMultiplicity_Unflipped_W", "Unfolding RefXj vs RecoXj vs Multiplicity Unflipped Weighted", nXjAjBinsUnfolding,
                      XjBinsUnfolding, nXjAjBins_ER, XjBins_ER, nMultiplicityBins, multBinArray);
@@ -1346,7 +1352,8 @@ void HistoManagerDiJet ::writeOutput()
     gDirectory->cd("..");
     gDirectory->mkdir("Unfolding");
     gDirectory->cd("Unfolding");
-    hUnfoldingRefXjVsRecoXjVsMultiplicity_W->Write();
+    hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W->Write();
+    hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W->Write();
     hUnfoldingRefXjVsRecoXjVsMultiplicity_Unflipped_W->Write();
     hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W->Write();
     hMultVsRecoXjForTesting_W->Write();
