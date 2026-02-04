@@ -1519,6 +1519,7 @@ void DiJetAnalysis::processRecoJets(const Event* event, const Double_t& event_We
             // std::endl; std::cout << "Lead Jet Eta: " << leadJetEtaCM << " SubLead Jet Eta: " <<
             // subLeadJetEtaCM << std::endl; std::cout << "Lead Jet Phi: " << leadJetPhi << "
             // SubLead Jet Phi: " << subLeadJetPhi << std::endl; std::cout << std::endl;
+
             fIsDiJetFound = kTRUE;
             fHM->hDeltaPhi_WithDiJet_W->Fill(deltaPhi, event_Weight);
             fHM->hMultVsXj_W->Fill(Xj, multiplicityBin, event_Weight);
@@ -1526,6 +1527,9 @@ void DiJetAnalysis::processRecoJets(const Event* event, const Double_t& event_We
             fHM->hMultVsXj_HiHFW->Fill(Xj, multiplicityBin, event_Weight * HiHFWeight(event->hiHFPlus()));
             fHM->hHiHFVsXj_W->Fill(Xj, FindBin(static_cast<double>(event->hiHFPlus()), fHiHFBins), event_Weight);
             fHM->hHiHFVsXj_HiHFW->Fill(Xj, FindBin(static_cast<double>(event->hiHFPlus()), fHiHFBins), event_Weight * HiHFWeight(event->hiHFPlus()));
+
+            Double_t QuenchingQuantitiesWithDijet[4] = {Xj, leadJetPt, subLeadJetPt, multiplicityBin};
+            fHM->hRecoQuenching_WithDijet_W->Fill(QuenchingQuantitiesWithDijet, event_Weight);
             if (fIsMC)
             {
                 if (refXj > 1.0)
@@ -1746,6 +1750,9 @@ void DiJetAnalysis::processGenJets(const Event* event, const Double_t& event_Wei
             fHM->hMultVsGenXj_W->Fill(Xj, multiplicityBin, event_Weight);
             fHM->hMultVsGenXj_DiJetW->Fill(Xj, multiplicityBin, event_Weight * fDijetWeight);
             fHM->hNGenDijetEvent->Fill(1);
+
+            Double_t QuenchingQuantitiesWithDijet[4] = {Xj, genLeadJetPt, genSubLeadJetPt, multiplicityBin};
+            fHM->hGenQuenching_WithDijet_W->Fill(QuenchingQuantitiesWithDijet, event_Weight);
         }
     }
     if (fIsGenDiJetFound)

@@ -159,6 +159,8 @@ class HistoManagerDiJet : public BaseHistoManager
 
     THnSparseD* hRecoQuenching_W;
     THnSparseD* hGenQuenching_W;
+    THnSparseD* hRecoQuenching_WithDijet_W;
+    THnSparseD* hGenQuenching_WithDijet_W;
     TH2D* hMultVsXj_W;
     TH2D* hMultVsXj_DiJetW;
     TH2D* hMultVsXj_HiHFW;

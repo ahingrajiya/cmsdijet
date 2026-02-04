@@ -63,7 +63,7 @@ ClassImp(HistoManagerDiJet)
     hXj_Projection_HiHFW{nullptr}, hHiHF_PF{nullptr}, hHiHF_PF_W{nullptr}, hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W{nullptr},
     hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W{nullptr}, hUnfoldingRefXjVsRecoXjVsMultiplicity_Unflipped_W{nullptr},
     hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W{nullptr}, hMultVsRecoXjForTesting_W{nullptr}, hMultVsRecoXjToBeUnfolded_W{nullptr},
-    hMultVsRefXjForTesting_W{nullptr}, hMultVsRefXjToBeUnfolded_W{nullptr}
+    hMultVsRefXjForTesting_W{nullptr}, hMultVsRefXjToBeUnfolded_W{nullptr}, hRecoQuenching_WithDijet_W{nullptr}, hGenQuenching_WithDijet_W{nullptr}
 {
     /* Empty*/
 }
@@ -145,6 +145,8 @@ HistoManagerDiJet::~HistoManagerDiJet()
     if (hGenLeadingVsGenSubLeading_WO_DiJet_W) delete hGenLeadingVsGenSubLeading_WO_DiJet_W;
     if (hRecoQuenching_W) delete hRecoQuenching_W;
     if (hGenQuenching_W) delete hGenQuenching_W;
+    if (hRecoQuenching_WithDijet_W) delete hRecoQuenching_WithDijet_W;
+    if (hGenQuenching_WithDijet_W) delete hGenQuenching_WithDijet_W;
 
     if (hInclusiveUncorrectedRecoJets) delete hInclusiveUncorrectedRecoJets;
     if (hInclusiveUncorrectedRecoJets_W) delete hInclusiveUncorrectedRecoJets_W;
@@ -527,10 +529,18 @@ void HistoManagerDiJet::init()
     copy(fHiHFEnergyBins.begin(), fHiHFEnergyBins.end(), hiHFEnergyBinArray);
     hiHFEnergyBinArray[fHiHFEnergyBins.size()] = fHiHFEnergyBins[fHiHFEnergyBins.size() - 1] + 1;
 
+    int QuenchBinsWithDijet[4] = {nXjAjBins, 200, 200, nMultiplicityBins + 1};
+    Double_t QuenchMinWithDijet[4] = {0.0, 0.0, 0.0, fMultiplicityBins[0]};
+    Double_t QuenchMaxWithDijet[4] = {1.0, 1000.0, 1000.0, fMultiplicityBins[fMultiplicityBins.size() - 1] + 1};
+
     hRecoQuenching_W = new THnSparseD("hRecoQuenching_W", "Reco Quenching", 5, QuenchBins, QuenchMin, QuenchMax);
     hRecoQuenching_W->GetAxis(0)->Set(QuenchBins[0], XjBins);
     hRecoQuenching_W->GetAxis(1)->Set(QuenchBins[1], DphiBins);
     hRecoQuenching_W->Sumw2();
+    hRecoQuenching_WithDijet_W =
+        new THnSparseD("hRecoQuenching_WithDijet_W", "Reco Quenching With Dijet Present", 4, QuenchBinsWithDijet, QuenchMinWithDijet, QuenchMaxWithDijet);
+    hRecoQuenching_WithDijet_W->GetAxis(0)->Set(QuenchBinsWithDijet[0], XjBins);
+    hRecoQuenching_WithDijet_W->Sumw2();
     hDeltaPhi_W = new TH1D("hDeltaPhi_W", "Delta Phi Distribution Weighted", nDphiBins, DphiBins);
     hDeltaPhi_W->Sumw2();
     hDeltaPhi_WithDiJet_W = new TH1D("hDeltaPhi_WithDiJet_W", "Delta Phi Distribution With Dijet Present Weighted", nDphiBins, DphiBins);
@@ -552,6 +562,10 @@ void HistoManagerDiJet::init()
         hGenQuenching_W->GetAxis(0)->Set(QuenchBins[0], XjBins);
         hGenQuenching_W->GetAxis(1)->Set(QuenchBins[1], DphiBins);
         hGenQuenching_W->Sumw2();
+        hGenQuenching_WithDijet_W =
+            new THnSparseD("hGenQuenching_WithDijet_W", "Gen Quenching With Dijet Present", 4, QuenchBinsWithDijet, QuenchMinWithDijet, QuenchMaxWithDijet);
+        hGenQuenching_WithDijet_W->GetAxis(0)->Set(QuenchBinsWithDijet[0], XjBins);
+        hGenQuenching_WithDijet_W->Sumw2();
         hGenDeltaPhi_W = new TH1D("hGenDeltaPhi_W", "Gen Delta Phi Distribution Weighted", nDphiBins, DphiBins);
         hGenDeltaPhi_W->Sumw2();
         hGenDeltaPhi_WithDiJet_W = new TH1D("hGenDeltaPhi_WithDiJet_W", "Gen Delta Phi Distribution With Dijet Present Weighted", nDphiBins, DphiBins);
@@ -1211,6 +1225,7 @@ void HistoManagerDiJet ::writeOutput()
     gDirectory->mkdir("Quenching");
     gDirectory->cd("Quenching");
     hRecoQuenching_W->Write();
+    hRecoQuenching_WithDijet_W->Write();
     hDeltaPhi_W->Write();
     hDeltaPhi_WithDiJet_W->Write();
     hMultVsXj_W->Write();
@@ -1228,6 +1243,7 @@ void HistoManagerDiJet ::writeOutput()
         hMultVsRefXj_W->Write();
         hMultVsMatchedRefXj_W->Write();
         hGenQuenching_W->Write();
+        hGenQuenching_WithDijet_W->Write();
         hGenDeltaPhi_W->Write();
         hGenDeltaPhi_WithDiJet_W->Write();
         hMultVsGenXj_W->Write();

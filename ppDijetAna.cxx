@@ -136,21 +136,20 @@ int main(int argc, char* argv[])
     analysis->addHistoManager(hm);
     analysis->setReader(reader);
     analysis->setIsMC(isMC);
-    analysis->setLeadJetEtaRange(-1.6, 1.6);
-    analysis->setSubLeadJetEtaRange(-1.6, 1.6);
+    analysis->setLeadJetEtaRange(-2.1, 2.1);
+    analysis->setSubLeadJetEtaRange(-2.1, 2.1);
     analysis->setMultiplicityRange(0., 10000.);
     analysis->setMultiplicityType(0);
-    analysis->setLeadJetPt(100.);
-    analysis->setSubLeadJetPt(50.);
-    analysis->setDeltaPhi(5. * TMath::Pi() / 6);
+    analysis->setLeadJetPt(50.);
+    analysis->setSubLeadJetPt(20.);
+    analysis->setDeltaPhi(7. * TMath::Pi() / 8);
     analysis->setInclusiveCorrectedJetPtMin(50.);
-    analysis->setInclusiveJetEtaRange(-1.6, 1.6);
+    analysis->setInclusiveJetEtaRange(-2.1, 2.1);
     analysis->setMinTrkPt(0.5);
     analysis->setTrkEtaRange(-2.4, 2.4);
     analysis->doInJetMultiplicity();
     analysis->setMultBins(multiplicityBins);
-    analysis->setInclusiveCorrectedJetPtMin(50.);
-    analysis->setInclusiveJetEtaRange(-1.6, 1.6);
+
     analysis->setHiHFBins(hiHFBins);
     // if (isMC)
     // {
