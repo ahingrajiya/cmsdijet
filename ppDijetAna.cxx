@@ -56,12 +56,26 @@ int main(int argc, char* argv[])
 
     if (isMC)
     {
-        JECFileName = "2024ppRef_withPU_L2Relative_AK4PF.txt";
+        if (collYear == 2025)
+        {
+            JECFileName = "2024ppRef_withPU_L2Relative_AK4PF.txt";
+        }
+        else
+        {
+            JECFileName = "Spring18_ppRef5TeV_V6_MC_L2Relative_AK4PF.txt";
+        }
     }
     else
     {
-        JECFileName = "2024ppRef_withPU_L2Relative_AK4PF.txt";
-        // JECFileDataName = "2024ppRef_withPU_L2L3Residual_AK4PF.txt";
+        if (collYear == 2025)
+        {
+            JECFileName = "2024ppRef_withPU_L2Relative_AK4PF.txt";
+        }
+        else
+        {
+            JECFileName = "Spring18_ppRef5TeV_V6_MC_L2Relative_AK4PF.txt";
+            JECFileDataName = "Spring18_ppRef5TeV_V6_DATA_L2L3Residual_AK4PF.txt";
+        }
     }
 
     // Initialize package manager
