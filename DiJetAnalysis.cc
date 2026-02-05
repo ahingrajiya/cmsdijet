@@ -1506,19 +1506,18 @@ void DiJetAnalysis::processRecoJets(const Event* event, const Double_t& event_We
 
         if (deltaPhi > fDeltaPhi)
         {
-            // std::cout << "Ref Lead : " << leadRefPt << " Ref SLead : " << subLeadRefPt <<
-            // std::endl; std::cout << "Ref Matched Lead : " << leadMatchedJetPt << " Ref Matched
-            // SLead :  " << subLeadMatchedJetPt << std::endl; std::cout << "Lead Jet Pt: " <<
-            // leadJetPt << " SubLead Jet Pt: " << subLeadJetPt << std::endl; std::cout << "Lead Jet
-            // Eta: " << leadJetEtaCM << " SubLead Jet Eta: " << subLeadJetEtaCM << std::endl;
+            // std::cout << "Ref Lead : " << leadRefPt << " Ref SLead : " << subLeadRefPt << std::endl;
+            // std::cout << "Ref Matched Lead : " << leadMatchedJetPt << " Ref Matched SLead : " << subLeadMatchedJetPt << std::endl;
+            // std::cout << " Lead Jet Pt : " << leadJetPt << " SubLead Jet Pt: " << subLeadJetPt << std::endl;
+            // std::cout << "Lead Jet Eta : " << leadJetEtaCM << " SubLead Jet Eta : " << subLeadJetEtaCM << std::endl;
             // std::cout << "Xj : " << Xj << " Delta Phi : " << deltaPhi << std::endl;
             // std::cout << "Event Number : " << event->eventNumber() << std::endl;
             // std::cout << "Event Number : " << event->eventNumber() << std::endl;
             // std::cout << "Xj : " << Xj << " Delta Phi : " << deltaPhi << std::endl;
-            // std::cout << "Lead Jet Pt: " << leadJetPt << " SubLead Jet Pt: " << subLeadJetPt <<
-            // std::endl; std::cout << "Lead Jet Eta: " << leadJetEtaCM << " SubLead Jet Eta: " <<
-            // subLeadJetEtaCM << std::endl; std::cout << "Lead Jet Phi: " << leadJetPhi << "
-            // SubLead Jet Phi: " << subLeadJetPhi << std::endl; std::cout << std::endl;
+            // std::cout << "Lead Jet Pt: " << leadJetPt << " SubLead Jet Pt: " << subLeadJetPt << std::endl;
+            // std::cout << "Lead Jet Eta: " << leadJetEtaCM << " SubLead Jet Eta: " << subLeadJetEtaCM << std::endl;
+            // std::cout << "Lead Jet Phi: " << leadJetPhi << "SubLead Jet Phi : " << subLeadJetPhi << std::endl;
+            // std::cout << std::endl;
 
             fIsDiJetFound = kTRUE;
             fHM->hDeltaPhi_WithDiJet_W->Fill(deltaPhi, event_Weight);
@@ -1744,6 +1743,7 @@ void DiJetAnalysis::processGenJets(const Event* event, const Double_t& event_Wei
 
         if (deltaPhi > fDeltaPhi)
         {
+            std::cout << "HERE" << std::endl;
             fIsGenDiJetFound = kTRUE;
 
             fHM->hGenDeltaPhi_WithDiJet_W->Fill(deltaPhi, event_Weight);
