@@ -94,7 +94,7 @@ int main(int argc, char* argv[])
 
     ForestReader* reader = new ForestReader{inFileName};
     reader->setForestFileType(ForestReader::ForestFileType::MiniAOD);
-    if (isMC)
+    if (isMC && collEnergyGeV == 5360)
     {
         reader->setIsMc(isMC);
         reader->setStoreLocation(kTRUE);
