@@ -1115,14 +1115,14 @@ void HistoManagerDiJet ::writeOutput()
     gDirectory->mkdir("Jets");
     gDirectory->cd("Jets");
 
-    // hInclusiveUncorrectedRecoJets->Write();
-    // hInclusiveUncorrectedRecoJets_W->Write();
-    // hInclusiveRecoJetsCMFrame->Write();
-    // hInclusiveRecoJetsCMFrame_W->Write();
-    // hSelectedInclusiveRecoJetsMidRapidity_W->Write();
-    // hInclusiveRecoJetPtVsEtaCMFrame_W->Write();
-    // hInclusiveUnCorrectedRecoPtVsEtaCMFrame_W->Write();
-    // hJetFlavorFractions_W->Write();
+    hInclusiveUncorrectedRecoJets->Write();
+    hInclusiveUncorrectedRecoJets_W->Write();
+    hInclusiveRecoJetsCMFrame->Write();
+    hInclusiveRecoJetsCMFrame_W->Write();
+    hSelectedInclusiveRecoJetsMidRapidity_W->Write();
+    hInclusiveRecoJetPtVsEtaCMFrame_W->Write();
+    hInclusiveUnCorrectedRecoPtVsEtaCMFrame_W->Write();
+    hJetFlavorFractions_W->Write();
 
     if (fCollSystem == "pPb")
     {
@@ -1160,16 +1160,16 @@ void HistoManagerDiJet ::writeOutput()
         hRefJES_Eta_Pt120_W->Write();
     }
 
-    // hLeadSubLeadJets->Write();
-    // hLeadSubLeadJets_W->Write();
-    // hLeadSubLeadJets_MidRapidity_W->Write();
-    // hLeadSubLeadJets_WithDijet_W->Write();
-    // hLeadSubLeadJets_WithDijet_DiJetW->Write();
-    // if (fCollSystem == "pPb" || fCollSystem == "pp")
-    // {
-    //     hLeadPtvsSubLeadPt_PtHatW->Write();
-    //     hLeadPtvsSubLeadPt_DiJetW->Write();
-    // }
+    hLeadSubLeadJets->Write();
+    hLeadSubLeadJets_W->Write();
+    hLeadSubLeadJets_MidRapidity_W->Write();
+    hLeadSubLeadJets_WithDijet_W->Write();
+    hLeadSubLeadJets_WithDijet_DiJetW->Write();
+    if (fCollSystem == "pPb" || fCollSystem == "pp")
+    {
+        hLeadPtvsSubLeadPt_PtHatW->Write();
+        hLeadPtvsSubLeadPt_DiJetW->Write();
+    }
 
     if (fIsMC)
     {
