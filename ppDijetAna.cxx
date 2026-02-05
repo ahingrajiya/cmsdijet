@@ -108,11 +108,15 @@ int main(int argc, char* argv[])
 
     ForestReader* reader = new ForestReader{inFileName};
     reader->setForestFileType(ForestReader::ForestFileType::MiniAOD);
-    if (isMC && collEnergyGeV == 5360)
+    if (isMC)
     {
         reader->setIsMc(isMC);
-        reader->setStoreLocation(kTRUE);
+
         // reader->useGenTrackBranch();
+    }
+    if (collEnergyGeV == 5360)
+    {
+        reader->setStoreLocation(kTRUE);
     }
     // reader->useTrackBranch();
     reader->useJets();

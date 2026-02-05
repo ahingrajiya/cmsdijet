@@ -1743,9 +1743,7 @@ void DiJetAnalysis::processGenJets(const Event* event, const Double_t& event_Wei
 
         if (deltaPhi > fDeltaPhi)
         {
-            std::cout << "HERE" << std::endl;
             fIsGenDiJetFound = kTRUE;
-
             fHM->hGenDeltaPhi_WithDiJet_W->Fill(deltaPhi, event_Weight);
             fHM->hMultVsGenXj_W->Fill(Xj, multiplicityBin, event_Weight);
             fHM->hMultVsGenXj_DiJetW->Fill(Xj, multiplicityBin, event_Weight * fDijetWeight);
