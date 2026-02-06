@@ -1160,15 +1160,15 @@ void HistoManagerDiJet ::writeOutput()
         hRefJES_Eta_Pt120_W->Write();
     }
 
-    hLeadSubLeadJets->Write();
-    hLeadSubLeadJets_W->Write();
-    hLeadSubLeadJets_MidRapidity_W->Write();
-    hLeadSubLeadJets_WithDijet_W->Write();
-    hLeadSubLeadJets_WithDijet_DiJetW->Write();
+    // hLeadSubLeadJets->Write();
+    // hLeadSubLeadJets_W->Write();
+    // hLeadSubLeadJets_MidRapidity_W->Write();
+    // hLeadSubLeadJets_WithDijet_W->Write();
+    // hLeadSubLeadJets_WithDijet_DiJetW->Write();
     if (fCollSystem == "pPb" || fCollSystem == "pp")
     {
-        hLeadPtvsSubLeadPt_PtHatW->Write();
-        hLeadPtvsSubLeadPt_DiJetW->Write();
+        // hLeadPtvsSubLeadPt_PtHatW->Write();
+        // hLeadPtvsSubLeadPt_DiJetW->Write();
     }
 
     if (fIsMC)
