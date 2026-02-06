@@ -111,13 +111,13 @@ int main(int argc, char* argv[])
     if (isMC)
     {
         reader->setIsMc(isMC);
-
+        if (collEnergyGeV == 5360)
+        {
+            reader->setStoreLocation(kTRUE);
+        }
         // reader->useGenTrackBranch();
     }
-    if (collEnergyGeV == 5360)
-    {
-        reader->setStoreLocation(kTRUE);
-    }
+
     // reader->useTrackBranch();
     reader->useJets();
     reader->setJetCollectionBranchName(jetBranchName.Data());
