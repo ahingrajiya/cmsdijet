@@ -1115,14 +1115,14 @@ void HistoManagerDiJet ::writeOutput()
     gDirectory->mkdir("Jets");
     gDirectory->cd("Jets");
 
-    hInclusiveUncorrectedRecoJets->Write();
-    hInclusiveUncorrectedRecoJets_W->Write();
-    hInclusiveRecoJetsCMFrame->Write();
-    hInclusiveRecoJetsCMFrame_W->Write();
-    hSelectedInclusiveRecoJetsMidRapidity_W->Write();
-    hInclusiveRecoJetPtVsEtaCMFrame_W->Write();
-    hInclusiveUnCorrectedRecoPtVsEtaCMFrame_W->Write();
-    hJetFlavorFractions_W->Write();
+    // hInclusiveUncorrectedRecoJets->Write();
+    // hInclusiveUncorrectedRecoJets_W->Write();
+    // hInclusiveRecoJetsCMFrame->Write();
+    // hInclusiveRecoJetsCMFrame_W->Write();
+    // hSelectedInclusiveRecoJetsMidRapidity_W->Write();
+    // hInclusiveRecoJetPtVsEtaCMFrame_W->Write();
+    // hInclusiveUnCorrectedRecoPtVsEtaCMFrame_W->Write();
+    // hJetFlavorFractions_W->Write();
 
     if (fCollSystem == "pPb")
     {
