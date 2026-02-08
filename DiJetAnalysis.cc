@@ -949,8 +949,7 @@ Double_t DiJetAnalysis::FindBin(const double& multiplicity, const std::map<Doubl
     if (fBins.empty())
     {
         throw std::runtime_error("Error: Bin configuration is empty!");
-    }
-
+    };
     if (multiplicity <= fBins.begin()->first) return fBins.begin()->second;
 
     auto it = fBins.lower_bound(multiplicity);
