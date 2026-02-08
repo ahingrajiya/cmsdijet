@@ -31,9 +31,9 @@ int main(int argc, char* argv[])
     TString JECFileName;
     TString JECFileDataName;
     TString path2JEC = "..";
-    Int_t collEnergyGeV{5360};
+    Int_t collEnergyGeV{5020};
     TString collSystem{"pp"};
-    Int_t collYear{2025};
+    Int_t collYear{2018};
     Bool_t useCentWeight{kFALSE};
     TString jetBranchName{"ak4PFJetAnalyzer"};
     std::vector<std::pair<Double_t, Double_t>> multiplicityBins = {{0, 0.0}, {10, 1.0}, {60, 2.0}, {120, 3.0}, {185, 4.0}, {250, 5.0}, {400, 6.0}};
@@ -158,8 +158,8 @@ int main(int argc, char* argv[])
     analysis->setSubLeadJetEtaRange(-2.1, 2.1);
     analysis->setMultiplicityRange(0., 10000.);
     analysis->setMultiplicityType(0);
-    analysis->setLeadJetPt(60.);
-    analysis->setSubLeadJetPt(40.);
+    analysis->setLeadJetPt(50.);
+    analysis->setSubLeadJetPt(20.);
     analysis->setDeltaPhi(7. * TMath::Pi() / 8);
     analysis->setInclusiveCorrectedJetPtMin(50.);
     analysis->setInclusiveJetEtaRange(-2.1, 2.1);
