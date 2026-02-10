@@ -31,9 +31,9 @@ int main(int argc, char* argv[])
     TString JECFileName;
     TString JECFileDataName;
     TString path2JEC = "..";
-    Int_t collEnergyGeV{5020};
+    Int_t collEnergyGeV{5360};
     TString collSystem{"pp"};
-    Int_t collYear{2018};
+    Int_t collYear{2025};
     Bool_t useCentWeight{kFALSE};
     TString jetBranchName{"ak4PFJetAnalyzer"};
     std::vector<std::pair<Double_t, Double_t>> multiplicityBins = {{0, 0.0}, {10, 1.0}, {60, 2.0}, {120, 3.0}, {185, 4.0}, {250, 5.0}, {400, 6.0}};
