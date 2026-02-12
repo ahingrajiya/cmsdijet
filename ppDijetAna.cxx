@@ -161,7 +161,7 @@ int main(int argc, char* argv[])
     analysis->setLeadJetPt(50.);
     analysis->setSubLeadJetPt(20.);
     analysis->setDeltaPhi(7. * TMath::Pi() / 8);
-    analysis->setInclusiveCorrectedJetPtMin(50.);
+    analysis->setInclusiveCorrectedJetPtMin(20.);
     analysis->setInclusiveJetEtaRange(-2.1, 2.1);
     analysis->setMinTrkPt(0.5);
     analysis->setTrkEtaRange(-2.4, 2.4);

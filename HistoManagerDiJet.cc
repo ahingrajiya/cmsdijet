@@ -529,7 +529,7 @@ void HistoManagerDiJet::init()
     copy(fHiHFEnergyBins.begin(), fHiHFEnergyBins.end(), hiHFEnergyBinArray);
     hiHFEnergyBinArray[fHiHFEnergyBins.size()] = fHiHFEnergyBins[fHiHFEnergyBins.size() - 1] + 1;
 
-    int QuenchBinsWithDijet[4] = {nXjAjBins, 200, 200, nMultiplicityBins + 1};
+    int QuenchBinsWithDijet[4] = {nXjAjBins, 500, 500, nMultiplicityBins + 1};
     Double_t QuenchMinWithDijet[4] = {0.0, 0.0, 0.0, fMultiplicityBins[0]};
     Double_t QuenchMaxWithDijet[4] = {1.0, 1000.0, 1000.0, fMultiplicityBins[fMultiplicityBins.size() - 1] + 1};
 
@@ -1115,14 +1115,14 @@ void HistoManagerDiJet ::writeOutput()
     gDirectory->mkdir("Jets");
     gDirectory->cd("Jets");
 
-    // hInclusiveUncorrectedRecoJets->Write();
-    // hInclusiveUncorrectedRecoJets_W->Write();
-    // hInclusiveRecoJetsCMFrame->Write();
-    // hInclusiveRecoJetsCMFrame_W->Write();
-    // hSelectedInclusiveRecoJetsMidRapidity_W->Write();
-    // hInclusiveRecoJetPtVsEtaCMFrame_W->Write();
-    // hInclusiveUnCorrectedRecoPtVsEtaCMFrame_W->Write();
-    // hJetFlavorFractions_W->Write();
+    hInclusiveUncorrectedRecoJets->Write();
+    hInclusiveUncorrectedRecoJets_W->Write();
+    hInclusiveRecoJetsCMFrame->Write();
+    hInclusiveRecoJetsCMFrame_W->Write();
+    hSelectedInclusiveRecoJetsMidRapidity_W->Write();
+    hInclusiveRecoJetPtVsEtaCMFrame_W->Write();
+    hInclusiveUnCorrectedRecoPtVsEtaCMFrame_W->Write();
+    hJetFlavorFractions_W->Write();
 
     if (fCollSystem == "pPb")
     {
@@ -1160,15 +1160,15 @@ void HistoManagerDiJet ::writeOutput()
         hRefJES_Eta_Pt120_W->Write();
     }
 
-    // hLeadSubLeadJets->Write();
-    // hLeadSubLeadJets_W->Write();
-    // hLeadSubLeadJets_MidRapidity_W->Write();
-    // hLeadSubLeadJets_WithDijet_W->Write();
-    // hLeadSubLeadJets_WithDijet_DiJetW->Write();
+    hLeadSubLeadJets->Write();
+    hLeadSubLeadJets_W->Write();
+    hLeadSubLeadJets_MidRapidity_W->Write();
+    hLeadSubLeadJets_WithDijet_W->Write();
+    hLeadSubLeadJets_WithDijet_DiJetW->Write();
     if (fCollSystem == "pPb" || fCollSystem == "pp")
     {
-        // hLeadPtvsSubLeadPt_PtHatW->Write();
-        // hLeadPtvsSubLeadPt_DiJetW->Write();
+        hLeadPtvsSubLeadPt_PtHatW->Write();
+        hLeadPtvsSubLeadPt_DiJetW->Write();
     }
 
     if (fIsMC)
@@ -1368,14 +1368,17 @@ void HistoManagerDiJet ::writeOutput()
     gDirectory->cd("..");
     gDirectory->mkdir("Unfolding");
     gDirectory->cd("Unfolding");
-    hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W->Write();
-    hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W->Write();
-    hUnfoldingRefXjVsRecoXjVsMultiplicity_Unflipped_W->Write();
-    hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W->Write();
-    hMultVsRecoXjForTesting_W->Write();
-    hMultVsRefXjForTesting_W->Write();
-    hMultVsRecoXjToBeUnfolded_W->Write();
-    hMultVsRefXjToBeUnfolded_W->Write();
+    if (fIsMC)
+    {
+        hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W->Write();
+        hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W->Write();
+        hUnfoldingRefXjVsRecoXjVsMultiplicity_Unflipped_W->Write();
+        hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W->Write();
+        hMultVsRecoXjForTesting_W->Write();
+        hMultVsRefXjForTesting_W->Write();
+        hMultVsRecoXjToBeUnfolded_W->Write();
+        hMultVsRefXjToBeUnfolded_W->Write();
+    }
 
     std::cout << "Writing Histograms Complete" << std::endl;
     std::cout << "====================================" << std::endl;

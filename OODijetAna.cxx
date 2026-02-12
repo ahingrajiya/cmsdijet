@@ -53,7 +53,7 @@ int main(int argc, char* argv[])
     std::vector<std::pair<double, double>> hiHFBins = {{0., 0.0},    {10., 1.0},   {20., 2.0},   {30., 3.0},   {40., 4.0},   {50., 5.0},   {70., 6.0},
                                                        {90., 7.0},   {120., 8.0},  {150., 9.0},  {180., 10.0}, {210., 11.0}, {250., 12.0}, {300., 13.0},
                                                        {350., 14.0}, {400., 15.0}, {450., 16.0}, {500., 17.0}, {550., 18.0}, {1000., 19.0}};
-    std::vector<std::string> filters{"pprimaryVertexFilter", "pphfCoincFilter2Th4"};  // pphfCoincFilterPF2Th4
+    std::vector<std::string> filters{"pprimaryVertexFilter", "pphfCoincFilterPF2Th4"};  // pphfCoincFilterPF2Th4 pphfCoincFilter2Th4
     std::vector<std::string> filtersmc{"pprimaryVertexFilter"};
     std::string UEType{"HIJING"};
     Int_t smearType{0};             // 0 - Nominal Smearing, 1 - JER Smearing, 2 - JEC Smearing
@@ -187,7 +187,7 @@ int main(int argc, char* argv[])
     analysis->setMultBins(multiplicityBins);
     analysis->setHiHFBins(hiHFBins);
     analysis->setUEType(UEType);
-    analysis->setInclusiveCorrectedJetPtMin(50.);
+    analysis->setInclusiveCorrectedJetPtMin(20.);
     analysis->setInclusiveJetEtaRange(-2.1, 2.1);
     if (isMC)
     {
