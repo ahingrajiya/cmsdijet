@@ -180,8 +180,8 @@ int main(int argc, char* argv[])
     analysis->setMultiplicityType(4);
     analysis->setMinTrkPt(0.40);
     analysis->setDeltaPhi(7 * TMath::Pi() / 8);
-    analysis->setLeadJetPt(60.);
-    analysis->setSubLeadJetPt(40.);
+    analysis->setLeadJetPt(50.);
+    analysis->setSubLeadJetPt(20.);
     analysis->setLeadJetEtaRange(-2.1, 2.1);
     analysis->setSubLeadJetEtaRange(-2.1, 2.1);
     analysis->setMultBins(multiplicityBins);
