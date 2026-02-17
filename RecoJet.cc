@@ -21,7 +21,7 @@
 ClassImp(RecoJet)
 
     //________________
-    RecoJet::RecoJet() : BaseJet{}, fPtJECCorr{0}, fRefJetPt{0}, fRefJetEta{0}, fRefJetPhi{0}, fJetPartonFlavor{0}, fJetPartonFlavorForB{0}, fJetID{kTRUE}
+    RecoJet::RecoJet() : BaseJet{}, fPtJECCorr{0}, fRefJetPt{-999.}, fRefJetEta{-999.}, fRefJetPhi{-999.}, fJetPartonFlavor{0}, fJetPartonFlavorForB{0}, fJetID{kTRUE}
 {
     /* Empty */
 }

@@ -1324,9 +1324,11 @@ Event* ForestReader::returnEvent()
         // Loop over generated jets
         if (fIsMc && !fEvent->isGenJetCollectionFilled())
         {
+            // std::cout << "Gen Jets for New Event " << std::endl;
             for (Int_t iGenJet{0}; iGenJet < fNGenJets; iGenJet++)
             {
                 GenJet* jet = new GenJet{};
+
                 jet->setPt(fGenJetPt[iGenJet]);
                 jet->setEta(fGenJetEta[iGenJet]);
                 jet->setPhi(fGenJetPhi[iGenJet]);
@@ -1339,6 +1341,7 @@ Event* ForestReader::returnEvent()
                     delete jet;
                     continue;
                 }
+                // std::cout << "Gen Pt : " << fGenJetPt[iGenJet] << " Gen Eta : " << fGenJetEta[iGenJet] << " Gen Phi : " << fGenJetPhi[iGenJet] << std::endl;
                 fEvent->genJetCollection()->push_back(jet);
 
             }  // for (Int_t iGenJet{0}; iGenJet<fNPFGenJets; iGenJet++)
@@ -1386,6 +1389,8 @@ Event* ForestReader::returnEvent()
                 }
                 jet->setJetID(iJetID);
             }
+            // std::cout << "New Reco Jet" << std::endl;
+            // std::cout << " Raw Pt : " << fRawJetPt[iJet] << std::endl;
             jet->setPt(fRawJetPt[iJet]);
             jet->setEta(fRecoJetEta[iJet]);
             jet->setPhi(fRecoJetPhi[iJet]);
@@ -1435,8 +1440,19 @@ Event* ForestReader::returnEvent()
             if (fIsMc)
             {
                 jet->setRefJetPt(fRefJetPt[iJet]);
-                jet->setRefJetEta(fRefJetEta[iJet]);
-                jet->setRefJetPhi(fRefJetPhi[iJet]);
+                // std::cout << " New Ref Jet" << std::endl;
+                // std::cout << "Ref Pt : " << fRefJetPt[iJet] << " Corrected Pt : " << pTcorr << std::endl;
+                for (Int_t iGenJet{0}; iGenJet < fNGenJets; iGenJet++)
+                {
+                    if (fabs(fRefJetPt[iJet] - fGenJetPt[iGenJet]) < 1e-6)
+                    {
+                        // std::cout << "Gen Pt : " << fGenJetPt[iGenJet] << std::endl;
+                        // std::cout << "Gen Eta : " << fGenJetEta[iGenJet] << " Gen Phi : " << fGenJetPhi[iGenJet] << std::endl;
+                        jet->setRefJetEta(fGenJetEta[iGenJet]);
+                        jet->setRefJetPhi(fGenJetPhi[iGenJet]);
+                    }
+                }
+
                 jet->setJetPartonFlavor(fRefJetPartonFlavor[iJet]);
                 jet->setJetPartonFlavorForB(fRefJetPartonFlavorForB[iJet]);
             }

@@ -316,6 +316,11 @@ class DiJetAnalysis : public BaseAnalysis
     ///@brief Random number generator
     ///@return Returns random number
     double uniform01();
+    ///@brief Comparing two double values
+    ///@param a First double value
+    ///@param b Second double value
+    ///@return Returns true if two double values are equal within a certain precision
+    bool areDoublesEqual(const double& a, const double& b);
     ///@brief Print debug information
     Bool_t fDebug;
     ///@brief Delta Phi selection for dijet
@@ -361,7 +366,9 @@ class DiJetAnalysis : public BaseAnalysis
     ///@brief Set Number of events to process
     Int_t fNEventsInSample;
     ///@brief If Dijet is found
-    Bool_t fIsDiJetFound;
+    Bool_t fIsRecoDiJetFound;
+    ///@brief if Ref Dijet is found
+    Bool_t fIsRefDijetFound;
     ///@brief If Gen Dijet is found
     Bool_t fIsGenDiJetFound;
     ///@brief Histogram Manager
@@ -445,6 +452,9 @@ class DiJetAnalysis : public BaseAnalysis
     static constexpr uint64_t SEED = 1729;
     std::mt19937_64 gen_;
     std::uniform_real_distribution<double> dist_;
+
+    ///@brief Double comparison precision value
+    static constexpr double fEpsilon = 1e-6;
 
     ClassDef(DiJetAnalysis, 0)
 };

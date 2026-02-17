@@ -164,17 +164,25 @@ class HistoManagerDiJet : public BaseHistoManager
     TH2D* hMultVsXj_W;
     TH2D* hMultVsXj_DiJetW;
     TH2D* hMultVsXj_HiHFW;
+    TH2D* hMultVsMatchedRefXj_W;
+    TH2D* hMultVsMatchedRefXj_DiJetW;
+    TH2D* hMultVsUnflippedMatchedRefXj_W;
+    TH2D* hMultVsUnflippedMatchedRefXj_DiJetW;
     TH2D* hHiHFVsXj_W;
     TH2D* hHiHFVsXj_HiHFW;
+
     TH2D* hMultVsRefXj_W;
-    TH2D* hMultVsMatchedRefXj_W;
     TH2D* hMultVsRefXj_DiJetW;
-    TH2D* hMultVsMatchedRefXj_DiJetW;
+    TH2D* hMultVsMatchedRecoXj_W;
+    TH2D* hMultVsUnflippedMatchedRecoXj_W;
+
     TH2D* hMultVsGenXj_W;
     TH2D* hMultVsGenXj_DiJetW;
     TH1D* hVzWithDijet_W;
     TH1D* hDeltaPhi_W;
     TH1D* hDeltaPhi_WithDiJet_W;
+    TH1D* hRefDeltaPhi_W;
+    TH1D* hRefDeltaPhi_WithDiJet_W;
     TH1D* hGenDeltaPhi_W;
     TH1D* hGenDeltaPhi_WithDiJet_W;
     TH1I* hNDijetEvent;
@@ -200,13 +208,10 @@ class HistoManagerDiJet : public BaseHistoManager
     TH2D *hHiHFPlusVsMultiplicity_W, *hHiHFMinusVsMultiplicity_W;
     TH2D *hHiHFPlusVsMultiplicity_WithDijet_W, *hHiHFMinusVsMultiplicity_WithDijet_W;
 
-    TH2D* hRefLeadRefSubLead_W;
-    TH2D* hGenLeadGenSubLead_W;
-
     TH3D* hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W;
     TH3D* hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W;
     TH3D* hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W;
-    TH3D* hUnfoldingRefXjVsRecoXjVsMultiplicity_Unflipped_W;
+    TH3D* hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W;
     TH2D* hMultVsRecoXjToBeUnfolded_W;
     TH2D* hMultVsRecoXjForTesting_W;
     TH2D* hMultVsRefXjToBeUnfolded_W;

@@ -55,15 +55,16 @@ ClassImp(HistoManagerDiJet)
     hGenTracks_Pt1_W{nullptr}, hJetFlavorFractions_W{nullptr}, hLeadSubLeadJets_WithDijet_DiJetW{nullptr}, hGenLeadGenSubLeadJets_WithDijet_DiJetW{nullptr},
     hRefLeadRefSubLeadJets_WithDijet_DiJetW{nullptr}, hLeadingGenJetPtWithDijet_DiJetW{nullptr}, hSubLeadingGenJetPtWithDijet_DiJetW{nullptr},
     hLeadingRefJetPtWithDijet_DiJetW{nullptr}, hSubLeadingRefJetPtWithDijet_DiJetW{nullptr}, hLeadingRecoJetPtWithDijet_DiJetW{nullptr},
-    hSubLeadingRecoJetPtWithDijet_DiJetW{nullptr}, hRefLeadRefSubLead_W{nullptr}, hGenLeadGenSubLead_W{nullptr}, hRefLeadPtVsRefSubLeadPtMatched_DiJetW{nullptr},
-    hRefLeadPtVsRefSubLeadPtMatched_PtHatW{nullptr}, hHiHFPlusVsHiHFMinus{nullptr}, hHiHFPlusVsHiHFMinus_W{nullptr}, hHiHFPlusVsHiHFMinus_WithDijet_W{nullptr},
-    hHiHFPlus{nullptr}, hHiHFPlus_W{nullptr}, hHiHFMinus{nullptr}, hHiHFMinus_W{nullptr}, hHiHFPlus_WithDijet_W{nullptr}, hHiHFMinus_WithDijet_W{nullptr},
-    hHiHFPlusVsMultiplicity_W{nullptr}, hHiHFMinusVsMultiplicity_W{nullptr}, hHiHFPlusVsMultiplicity_WithDijet_W{nullptr}, hHiHFMinusVsMultiplicity_WithDijet_W{nullptr},
-    hHiHFVsXj_W{nullptr}, hHiHFVsXj_HiHFW{nullptr}, hXj_ProjectionHiHF_W{nullptr}, hXj_ProjectionHiHF_HiHFW{nullptr}, hMultVsXj_HiHFW{nullptr},
-    hXj_Projection_HiHFW{nullptr}, hHiHF_PF{nullptr}, hHiHF_PF_W{nullptr}, hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W{nullptr},
-    hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W{nullptr}, hUnfoldingRefXjVsRecoXjVsMultiplicity_Unflipped_W{nullptr},
+    hSubLeadingRecoJetPtWithDijet_DiJetW{nullptr}, hRefLeadPtVsRefSubLeadPtMatched_DiJetW{nullptr}, hRefLeadPtVsRefSubLeadPtMatched_PtHatW{nullptr},
+    hHiHFPlusVsHiHFMinus{nullptr}, hHiHFPlusVsHiHFMinus_W{nullptr}, hHiHFPlusVsHiHFMinus_WithDijet_W{nullptr}, hHiHFPlus{nullptr}, hHiHFPlus_W{nullptr},
+    hHiHFMinus{nullptr}, hHiHFMinus_W{nullptr}, hHiHFPlus_WithDijet_W{nullptr}, hHiHFMinus_WithDijet_W{nullptr}, hHiHFPlusVsMultiplicity_W{nullptr},
+    hHiHFMinusVsMultiplicity_W{nullptr}, hHiHFPlusVsMultiplicity_WithDijet_W{nullptr}, hHiHFMinusVsMultiplicity_WithDijet_W{nullptr}, hHiHFVsXj_W{nullptr},
+    hHiHFVsXj_HiHFW{nullptr}, hXj_ProjectionHiHF_W{nullptr}, hXj_ProjectionHiHF_HiHFW{nullptr}, hMultVsXj_HiHFW{nullptr}, hXj_Projection_HiHFW{nullptr},
+    hHiHF_PF{nullptr}, hHiHF_PF_W{nullptr}, hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W{nullptr}, hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W{nullptr},
     hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W{nullptr}, hMultVsRecoXjForTesting_W{nullptr}, hMultVsRecoXjToBeUnfolded_W{nullptr},
-    hMultVsRefXjForTesting_W{nullptr}, hMultVsRefXjToBeUnfolded_W{nullptr}, hRecoQuenching_WithDijet_W{nullptr}, hGenQuenching_WithDijet_W{nullptr}
+    hMultVsRefXjForTesting_W{nullptr}, hMultVsRefXjToBeUnfolded_W{nullptr}, hRecoQuenching_WithDijet_W{nullptr}, hGenQuenching_WithDijet_W{nullptr},
+    hMultVsUnflippedMatchedRecoXj_W{nullptr}, hMultVsUnflippedMatchedRefXj_DiJetW{nullptr}, hMultVsUnflippedMatchedRefXj_W{nullptr}, hMultVsMatchedRecoXj_W{nullptr},
+    hRefDeltaPhi_W{nullptr}, hRefDeltaPhi_WithDiJet_W{nullptr}, hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W{nullptr}
 {
     /* Empty*/
 }
@@ -102,6 +103,12 @@ HistoManagerDiJet::~HistoManagerDiJet()
     if (hGenDeltaPhi_WithDiJet_W) delete hGenDeltaPhi_WithDiJet_W;
     if (hHiHF_PF) delete hHiHF_PF;
     if (hHiHF_PF_W) delete hHiHF_PF_W;
+    if (hMultVsMatchedRecoXj_W) delete hMultVsMatchedRecoXj_W;
+    if (hMultVsUnflippedMatchedRecoXj_W) delete hMultVsUnflippedMatchedRecoXj_W;
+    if (hMultVsUnflippedMatchedRefXj_DiJetW) delete hMultVsUnflippedMatchedRefXj_DiJetW;
+    if (hMultVsUnflippedMatchedRefXj_W) delete hMultVsUnflippedMatchedRefXj_W;
+    if (hRefDeltaPhi_W) delete hRefDeltaPhi_W;
+    if (hRefDeltaPhi_WithDiJet_W) delete hRefDeltaPhi_WithDiJet_W;
 
     if (hInJetMultiplicity_W) delete hInJetMultiplicity_W;
     if (hGenInJetMultiplicity_W) delete hGenInJetMultiplicity_W;
@@ -219,8 +226,6 @@ HistoManagerDiJet::~HistoManagerDiJet()
     if (hSubLeadingGenJetPtWithDijet_DiJetW) delete hSubLeadingGenJetPtWithDijet_DiJetW;
     if (hLeadingRefJetPtWithDijet_DiJetW) delete hLeadingRefJetPtWithDijet_DiJetW;
     if (hSubLeadingRefJetPtWithDijet_DiJetW) delete hSubLeadingRefJetPtWithDijet_DiJetW;
-    if (hRefLeadRefSubLead_W) delete hRefLeadRefSubLead_W;
-    if (hGenLeadGenSubLead_W) delete hGenLeadGenSubLead_W;
 
     if (hGenTrackPtVsEta) delete hGenTrackPtVsEta;
     if (hGenTrackPtVsEta_W) delete hGenTrackPtVsEta_W;
@@ -261,6 +266,8 @@ HistoManagerDiJet::~HistoManagerDiJet()
     if (hMultVsRecoXjToBeUnfolded_W) delete hMultVsRecoXjToBeUnfolded_W;
     if (hMultVsRefXjForTesting_W) delete hMultVsRefXjForTesting_W;
     if (hMultVsRefXjToBeUnfolded_W) delete hMultVsRefXjToBeUnfolded_W;
+    if (hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W) delete hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W;
+    if (hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W) delete hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W;
 
     for (auto hist : hXj_Projection_W) delete hist;
     for (auto hist : hXj_ProjectionHiHF_W) delete hist;
@@ -463,11 +470,6 @@ void HistoManagerDiJet::init()
         hRefLeadRefSubLeadJets_WithDijet_DiJetW->Sumw2();
     }
 
-    hRefLeadRefSubLead_W = new TH2D("hRefLeadRefSubLead_W", "Ref Leading vs Ref SubLeading Jet", 200, 0., 1000., 200, 0., 1000.);
-    hRefLeadRefSubLead_W->Sumw2();
-    hGenLeadGenSubLead_W = new TH2D("hGenLeadGenSubLead_W", "Gen Leading vs Gen SubLeading Jet", 200, 0., 1000., 200, 0., 1000.);
-    hGenLeadGenSubLead_W->Sumw2();
-
     const int nDphiBins = 30;  // number of bins
     double DphiBins[nDphiBins + 1] = {0.0,
                                       TMath::Pi() / 5.,
@@ -570,18 +572,35 @@ void HistoManagerDiJet::init()
         hGenDeltaPhi_W->Sumw2();
         hGenDeltaPhi_WithDiJet_W = new TH1D("hGenDeltaPhi_WithDiJet_W", "Gen Delta Phi Distribution With Dijet Present Weighted", nDphiBins, DphiBins);
         hGenDeltaPhi_WithDiJet_W->Sumw2();
+        hRefDeltaPhi_W = new TH1D("hRefDeltaPhi_W", "Ref Delta Phi Distribution Weighted", nDphiBins, DphiBins);
+        hRefDeltaPhi_W->Sumw2();
+        hRefDeltaPhi_WithDiJet_W = new TH1D("hRefDeltaPhi_WithDiJet_W", "Ref Delta Phi Distribution With Diejt Present Weighted", nDphiBins, DphiBins);
+        hRefDeltaPhi_WithDiJet_W->Sumw2();
         hMultVsRefXj_W = new TH2D("hMultVsRefXj_W", "RefXj Distribution Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
         hMultVsRefXj_W->Sumw2();
         hMultVsRefXj_DiJetW = new TH2D("hMultVsRefXj_DiJetW", "RefXj Distribution XjWeighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
         hMultVsRefXj_DiJetW->Sumw2();
         hMultVsMatchedRefXj_W = new TH2D("hMultVsMatchedRefXj_W", "Matched RefXj Distribution Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
         hMultVsMatchedRefXj_W->Sumw2();
-        hMultVsMatchedRefXj_DiJetW = new TH2D("hMultVsMatchedRefXj_DiJetW", "Matched RefXj Distribution XjWeighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
+        hMultVsMatchedRefXj_DiJetW =
+            new TH2D("hMultVsMatchedRefXj_DiJetW", "Matched RefXj Distribution DiJet Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
         hMultVsMatchedRefXj_DiJetW->Sumw2();
         hMultVsGenXj_W = new TH2D("hMultVsGenXj_W", "Gen Xj Distribution Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
         hMultVsGenXj_W->Sumw2();
         hMultVsGenXj_DiJetW = new TH2D("hMultVsGenXj_DiJetW", "Gen Xj Distribution DijetWeighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
         hMultVsGenXj_DiJetW->Sumw2();
+        hMultVsMatchedRecoXj_W = new TH2D("hMultVsMatchedRecoXj_W", "Matched RecoXj Distribution", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
+        hMultVsMatchedRecoXj_W->Sumw2();
+        hMultVsUnflippedMatchedRecoXj_W =
+            new TH2D("hMultVsUnflippedMatchedRecoXj_W", "Matched Unflipped RecoXj Distribution", nXjAjBins_ER, XjBins_ER, nMultiplicityBins, multBinArray);
+        hMultVsUnflippedMatchedRecoXj_W->Sumw2();
+        hMultVsUnflippedMatchedRefXj_W =
+            new TH2D("hMultVsUnflippedMatchedRefXj_W", "Matched Unflipped RefXj Distribution", nXjAjBins_ER, XjBins_ER, nMultiplicityBins, multBinArray);
+        hMultVsUnflippedMatchedRefXj_W->Sumw2();
+        hMultVsUnflippedMatchedRefXj_DiJetW = new TH2D("hMultVsUnflippedMatchedRefXj_DiJetW", "Matched Unflipped RefXj Distribution DiJet Weighted", nXjAjBins_ER,
+                                                       XjBins_ER, nMultiplicityBins, multBinArray);
+        hMultVsUnflippedMatchedRefXj_DiJetW->Sumw2();
+
         hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W =
             new TH3D("hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W", "Unfolding RefXj vs RecoXj vs Multiplicity Weighted To Be Unfolded", nXjAjBinsUnfolding,
                      XjBinsUnfolding, nXjAjBinsUnfolding, XjBinsUnfolding, nMultiplicityBins, multBinArray);
@@ -589,14 +608,14 @@ void HistoManagerDiJet::init()
         hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W =
             new TH3D("hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W", "Unfolding RefXj vs RecoXj vs Multiplicity Weighted For Testing", nXjAjBinsUnfolding,
                      XjBinsUnfolding, nXjAjBinsUnfolding, XjBinsUnfolding, nMultiplicityBins, multBinArray);
-        hUnfoldingRefXjVsRecoXjVsMultiplicity_Unflipped_W =
-            new TH3D("hUnfoldingRefXjVsRecoXjVsMultiplicity_Unflipped_W", "Unfolding RefXj vs RecoXj vs Multiplicity Unflipped Weighted", nXjAjBinsUnfolding,
-                     XjBinsUnfolding, nXjAjBins_ER, XjBins_ER, nMultiplicityBins, multBinArray);
-        hUnfoldingRefXjVsRecoXjVsMultiplicity_Unflipped_W->Sumw2();
         hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W =
             new TH3D("hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W", "Unfolding RefXj vs RecoXj vs Multiplicity Missing Jets Weighted", nXjAjBinsUnfolding,
                      XjBinsUnfolding, nXjAjBinsUnfolding, XjBinsUnfolding, nMultiplicityBins, multBinArray);
         hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W->Sumw2();
+        hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W =
+            new TH3D("hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W", "Unfolding RefXj vs RecoXj vs Multiplicity Missing Jets Weighted", nXjAjBinsUnfolding,
+                     XjBinsUnfolding, nXjAjBinsUnfolding, XjBinsUnfolding, nMultiplicityBins, multBinArray);
+        hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W->Sumw2();
         hMultVsRecoXjForTesting_W =
             new TH2D("hMultVsRecoXjForTesting_W", "Reco Xj Distribution Weighted", nXjAjBinsUnfolding, XjBinsUnfolding, nMultiplicityBins, multBinArray);
         hMultVsRecoXjForTesting_W->Sumw2();
@@ -1178,14 +1197,12 @@ void HistoManagerDiJet ::writeOutput()
         hGenLeadGenSubLeadJets_MidRapidity_W->Write();
         hGenLeadGenSubLeadJets_WithDijet_W->Write();
         hGenLeadGenSubLeadJets_WithDijet_DiJetW->Write();
-        hGenLeadGenSubLead_W->Write();
 
         hRefLeadRefSubLeadJets->Write();
         hRefLeadRefSubLeadJets_W->Write();
         hRefLeadRefSubLeadJets_MidRapidity_W->Write();
         hRefLeadRefSubLeadJets_WithDijet_W->Write();
         hRefLeadRefSubLeadJets_WithDijet_W->Write();
-        hRefLeadRefSubLead_W->Write();
 
         if (fCollSystem == "pPb" || fCollSystem == "pp")
         {
@@ -1242,10 +1259,16 @@ void HistoManagerDiJet ::writeOutput()
     {
         hMultVsRefXj_W->Write();
         hMultVsMatchedRefXj_W->Write();
+        hMultVsMatchedRecoXj_W->Write();
+        hMultVsUnflippedMatchedRecoXj_W->Write();
+        hMultVsUnflippedMatchedRefXj_DiJetW->Write();
+        hMultVsUnflippedMatchedRefXj_W->Write();
         hGenQuenching_W->Write();
         hGenQuenching_WithDijet_W->Write();
         hGenDeltaPhi_W->Write();
         hGenDeltaPhi_WithDiJet_W->Write();
+        hRefDeltaPhi_W->Write();
+        hRefDeltaPhi_WithDiJet_W->Write();
         hMultVsGenXj_W->Write();
         hNGenDijetEvent->Write();
         if (fCollSystem == "pPb" || fCollSystem == "pp")
@@ -1365,15 +1388,16 @@ void HistoManagerDiJet ::writeOutput()
         }
     }
 
-    gDirectory->cd("..");
-    gDirectory->mkdir("Unfolding");
-    gDirectory->cd("Unfolding");
     if (fIsMC)
     {
+        gDirectory->cd("..");
+        gDirectory->mkdir("Unfolding");
+        gDirectory->cd("Unfolding");
+
         hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W->Write();
         hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W->Write();
-        hUnfoldingRefXjVsRecoXjVsMultiplicity_Unflipped_W->Write();
         hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W->Write();
+        hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W->Write();
         hMultVsRecoXjForTesting_W->Write();
         hMultVsRefXjForTesting_W->Write();
         hMultVsRecoXjToBeUnfolded_W->Write();
