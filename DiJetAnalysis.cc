@@ -1600,8 +1600,13 @@ void DiJetAnalysis::processRecoJets(const Event* event, const Double_t& event_We
                 fHM->hMultVsRecoXjForTesting_W->Fill(Xj, multiplicityBin, event_Weight);
                 fHM->hMultVsRefXjForTesting_W->Fill(matchedRefXj, multiplicityBin, event_Weight);
             }
+
             if (fIsRefDijetFound && !areRefVsMacthedRefEqual)
             {
+                // std::cout << "Is Reco Dijet : " << fIsRecoDiJetFound << std::endl;
+                // std::cout << "Matched Reco - Reco : " << matchedRecoXj << " " << Xj << std::endl;
+                // std::cout << "Matched Ref - Ref : " << matchedRefXj << " " << refXj << std::endl;
+                // std::cout << std::endl;
                 fHM->hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W->Fill(matchedRecoXj, refXj, multiplicityBin, event_Weight);
                 fHM->hMultVsRefXjForTesting_W->Fill(refXj, multiplicityBin, event_Weight);
             }
@@ -1616,7 +1621,7 @@ void DiJetAnalysis::processRecoJets(const Event* event, const Double_t& event_We
             }
             if (fIsRefDijetFound && !areRefVsMacthedRefEqual)
             {
-                fHM->hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W->Fill(Xj, matchedRefXj, multiplicityBin, event_Weight);
+                fHM->hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W->Fill(matchedRecoXj, refXj, multiplicityBin, event_Weight);
                 fHM->hMultVsRefXjToBeUnfolded_W->Fill(refXj, multiplicityBin, event_Weight);
             }
         }
