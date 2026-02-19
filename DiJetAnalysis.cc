@@ -1624,20 +1624,20 @@ void DiJetAnalysis::processRecoJets(const Event* event, const Double_t& event_We
                 fHM->hMultVsRecoXjToBeUnfolded_W->Fill(Xj, multiplicityBin, event_Weight);
                 fHM->hMultVsRefXjToBeUnfolded_W->Fill(matchedRefXj, multiplicityBin, event_Weight);
             }
-            // if (!fIsRecoDiJetFound && fIsRefDijetFound && !areRefVsMacthedRefEqual)
-            // {
-            //     fHM->hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W->Fill(matchedRecoXj, refXj, multiplicityBin, event_Weight);
-            //     fHM->hMultVsRefXjToBeUnfolded_W->Fill(refXj, multiplicityBin, event_Weight);
-            // }
+            if (!fIsRecoDiJetFound && fIsRefDijetFound && !areRefVsMacthedRefEqual)
+            {
+                fHM->hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W->Fill(matchedRecoXj, refXj, multiplicityBin, event_Weight);
+                fHM->hMultVsRefXjToBeUnfolded_W->Fill(refXj, multiplicityBin, event_Weight);
+            }
         }
 
-        if (fIsRecoDiJetFound && matchedRefXj < 0)
+        if (fIsRecoDiJetFound && !fIsRefDijetFound)
         {
             // std::cout << matchedRefXj << std::endl;
             fHM->hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W->Fill(Xj, matchedRefXj, multiplicityBin, event_Weight);
         }
 
-        if (fIsRefDijetFound && !areRefVsMacthedRefEqual)
+        if (!fIsRecoDiJetFound && fIsRefDijetFound)
         {
             fHM->hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W->Fill(matchedRecoXj, refXj, multiplicityBin, event_Weight);
         }
