@@ -341,8 +341,8 @@ void HistoManagerDiJet::init()
     hMultiplicities_DiJet_W->Sumw2();
 
     int JetBins[5] = {200, 52, 64, 5, nMultiplicityBins + 1};
-    Double_t JetMin[5] = {0.0, -5.2, -2, -TMath::Pi(), fMultiplicityBins[0]};
-    Double_t JetMax[5] = {1000.0, 5.2, 2, TMath::Pi(), fMultiplicityBins[fMultiplicityBins.size() - 1] + 1};
+    Double_t JetMin[5] = {0.0, -5.2, -TMath::Pi(), -2, fMultiplicityBins[0]};
+    Double_t JetMax[5] = {1000.0, 5.2, TMath::Pi(), 2, fMultiplicityBins[fMultiplicityBins.size() - 1] + 1};
     hInclusiveUncorrectedRecoJets = new THnSparseD("hInclusiveUncorrectedRecoJets", "Inclusive Uncorrected Reco Jets", 5, JetBins, JetMin, JetMax);
     hInclusiveUncorrectedRecoJets->Sumw2();
     hInclusiveUncorrectedRecoJets_W = new THnSparseD("hInclusiveUncorrectedRecoJets_W", "Inclusive Uncorrected Reco Jets Weighted", 5, JetBins, JetMin, JetMax);
