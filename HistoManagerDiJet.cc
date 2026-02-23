@@ -608,6 +608,7 @@ void HistoManagerDiJet::init()
         hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W =
             new TH3D("hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W", "Unfolding RefXj vs RecoXj vs Multiplicity Weighted For Testing", nXjAjBinsUnfolding,
                      XjBinsUnfolding, nXjAjBinsUnfolding, XjBinsUnfolding, nMultiplicityBins, multBinArray);
+        hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W->Sumw2();
         hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W =
             new TH3D("hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W", "Unfolding RefXj vs RecoXj vs Multiplicity Missing Jets Weighted", nXjAjBinsUnfolding,
                      XjBinsUnfolding, nXjAjBinsUnfolding, XjBinsUnfolding, nMultiplicityBins, multBinArray);
