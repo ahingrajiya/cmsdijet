@@ -13,7 +13,8 @@ cd ${EXEC_PATH}
 input_file_list=$1
 output_file=$2
 ismc=$3
+collenergy=$4
 
-./ppDijetAna ${input_file_list} ${output_file} ${ismc}
+./ppDijetAna ${input_file_list} ${output_file} ${ismc} ${collenergy}
 
 
