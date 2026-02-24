@@ -74,7 +74,7 @@ EOF
     for file in ${file_list}/*.txt; do
         cat <<EOF >> processing/pp_${subfile%.*}.sub
 
-	    arguments   = ${file_list}/$(basename "$file") ${output_path}${sample_prefix}_PD${PD_Number}_${jobid}.root ${isMC}
+	    arguments   = ${file_list}/$(basename "$file") ${output_path}${sample_prefix}_PD${PD_Number}_${jobid}.root ${isMC} ${energy}
         output      = processing/condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.out
         error       = processing/condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.err
         log         = processing/condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.log

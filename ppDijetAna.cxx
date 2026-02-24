@@ -39,7 +39,8 @@ int main(int argc, char* argv[])
     std::vector<std::pair<Double_t, Double_t>> multiplicityBins = {{0, 0.0}, {10, 1.0}, {60, 2.0}, {120, 3.0}, {185, 4.0}, {250, 5.0}, {400, 6.0}};
     std::vector<std::pair<double, double>> hiHFBins = {{0., 0.0},  {10., 1.0}, {20., 2.0},  {30., 3.0},  {40., 4.0},   {50., 5.0},
                                                        {70., 6.0}, {90., 7.0}, {120., 8.0}, {150., 9.0}, {1000., 10.0}};
-    std::vector<std::string> filters{"pprimaryVertexFilter"};
+    // std::vector<std::string> filters{"pprimaryVertexFilter"};
+    std::vector<std::string> filters{"pBeamScrapingFilter", "pPAprimaryVertexFilter", "HBHENoiseFilterResultRun2Loose"};
     std::string path2DijetWeight = "../aux_files/pp_5020/Dijet_Weight/PYTHIA_DiJetWeight_Table.root";
     std::string dijetWeightType{"Gen"};
 
@@ -53,6 +54,7 @@ int main(int argc, char* argv[])
     inFileName = argv[1];
     oFileName = argv[2];
     isMC = atoi(argv[3]);
+    collEnergyGeV = atoi(argv[4]);
 
     if (isMC)
     {
@@ -76,6 +78,15 @@ int main(int argc, char* argv[])
             JECFileName = "Spring18_ppRef5TeV_V6_MC_L2Relative_AK4PF.txt";
             JECFileDataName = "Spring18_ppRef5TeV_V6_DATA_L2L3Residual_AK4PF.txt";
         }
+    }
+
+    if (collEnergyGeV == 5360)
+    {
+        collYear = 2025;
+    }
+    else
+    {
+        collYear = 2018;
     }
 
     // Initialize package manager
@@ -131,6 +142,11 @@ int main(int argc, char* argv[])
     {
         // reader->addJECFile(JECFileDataName.Data());
         // reader->setStoreLocation(kTRUE);
+        reader->useSkimmingBranch();
+        reader->setFilters(filters);
+    }
+    if (isMC && collEnergyGeV == 5020)
+    {
         reader->useSkimmingBranch();
         reader->setFilters(filters);
     }
