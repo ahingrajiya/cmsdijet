@@ -1597,40 +1597,45 @@ void DiJetAnalysis::processRecoJets(const Event* event, const Double_t& event_We
             if (fIsRecoDiJetFound)
             {
                 fHM->hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W->Fill(Xj, matchedRefXj, multiplicityBin, event_Weight);
-                fHM->hMultVsRecoXjForTesting_W->Fill(Xj, multiplicityBin, event_Weight);
-                fHM->hMultVsRefXjForTesting_W->Fill(matchedRefXj, multiplicityBin, event_Weight);
+                if (!fIsRefDijetFound)
+                {
+                    fHM->hMultVsFakeRecoXjForTesting_W->Fill(Xj, multiplicityBin, event_Weight);
+                    fHM->hMultVsFakeRefXjForTesting_W->Fill(matchedRefXj, multiplicityBin, event_Weight);
+                }
             }
 
-            // if (!fIsRecoDiJetFound && fIsRefDijetFound && !areRefVsMacthedRefEqual)
-            // {
-            //     // std::cout << "Is Reco Dijet : " << fIsRecoDiJetFound << std::endl;
-            //     // std::cout << "Matched Reco - Reco : " << matchedRecoXj << " " << Xj << std::endl;
-            //     // std::cout << leadMatchedRecoJetPt << "  " << leadJetPt << " " << leadJetEtaCM << "   " << leadJetEta << "   " << leadJetPhi << std::endl;
-            //     // std::cout << subLeadMatchedRecoJetPt << "   " << subLeadJetPt << "  " << subLeadJetEtaCM << "  " << subLeadJetEta << "  " << subLeadJetPhi <<
-            //     // std::endl; std::cout << leadJetID << "     " << subLeadJetID << std::endl; std::cout << "Delta Phi Diff : " << deltaPhi << std::endl; std::cout <<
-            //     // "Matched Ref - Ref : " << matchedRefXj << " " << refXj << std::endl; std::cout << leadMatchedJetPt << "  " << leadRefPt << "     " << leadRefEta <<
-            //     " "
-            //     // << leadRefPhi << std::endl; std::cout << subLeadMatchedJetPt << "   " << subLeadRefPt << "   " << subLeadRefEta << "  " << subLeadRefPhi <<
-            //     std::endl;
-            //     // std::cout << "Delta Ref Phi Diff : " << refDeltaPhi << std::endl;
-            //     // std::cout << std::endl;
-            //     fHM->hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W->Fill(matchedRecoXj, refXj, multiplicityBin, event_Weight);
-            //     fHM->hMultVsRefXjForTesting_W->Fill(refXj, multiplicityBin, event_Weight);
-            // }
+            if (!fIsRecoDiJetFound && fIsRefDijetFound)
+            {
+                // std::cout << "Is Reco Dijet : " << fIsRecoDiJetFound << std::endl;
+                // std::cout << "Matched Reco - Reco : " << matchedRecoXj << " " << Xj << std::endl;
+                // std::cout << leadMatchedRecoJetPt << "  " << leadJetPt << " " << leadJetEtaCM << "   " << leadJetEta << "   " << leadJetPhi << std::endl;
+                // std::cout << subLeadMatchedRecoJetPt << "   " << subLeadJetPt << "  " << subLeadJetEtaCM << "  " << subLeadJetEta << "  " << subLeadJetPhi <<
+                // std::endl; std::cout << leadJetID << "     " << subLeadJetID << std::endl; std::cout << "Delta Phi Diff : " << deltaPhi << std::endl; std::cout <<
+                // "Matched Ref - Ref : " << matchedRefXj << " " << refXj << std::endl; std::cout << leadMatchedJetPt << "  " << leadRefPt << "     " << leadRefEta <<
+                // " "
+                // << leadRefPhi << std::endl; std::cout << subLeadMatchedJetPt << "   " << subLeadRefPt << "   " << subLeadRefEta << "  " << subLeadRefPhi <<
+                // std::endl;
+                // std::cout << "Delta Ref Phi Diff : " << refDeltaPhi << std::endl;
+                // std::cout << std::endl;
+                fHM->hMultVsMissingRefXjForTesting_W->Fill(refXj, multiplicityBin, event_Weight);
+            }
         }
         else
         {
             if (fIsRecoDiJetFound)
             {
                 fHM->hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W->Fill(Xj, matchedRefXj, multiplicityBin, event_Weight);
-                fHM->hMultVsRecoXjToBeUnfolded_W->Fill(Xj, multiplicityBin, event_Weight);
-                fHM->hMultVsRefXjToBeUnfolded_W->Fill(matchedRefXj, multiplicityBin, event_Weight);
+                if (!fIsRefDijetFound)
+                {
+                    fHM->hMultVsFakeRecoXjToBeUnfolded_W->Fill(Xj, multiplicityBin, event_Weight);
+                    fHM->hMultVsFakeRefXjToBeUnfolded_W->Fill(matchedRefXj, multiplicityBin, event_Weight);
+                }
             }
-            // if (!fIsRecoDiJetFound && fIsRefDijetFound && !areRefVsMacthedRefEqual)
-            // {
-            //     fHM->hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W->Fill(matchedRecoXj, refXj, multiplicityBin, event_Weight);
-            //     fHM->hMultVsRefXjToBeUnfolded_W->Fill(refXj, multiplicityBin, event_Weight);
-            // }
+            if (!fIsRecoDiJetFound && fIsRefDijetFound)
+            {
+                // fHM->hMultVsRefXjToBeUnfolded_W->Fill(refXj, multiplicityBin, event_Weight);
+                fHM->hMultVsMissingRefXjToBeUnfolded_W->Fill(refXj, multiplicityBin, event_Weight);
+            }
         }
 
         if (fIsRecoDiJetFound && !fIsRefDijetFound)

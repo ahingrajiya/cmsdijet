@@ -61,10 +61,11 @@ ClassImp(HistoManagerDiJet)
     hHiHFMinusVsMultiplicity_W{nullptr}, hHiHFPlusVsMultiplicity_WithDijet_W{nullptr}, hHiHFMinusVsMultiplicity_WithDijet_W{nullptr}, hHiHFVsXj_W{nullptr},
     hHiHFVsXj_HiHFW{nullptr}, hXj_ProjectionHiHF_W{nullptr}, hXj_ProjectionHiHF_HiHFW{nullptr}, hMultVsXj_HiHFW{nullptr}, hXj_Projection_HiHFW{nullptr},
     hHiHF_PF{nullptr}, hHiHF_PF_W{nullptr}, hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W{nullptr}, hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W{nullptr},
-    hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W{nullptr}, hMultVsRecoXjForTesting_W{nullptr}, hMultVsRecoXjToBeUnfolded_W{nullptr},
-    hMultVsRefXjForTesting_W{nullptr}, hMultVsRefXjToBeUnfolded_W{nullptr}, hRecoQuenching_WithDijet_W{nullptr}, hGenQuenching_WithDijet_W{nullptr},
+    hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W{nullptr}, hMultVsFakeRecoXjForTesting_W{nullptr}, hMultVsFakeRecoXjToBeUnfolded_W{nullptr},
+    hMultVsMissingRefXjForTesting_W{nullptr}, hMultVsMissingRefXjToBeUnfolded_W{nullptr}, hRecoQuenching_WithDijet_W{nullptr}, hGenQuenching_WithDijet_W{nullptr},
     hMultVsUnflippedMatchedRecoXj_W{nullptr}, hMultVsUnflippedMatchedRefXj_DiJetW{nullptr}, hMultVsUnflippedMatchedRefXj_W{nullptr}, hMultVsMatchedRecoXj_W{nullptr},
-    hRefDeltaPhi_W{nullptr}, hRefDeltaPhi_WithDiJet_W{nullptr}, hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W{nullptr}
+    hRefDeltaPhi_W{nullptr}, hRefDeltaPhi_WithDiJet_W{nullptr}, hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W{nullptr}, hMultVsFakeRefXjToBeUnfolded_W{nullptr},
+    hMultVsFakeRefXjForTesting_W{nullptr}
 {
     /* Empty*/
 }
@@ -262,10 +263,12 @@ HistoManagerDiJet::~HistoManagerDiJet()
     if (hHiHFMinusVsMultiplicity_WithDijet_W) delete hHiHFMinusVsMultiplicity_WithDijet_W;
     if (hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W) delete hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W;
     if (hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W) delete hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W;
-    if (hMultVsRecoXjForTesting_W) delete hMultVsRecoXjForTesting_W;
-    if (hMultVsRecoXjToBeUnfolded_W) delete hMultVsRecoXjToBeUnfolded_W;
-    if (hMultVsRefXjForTesting_W) delete hMultVsRefXjForTesting_W;
-    if (hMultVsRefXjToBeUnfolded_W) delete hMultVsRefXjToBeUnfolded_W;
+    if (hMultVsFakeRecoXjForTesting_W) delete hMultVsFakeRecoXjForTesting_W;
+    if (hMultVsFakeRecoXjToBeUnfolded_W) delete hMultVsFakeRecoXjToBeUnfolded_W;
+    if (hMultVsMissingRefXjForTesting_W) delete hMultVsMissingRefXjForTesting_W;
+    if (hMultVsMissingRefXjToBeUnfolded_W) delete hMultVsMissingRefXjToBeUnfolded_W;
+    if (hMultVsFakeRefXjToBeUnfolded_W) delete hMultVsFakeRefXjToBeUnfolded_W;
+    if (hMultVsFakeRefXjForTesting_W) delete hMultVsFakeRefXjForTesting_W;
     if (hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W) delete hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W;
     if (hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W) delete hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W;
 
@@ -617,18 +620,25 @@ void HistoManagerDiJet::init()
             new TH3D("hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W", "Unfolding RefXj vs RecoXj vs Multiplicity Missing Jets Weighted", nXjAjBinsUnfolding,
                      XjBinsUnfolding, nXjAjBinsUnfolding, XjBinsUnfolding, nMultiplicityBins, multBinArray);
         hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W->Sumw2();
-        hMultVsRecoXjForTesting_W =
-            new TH2D("hMultVsRecoXjForTesting_W", "Reco Xj Distribution Weighted", nXjAjBinsUnfolding, XjBinsUnfolding, nMultiplicityBins, multBinArray);
-        hMultVsRecoXjForTesting_W->Sumw2();
-        hMultVsRecoXjToBeUnfolded_W =
-            new TH2D("hMultVsRecoXjToBeUnfolded_W", "Reco Xj Distribution To Be Unfolded Weighted", nXjAjBinsUnfolding, XjBinsUnfolding, nMultiplicityBins, multBinArray);
-        hMultVsRecoXjToBeUnfolded_W->Sumw2();
-        hMultVsRefXjForTesting_W =
-            new TH2D("hMultVsRefXjForTesting_W", "Ref Xj Distribution Weighted", nXjAjBinsUnfolding, XjBinsUnfolding, nMultiplicityBins, multBinArray);
-        hMultVsRefXjForTesting_W->Sumw2();
-        hMultVsRefXjToBeUnfolded_W =
-            new TH2D("hMultVsRefXjToBeUnfolded_W", "Ref Xj Distribution To Be Unfolded Weighted", nXjAjBinsUnfolding, XjBinsUnfolding, nMultiplicityBins, multBinArray);
-        hMultVsRefXjToBeUnfolded_W->Sumw2();
+        hMultVsFakeRecoXjForTesting_W = new TH2D("hMultVsFakeRecoXjForTesting_W", "Fake Reco Xj Distribution For Testing Weighted", nXjAjBinsUnfolding, XjBinsUnfolding,
+                                                 nMultiplicityBins, multBinArray);
+        hMultVsFakeRecoXjForTesting_W->Sumw2();
+        hMultVsFakeRecoXjToBeUnfolded_W = new TH2D("hMultVsFakeRecoXjToBeUnfolded_W", "Fake Reco Xj Distribution To Be Unfolded Weighted", nXjAjBinsUnfolding,
+                                                   XjBinsUnfolding, nMultiplicityBins, multBinArray);
+        hMultVsFakeRecoXjToBeUnfolded_W->Sumw2();
+        hMultVsMissingRefXjForTesting_W = new TH2D("hMultVsMissingRefXjForTesting_W", "Missing Ref Xj Distribution For Testing Weighted", nXjAjBinsUnfolding,
+                                                   XjBinsUnfolding, nMultiplicityBins, multBinArray);
+        hMultVsMissingRefXjForTesting_W->Sumw2();
+        hMultVsMissingRefXjToBeUnfolded_W = new TH2D("hMultVsMissingRefXjToBeUnfolded_W", "Missing Ref Xj Distribution To Be Unfolded Weighted", nXjAjBinsUnfolding,
+                                                     XjBinsUnfolding, nMultiplicityBins, multBinArray);
+        hMultVsMissingRefXjToBeUnfolded_W->Sumw2();
+
+        hMultVsFakeRefXjForTesting_W = new TH2D("hMultVsFakeRefXjForTesting_W", "Fake Ref Xj Distribution For Testing Weighted", nXjAjBinsUnfolding, XjBinsUnfolding,
+                                                nMultiplicityBins, multBinArray);
+        hMultVsFakeRefXjForTesting_W->Sumw2();
+        hMultVsFakeRefXjToBeUnfolded_W = new TH2D("hMultVsFakeRefXjToBeUnfolded_W", "Fake Ref Xj Distribution To Be Unfolded Weighted", nXjAjBinsUnfolding,
+                                                  XjBinsUnfolding, nMultiplicityBins, multBinArray);
+        hMultVsFakeRefXjToBeUnfolded_W->Sumw2();
     }
     // Float_t LeadSubLeadPtBins[] = {0.0, 50., 60., 70., 80., 90., 100., 110., 120., 130., 140., 150., 160., 170., 180., 190., 200., 220., 240., 260., 280., 300.,
     // 350., 400., 450., 500., 600., 700., 1200.};
@@ -1399,10 +1409,12 @@ void HistoManagerDiJet ::writeOutput()
         hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W->Write();
         hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W->Write();
         hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W->Write();
-        hMultVsRecoXjForTesting_W->Write();
-        hMultVsRefXjForTesting_W->Write();
-        hMultVsRecoXjToBeUnfolded_W->Write();
-        hMultVsRefXjToBeUnfolded_W->Write();
+        hMultVsFakeRecoXjForTesting_W->Write();
+        hMultVsMissingRefXjForTesting_W->Write();
+        hMultVsFakeRecoXjToBeUnfolded_W->Write();
+        hMultVsMissingRefXjToBeUnfolded_W->Write();
+        hMultVsFakeRefXjForTesting_W->Write();
+        hMultVsFakeRefXjToBeUnfolded_W->Write();
     }
 
     std::cout << "Writing Histograms Complete" << std::endl;

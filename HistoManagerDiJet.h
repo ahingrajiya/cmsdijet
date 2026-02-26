@@ -212,10 +212,12 @@ class HistoManagerDiJet : public BaseHistoManager
     TH3D* hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W;
     TH3D* hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W;
     TH3D* hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W;
-    TH2D* hMultVsRecoXjToBeUnfolded_W;
-    TH2D* hMultVsRecoXjForTesting_W;
-    TH2D* hMultVsRefXjToBeUnfolded_W;
-    TH2D* hMultVsRefXjForTesting_W;
+    TH2D* hMultVsFakeRefXjToBeUnfolded_W;
+    TH2D* hMultVsFakeRecoXjToBeUnfolded_W;
+    TH2D* hMultVsFakeRecoXjForTesting_W;
+    TH2D* hMultVsFakeRefXjForTesting_W;
+    TH2D* hMultVsMissingRefXjToBeUnfolded_W;
+    TH2D* hMultVsMissingRefXjForTesting_W;
 
    private:
     Bool_t fIsMC;
@@ -304,4 +306,5 @@ class HistoManagerDiJet : public BaseHistoManager
 
     ClassDef(HistoManagerDiJet, 1)
 };
+
 #endif
