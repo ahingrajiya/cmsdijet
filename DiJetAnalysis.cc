@@ -967,7 +967,7 @@ Bool_t DiJetAnalysis::CheckDijet(const Float_t& leadpt, const Float_t& leadeta, 
                                  const Bool_t& subleadID)
 {
     Bool_t isDijetPt = kFALSE;
-    if (leadpt > fLeadJetPtLow && leadpt <= 65. && subleadpt > fSubLeadJetPtLow)
+    if (leadpt > fLeadJetPtLow && leadpt <= 200. && subleadpt > fSubLeadJetPtLow)
     {
         if (fDebug)
         {
@@ -1208,7 +1208,7 @@ void DiJetAnalysis::processEvent(const Event* event)
     }
     // std::cout << "HiHFPlus : " << event->hiHFPlus() << " HiHFMinus : " << event->hiHFMinus() << std::endl;
     // std::cout << "HiHFBins : " << FindBin(event->hiHFPlus(), fHiHFBins) << std::endl;
-    // std::cout << "Multiplicity : " << iMultiplicity << " Multiplicity Bins : " << iMultiplicityBin << std::endl;
+    std::cout << "Multiplicity : " << iMultiplicity << " Multiplicity Bins : " << iMultiplicityBin << std::endl;
 
     fHM->hVz->Fill(iVertexZ);
     fHM->hVz_W->Fill(iVertexZ, Event_Weight * fDijetWeight);
