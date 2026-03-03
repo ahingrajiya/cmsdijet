@@ -157,8 +157,8 @@ int main(int argc, char* argv[])
     reader->setYearOfDataTaking(collYear);
     reader->addJECFile(JECFileName.Data());
     reader->setPath2JetAnalysis(path2JEC.Data());
-    // reader->setUseJetID();
-    // reader->setJetIDType(2);
+    reader->setUseJetID();
+    reader->setJetIDType(2);
     reader->eventsToProcess(-1);
     reader->setJetCut(jetCut);
     reader->setTrackCut(trackCut);
@@ -179,11 +179,11 @@ int main(int argc, char* argv[])
     analysis->setMultiplicityRange(10, 500);
     analysis->setMultiplicityType(4);
     analysis->setMinTrkPt(0.40);
-    analysis->setDeltaPhi(5 * TMath::Pi() / 6);
-    analysis->setLeadJetPt(100.);
-    analysis->setSubLeadJetPt(50.);
-    analysis->setLeadJetEtaRange(-2.1, 2.1);
-    analysis->setSubLeadJetEtaRange(-2.1, 2.1);
+    analysis->setDeltaPhi(2.7);
+    analysis->setLeadJetPt(60.);
+    analysis->setSubLeadJetPt(30.);
+    analysis->setLeadJetEtaRange(-2.5, 2.5);
+    analysis->setSubLeadJetEtaRange(-2.5, 2.5);
     analysis->setMultBins(multiplicityBins);
     analysis->setHiHFBins(hiHFBins);
     analysis->setUEType(UEType);

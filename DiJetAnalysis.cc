@@ -967,7 +967,7 @@ Bool_t DiJetAnalysis::CheckDijet(const Float_t& leadpt, const Float_t& leadeta, 
                                  const Bool_t& subleadID)
 {
     Bool_t isDijetPt = kFALSE;
-    if (leadpt > fLeadJetPtLow && subleadpt > fSubLeadJetPtLow)
+    if (leadpt > fLeadJetPtLow && leadpt <= 65. && subleadpt > fSubLeadJetPtLow)
     {
         if (fDebug)
         {

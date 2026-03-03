@@ -635,36 +635,45 @@ Bool_t ForestReader::JetIDType2(const Float_t& jtNHF, const Float_t& jtNEF, cons
     Int_t NConst = ChargedMult + NeutralMult;
     Float_t chemFracCut = 0.9;  // Magic Number provided by the JetMET group
     Float_t nhFracCut = 0.9;    // Magic Number provided by the JetMET group
-
-    if (fabs(jetEta) <= 2.7)
+    if (!fIs_OO)
     {
-        if (jtNHF >= nhFracCut || jtNEF >= nhFracCut || NConst <= 1 || jtMUF >= 0.8)
+        if (fabs(jetEta) <= 2.7)
         {
-            jetID = kFALSE;
+            if (jtNHF >= nhFracCut || jtNEF >= nhFracCut || NConst <= 1 || jtMUF >= 0.8)
+            {
+                jetID = kFALSE;
+            }
+            if (fabs(jetEta) <= 2.4)
+            {
+                if (jtCHF <= 0. || ChargedMult <= 0 || jtCEF >= chemFracCut)
+                {
+                    jetID = kFALSE;
+                }
+            }
         }
-        if (fabs(jetEta) <= 2.4)
+        else if (fabs(jetEta) > 2.7 && fabs(jetEta) <= 3.0)
         {
-            if (jtCHF <= 0. || ChargedMult <= 0 || jtCEF >= chemFracCut)
+            if (jtNEF <= 0.01 || jtNEF >= 0.98 || NeutralMult <= 2)
             {
                 jetID = kFALSE;
             }
         }
-    }
-    else if (fabs(jetEta) > 2.7 && fabs(jetEta) <= 3.0)
-    {
-        if (jtNEF <= 0.01 || jtNEF >= 0.98 || NeutralMult <= 2)
+        else if (fabs(jetEta) > 3.0)
         {
-            jetID = kFALSE;
+            if (jtNEF >= 0.9 || NeutralMult <= 10)
+            {
+                jetID = kFALSE;
+            }
         }
+        return jetID;
     }
-    else if (fabs(jetEta) > 3.0)
+    else if (fIs_OO)
     {
-        if (jtNEF >= 0.9 || NeutralMult <= 10)
-        {
-            jetID = kFALSE;
-        }
+        if (jtCHF <= 0.01 || jtCHF >= 0.99) return false;
+        if (jtNHF >= 0.99) return false;
+        if (jtNEF >= 0.99) return false;
+        if (jtCHM <= 0) return false;
     }
-    return jetID;
 }
 
 //_________________
