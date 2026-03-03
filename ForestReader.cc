@@ -665,15 +665,15 @@ Bool_t ForestReader::JetIDType2(const Float_t& jtNHF, const Float_t& jtNEF, cons
                 jetID = kFALSE;
             }
         }
-        return jetID;
     }
     else if (fIs_OO)
     {
-        if (jtCHF <= 0.01 || jtCHF >= 0.99) return false;
-        if (jtNHF >= 0.99) return false;
-        if (jtNEF >= 0.99) return false;
-        if (jtCHM <= 0) return false;
+        if (jtCHF <= 0.01 || jtCHF >= 0.99) jetID = false;
+        if (jtNHF >= 0.99) jetID = false;
+        if (jtNEF >= 0.99) jetID = false;
+        if (jtCHM <= 0) jetID = false;
     }
+    return jetID;
 }
 
 //_________________
