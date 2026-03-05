@@ -218,6 +218,8 @@ class HistoManagerDiJet : public BaseHistoManager
     TH2D* hMultVsFakeRefXjForTesting_W;
     TH2D* hMultVsMissingRefXjToBeUnfolded_W;
     TH2D* hMultVsMissingRefXjForTesting_W;
+    TH1D* hFakeLeadXj_W;
+    TH1D* hFakeSubLeadXj_W;
 
    private:
     Bool_t fIsMC;

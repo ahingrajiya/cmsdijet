@@ -180,7 +180,7 @@ int main(int argc, char* argv[])
     analysis->setMultiplicityType(4);
     analysis->setMinTrkPt(0.40);
     analysis->setDeltaPhi(2.7);
-    analysis->setLeadJetPt(90.);
+    analysis->setLeadJetPt(50.);
     analysis->setSubLeadJetPt(30.);
     analysis->setLeadJetEtaRange(-2.5, 2.5);
     analysis->setSubLeadJetEtaRange(-2.5, 2.5);

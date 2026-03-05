@@ -967,7 +967,7 @@ Bool_t DiJetAnalysis::CheckDijet(const Float_t& leadpt, const Float_t& leadeta, 
                                  const Bool_t& subleadID)
 {
     Bool_t isDijetPt = kFALSE;
-    if (leadpt > fLeadJetPtLow && leadpt <= 200. && subleadpt > fSubLeadJetPtLow)
+    if (leadpt > fLeadJetPtLow && subleadpt > fSubLeadJetPtLow)
     {
         if (fDebug)
         {
@@ -1208,7 +1208,7 @@ void DiJetAnalysis::processEvent(const Event* event)
     }
     // std::cout << "HiHFPlus : " << event->hiHFPlus() << " HiHFMinus : " << event->hiHFMinus() << std::endl;
     // std::cout << "HiHFBins : " << FindBin(event->hiHFPlus(), fHiHFBins) << std::endl;
-    std::cout << "Multiplicity : " << iMultiplicity << " Multiplicity Bins : " << iMultiplicityBin << std::endl;
+    // std::cout << "Multiplicity : " << iMultiplicity << " Multiplicity Bins : " << iMultiplicityBin << std::endl;
 
     fHM->hVz->Fill(iVertexZ);
     fHM->hVz_W->Fill(iVertexZ, Event_Weight * fDijetWeight);
@@ -1275,6 +1275,8 @@ void DiJetAnalysis::processRecoJets(const Event* event, const Double_t& event_We
     Float_t subLeadMatchedJetPt = -999.;
     Float_t leadMatchedRecoJetPt = -999.;
     Float_t subLeadMatchedRecoJetPt = -999.;
+    int subLeadFlavor = -999;
+    int leadFlavor = -999;
     Bool_t leadJetID = kFALSE;
     Bool_t subLeadJetID = kFALSE;
 
@@ -1288,6 +1290,7 @@ void DiJetAnalysis::processRecoJets(const Event* event, const Double_t& event_We
         Float_t jetPhi = (*recoJetIterator)->phi();
         Bool_t jetID = (*recoJetIterator)->JetID();
         Float_t rawPt = (*recoJetIterator)->pt();
+        double jetFlavor = (*recoJetIterator)->JetPartonFlavorForB();
 
         Float_t refPt;
         Float_t refEta;
@@ -1361,7 +1364,9 @@ void DiJetAnalysis::processRecoJets(const Event* event, const Double_t& event_We
             if (fIsMC)
             {
                 subLeadMatchedJetPt = leadMatchedJetPt;
+                subLeadFlavor = leadFlavor;
                 leadMatchedJetPt = refPt;
+                leadFlavor = jetFlavor;
             }
         }
         else if (jetPt > subLeadJetPt)
@@ -1373,6 +1378,7 @@ void DiJetAnalysis::processRecoJets(const Event* event, const Double_t& event_We
             if (fIsMC)
             {
                 subLeadMatchedJetPt = refPt;
+                subLeadFlavor = jetFlavor;
             }
         }
 
@@ -1400,7 +1406,7 @@ void DiJetAnalysis::processRecoJets(const Event* event, const Double_t& event_We
         }
 
         Float_t jetEtaCM = MoveToCMFrame(jetEta);
-        Double_t jetFlavor = GetJetFlavor((*recoJetIterator)->JetPartonFlavorForB());
+        // Double_t jetFlavor = GetJetFlavor((*recoJetIterator)->JetPartonFlavorForB());
 
         Double_t JetQuantities[5] = {jetPt, jetEtaCM, jetPhi, jetFlavor, multiplicityBin};
         Double_t JetQuantitiesLab[5] = {jetPt, jetEta, jetPhi, jetFlavor, multiplicityBin};
@@ -1532,6 +1538,14 @@ void DiJetAnalysis::processRecoJets(const Event* event, const Double_t& event_We
             }
 
             fHM->hNDijetEvent->Fill(1);
+        }
+        if (leadFlavor == 0)
+        {
+            fHM->hFakeLeadXj_W->Fill(Xj, event_Weight);
+        }
+        else if (subLeadFlavor == 0)
+        {
+            fHM->hFakeSubLeadXj_W->Fill(Xj, event_Weight);
         }
     }
 

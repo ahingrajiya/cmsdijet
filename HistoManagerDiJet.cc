@@ -65,7 +65,7 @@ ClassImp(HistoManagerDiJet)
     hMultVsMissingRefXjForTesting_W{nullptr}, hMultVsMissingRefXjToBeUnfolded_W{nullptr}, hRecoQuenching_WithDijet_W{nullptr}, hGenQuenching_WithDijet_W{nullptr},
     hMultVsUnflippedMatchedRecoXj_W{nullptr}, hMultVsUnflippedMatchedRefXj_DiJetW{nullptr}, hMultVsUnflippedMatchedRefXj_W{nullptr}, hMultVsMatchedRecoXj_W{nullptr},
     hRefDeltaPhi_W{nullptr}, hRefDeltaPhi_WithDiJet_W{nullptr}, hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W{nullptr}, hMultVsFakeRefXjToBeUnfolded_W{nullptr},
-    hMultVsFakeRefXjForTesting_W{nullptr}
+    hMultVsFakeRefXjForTesting_W{nullptr}, hFakeLeadXj_W{nullptr}, hFakeSubLeadXj_W{nullptr}
 {
     /* Empty*/
 }
@@ -271,6 +271,8 @@ HistoManagerDiJet::~HistoManagerDiJet()
     if (hMultVsFakeRefXjForTesting_W) delete hMultVsFakeRefXjForTesting_W;
     if (hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W) delete hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W;
     if (hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W) delete hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W;
+    if (hFakeLeadXj_W) delete hFakeLeadXj_W;
+    if (hFakeSubLeadXj_W) delete hFakeSubLeadXj_W;
 
     for (auto hist : hXj_Projection_W) delete hist;
     for (auto hist : hXj_ProjectionHiHF_W) delete hist;
@@ -639,6 +641,10 @@ void HistoManagerDiJet::init()
         hMultVsFakeRefXjToBeUnfolded_W = new TH2D("hMultVsFakeRefXjToBeUnfolded_W", "Fake Ref Xj Distribution To Be Unfolded Weighted", nXjAjBinsUnfolding,
                                                   XjBinsUnfolding, nMultiplicityBins, multBinArray);
         hMultVsFakeRefXjToBeUnfolded_W->Sumw2();
+        hFakeLeadXj_W = new TH1D("hFakeLeadXj_W", "Fake Lead Xj Weighted", nXjAjBinsUnfolding, XjBinsUnfolding);
+        hFakeLeadXj_W->Sumw2();
+        hFakeSubLeadXj_W = new TH1D("hFakeSubLeadXj_W", "Fake SubLead Xj Weighted", nXjAjBinsUnfolding, XjBinsUnfolding);
+        hFakeSubLeadXj_W->Sumw2();
     }
     // Float_t LeadSubLeadPtBins[] = {0.0, 50., 60., 70., 80., 90., 100., 110., 120., 130., 140., 150., 160., 170., 180., 190., 200., 220., 240., 260., 280., 300.,
     // 350., 400., 450., 500., 600., 700., 1200.};
@@ -1415,6 +1421,8 @@ void HistoManagerDiJet ::writeOutput()
         hMultVsMissingRefXjToBeUnfolded_W->Write();
         hMultVsFakeRefXjForTesting_W->Write();
         hMultVsFakeRefXjToBeUnfolded_W->Write();
+        hFakeLeadXj_W->Write();
+        hFakeSubLeadXj_W->Write();
     }
 
     std::cout << "Writing Histograms Complete" << std::endl;
