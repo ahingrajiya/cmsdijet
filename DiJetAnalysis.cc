@@ -1652,7 +1652,7 @@ void DiJetAnalysis::processRecoJets(const Event* event, const Double_t& event_We
             }
         }
 
-        if (fIsRecoDiJetFound && !fIsRefDijetFound)
+        if (fIsRecoDiJetFound && matchedRefXj < 0.0)
         {
             // std::cout << matchedRefXj << std::endl;
             fHM->hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W->Fill(Xj, matchedRefXj, multiplicityBin, event_Weight);
