@@ -526,9 +526,12 @@ void HistoManagerDiJet::init()
                                                       0.35, 0.375, 0.4,  0.425, 0.45, 0.475, 0.5,  0.525, 0.55, 0.575, 0.6,  0.625, 0.65, 0.675,
                                                       0.7,  0.725, 0.75, 0.775, 0.8,  0.825, 0.85, 0.875, 0.9,  0.925, 0.95, 0.975, 1.0};
 
-    int QuenchBins[5] = {nXjAjBins, nDphiBins, 100, 100, nMultiplicityBins + 1};
+    const int nLeadPtBins = 8;
+    double leadPtBins[nLeadPtBins + 1] = {50., 55., 60., 65., 70., 80., 90., 200., 5360.};
+
+    int QuenchBins[5] = {nXjAjBins, nDphiBins, 200, 200, nMultiplicityBins + 1};
     Double_t QuenchMin[5] = {0.0, 0.0, 0.0, 0.0, fMultiplicityBins[0]};
-    Double_t QuenchMax[5] = {2.0, TMath::Pi(), 1000.0, 1000.0, fMultiplicityBins[fMultiplicityBins.size() - 1] + 1};
+    Double_t QuenchMax[5] = {1.0, TMath::Pi(), 1000.0, 1000.0, fMultiplicityBins[fMultiplicityBins.size() - 1] + 1};
     double multBinArray[fMultiplicityBins.size() + 1];
     copy(fMultiplicityBins.begin(), fMultiplicityBins.end(), multBinArray);
     multBinArray[fMultiplicityBins.size()] = fMultiplicityBins[fMultiplicityBins.size() - 1] + 1;
@@ -539,6 +542,10 @@ void HistoManagerDiJet::init()
     int QuenchBinsWithDijet[4] = {nXjAjBins, 500, 500, nMultiplicityBins + 1};
     Double_t QuenchMinWithDijet[4] = {0.0, 0.0, 0.0, fMultiplicityBins[0]};
     Double_t QuenchMaxWithDijet[4] = {1.0, 1000.0, 1000.0, fMultiplicityBins[fMultiplicityBins.size() - 1] + 1};
+
+    int UnfoldingBins[4] = {nXjAjBins, nXjAjBins, nMultiplicityBins + 1, nLeadPtBins};
+    double UnfoldingMin[4] = {0., 0., fMultiplicityBins[0], 0.};
+    double UnfoldingMax[4] = {1.0, 1.0, fMultiplicityBins[fMultiplicityBins.size() - 1] + 1, 1.};
 
     hRecoQuenching_W = new THnSparseD("hRecoQuenching_W", "Reco Quenching", 5, QuenchBins, QuenchMin, QuenchMax);
     hRecoQuenching_W->GetAxis(0)->Set(QuenchBins[0], XjBins);
@@ -552,9 +559,9 @@ void HistoManagerDiJet::init()
     hDeltaPhi_W->Sumw2();
     hDeltaPhi_WithDiJet_W = new TH1D("hDeltaPhi_WithDiJet_W", "Delta Phi Distribution With Dijet Present Weighted", nDphiBins, DphiBins);
     hDeltaPhi_WithDiJet_W->Sumw2();
-    hMultVsXj_W = new TH2D("hMultVsXj_W", "Xj Distribution Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
+    hMultVsXj_W = new TH3D("hMultVsXj_W", "Xj Distribution Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray, nLeadPtBins, leadPtBins);
     hMultVsXj_W->Sumw2();
-    hMultVsXj_DiJetW = new TH2D("hMultVsXj_DiJetW", "Xj Distribution DijetWeighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
+    hMultVsXj_DiJetW = new TH3D("hMultVsXj_DiJetW", "Xj Distribution DijetWeighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray, nLeadPtBins, leadPtBins);
     hMultVsXj_DiJetW->Sumw2();
     hMultVsXj_HiHFW = new TH2D("hMultVsXj_HiHFW", "Xj Distribution HiHFWeighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
     hMultVsXj_HiHFW->Sumw2();
@@ -581,38 +588,48 @@ void HistoManagerDiJet::init()
         hRefDeltaPhi_W->Sumw2();
         hRefDeltaPhi_WithDiJet_W = new TH1D("hRefDeltaPhi_WithDiJet_W", "Ref Delta Phi Distribution With Diejt Present Weighted", nDphiBins, DphiBins);
         hRefDeltaPhi_WithDiJet_W->Sumw2();
-        hMultVsRefXj_W = new TH2D("hMultVsRefXj_W", "RefXj Distribution Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
+        hMultVsRefXj_W = new TH3D("hMultVsRefXj_W", "RefXj Distribution Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray, nLeadPtBins, leadPtBins);
         hMultVsRefXj_W->Sumw2();
-        hMultVsRefXj_DiJetW = new TH2D("hMultVsRefXj_DiJetW", "RefXj Distribution XjWeighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
+        hMultVsRefXj_DiJetW =
+            new TH3D("hMultVsRefXj_DiJetW", "RefXj Distribution XjWeighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray, nLeadPtBins, leadPtBins);
         hMultVsRefXj_DiJetW->Sumw2();
-        hMultVsMatchedRefXj_W = new TH2D("hMultVsMatchedRefXj_W", "Matched RefXj Distribution Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
+        hMultVsMatchedRefXj_W =
+            new TH3D("hMultVsMatchedRefXj_W", "Matched RefXj Distribution Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray, nLeadPtBins, leadPtBins);
         hMultVsMatchedRefXj_W->Sumw2();
-        hMultVsMatchedRefXj_DiJetW =
-            new TH2D("hMultVsMatchedRefXj_DiJetW", "Matched RefXj Distribution DiJet Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
+        hMultVsMatchedRefXj_DiJetW = new TH3D("hMultVsMatchedRefXj_DiJetW", "Matched RefXj Distribution DiJet Weighted", nXjAjBins, XjBins, nMultiplicityBins,
+                                              multBinArray, nLeadPtBins, leadPtBins);
         hMultVsMatchedRefXj_DiJetW->Sumw2();
-        hMultVsGenXj_W = new TH2D("hMultVsGenXj_W", "Gen Xj Distribution Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
+        hMultVsGenXj_W = new TH3D("hMultVsGenXj_W", "Gen Xj Distribution Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray, nLeadPtBins, leadPtBins);
         hMultVsGenXj_W->Sumw2();
-        hMultVsGenXj_DiJetW = new TH2D("hMultVsGenXj_DiJetW", "Gen Xj Distribution DijetWeighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
+        hMultVsGenXj_DiJetW =
+            new TH3D("hMultVsGenXj_DiJetW", "Gen Xj Distribution DijetWeighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray, nLeadPtBins, leadPtBins);
         hMultVsGenXj_DiJetW->Sumw2();
-        hMultVsMatchedRecoXj_W = new TH2D("hMultVsMatchedRecoXj_W", "Matched RecoXj Distribution", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
+        hMultVsMatchedRecoXj_W =
+            new TH3D("hMultVsMatchedRecoXj_W", "Matched RecoXj Distribution", nXjAjBins, XjBins, nMultiplicityBins, multBinArray, nLeadPtBins, leadPtBins);
         hMultVsMatchedRecoXj_W->Sumw2();
-        hMultVsUnflippedMatchedRecoXj_W =
-            new TH2D("hMultVsUnflippedMatchedRecoXj_W", "Matched Unflipped RecoXj Distribution", nXjAjBins_ER, XjBins_ER, nMultiplicityBins, multBinArray);
+        hMultVsUnflippedMatchedRecoXj_W = new TH3D("hMultVsUnflippedMatchedRecoXj_W", "Matched Unflipped RecoXj Distribution", nXjAjBins_ER, XjBins_ER, nMultiplicityBins,
+                                                   multBinArray, nLeadPtBins, leadPtBins);
         hMultVsUnflippedMatchedRecoXj_W->Sumw2();
-        hMultVsUnflippedMatchedRefXj_W =
-            new TH2D("hMultVsUnflippedMatchedRefXj_W", "Matched Unflipped RefXj Distribution", nXjAjBins_ER, XjBins_ER, nMultiplicityBins, multBinArray);
+        hMultVsUnflippedMatchedRefXj_W = new TH3D("hMultVsUnflippedMatchedRefXj_W", "Matched Unflipped RefXj Distribution", nXjAjBins_ER, XjBins_ER, nMultiplicityBins,
+                                                  multBinArray, nLeadPtBins, leadPtBins);
         hMultVsUnflippedMatchedRefXj_W->Sumw2();
-        hMultVsUnflippedMatchedRefXj_DiJetW = new TH2D("hMultVsUnflippedMatchedRefXj_DiJetW", "Matched Unflipped RefXj Distribution DiJet Weighted", nXjAjBins_ER,
-                                                       XjBins_ER, nMultiplicityBins, multBinArray);
+        hMultVsUnflippedMatchedRefXj_DiJetW = new TH3D("hMultVsUnflippedMatchedRefXj_DiJetW", "Matched Unflipped RefXj Distribution DiJet Weighted", nXjAjBins_ER,
+                                                       XjBins_ER, nMultiplicityBins, multBinArray, nLeadPtBins, leadPtBins);
         hMultVsUnflippedMatchedRefXj_DiJetW->Sumw2();
 
         hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W =
-            new TH3D("hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W", "Unfolding RefXj vs RecoXj vs Multiplicity Weighted To Be Unfolded", nXjAjBinsUnfolding,
-                     XjBinsUnfolding, nXjAjBinsUnfolding, XjBinsUnfolding, nMultiplicityBins, multBinArray);
+            new THnSparseD("hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W", "Unfolding RefXj vs RecoXj vs Multiplicity Weighted To Be Unfolded", 4, UnfoldingBins,
+                           UnfoldingMin, UnfoldingMax);
+        hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W->GetAxis(0)->Set(UnfoldingBins[0], XjBins);
+        hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W->GetAxis(1)->Set(UnfoldingBins[1], XjBins);
+        hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W->GetAxis(3)->Set(UnfoldingBins[3], leadPtBins);
         hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W->Sumw2();
         hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W =
-            new TH3D("hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W", "Unfolding RefXj vs RecoXj vs Multiplicity Weighted For Testing", nXjAjBinsUnfolding,
-                     XjBinsUnfolding, nXjAjBinsUnfolding, XjBinsUnfolding, nMultiplicityBins, multBinArray);
+            new THnSparseD("hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W", "Unfolding RefXj vs RecoXj vs Multiplicity Weighted For Testing", 4, UnfoldingBins,
+                           UnfoldingMin, UnfoldingMax);
+        hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W->GetAxis(0)->Set(UnfoldingBins[0], XjBins);
+        hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W->GetAxis(0)->Set(UnfoldingBins[1], XjBins);
+        hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W->GetAxis(0)->Set(UnfoldingBins[3], leadPtBins);
         hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W->Sumw2();
         hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W =
             new TH3D("hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W", "Unfolding RefXj vs RecoXj vs Multiplicity Missing Jets Weighted", nXjAjBinsUnfolding,
@@ -641,9 +658,10 @@ void HistoManagerDiJet::init()
         hMultVsFakeRefXjToBeUnfolded_W = new TH2D("hMultVsFakeRefXjToBeUnfolded_W", "Fake Ref Xj Distribution To Be Unfolded Weighted", nXjAjBinsUnfolding,
                                                   XjBinsUnfolding, nMultiplicityBins, multBinArray);
         hMultVsFakeRefXjToBeUnfolded_W->Sumw2();
-        hFakeLeadXj_W = new TH1D("hFakeLeadXj_W", "Fake Lead Xj Weighted", nXjAjBinsUnfolding, XjBinsUnfolding);
+        hFakeLeadXj_W = new TH3D("hFakeLeadXj_W", "Fake Lead Xj Weighted", nXjAjBinsUnfolding, XjBinsUnfolding, nMultiplicityBins, multBinArray, nLeadPtBins, leadPtBins);
         hFakeLeadXj_W->Sumw2();
-        hFakeSubLeadXj_W = new TH1D("hFakeSubLeadXj_W", "Fake SubLead Xj Weighted", nXjAjBinsUnfolding, XjBinsUnfolding);
+        hFakeSubLeadXj_W =
+            new TH3D("hFakeSubLeadXj_W", "Fake SubLead Xj Weighted", nXjAjBinsUnfolding, XjBinsUnfolding, nMultiplicityBins, multBinArray, nLeadPtBins, leadPtBins);
         hFakeSubLeadXj_W->Sumw2();
     }
     // Float_t LeadSubLeadPtBins[] = {0.0, 50., 60., 70., 80., 90., 100., 110., 120., 130., 140., 150., 160., 170., 180., 190., 200., 220., 240., 260., 280., 300.,

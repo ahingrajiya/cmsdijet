@@ -1304,14 +1304,14 @@ void DiJetAnalysis::processRecoJets(const Event* event, const Double_t& event_We
         // std::cout << Form("Raw Pt: %f, Jet Pt: %f, Jet Eta: %f, Jet Phi: %f", rawPt, jetPt,
         // jetEta, jetPhi) << std::endl;
 
-        if (fIsMC && TMath::Abs(refEta) < 3.0)
+        if (fIsMC && TMath::Abs(refEta) < 2.0)
         {
             // std::cout << Form("Ref Pt: %f, Ref Eta: %f, Ref Phi: %f", refPt, refEta, refPhi) <<
             // std::endl;
 
             fHM->hRecoJES_W->Fill(jetPt / refPt, jetPt, multiplicityBin, event_Weight);
             fHM->hRefJES_W->Fill(jetPt / refPt, refPt, multiplicityBin, event_Weight);
-            if (refPt > 30.0)
+            if (refPt > 20.0)
             {
                 fHM->hRecoJES_Eta_W->Fill(jetPt / refPt, jetEta, multiplicityBin, event_Weight);
                 fHM->hRefJES_Eta_W->Fill(jetPt / refPt, refEta, multiplicityBin, event_Weight);
@@ -1504,8 +1504,8 @@ void DiJetAnalysis::processRecoJets(const Event* event, const Double_t& event_We
 
             fIsRecoDiJetFound = kTRUE;
             fHM->hDeltaPhi_WithDiJet_W->Fill(deltaPhi, event_Weight);
-            fHM->hMultVsXj_W->Fill(Xj, multiplicityBin, event_Weight);
-            fHM->hMultVsXj_DiJetW->Fill(Xj, multiplicityBin, event_Weight * fDijetWeight);
+            fHM->hMultVsXj_W->Fill(Xj, multiplicityBin, leadJetPt, event_Weight);
+            fHM->hMultVsXj_DiJetW->Fill(Xj, multiplicityBin, leadJetPt, event_Weight * fDijetWeight);
             fHM->hMultVsXj_HiHFW->Fill(Xj, multiplicityBin, event_Weight * HiHFWeight(event->hiHFPlus()));
             fHM->hHiHFVsXj_W->Fill(Xj, FindBin(static_cast<double>(event->hiHFPlus()), fHiHFBins), event_Weight);
             fHM->hHiHFVsXj_HiHFW->Fill(Xj, FindBin(static_cast<double>(event->hiHFPlus()), fHiHFBins), event_Weight * HiHFWeight(event->hiHFPlus()));
@@ -1522,16 +1522,16 @@ void DiJetAnalysis::processRecoJets(const Event* event, const Double_t& event_We
             fHM->hRecoQuenching_WithDijet_W->Fill(QuenchingQuantitiesWithDijet, event_Weight);
             if (fIsMC)
             {
-                fHM->hMultVsUnflippedMatchedRefXj_W->Fill(matchedRefXj, multiplicityBin, event_Weight);
-                fHM->hMultVsUnflippedMatchedRefXj_DiJetW->Fill(matchedRefXj, multiplicityBin, event_Weight * fDijetWeight);
+                fHM->hMultVsUnflippedMatchedRefXj_W->Fill(matchedRefXj, multiplicityBin, leadMatchedJetPt, event_Weight);
+                fHM->hMultVsUnflippedMatchedRefXj_DiJetW->Fill(matchedRefXj, multiplicityBin, leadMatchedJetPt, event_Weight * fDijetWeight);
                 if (matchedRefXj > 1.0)
                 {
                     matchedRefXj = 1. / matchedRefXj;
                     std::swap(leadMatchedJetPt, subLeadMatchedJetPt);
                 }
 
-                fHM->hMultVsMatchedRefXj_W->Fill(matchedRefXj, multiplicityBin, event_Weight);
-                fHM->hMultVsMatchedRefXj_DiJetW->Fill(matchedRefXj, multiplicityBin, event_Weight * fDijetWeight);
+                fHM->hMultVsMatchedRefXj_W->Fill(matchedRefXj, multiplicityBin, leadMatchedJetPt, event_Weight);
+                fHM->hMultVsMatchedRefXj_DiJetW->Fill(matchedRefXj, multiplicityBin, leadMatchedJetPt, event_Weight * fDijetWeight);
 
                 fHM->hRefLeadPtVsRefSubLeadPtMatched_PtHatW->Fill(subLeadMatchedJetPt, leadMatchedJetPt, event_Weight);
                 fHM->hRefLeadPtVsRefSubLeadPtMatched_DiJetW->Fill(subLeadMatchedJetPt, leadMatchedJetPt, event_Weight * fDijetWeight);
@@ -1541,11 +1541,11 @@ void DiJetAnalysis::processRecoJets(const Event* event, const Double_t& event_We
         }
         if (leadFlavor == 0)
         {
-            fHM->hFakeLeadXj_W->Fill(Xj, event_Weight);
+            fHM->hFakeLeadXj_W->Fill(Xj, multiplicityBin, leadJetPt, event_Weight);
         }
         else if (subLeadFlavor == 0)
         {
-            fHM->hFakeSubLeadXj_W->Fill(Xj, event_Weight);
+            fHM->hFakeSubLeadXj_W->Fill(Xj, multiplicityBin, leadJetPt, event_Weight);
         }
     }
 
@@ -1589,14 +1589,14 @@ void DiJetAnalysis::processRecoJets(const Event* event, const Double_t& event_We
                 fHM->hRefLeadPtvsRefSubLeadPt_PtHatW->Fill(subLeadRefPt, leadRefPt, event_Weight);
                 fHM->hRefLeadPtvsRefSubLeadPt_DiJetW->Fill(subLeadRefPt, leadRefPt, event_Weight * fDijetWeight);
 
-                fHM->hMultVsUnflippedMatchedRecoXj_W->Fill(matchedRecoXj, multiplicityBin, event_Weight);
+                fHM->hMultVsUnflippedMatchedRecoXj_W->Fill(matchedRecoXj, multiplicityBin, leadMatchedRecoJetPt, event_Weight);
                 if (matchedRecoXj > 1.0)
                 {
                     matchedRecoXj = 1. / matchedRecoXj;
                 }
-                fHM->hMultVsMatchedRecoXj_W->Fill(matchedRecoXj, multiplicityBin, event_Weight);
-                fHM->hMultVsRefXj_W->Fill(refXj, multiplicityBin, event_Weight);
-                fHM->hMultVsRefXj_DiJetW->Fill(refXj, multiplicityBin, event_Weight * fDijetWeight);
+                fHM->hMultVsMatchedRecoXj_W->Fill(matchedRecoXj, multiplicityBin, leadMatchedRecoJetPt, event_Weight);
+                fHM->hMultVsRefXj_W->Fill(refXj, multiplicityBin, leadRefPt, event_Weight);
+                fHM->hMultVsRefXj_DiJetW->Fill(refXj, multiplicityBin, leadRefPt, event_Weight * fDijetWeight);
             }
         }
     }
@@ -1606,11 +1606,13 @@ void DiJetAnalysis::processRecoJets(const Event* event, const Double_t& event_We
         double rndm = uniform01();
         bool areRefVsMacthedRefEqual = areDoublesEqual(refXj, matchedRefXj);
 
+        double unfoldingQuantities[4] = {Xj, matchedRefXj, multiplicityBin, leadJetPt};
+
         if (rndm <= 0.5)
         {
             if (fIsRecoDiJetFound)
             {
-                fHM->hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W->Fill(Xj, matchedRefXj, multiplicityBin, event_Weight);
+                fHM->hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W->Fill(unfoldingQuantities, event_Weight);
                 if (!fIsRefDijetFound)
                 {
                     fHM->hMultVsFakeRecoXjForTesting_W->Fill(Xj, multiplicityBin, event_Weight);
@@ -1638,7 +1640,7 @@ void DiJetAnalysis::processRecoJets(const Event* event, const Double_t& event_We
         {
             if (fIsRecoDiJetFound)
             {
-                fHM->hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W->Fill(Xj, matchedRefXj, multiplicityBin, event_Weight);
+                fHM->hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W->Fill(unfoldingQuantities, event_Weight);
                 if (!fIsRefDijetFound)
                 {
                     fHM->hMultVsFakeRecoXjToBeUnfolded_W->Fill(Xj, multiplicityBin, event_Weight);
@@ -1799,8 +1801,8 @@ void DiJetAnalysis::processGenJets(const Event* event, const Double_t& event_Wei
         {
             fIsGenDiJetFound = kTRUE;
             fHM->hGenDeltaPhi_WithDiJet_W->Fill(deltaPhi, event_Weight);
-            fHM->hMultVsGenXj_W->Fill(Xj, multiplicityBin, event_Weight);
-            fHM->hMultVsGenXj_DiJetW->Fill(Xj, multiplicityBin, event_Weight * fDijetWeight);
+            fHM->hMultVsGenXj_W->Fill(Xj, multiplicityBin, genLeadJetPt, event_Weight);
+            fHM->hMultVsGenXj_DiJetW->Fill(Xj, multiplicityBin, genLeadJetPt, event_Weight * fDijetWeight);
             fHM->hNGenDijetEvent->Fill(1);
 
             Double_t QuenchingQuantitiesWithDijet[4] = {Xj, genLeadJetPt, genSubLeadJetPt, multiplicityBin};

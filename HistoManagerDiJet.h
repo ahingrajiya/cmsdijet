@@ -161,23 +161,24 @@ class HistoManagerDiJet : public BaseHistoManager
     THnSparseD* hGenQuenching_W;
     THnSparseD* hRecoQuenching_WithDijet_W;
     THnSparseD* hGenQuenching_WithDijet_W;
-    TH2D* hMultVsXj_W;
-    TH2D* hMultVsXj_DiJetW;
+
     TH2D* hMultVsXj_HiHFW;
-    TH2D* hMultVsMatchedRefXj_W;
-    TH2D* hMultVsMatchedRefXj_DiJetW;
-    TH2D* hMultVsUnflippedMatchedRefXj_W;
-    TH2D* hMultVsUnflippedMatchedRefXj_DiJetW;
     TH2D* hHiHFVsXj_W;
     TH2D* hHiHFVsXj_HiHFW;
 
-    TH2D* hMultVsRefXj_W;
-    TH2D* hMultVsRefXj_DiJetW;
-    TH2D* hMultVsMatchedRecoXj_W;
-    TH2D* hMultVsUnflippedMatchedRecoXj_W;
+    TH3D* hMultVsXj_W;
+    TH3D* hMultVsXj_DiJetW;
+    TH3D* hMultVsMatchedRefXj_W;
+    TH3D* hMultVsMatchedRefXj_DiJetW;
+    TH3D* hMultVsUnflippedMatchedRefXj_W;
+    TH3D* hMultVsUnflippedMatchedRefXj_DiJetW;
+    TH3D* hMultVsRefXj_W;
+    TH3D* hMultVsRefXj_DiJetW;
+    TH3D* hMultVsMatchedRecoXj_W;
+    TH3D* hMultVsUnflippedMatchedRecoXj_W;
+    TH3D* hMultVsGenXj_W;
+    TH3D* hMultVsGenXj_DiJetW;
 
-    TH2D* hMultVsGenXj_W;
-    TH2D* hMultVsGenXj_DiJetW;
     TH1D* hVzWithDijet_W;
     TH1D* hDeltaPhi_W;
     TH1D* hDeltaPhi_WithDiJet_W;
@@ -208,8 +209,8 @@ class HistoManagerDiJet : public BaseHistoManager
     TH2D *hHiHFPlusVsMultiplicity_W, *hHiHFMinusVsMultiplicity_W;
     TH2D *hHiHFPlusVsMultiplicity_WithDijet_W, *hHiHFMinusVsMultiplicity_WithDijet_W;
 
-    TH3D* hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W;
-    TH3D* hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W;
+    THnSparseD* hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W;
+    THnSparseD* hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W;
     TH3D* hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W;
     TH3D* hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W;
     TH2D* hMultVsFakeRefXjToBeUnfolded_W;
@@ -218,8 +219,8 @@ class HistoManagerDiJet : public BaseHistoManager
     TH2D* hMultVsFakeRefXjForTesting_W;
     TH2D* hMultVsMissingRefXjToBeUnfolded_W;
     TH2D* hMultVsMissingRefXjForTesting_W;
-    TH1D* hFakeLeadXj_W;
-    TH1D* hFakeSubLeadXj_W;
+    TH3D* hFakeLeadXj_W;
+    TH3D* hFakeSubLeadXj_W;
 
    private:
     Bool_t fIsMC;
