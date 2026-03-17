@@ -628,8 +628,8 @@ void HistoManagerDiJet::init()
             new THnSparseD("hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W", "Unfolding RefXj vs RecoXj vs Multiplicity Weighted For Testing", 4, UnfoldingBins,
                            UnfoldingMin, UnfoldingMax);
         hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W->GetAxis(0)->Set(UnfoldingBins[0], XjBins);
-        hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W->GetAxis(0)->Set(UnfoldingBins[1], XjBins);
-        hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W->GetAxis(0)->Set(UnfoldingBins[3], leadPtBins);
+        hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W->GetAxis(1)->Set(UnfoldingBins[1], XjBins);
+        hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W->GetAxis(3)->Set(UnfoldingBins[3], leadPtBins);
         hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W->Sumw2();
         hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W =
             new TH3D("hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W", "Unfolding RefXj vs RecoXj vs Multiplicity Missing Jets Weighted", nXjAjBinsUnfolding,
@@ -700,10 +700,10 @@ void HistoManagerDiJet::init()
         hRefLeadPtVsRefSubLeadPtMatched_PtHatW->Sumw2();
 
         hRecoJES_W =
-            new TH3D("hRecoJES_W", "Reco JES Weighted", 200, 0.0, 2.0, 200, 0.0, 1000.0, nMultiplicityBins, multBinArray[0], multBinArray[fMultiplicityBins.size() - 1]);
+            new TH3D("hRecoJES_W", "Reco JES Weighted", 200, 0.0, 2.0, 500, 0.0, 1000.0, nMultiplicityBins, multBinArray[0], multBinArray[fMultiplicityBins.size() - 1]);
         hRecoJES_W->Sumw2();
         hRefJES_W =
-            new TH3D("hRefJES_W", "Ref JES Weighted", 200, 0.0, 2.0, 200, 0.0, 1000.0, nMultiplicityBins, multBinArray[0], multBinArray[fMultiplicityBins.size() - 1]);
+            new TH3D("hRefJES_W", "Ref JES Weighted", 200, 0.0, 2.0, 500, 0.0, 1000.0, nMultiplicityBins, multBinArray[0], multBinArray[fMultiplicityBins.size() - 1]);
         hRefJES_W->Sumw2();
         hRecoJES_Eta_W = new TH3D("hRecoJES_Eta_W", "Reco JES Weighted", 200, 0.0, 2.0, 200, -5.0, 5.0, nMultiplicityBins, multBinArray[0],
                                   multBinArray[fMultiplicityBins.size() - 1]);
@@ -722,7 +722,7 @@ void HistoManagerDiJet::init()
         hRefJES_Eta_Pt100_W->Sumw2();
         hRefJES_Eta_Pt120_W = new TH3D("hRefJES_Eta_Pt120_W", "Ref JES Weighted", 200, 0.0, 2.0, 200, -5.0, 5.0, nMultiplicityBins, multBinArray[0],
                                        multBinArray[fMultiplicityBins.size() - 1]);
-        hRefJES_Eta_Pt100_W->Sumw2();
+        hRefJES_Eta_Pt120_W->Sumw2();
     }
 
     Double_t trkEtaBins[] = {-2.4, -2.1, -1.8, -1.5, -1.3, -1.1, -0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0.0,

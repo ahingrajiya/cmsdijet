@@ -1304,7 +1304,7 @@ void DiJetAnalysis::processRecoJets(const Event* event, const Double_t& event_We
         // std::cout << Form("Raw Pt: %f, Jet Pt: %f, Jet Eta: %f, Jet Phi: %f", rawPt, jetPt,
         // jetEta, jetPhi) << std::endl;
 
-        if (fIsMC && TMath::Abs(refEta) < 2.0)
+        if (fIsMC && TMath::Abs(refEta) < 2.0 && refPt > 15)
         {
             // std::cout << Form("Ref Pt: %f, Ref Eta: %f, Ref Phi: %f", refPt, refEta, refPhi) <<
             // std::endl;
