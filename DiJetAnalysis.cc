@@ -1535,11 +1535,11 @@ void DiJetAnalysis::processRecoJets(const Event* event, const Double_t& event_We
 
                 fHM->hRefLeadPtVsRefSubLeadPtMatched_PtHatW->Fill(subLeadMatchedJetPt, leadMatchedJetPt, event_Weight);
                 fHM->hRefLeadPtVsRefSubLeadPtMatched_DiJetW->Fill(subLeadMatchedJetPt, leadMatchedJetPt, event_Weight * fDijetWeight);
+                fHM->hLeadPtVsRefXj_W->Fill(matchedRefXj, leadMatchedJetPt, event_Weight);
             }
 
             fHM->hNDijetEvent->Fill(1);
             fHM->hLeadPtVsRecoXj_W->Fill(Xj, leadJetPt, event_Weight);
-            fHM->hLeadPtVsRefXj_W->Fill(refXj, matchedRefXj, event_Weight);
         }
         if (leadFlavor == 0)
         {
