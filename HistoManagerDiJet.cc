@@ -65,7 +65,8 @@ ClassImp(HistoManagerDiJet)
     hMultVsMissingRefXjForTesting_W{nullptr}, hMultVsMissingRefXjToBeUnfolded_W{nullptr}, hRecoQuenching_WithDijet_W{nullptr}, hGenQuenching_WithDijet_W{nullptr},
     hMultVsUnflippedMatchedRecoXj_W{nullptr}, hMultVsUnflippedMatchedRefXj_DiJetW{nullptr}, hMultVsUnflippedMatchedRefXj_W{nullptr}, hMultVsMatchedRecoXj_W{nullptr},
     hRefDeltaPhi_W{nullptr}, hRefDeltaPhi_WithDiJet_W{nullptr}, hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W{nullptr}, hMultVsFakeRefXjToBeUnfolded_W{nullptr},
-    hMultVsFakeRefXjForTesting_W{nullptr}, hFakeLeadXj_W{nullptr}, hFakeSubLeadXj_W{nullptr}
+    hMultVsFakeRefXjForTesting_W{nullptr}, hFakeLeadXj_W{nullptr}, hFakeSubLeadXj_W{nullptr}, hLeadPtVsRecoXj_W{nullptr}, hLeadPtVsRefXj_W{nullptr},
+    hLeadPtVsGenXj_W{nullptr}
 {
     /* Empty*/
 }
@@ -273,6 +274,9 @@ HistoManagerDiJet::~HistoManagerDiJet()
     if (hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W) delete hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W;
     if (hFakeLeadXj_W) delete hFakeLeadXj_W;
     if (hFakeSubLeadXj_W) delete hFakeSubLeadXj_W;
+    if (hLeadPtVsRefXj_W) delete hLeadPtVsRefXj_W;
+    if (hLeadPtVsRecoXj_W) delete hLeadPtVsRecoXj_W;
+    if (hLeadPtVsGenXj_W) delete hLeadPtVsGenXj_W;
 
     for (auto hist : hXj_Projection_W) delete hist;
     for (auto hist : hXj_ProjectionHiHF_W) delete hist;
@@ -526,8 +530,8 @@ void HistoManagerDiJet::init()
                                                       0.35, 0.375, 0.4,  0.425, 0.45, 0.475, 0.5,  0.525, 0.55, 0.575, 0.6,  0.625, 0.65, 0.675,
                                                       0.7,  0.725, 0.75, 0.775, 0.8,  0.825, 0.85, 0.875, 0.9,  0.925, 0.95, 0.975, 1.0};
 
-    const int nLeadPtBins = 8;
-    double leadPtBins[nLeadPtBins + 1] = {50., 55., 60., 65., 70., 80., 90., 200., 5360.};
+    const int nLeadPtBins = 10;
+    double leadPtBins[nLeadPtBins + 1] = {0.0, 25.0, 50., 55., 60., 65., 70., 80., 90., 200., 5360.};
 
     int QuenchBins[5] = {nXjAjBins, nDphiBins, 200, 200, nMultiplicityBins + 1};
     Double_t QuenchMin[5] = {0.0, 0.0, 0.0, 0.0, fMultiplicityBins[0]};
@@ -663,6 +667,13 @@ void HistoManagerDiJet::init()
         hFakeSubLeadXj_W =
             new TH3D("hFakeSubLeadXj_W", "Fake SubLead Xj Weighted", nXjAjBinsUnfolding, XjBinsUnfolding, nMultiplicityBins, multBinArray, nLeadPtBins, leadPtBins);
         hFakeSubLeadXj_W->Sumw2();
+
+        hLeadPtVsRecoXj_W = new TH2D("hLeadPtVsRecoXj_W", "Lead Pt vs Reco Xj Weighted", nXjAjBinsUnfolding, XjBinsUnfolding, nLeadPtBins, leadPtBins);
+        hLeadPtVsRecoXj_W->Sumw2();
+        hLeadPtVsRefXj_W = new TH2D("hLeadPtVsRefXj_W", "Lead Pt vs Ref Xj Weighted", nXjAjBinsUnfolding, XjBinsUnfolding, nLeadPtBins, leadPtBins);
+        hLeadPtVsRefXj_W->Sumw2();
+        hLeadPtVsGenXj_W = new TH2D("hLeadPtVsGenXj_W", "Lead Pt vs Gen Xj Weighted", nXjAjBinsUnfolding, XjBinsUnfolding, nLeadPtBins, leadPtBins);
+        hLeadPtVsGenXj_W->Sumw2();
     }
     // Float_t LeadSubLeadPtBins[] = {0.0, 50., 60., 70., 80., 90., 100., 110., 120., 130., 140., 150., 160., 170., 180., 190., 200., 220., 240., 260., 280., 300.,
     // 350., 400., 450., 500., 600., 700., 1200.};
@@ -1441,6 +1452,9 @@ void HistoManagerDiJet ::writeOutput()
         hMultVsFakeRefXjToBeUnfolded_W->Write();
         hFakeLeadXj_W->Write();
         hFakeSubLeadXj_W->Write();
+        hLeadPtVsRecoXj_W->Write();
+        hLeadPtVsRefXj_W->Write();
+        hLeadPtVsGenXj_W->Write();
     }
 
     std::cout << "Writing Histograms Complete" << std::endl;

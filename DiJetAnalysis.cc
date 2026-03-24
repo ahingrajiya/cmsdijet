@@ -1538,6 +1538,8 @@ void DiJetAnalysis::processRecoJets(const Event* event, const Double_t& event_We
             }
 
             fHM->hNDijetEvent->Fill(1);
+            fHM->hLeadPtVsRecoXj_W->Fill(Xj, leadJetPt, event_Weight);
+            fHM->hLeadPtVsRefXj_W->Fill(refXj, matchedRefXj, event_Weight);
         }
         if (leadFlavor == 0)
         {
@@ -1809,6 +1811,7 @@ void DiJetAnalysis::processGenJets(const Event* event, const Double_t& event_Wei
 
             Double_t QuenchingQuantitiesWithDijet[4] = {Xj, genLeadJetPt, genSubLeadJetPt, multiplicityBin};
             fHM->hGenQuenching_WithDijet_W->Fill(QuenchingQuantitiesWithDijet, event_Weight);
+            fHM->hLeadPtVsGenXj_W->Fill(Xj, genLeadJetPt, event_Weight);
         }
     }
     if (fIsGenDiJetFound)

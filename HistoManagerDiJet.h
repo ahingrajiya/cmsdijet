@@ -222,6 +222,10 @@ class HistoManagerDiJet : public BaseHistoManager
     TH3D* hFakeLeadXj_W;
     TH3D* hFakeSubLeadXj_W;
 
+    TH2D* hLeadPtVsRecoXj_W;
+    TH2D* hLeadPtVsRefXj_W;
+    TH2D* hLeadPtVsGenXj_W;
+
    private:
     Bool_t fIsMC;
 
