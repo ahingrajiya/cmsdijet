@@ -1539,17 +1539,24 @@ void DiJetAnalysis::processRecoJets(const Event* event, const Double_t& event_We
             }
 
             fHM->hNDijetEvent->Fill(1);
-            fHM->hLeadPtVsRecoXj_W->Fill(Xj, leadJetPt, event_Weight);
+
+            if (fIsMC)
+            {
+                fHM->hLeadPtVsRecoXj_W->Fill(Xj, leadJetPt, event_Weight);
+            }
         }
-        if (leadFlavor == 0)
+        if (fIsMC)
         {
-            fHM->hFakeLeadXj_W->Fill(Xj, multiplicityBin, leadJetPt, event_Weight);
-            fIsRecoDiJetFound = false;
-        }
-        else if (subLeadFlavor == 0)
-        {
-            fHM->hFakeSubLeadXj_W->Fill(Xj, multiplicityBin, leadJetPt, event_Weight);
-            fIsRecoDiJetFound = false;
+            if (leadFlavor == 0)
+            {
+                fHM->hFakeLeadXj_W->Fill(Xj, multiplicityBin, leadJetPt, event_Weight);
+                fIsRecoDiJetFound = false;
+            }
+            else if (subLeadFlavor == 0)
+            {
+                fHM->hFakeSubLeadXj_W->Fill(Xj, multiplicityBin, leadJetPt, event_Weight);
+                fIsRecoDiJetFound = false;
+            }
         }
     }
 
