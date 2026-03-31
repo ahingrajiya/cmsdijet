@@ -182,8 +182,8 @@ int main(int argc, char* argv[])
     analysis->setDeltaPhi(2.7);
     analysis->setLeadJetPt(50.);
     analysis->setSubLeadJetPt(30.);
-    analysis->setLeadJetEtaRange(-2.5, 2.5);
-    analysis->setSubLeadJetEtaRange(-2.5, 2.5);
+    analysis->setLeadJetEtaRange(-2.1, 2.1);
+    analysis->setSubLeadJetEtaRange(-2.1, 2.1);
     analysis->setMultBins(multiplicityBins);
     analysis->setHiHFBins(hiHFBins);
     analysis->setUEType(UEType);
