@@ -193,6 +193,7 @@ int main(int argc, char* argv[])
     analysis->setUEType(UEType);
     analysis->setInclusiveCorrectedJetPtMin(20.);
     analysis->setInclusiveJetEtaRange(-2.1, 2.1);
+    analysis->useAveragePt(true);
     if (isMC)
     {
         analysis->setUseCentralityWeight();

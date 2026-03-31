@@ -184,6 +184,8 @@ class DiJetAnalysis : public BaseAnalysis
     ///@brief Set hihf rewighting
     void useHiHFWeight(bool useWeight = false) noexcept { fUseHiHFWeight = useWeight; }
 
+    void useAveragePt(bool useAveragePt = false) noexcept { fUseAveragePt = useAveragePt; }
+
    private:
     /// @brief Reco and Corrected Multiplicity calculator with custom track pt and track eta cuts
     /// @param event Event object
@@ -321,6 +323,11 @@ class DiJetAnalysis : public BaseAnalysis
     ///@param b Second double value
     ///@return Returns true if two double values are equal within a certain precision
     bool areDoublesEqual(const double& a, const double& b);
+    /// @brief Calculates Average jet pt
+    /// @param leadpt leading jet pt
+    /// @param subleadpt subleading jet pt
+    /// @return double value of average jet pt
+    double averagePt(const double& leadpt, const double& subleadpt);
     ///@brief Print debug information
     Bool_t fDebug;
     ///@brief Delta Phi selection for dijet
@@ -442,6 +449,8 @@ class DiJetAnalysis : public BaseAnalysis
     TF1* fHiHFWeight;
     ///@brief Boolean for HiHFWeighting
     bool fUseHiHFWeight;
+    ///@brief Boolean for using averagept
+    bool fUseAveragePt;
 
     ///@brief Holds dynamic multiplicity or centrality bins
     std::map<Double_t, Double_t> fMultBins;

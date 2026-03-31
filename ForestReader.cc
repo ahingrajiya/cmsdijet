@@ -1507,7 +1507,10 @@ Event* ForestReader::returnEvent()
             fEvent->genTrackCollection()->push_back(track);
         }
         fEvent->setGenMultiplicity(iGenMult);
+    }
 
+    if (fUseTrackBranch)
+    {
         Int_t iRecoMult = 0;
         if (fIsAOD)
         {

@@ -66,7 +66,7 @@ ClassImp(HistoManagerDiJet)
     hMultVsUnflippedMatchedRecoXj_W{nullptr}, hMultVsUnflippedMatchedRefXj_DiJetW{nullptr}, hMultVsUnflippedMatchedRefXj_W{nullptr}, hMultVsMatchedRecoXj_W{nullptr},
     hRefDeltaPhi_W{nullptr}, hRefDeltaPhi_WithDiJet_W{nullptr}, hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W{nullptr}, hMultVsFakeRefXjToBeUnfolded_W{nullptr},
     hMultVsFakeRefXjForTesting_W{nullptr}, hFakeLeadXj_W{nullptr}, hFakeSubLeadXj_W{nullptr}, hLeadPtVsRecoXj_W{nullptr}, hLeadPtVsRefXj_W{nullptr},
-    hLeadPtVsGenXj_W{nullptr}
+    hLeadPtVsGenXj_W{nullptr}, hAverageRecoPt_W{nullptr}, hAverageGenPt_W{nullptr}
 {
     /* Empty*/
 }
@@ -235,6 +235,9 @@ HistoManagerDiJet::~HistoManagerDiJet()
     if (hTrackPtVsEta_W) delete hTrackPtVsEta_W;
     if (hTrackPtVsEtaCorrected) delete hTrackPtVsEtaCorrected;
     if (hTrackPtVsEtaCorrected_W) delete hTrackPtVsEtaCorrected_W;
+
+    if (hAverageGenPt_W) delete hAverageGenPt_W;
+    if (hAverageRecoPt_W) delete hAverageRecoPt_W;
 
     if (hRecoTracks) delete hRecoTracks;
     if (hRecoTracks_W) delete hRecoTracks_W;
@@ -445,6 +448,8 @@ void HistoManagerDiJet::init()
     hLeadSubLeadJets_WithDijet_DiJetW =
         new THnSparseD("hLeadSubLeadJets_WithDijet_DiJetW", "Lead vs SubLead Pt With Dijet With DiJetWeighted", 7, LeadSLeadJetBins, LeadSLeadJetMin, LeadSLeadJetMax);
     hLeadSubLeadJets_WithDijet_DiJetW->Sumw2();
+    hAverageRecoPt_W = new TH1D("hAverageRecoPt_W", "Average Reco Jet Pt", 200, 0.0, 1000.);
+    hAverageRecoPt_W->Sumw2();
     if (fIsMC)
     {
         hGenLeadingVsGenSubLeading_WO_DiJet_W = new TH2D("hGenLeadingVsGenSubLeading_WO_DiJet_W", "Gen Leading vs Gen SubLeading Jet", 100, 0., 1000., 100, 0., 1000.);
@@ -477,6 +482,8 @@ void HistoManagerDiJet::init()
         hRefLeadRefSubLeadJets_WithDijet_DiJetW = new THnSparseD("hRefLeadRefSubLeadJets_WithDijet_DiJetW", "Ref Lead vs Ref SubLead Pt With Dijet With DiJetWeighted", 7,
                                                                  LeadSLeadJetBins, LeadSLeadJetMin, LeadSLeadJetMax);
         hRefLeadRefSubLeadJets_WithDijet_DiJetW->Sumw2();
+        hAverageGenPt_W = new TH1D("hAverageGenPt_W", "Average Gen Jet Pt", 200, 0.0, 1000.);
+        hAverageGenPt_W->Sumw2();
     }
 
     const int nDphiBins = 30;  // number of bins
@@ -1188,6 +1195,7 @@ void HistoManagerDiJet ::writeOutput()
     hInclusiveRecoJetPtVsEtaCMFrame_W->Write();
     hInclusiveUnCorrectedRecoPtVsEtaCMFrame_W->Write();
     hJetFlavorFractions_W->Write();
+    hAverageRecoPt_W->Write();
 
     if (fCollSystem == "pPb")
     {
@@ -1223,6 +1231,7 @@ void HistoManagerDiJet ::writeOutput()
         hRecoJES_Eta_Pt120_W->Write();
         hRefJES_Eta_Pt100_W->Write();
         hRefJES_Eta_Pt120_W->Write();
+        hAverageGenPt_W->Write();
     }
 
     hLeadSubLeadJets->Write();

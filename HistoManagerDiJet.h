@@ -226,6 +226,9 @@ class HistoManagerDiJet : public BaseHistoManager
     TH2D* hLeadPtVsRefXj_W;
     TH2D* hLeadPtVsGenXj_W;
 
+    TH1D* hAverageRecoPt_W;
+    TH1D* hAverageGenPt_W;
+
    private:
     Bool_t fIsMC;
 

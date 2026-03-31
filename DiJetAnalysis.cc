@@ -22,7 +22,7 @@ ClassImp(DiJetAnalysis)
     hDijetWeight{nullptr}, fDijetWeightFile{nullptr}, fDijetWeight{1.0}, fDijetWeightType{"Reco"}, fIspp{kFALSE}, fIsPbPb{kFALSE}, fIsOO{kFALSE}, fCollSystem{""},
     fUEType{""}, fDoTrackingClosures{kFALSE}, fVertexZWeight{nullptr}, fDoVzWeight{kFALSE}, fRecoType{kFALSE}, fRefType{kFALSE}, fGenType{kFALSE},
     fMultWeightFunctions{nullptr}, fXBinEdges{}, fYBinEdges{}, fBinContent{}, fXBinCount{0}, fYBinCount{0}, fInclusiveCorrectedJetPtMin{50.}, fUseHiHFWeight{kFALSE},
-    fHiHFWeight{nullptr}, gen_{SEED}, dist_{0.0, 1.0}
+    fHiHFWeight{nullptr}, gen_{SEED}, dist_{0.0, 1.0}, fUseAveragePt{false}
 {
     fLeadJetEtaRange[0] = {-1.};
     fLeadJetEtaRange[1] = {1.};
@@ -1501,14 +1501,16 @@ void DiJetAnalysis::processRecoJets(const Event* event, const Double_t& event_We
             // std::cout << "Lead Jet Eta: " << leadJetEtaCM << " SubLead Jet Eta: " << subLeadJetEtaCM << std::endl;
             // std::cout << "Lead Jet Phi: " << leadJetPhi << "SubLead Jet Phi : " << subLeadJetPhi << std::endl;
             // std::cout << std::endl;
-
+            // std::cout << multiplicityBin << std::endl;
+            double jetPt = (fUseAveragePt) ? averagePt(leadJetPt, subLeadJetPt) : leadJetPt;
             fIsRecoDiJetFound = kTRUE;
             fHM->hDeltaPhi_WithDiJet_W->Fill(deltaPhi, event_Weight);
-            fHM->hMultVsXj_W->Fill(Xj, multiplicityBin, leadJetPt, event_Weight);
-            fHM->hMultVsXj_DiJetW->Fill(Xj, multiplicityBin, leadJetPt, event_Weight * fDijetWeight);
+            fHM->hMultVsXj_W->Fill(Xj, multiplicityBin, jetPt, event_Weight);
+            fHM->hMultVsXj_DiJetW->Fill(Xj, multiplicityBin, jetPt, event_Weight * fDijetWeight);
             fHM->hMultVsXj_HiHFW->Fill(Xj, multiplicityBin, event_Weight * HiHFWeight(event->hiHFPlus()));
             fHM->hHiHFVsXj_W->Fill(Xj, FindBin(static_cast<double>(event->hiHFPlus()), fHiHFBins), event_Weight);
             fHM->hHiHFVsXj_HiHFW->Fill(Xj, FindBin(static_cast<double>(event->hiHFPlus()), fHiHFBins), event_Weight * HiHFWeight(event->hiHFPlus()));
+            fHM->hAverageRecoPt_W->Fill(averagePt(leadJetPt, subLeadJetPt), event_Weight);
 
             Double_t LeadSLeadJetsWithDijet[7] = {leadJetPt, leadJetEtaCM, leadJetPhi, subLeadJetPt, subLeadJetEtaCM, subLeadJetPhi, multiplicityBin};
             fHM->hLeadSubLeadJets_WithDijet_W->Fill(LeadSLeadJetsWithDijet, event_Weight);
@@ -1923,6 +1925,11 @@ void DiJetAnalysis::processGenTracks(const Event* event, const Double_t& event_W
 bool DiJetAnalysis::areDoublesEqual(const double& a, const double& b)
 {
     return std::fabs(a - b) <= fEpsilon * std::max(std::fabs(a), std::fabs(b));
+}
+
+double DiJetAnalysis::averagePt(const double& leadpt, const double& subleadpt)
+{
+    return (leadpt + subleadpt) / 2.0;
 }
 
 void DiJetAnalysis::report()
