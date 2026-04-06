@@ -144,6 +144,12 @@ int main(int argc, char* argv[])
         // reader->setStoreLocation(kTRUE);
         reader->useSkimmingBranch();
         reader->setFilters(filters);
+        if (collEnergyGeV == 5360)
+        {
+            filters.clear();
+            filters.push_back("pprimaryVertexFilter");
+            reader->setFilters(filters);
+        }
     }
     if (isMC && collEnergyGeV == 5020)
     {
