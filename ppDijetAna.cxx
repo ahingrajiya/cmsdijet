@@ -36,9 +36,8 @@ int main(int argc, char* argv[])
     Int_t collYear{2018};
     Bool_t useCentWeight{kFALSE};
     TString jetBranchName{"ak4PFJetAnalyzer"};
-    std::vector<std::pair<Double_t, Double_t>> multiplicityBins = {{0, 0.0}, {10, 1.0}, {60, 2.0}, {120, 3.0}, {185, 4.0}, {250, 5.0}, {400, 6.0}};
-    std::vector<std::pair<double, double>> hiHFBins = {{0., 0.0},  {10., 1.0}, {20., 2.0},  {30., 3.0},  {40., 4.0},   {50., 5.0},
-                                                       {70., 6.0}, {90., 7.0}, {120., 8.0}, {150., 9.0}, {1000., 10.0}};
+    std::vector<double> multiplicityBins = {0.0, 10.0, 60., 120., 185., 250., 400.};
+    std::vector<double> hiHFBins = {0., 10., 20., 30., 40., 50., 70., 90., 120., 150., 1000.};
     // std::vector<std::string> filters{"pprimaryVertexFilter"};
     std::vector<std::string> filters{"pBeamScrapingFilter", "pPAprimaryVertexFilter", "HBHENoiseFilterResultRun2Loose"};
     std::string path2DijetWeight = "../aux_files/pp_5020/Dijet_Weight/PYTHIA_DiJetWeight_Table.root";
@@ -188,9 +187,7 @@ int main(int argc, char* argv[])
     analysis->setMinTrkPt(0.5);
     analysis->setTrkEtaRange(-2.4, 2.4);
     analysis->doInJetMultiplicity();
-    analysis->setMultBins(multiplicityBins);
 
-    analysis->setHiHFBins(hiHFBins);
     // if (isMC)
     // {
     //     analysis->setUseDijetWeight();

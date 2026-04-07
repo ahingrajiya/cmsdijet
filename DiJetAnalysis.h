@@ -57,22 +57,6 @@ class DiJetAnalysis : public BaseAnalysis
     ///@brief Return a list of objects to be written as output
     virtual TList* getOutputList();
 
-    ///@brief Set Multiplicity or Centrality bins
-    void setMultBins(const std::vector<std::pair<Double_t, Double_t>>& Bins)
-    {
-        for (const auto& [threshold, value] : Bins)
-        {
-            fMultBins[threshold] = value;
-        }
-    }
-
-    void setHiHFBins(const std::vector<std::pair<Double_t, Double_t>>& Bins)
-    {
-        for (const auto& [threshold, value] : Bins)
-        {
-            fHiHFBins[threshold] = value;
-        }
-    }
     ///@brief Set debug information
     void setDebug(const Bool_t& debug) { fDebug = debug; }
     ///@brief Add histogram Manager
@@ -451,12 +435,6 @@ class DiJetAnalysis : public BaseAnalysis
     bool fUseHiHFWeight;
     ///@brief Boolean for using averagept
     bool fUseAveragePt;
-
-    ///@brief Holds dynamic multiplicity or centrality bins
-    std::map<Double_t, Double_t> fMultBins;
-
-    ///@brief Holds dynamic multiplicity or centrality bins
-    std::map<Double_t, Double_t> fHiHFBins;
     ///@brief SEED FOR RANDOM NUMBER GENERATION
     static constexpr uint64_t SEED = 1729;
     std::mt19937_64 gen_;

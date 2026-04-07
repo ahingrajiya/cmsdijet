@@ -48,11 +48,8 @@ int main(int argc, char* argv[])
     Double_t ptHatCut[2]{15., 10000.};
     Bool_t isEmbedded{kTRUE};
     // std::vector<std::pair<double, double>> multiplicityBins = {{0, 0.0}, {10, 1.0}, {60, 2.0}, {120, 3.0}, {185, 4.0}, {250, 5.0}, {400, 6.0}, {500, 7.0}};
-    std::vector<std::pair<double, double>> multiplicityBins = {{0, 0.0},   {10, 1.0},  {20, 2.0},  {40, 3.0},  {60, 4.0},   {80, 5.0},
-                                                               {100, 6.0}, {120, 7.0}, {140, 8.0}, {160, 9.0}, {180, 10.0}, {200, 11.0}};
-    std::vector<std::pair<double, double>> hiHFBins = {{0., 0.0},    {10., 1.0},   {20., 2.0},   {30., 3.0},   {40., 4.0},   {50., 5.0},   {70., 6.0},
-                                                       {90., 7.0},   {120., 8.0},  {150., 9.0},  {180., 10.0}, {210., 11.0}, {250., 12.0}, {300., 13.0},
-                                                       {350., 14.0}, {400., 15.0}, {450., 16.0}, {500., 17.0}, {550., 18.0}, {1000., 19.0}};
+    std::vector<double> multiplicityBins = {0.0, 10., 20., 40., 60., 80., 100., 120., 140., 160., 180., 200.};
+    std::vector<double> hiHFBins = {0., 10., 20., 30., 40., 50., 70., 90., 120., 150., 180., 210., 250., 300., 350., 400., 450., 500., 550., 1000.};
     std::vector<std::string> filters{"pprimaryVertexFilter", "pphfCoincFilter2Th4"};  // pphfCoincFilterPF2Th4 pphfCoincFilter2Th4
     std::vector<std::string> filtersmc{"pprimaryVertexFilter"};
     std::string UEType{"HIJING"};
@@ -188,8 +185,6 @@ int main(int argc, char* argv[])
     analysis->setSubLeadJetPt(30.);
     analysis->setLeadJetEtaRange(-2.1, 2.1);
     analysis->setSubLeadJetEtaRange(-2.1, 2.1);
-    analysis->setMultBins(multiplicityBins);
-    analysis->setHiHFBins(hiHFBins);
     analysis->setUEType(UEType);
     analysis->setInclusiveCorrectedJetPtMin(20.);
     analysis->setInclusiveJetEtaRange(-2.1, 2.1);

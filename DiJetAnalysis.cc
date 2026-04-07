@@ -945,24 +945,6 @@ Double_t DiJetAnalysis::CentralityWeight(const int& centrality)
         return 1.0;
 }
 
-Double_t DiJetAnalysis::FindBin(const double& multiplicity, const std::map<Double_t, Double_t>& fBins)
-{
-    if (fBins.empty())
-    {
-        throw std::runtime_error("Error: Bin configuration is empty!");
-    };
-    if (multiplicity <= fBins.begin()->first) return fBins.begin()->second;
-
-    auto it = fBins.lower_bound(multiplicity);
-
-    if (it == fBins.end() || it->first > multiplicity)
-    {
-        --it;
-    }
-
-    return it->second;
-}
-
 Bool_t DiJetAnalysis::CheckDijet(const Float_t& leadpt, const Float_t& leadeta, const Float_t& subleadpt, const Float_t& subleadeta, const Bool_t& leadID,
                                  const Bool_t& subleadID)
 {
@@ -1131,11 +1113,11 @@ void DiJetAnalysis::processEvent(const Event* event)
     Double_t iMultiplicityBin;
     if (fMultiplicityType != 4)
     {
-        iMultiplicityBin = FindBin(static_cast<double>(event->multiplicity()), fMultBins);
+        iMultiplicityBin = static_cast<double>(event->multiplicity());
     }
     else if (fMultiplicityType == 4)
     {
-        iMultiplicityBin = FindBin(static_cast<double>(event->hiBinWithShift()), fMultBins);
+        iMultiplicityBin = static_cast<double>(event->hiBinWithShift());
     }
 
     Double_t iVertexZ = event->vz();
@@ -1207,7 +1189,6 @@ void DiJetAnalysis::processEvent(const Event* event)
         processGenJets(event, Event_Weight, iMultiplicityBin);
     }
     // std::cout << "HiHFPlus : " << event->hiHFPlus() << " HiHFMinus : " << event->hiHFMinus() << std::endl;
-    // std::cout << "HiHFBins : " << FindBin(event->hiHFPlus(), fHiHFBins) << std::endl;
     // std::cout << "Multiplicity : " << iMultiplicity << " Multiplicity Bins : " << iMultiplicityBin << std::endl;
 
     fHM->hVz->Fill(iVertexZ);
@@ -1508,8 +1489,8 @@ void DiJetAnalysis::processRecoJets(const Event* event, const Double_t& event_We
             fHM->hMultVsXj_W->Fill(Xj, multiplicityBin, jetPt, event_Weight);
             fHM->hMultVsXj_DiJetW->Fill(Xj, multiplicityBin, jetPt, event_Weight * fDijetWeight);
             fHM->hMultVsXj_HiHFW->Fill(Xj, multiplicityBin, event_Weight * HiHFWeight(event->hiHFPlus()));
-            fHM->hHiHFVsXj_W->Fill(Xj, FindBin(static_cast<double>(event->hiHFPlus()), fHiHFBins), event_Weight);
-            fHM->hHiHFVsXj_HiHFW->Fill(Xj, FindBin(static_cast<double>(event->hiHFPlus()), fHiHFBins), event_Weight * HiHFWeight(event->hiHFPlus()));
+            fHM->hHiHFVsXj_W->Fill(Xj, event->hiHFPlus(), event_Weight);
+            fHM->hHiHFVsXj_HiHFW->Fill(Xj, event->hiHFPlus(), event_Weight * HiHFWeight(event->hiHFPlus()));
             fHM->hAverageRecoPt_W->Fill(averagePt(leadJetPt, subLeadJetPt), event_Weight);
 
             Double_t LeadSLeadJetsWithDijet[7] = {leadJetPt, leadJetEtaCM, leadJetPhi, subLeadJetPt, subLeadJetEtaCM, subLeadJetPhi, multiplicityBin};

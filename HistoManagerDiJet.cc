@@ -21,15 +21,15 @@
 ClassImp(HistoManagerDiJet)
 
     HistoManagerDiJet::HistoManagerDiJet() :
-    BaseHistoManager(), fIsMC{kFALSE}, fMultiplicityBins{0.0}, fMultiplicityBinThresholds{0}, hRecoMultiplicity_W{nullptr}, hCorrectedMultiplicity_W{nullptr},
-    hGenMultiplicity_W{nullptr}, hSubEventMultiplicity_W{nullptr}, hSelectedMultiplicity_W{nullptr}, hMultiplicities{nullptr}, hMultiplicities_W{nullptr},
-    hPtHat{nullptr}, hPtHat_W{nullptr}, hHiBin{nullptr}, hHiBin_W{nullptr}, hVz{nullptr}, hVz_W{nullptr}, hMultiplicities_DiJet_W{nullptr}, hRecoQuenching_W{nullptr},
-    hGenQuenching_W{nullptr}, hDeltaPhi_W{nullptr}, hMultVsXj_W{nullptr}, hNDijetEvent{nullptr}, hNEventsInMult{nullptr}, hGenDeltaPhi_W{nullptr},
-    hMultVsGenXj_W{nullptr}, hNGenDijetEvent{nullptr}, hInJetMultiplicity_W{nullptr}, hGenInJetMultiplicity_W{nullptr}, hLeadSubLeadJets{nullptr},
-    hGenLeadGenSubLeadJets{nullptr}, hGenLeadGenSubLeadJets_W{nullptr}, hLeadSubLeadJets_W{nullptr}, hVzWithDijet_W{nullptr}, hMultVsXj_DiJetW{nullptr},
-    hMultVsRefXj_W{nullptr}, hMultVsRefXj_DiJetW{nullptr}, hMultVsMatchedRefXj_W{nullptr}, hMultVsMatchedRefXj_DiJetW{nullptr}, hRefLeadRefSubLeadJets{nullptr},
-    hRefLeadRefSubLeadJets_W{nullptr}, hMultVsGenXj_DiJetW{nullptr}, hRecoJES_W{nullptr}, hRefJES_W{nullptr}, hGenLeadingVsGenSubLeading_WO_DiJet_W{nullptr},
-    hLeadPtvsSubLeadPt_DiJetW{nullptr}, hRefLeadPtvsRefSubLeadPt_DiJetW{nullptr}, hLeadSubLeadJets_MidRapidity_W{nullptr}, hGenLeadGenSubLeadJets_MidRapidity_W{nullptr},
+    BaseHistoManager(), fIsMC{kFALSE}, fMultiplicityBins{0.0}, hRecoMultiplicity_W{nullptr}, hCorrectedMultiplicity_W{nullptr}, hGenMultiplicity_W{nullptr},
+    hSubEventMultiplicity_W{nullptr}, hSelectedMultiplicity_W{nullptr}, hMultiplicities{nullptr}, hMultiplicities_W{nullptr}, hPtHat{nullptr}, hPtHat_W{nullptr},
+    hHiBin{nullptr}, hHiBin_W{nullptr}, hVz{nullptr}, hVz_W{nullptr}, hMultiplicities_DiJet_W{nullptr}, hRecoQuenching_W{nullptr}, hGenQuenching_W{nullptr},
+    hDeltaPhi_W{nullptr}, hMultVsXj_W{nullptr}, hNDijetEvent{nullptr}, hNEventsInMult{nullptr}, hGenDeltaPhi_W{nullptr}, hMultVsGenXj_W{nullptr},
+    hNGenDijetEvent{nullptr}, hInJetMultiplicity_W{nullptr}, hGenInJetMultiplicity_W{nullptr}, hLeadSubLeadJets{nullptr}, hGenLeadGenSubLeadJets{nullptr},
+    hGenLeadGenSubLeadJets_W{nullptr}, hLeadSubLeadJets_W{nullptr}, hVzWithDijet_W{nullptr}, hMultVsXj_DiJetW{nullptr}, hMultVsRefXj_W{nullptr},
+    hMultVsRefXj_DiJetW{nullptr}, hMultVsMatchedRefXj_W{nullptr}, hMultVsMatchedRefXj_DiJetW{nullptr}, hRefLeadRefSubLeadJets{nullptr}, hRefLeadRefSubLeadJets_W{nullptr},
+    hMultVsGenXj_DiJetW{nullptr}, hRecoJES_W{nullptr}, hRefJES_W{nullptr}, hGenLeadingVsGenSubLeading_WO_DiJet_W{nullptr}, hLeadPtvsSubLeadPt_DiJetW{nullptr},
+    hRefLeadPtvsRefSubLeadPt_DiJetW{nullptr}, hLeadSubLeadJets_MidRapidity_W{nullptr}, hGenLeadGenSubLeadJets_MidRapidity_W{nullptr},
     hRefLeadRefSubLeadJets_MidRapidity_W{nullptr}, hGenLeadPtvsGenSubLeadPt_DiJetW{nullptr}, hLeadSubLeadJets_WithDijet_W{nullptr},
     hGenLeadGenSubLeadJets_WithDijet_W{nullptr}, hRefLeadRefSubLeadJets_WithDijet_W{nullptr}, hGenLeadPtvsGenSubLeadPt_PtHatW{nullptr},
     hRefLeadPtvsRefSubLeadPt_PtHatW{nullptr}, hLeadPtvsSubLeadPt_PtHatW{nullptr}, hDeltaPhi_WithDiJet_W{nullptr}, hGenDeltaPhi_WithDiJet_W{nullptr},
@@ -299,6 +299,13 @@ void HistoManagerDiJet::init()
     int nMultiplicityBins = fMultiplicityBins.size() - 1;
     int nHiHFEnergyBins = fHiHFEnergyBins.size() - 1;
 
+    double multBinArray[fMultiplicityBins.size() + 1];
+    copy(fMultiplicityBins.begin(), fMultiplicityBins.end(), multBinArray);
+    multBinArray[fMultiplicityBins.size()] = fMultiplicityBins[fMultiplicityBins.size() - 1] + 1;
+    double hiHFEnergyBinArray[fHiHFEnergyBins.size() + 1];
+    copy(fHiHFEnergyBins.begin(), fHiHFEnergyBins.end(), hiHFEnergyBinArray);
+    hiHFEnergyBinArray[fHiHFEnergyBins.size()] = fHiHFEnergyBins[fHiHFEnergyBins.size() - 1] + 1;
+
     hRecoMultiplicity_W = new TH1D("hRecoMultiplicity_W", "Reco Multiplicity Weighted", 600, 0.0, 600.0);
     hRecoMultiplicity_W->Sumw2();
     hCorrectedMultiplicity_W = new TH1D("hCorrectedMultiplicity_W", "Corrected Multiplicity Weighted", 600, 0.0, 600.0);
@@ -346,53 +353,73 @@ void HistoManagerDiJet::init()
     Double_t MultMin[7] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, fMultiplicityBins[0]};
     Double_t MultMax[7] = {5000.0, 5000.0, 5000.0, 5000.0, 5000.0, 200, fMultiplicityBins[fMultiplicityBins.size() - 1] + 1};
     hMultiplicities = new THnSparseD("hMultiplicities", "Multiplicity Distribution", 7, MultBins, MultMin, MultMax);
+    hMultiplicities->GetAxis(6)->Set(MultBins[6], multBinArray);
     hMultiplicities->Sumw2();
     hMultiplicities_W = new THnSparseD("hMultiplicities_W", "Multiplicity Distribution with Weights", 7, MultBins, MultMin, MultMax);
+    hMultiplicities_W->GetAxis(6)->Set(MultBins[6], multBinArray);
     hMultiplicities_W->Sumw2();
     hMultiplicities_DiJet_W = new THnSparseD("hMultiplicities_DiJet_W", "Multiplicity Distribution with Dijet Present", 7, MultBins, MultMin, MultMax);
+    hMultiplicities_DiJet_W->GetAxis(6)->Set(MultBins[6], multBinArray);
     hMultiplicities_DiJet_W->Sumw2();
 
     int JetBins[5] = {200, 52, 64, 5, nMultiplicityBins + 1};
     Double_t JetMin[5] = {0.0, -5.2, -TMath::Pi(), -2, fMultiplicityBins[0]};
     Double_t JetMax[5] = {1000.0, 5.2, TMath::Pi(), 2, fMultiplicityBins[fMultiplicityBins.size() - 1] + 1};
     hInclusiveUncorrectedRecoJets = new THnSparseD("hInclusiveUncorrectedRecoJets", "Inclusive Uncorrected Reco Jets", 5, JetBins, JetMin, JetMax);
+    hInclusiveUncorrectedRecoJets->GetAxis(4)->Set(JetBins[4], multBinArray);
     hInclusiveUncorrectedRecoJets->Sumw2();
     hInclusiveUncorrectedRecoJets_W = new THnSparseD("hInclusiveUncorrectedRecoJets_W", "Inclusive Uncorrected Reco Jets Weighted", 5, JetBins, JetMin, JetMax);
+    hInclusiveUncorrectedRecoJets_W->GetAxis(4)->Set(JetBins[4], multBinArray);
     hInclusiveUncorrectedRecoJets_W->Sumw2();
     hInclusiveRecoJetsLabFrame = new THnSparseD("hInclusiveRecoJetsLabFrame", "Inclusive Reco Jets in Lab Frame", 5, JetBins, JetMin, JetMax);
+    hInclusiveRecoJetsLabFrame->GetAxis(4)->Set(JetBins[4], multBinArray);
     hInclusiveRecoJetsLabFrame->Sumw2();
     hInclusiveRecoJetsLabFrame_W = new THnSparseD("hInclusiveRecoJetsLabFrame_W", "Inclusive Reco Jets in Lab Frame Weighted", 5, JetBins, JetMin, JetMax);
+    hInclusiveRecoJetsLabFrame_W->GetAxis(4)->Set(JetBins[4], multBinArray);
     hInclusiveRecoJetsLabFrame_W->Sumw2();
     hInclusiveRecoJetsCMFrame = new THnSparseD("hInclusiveRecoJetsCMFrame", "Inclusive Reco Jets in CM Frame", 5, JetBins, JetMin, JetMax);
+    hInclusiveRecoJetsCMFrame->GetAxis(4)->Set(JetBins[4], multBinArray);
     hInclusiveRecoJetsCMFrame->Sumw2();
     hInclusiveRecoJetsCMFrame_W = new THnSparseD("hInclusiveRecoJetsCMFrame_W", "Inclusive Reco Jets in CM Frame Weighted", 5, JetBins, JetMin, JetMax);
+    hInclusiveRecoJetsCMFrame_W->GetAxis(4)->Set(JetBins[4], multBinArray);
     hInclusiveRecoJetsCMFrame_W->Sumw2();
     hSelectedInclusiveRecoJetsMidRapidity_W =
         new THnSparseD("hSelectedInclusiveRecoJetsMidRapidity_W", "Inclusive Reco Jets (JetPt > 50.0) MidRapidity Weighted", 5, JetBins, JetMin, JetMax);
+    hSelectedInclusiveRecoJetsMidRapidity_W->GetAxis(4)->Set(JetBins[4], multBinArray);
     hSelectedInclusiveRecoJetsMidRapidity_W->Sumw2();
     if (fIsMC)
     {
         hInclusiveGenJetsLabFrame = new THnSparseD("hInclusiveGenJetsLabFrame", "Inclusive Gen Jets in Lab Frame", 5, JetBins, JetMin, JetMax);
+        hInclusiveGenJetsLabFrame->GetAxis(4)->Set(JetBins[4], multBinArray);
         hInclusiveGenJetsLabFrame->Sumw2();
         hInclusiveGenJetsLabFrame_W = new THnSparseD("hInclusiveGenJetsLabFrame_W", "Inclusive Gen Jets in Lab Frame Weighted", 5, JetBins, JetMin, JetMax);
+        hInclusiveGenJetsLabFrame_W->GetAxis(4)->Set(JetBins[4], multBinArray);
         hInclusiveGenJetsLabFrame_W->Sumw2();
         hInclusiveGenJetsCMFrame = new THnSparseD("hInclusiveGenJetsCMFrame", "Inclusive Gen Jets in CM Frame", 5, JetBins, JetMin, JetMax);
+        hInclusiveGenJetsCMFrame->GetAxis(4)->Set(JetBins[4], multBinArray);
         hInclusiveGenJetsCMFrame->Sumw2();
         hInclusiveGenJetsCMFrame_W = new THnSparseD("hInclusiveGenJetsCMFrame_W", "Inclusive Gen Jets in CM Frame Weighted", 5, JetBins, JetMin, JetMax);
+        hInclusiveGenJetsCMFrame_W->GetAxis(4)->Set(JetBins[4], multBinArray);
         hInclusiveGenJetsCMFrame_W->Sumw2();
         hSelectedInclusiveGenJetsMidRapidity_W =
             new THnSparseD("hSelectedInclusiveGenJetsMidRapidity_W", "Inclusive Gen Jets (JetPt > 50.0) MidRapidity Weighted", 5, JetBins, JetMin, JetMax);
+        hSelectedInclusiveGenJetsMidRapidity_W->GetAxis(4)->Set(JetBins[4], multBinArray);
         hSelectedInclusiveGenJetsMidRapidity_W->Sumw2();
         hInclusiveRefJetsLabFrame = new THnSparseD("hInclusiveRefJetsLabFrame", "Inclusive Ref Jets in Lab Frame", 5, JetBins, JetMin, JetMax);
+        hInclusiveRefJetsLabFrame->GetAxis(4)->Set(JetBins[4], multBinArray);
         hInclusiveRefJetsLabFrame->Sumw2();
         hInclusiveRefJetsLabFrame_W = new THnSparseD("hInclusiveRefJetsLabFrame_W", "Inclusive Ref Jets in Lab Frame Weighted", 5, JetBins, JetMin, JetMax);
+        hInclusiveRefJetsLabFrame_W->GetAxis(4)->Set(JetBins[4], multBinArray);
         hInclusiveRefJetsLabFrame_W->Sumw2();
         hInclusiveRefJetsCMFrame = new THnSparseD("hInclusiveRefJetsCMFrame", "Inclusive Ref Jets in CM Frame", 5, JetBins, JetMin, JetMax);
+        hInclusiveRefJetsCMFrame->GetAxis(4)->Set(JetBins[4], multBinArray);
         hInclusiveRefJetsCMFrame->Sumw2();
         hInclusiveRefJetsCMFrame_W = new THnSparseD("hInclusiveRefJetsCMFrame_W", "Inclusive Ref Jets in CM Frame Weighted", 5, JetBins, JetMin, JetMax);
+        hInclusiveRefJetsCMFrame_W->GetAxis(4)->Set(JetBins[4], multBinArray);
         hInclusiveRefJetsCMFrame_W->Sumw2();
         hSelectedInclusiveRefJetsMidRapidity_W =
             new THnSparseD("hSelectedInclusiveRefJetsMidRapidity_W", "Inclusive Ref Jets (JetPt > 50.0) MidRapidity Weighted", 5, JetBins, JetMin, JetMax);
+        hSelectedInclusiveRefJetsMidRapidity_W->GetAxis(4)->Set(JetBins[4], multBinArray);
         hSelectedInclusiveRefJetsMidRapidity_W->Sumw2();
     }
     hInclusiveRecoJetPtVsEtaCMFrame_W = new TH2D("hInclusiveRecoJetPtVsEtaCMFrame_W", "Inclusive Reco Jet Pt vs Eta in CM Frame Weighted", 100, -5., 5., 200, 0., 1000.);
@@ -412,6 +439,7 @@ void HistoManagerDiJet::init()
     Double_t JetFractionMax[5] = {1000.0, 5.0, TMath::Pi(), 50.0, fMultiplicityBins[fMultiplicityBins.size() - 1] + 1};
 
     hJetFlavorFractions_W = new THnSparseD("hJetFlavorFractions_W", "Jet Flavor Fractions Weighted", 5, JetFractionBins, JetFractionMin, JetFractionMax);
+    hJetFlavorFractions_W->GetAxis(4)->Set(JetFractionBins[4], multBinArray);
     hJetFlavorFractions_W->Sumw2();
 
     int TrackBins[4] = {100, 60, 64, nMultiplicityBins + 1};
@@ -419,16 +447,22 @@ void HistoManagerDiJet::init()
     Double_t TrackMax[4] = {5.0, 3.0, TMath::Pi(), fMultiplicityBins[fMultiplicityBins.size() - 1] + 1};
 
     hRecoTracks = new THnSparseD("hRecoTracks", "Reco Tracks", 4, TrackBins, TrackMin, TrackMax);
+    hRecoTracks->GetAxis(3)->Set(TrackBins[3], multBinArray);
     hRecoTracks->Sumw2();
     hRecoTracks_W = new THnSparseD("hRecoTracks_W", "Reco Tracks Weighted", 4, TrackBins, TrackMin, TrackMax);
+    hRecoTracks_W->GetAxis(3)->Set(TrackBins[3], multBinArray);
     hRecoTracks_W->Sumw2();
     hRecoTracks_Pt1_W = new THnSparseD("hRecoTracks_Pt1_W", "Reco Tracks Pt > 1.0 Weighted", 4, TrackBins, TrackMin, TrackMax);
+    hRecoTracks_Pt1_W->GetAxis(3)->Set(TrackBins[3], multBinArray);
     hRecoTracks_Pt1_W->Sumw2();
     hGenTracks = new THnSparseD("hGenTracks", "Gen Tracks", 4, TrackBins, TrackMin, TrackMax);
+    hGenTracks->GetAxis(3)->Set(TrackBins[3], multBinArray);
     hGenTracks->Sumw2();
     hGenTracks_W = new THnSparseD("hGenTracks_W", "Gen Tracks Weighted", 4, TrackBins, TrackMin, TrackMax);
+    hGenTracks_W->GetAxis(3)->Set(TrackBins[3], multBinArray);
     hGenTracks_W->Sumw2();
     hGenTracks_Pt1_W = new THnSparseD("hGenTracks_Pt1_W", "Gen Tracks Pt > 1.0 Weighted", 4, TrackBins, TrackMin, TrackMax);
+    hGenTracks_Pt1_W->GetAxis(3)->Set(TrackBins[3], multBinArray);
     hGenTracks_Pt1_W->Sumw2();
 
     int LeadSLeadJetBins[7] = {200, 100, 64, 200, 100, 64, nMultiplicityBins + 1};
@@ -436,17 +470,22 @@ void HistoManagerDiJet::init()
     Double_t LeadSLeadJetMax[7] = {1000.0, 5.0, TMath::Pi(), 1000.0, 5.0, TMath::Pi(), fMultiplicityBins[fMultiplicityBins.size() - 1] + 1};
 
     hLeadSubLeadJets = new THnSparseD("hLeadSubLeadJets", "Lead vs SubLead Pt", 7, LeadSLeadJetBins, LeadSLeadJetMin, LeadSLeadJetMax);
+    hLeadSubLeadJets->GetAxis(6)->Set(LeadSLeadJetBins[6], multBinArray);
     hLeadSubLeadJets->Sumw2();
     hLeadSubLeadJets_W = new THnSparseD("hLeadSubLeadJets_W", "Lead vs SubLead Pt Weighted", 7, LeadSLeadJetBins, LeadSLeadJetMin, LeadSLeadJetMax);
+    hLeadSubLeadJets_W->GetAxis(6)->Set(LeadSLeadJetBins[6], multBinArray);
     hLeadSubLeadJets_W->Sumw2();
     hLeadSubLeadJets_MidRapidity_W =
         new THnSparseD("hLeadSubLeadJets_MidRapidity_W", "Lead vs SubLead Pt MidRapidity Weighted", 7, LeadSLeadJetBins, LeadSLeadJetMin, LeadSLeadJetMax);
+    hLeadSubLeadJets_MidRapidity_W->GetAxis(6)->Set(LeadSLeadJetBins[6], multBinArray);
     hLeadSubLeadJets_MidRapidity_W->Sumw2();
     hLeadSubLeadJets_WithDijet_W =
         new THnSparseD("hLeadSubLeadJets_WithDijet_W", "Lead vs SubLead Pt With Dijet Weighted", 7, LeadSLeadJetBins, LeadSLeadJetMin, LeadSLeadJetMax);
+    hLeadSubLeadJets_WithDijet_W->GetAxis(6)->Set(LeadSLeadJetBins[6], multBinArray);
     hLeadSubLeadJets_WithDijet_W->Sumw2();
     hLeadSubLeadJets_WithDijet_DiJetW =
         new THnSparseD("hLeadSubLeadJets_WithDijet_DiJetW", "Lead vs SubLead Pt With Dijet With DiJetWeighted", 7, LeadSLeadJetBins, LeadSLeadJetMin, LeadSLeadJetMax);
+    hLeadSubLeadJets_WithDijet_DiJetW->GetAxis(6)->Set(LeadSLeadJetBins[6], multBinArray);
     hLeadSubLeadJets_WithDijet_DiJetW->Sumw2();
     hAverageRecoPt_W = new TH1D("hAverageRecoPt_W", "Average Reco Jet Pt", 200, 0.0, 1000.);
     hAverageRecoPt_W->Sumw2();
@@ -455,32 +494,42 @@ void HistoManagerDiJet::init()
         hGenLeadingVsGenSubLeading_WO_DiJet_W = new TH2D("hGenLeadingVsGenSubLeading_WO_DiJet_W", "Gen Leading vs Gen SubLeading Jet", 100, 0., 1000., 100, 0., 1000.);
         hGenLeadingVsGenSubLeading_WO_DiJet_W->Sumw2();
         hGenLeadGenSubLeadJets = new THnSparseD("hGenLeadGenSubLeadJets", "Gen Lead vs Gen SubLead Pt", 7, LeadSLeadJetBins, LeadSLeadJetMin, LeadSLeadJetMax);
+        hGenLeadGenSubLeadJets->GetAxis(6)->Set(LeadSLeadJetBins[6], multBinArray);
         hGenLeadGenSubLeadJets->Sumw2();
         hGenLeadGenSubLeadJets_W =
             new THnSparseD("hGenLeadGenSubLeadJets_W", "Gen Lead vs Gen SubLead Pt Weighted", 7, LeadSLeadJetBins, LeadSLeadJetMin, LeadSLeadJetMax);
+        hGenLeadGenSubLeadJets_W->GetAxis(6)->Set(LeadSLeadJetBins[6], multBinArray);
         hGenLeadGenSubLeadJets_W->Sumw2();
         hGenLeadGenSubLeadJets_MidRapidity_W = new THnSparseD("hGenLeadGenSubLeadJets_MidRapidity_W", "Gen Lead vs Gen SubLead Pt MidRapidity Weighted", 7,
                                                               LeadSLeadJetBins, LeadSLeadJetMin, LeadSLeadJetMax);
+        hGenLeadGenSubLeadJets_MidRapidity_W->GetAxis(6)->Set(LeadSLeadJetBins[6], multBinArray);
         hGenLeadGenSubLeadJets_MidRapidity_W->Sumw2();
         hGenLeadGenSubLeadJets_WithDijet_W =
             new THnSparseD("hGenLeadGenSubLeadJets_WithDijet_W", "Gen Lead vs Gen SubLead Pt With Dijet Weighted", 7, LeadSLeadJetBins, LeadSLeadJetMin, LeadSLeadJetMax);
+        hGenLeadGenSubLeadJets_WithDijet_W->GetAxis(6)->Set(LeadSLeadJetBins[6], multBinArray);
         hGenLeadGenSubLeadJets_WithDijet_W->Sumw2();
         hGenLeadGenSubLeadJets_WithDijet_DiJetW = new THnSparseD("hGenLeadGenSubLeadJets_WithDijet_DiJetW", "Gen Lead vs Gen SubLead Pt With Dijet With DiJetWeighted", 7,
                                                                  LeadSLeadJetBins, LeadSLeadJetMin, LeadSLeadJetMax);
+        hGenLeadGenSubLeadJets_WithDijet_DiJetW->GetAxis(6)->Set(LeadSLeadJetBins[6], multBinArray);
         hGenLeadGenSubLeadJets_WithDijet_DiJetW->Sumw2();
         hRefLeadRefSubLeadJets = new THnSparseD("hRefLeadRefSubLeadJets", "Ref Lead vs Ref SubLead Pt", 7, LeadSLeadJetBins, LeadSLeadJetMin, LeadSLeadJetMax);
+        hRefLeadRefSubLeadJets->GetAxis(6)->Set(LeadSLeadJetBins[6], multBinArray);
         hRefLeadRefSubLeadJets->Sumw2();
         hRefLeadRefSubLeadJets_W =
             new THnSparseD("hRefLeadRefSubLeadJets_W", "Ref Lead vs Ref SubLead Pt Weighted", 7, LeadSLeadJetBins, LeadSLeadJetMin, LeadSLeadJetMax);
+        hRefLeadRefSubLeadJets_W->GetAxis(6)->Set(LeadSLeadJetBins[6], multBinArray);
         hRefLeadRefSubLeadJets_W->Sumw2();
         hRefLeadRefSubLeadJets_MidRapidity_W = new THnSparseD("hRefLeadRefSubLeadJets_MidRapidity_W", "Ref Lead vs Ref SubLead Pt MidRapidity Weighted", 7,
                                                               LeadSLeadJetBins, LeadSLeadJetMin, LeadSLeadJetMax);
+        hRefLeadRefSubLeadJets_MidRapidity_W->GetAxis(6)->Set(LeadSLeadJetBins[6], multBinArray);
         hRefLeadRefSubLeadJets_MidRapidity_W->Sumw2();
         hRefLeadRefSubLeadJets_WithDijet_W =
             new THnSparseD("hRefLeadRefSubLeadJets_WithDijet_W", "Ref Lead vs Ref SubLead Pt With Dijet Weighted", 7, LeadSLeadJetBins, LeadSLeadJetMin, LeadSLeadJetMax);
+        hRefLeadRefSubLeadJets_WithDijet_W->GetAxis(6)->Set(LeadSLeadJetBins[6], multBinArray);
         hRefLeadRefSubLeadJets_WithDijet_W->Sumw2();
         hRefLeadRefSubLeadJets_WithDijet_DiJetW = new THnSparseD("hRefLeadRefSubLeadJets_WithDijet_DiJetW", "Ref Lead vs Ref SubLead Pt With Dijet With DiJetWeighted", 7,
                                                                  LeadSLeadJetBins, LeadSLeadJetMin, LeadSLeadJetMax);
+        hRefLeadRefSubLeadJets_WithDijet_DiJetW->GetAxis(6)->Set(LeadSLeadJetBins[6], multBinArray);
         hRefLeadRefSubLeadJets_WithDijet_DiJetW->Sumw2();
         hAverageGenPt_W = new TH1D("hAverageGenPt_W", "Average Gen Jet Pt", 200, 0.0, 1000.);
         hAverageGenPt_W->Sumw2();
@@ -543,12 +592,6 @@ void HistoManagerDiJet::init()
     int QuenchBins[5] = {nXjAjBins, nDphiBins, 200, 200, nMultiplicityBins + 1};
     Double_t QuenchMin[5] = {0.0, 0.0, 0.0, 0.0, fMultiplicityBins[0]};
     Double_t QuenchMax[5] = {1.0, TMath::Pi(), 1000.0, 1000.0, fMultiplicityBins[fMultiplicityBins.size() - 1] + 1};
-    double multBinArray[fMultiplicityBins.size() + 1];
-    copy(fMultiplicityBins.begin(), fMultiplicityBins.end(), multBinArray);
-    multBinArray[fMultiplicityBins.size()] = fMultiplicityBins[fMultiplicityBins.size() - 1] + 1;
-    double hiHFEnergyBinArray[fHiHFEnergyBins.size() + 1];
-    copy(fHiHFEnergyBins.begin(), fHiHFEnergyBins.end(), hiHFEnergyBinArray);
-    hiHFEnergyBinArray[fHiHFEnergyBins.size()] = fHiHFEnergyBins[fHiHFEnergyBins.size() - 1] + 1;
 
     int QuenchBinsWithDijet[4] = {nXjAjBins, 500, 500, nMultiplicityBins + 1};
     Double_t QuenchMinWithDijet[4] = {0.0, 0.0, 0.0, fMultiplicityBins[0]};
@@ -561,10 +604,12 @@ void HistoManagerDiJet::init()
     hRecoQuenching_W = new THnSparseD("hRecoQuenching_W", "Reco Quenching", 5, QuenchBins, QuenchMin, QuenchMax);
     hRecoQuenching_W->GetAxis(0)->Set(QuenchBins[0], XjBins);
     hRecoQuenching_W->GetAxis(1)->Set(QuenchBins[1], DphiBins);
+    hRecoQuenching_W->GetAxis(4)->Set(QuenchBins[4], multBinArray);
     hRecoQuenching_W->Sumw2();
     hRecoQuenching_WithDijet_W =
         new THnSparseD("hRecoQuenching_WithDijet_W", "Reco Quenching With Dijet Present", 4, QuenchBinsWithDijet, QuenchMinWithDijet, QuenchMaxWithDijet);
     hRecoQuenching_WithDijet_W->GetAxis(0)->Set(QuenchBinsWithDijet[0], XjBins);
+    hRecoQuenching_WithDijet_W->GetAxis(3)->Set(QuenchBinsWithDijet[3], multBinArray);
     hRecoQuenching_WithDijet_W->Sumw2();
     hDeltaPhi_W = new TH1D("hDeltaPhi_W", "Delta Phi Distribution Weighted", nDphiBins, DphiBins);
     hDeltaPhi_W->Sumw2();
@@ -586,10 +631,12 @@ void HistoManagerDiJet::init()
         hGenQuenching_W = new THnSparseD("hGenQuenching_W", "Gen Quenching", 5, QuenchBins, QuenchMin, QuenchMax);
         hGenQuenching_W->GetAxis(0)->Set(QuenchBins[0], XjBins);
         hGenQuenching_W->GetAxis(1)->Set(QuenchBins[1], DphiBins);
+        hGenQuenching_W->GetAxis(4)->Set(QuenchBins[4], multBinArray);
         hGenQuenching_W->Sumw2();
         hGenQuenching_WithDijet_W =
             new THnSparseD("hGenQuenching_WithDijet_W", "Gen Quenching With Dijet Present", 4, QuenchBinsWithDijet, QuenchMinWithDijet, QuenchMaxWithDijet);
         hGenQuenching_WithDijet_W->GetAxis(0)->Set(QuenchBinsWithDijet[0], XjBins);
+        hGenQuenching_WithDijet_W->GetAxis(3)->Set(QuenchBinsWithDijet[3], multBinArray);
         hGenQuenching_WithDijet_W->Sumw2();
         hGenDeltaPhi_W = new TH1D("hGenDeltaPhi_W", "Gen Delta Phi Distribution Weighted", nDphiBins, DphiBins);
         hGenDeltaPhi_W->Sumw2();
@@ -633,6 +680,7 @@ void HistoManagerDiJet::init()
                            UnfoldingMin, UnfoldingMax);
         hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W->GetAxis(0)->Set(UnfoldingBins[0], XjBins);
         hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W->GetAxis(1)->Set(UnfoldingBins[1], XjBins);
+        hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W->GetAxis(2)->Set(UnfoldingBins[2], multBinArray);
         hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W->GetAxis(3)->Set(UnfoldingBins[3], leadPtBins);
         hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W->Sumw2();
         hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W =
@@ -640,6 +688,7 @@ void HistoManagerDiJet::init()
                            UnfoldingMin, UnfoldingMax);
         hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W->GetAxis(0)->Set(UnfoldingBins[0], XjBins);
         hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W->GetAxis(1)->Set(UnfoldingBins[1], XjBins);
+        hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W->GetAxis(2)->Set(UnfoldingBins[2], multBinArray);
         hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W->GetAxis(3)->Set(UnfoldingBins[3], leadPtBins);
         hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W->Sumw2();
         hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W =
@@ -717,29 +766,47 @@ void HistoManagerDiJet::init()
                                                           nLeadSubLeadPtBins, LeadSubLeadPtBins, nLeadSubLeadPtBins, LeadSubLeadPtBins);
         hRefLeadPtVsRefSubLeadPtMatched_PtHatW->Sumw2();
 
-        hRecoJES_W =
-            new TH3D("hRecoJES_W", "Reco JES Weighted", 200, 0.0, 2.0, 500, 0.0, 1000.0, nMultiplicityBins, multBinArray[0], multBinArray[fMultiplicityBins.size() - 1]);
+        int nJetPtBins = 500;
+        int nRatioBins = 200;
+        int nJetEtaBins = 200;
+        double ratioMin = 0.0, ratioMax = 2.0;
+        double jetPtMin = 0.0, jetPtMax = 1000.;
+        double etaMin = -5.0, etaMax = 5.0;
+
+        std::vector<double> jetPtBins(nJetPtBins + 1);
+        for (int i = 0; i <= nJetPtBins; ++i)
+        {
+            jetPtBins[i] = jetPtMin + i * (jetPtMax - jetPtMin) / nJetPtBins;
+        }
+        std::vector<double> jetEtaBins(nJetEtaBins + 1);
+        for (int i = 0; i <= nJetEtaBins; ++i)
+        {
+            jetEtaBins[i] = etaMin + i * (etaMax - etaMin) / nJetEtaBins;
+        }
+        std::vector<double> ratioBins(nRatioBins + 1);
+        for (int i = 0; i <= nRatioBins; ++i)
+        {
+            ratioBins[i] = ratioMin + i * (ratioMax - ratioMin) / nRatioBins;
+        }
+        hRecoJES_W = new TH3D("hRecoJES_W", "Reco JES Weighted", nRatioBins, ratioBins.data(), nJetPtBins, jetPtBins.data(), nMultiplicityBins, multBinArray);
         hRecoJES_W->Sumw2();
-        hRefJES_W =
-            new TH3D("hRefJES_W", "Ref JES Weighted", 200, 0.0, 2.0, 500, 0.0, 1000.0, nMultiplicityBins, multBinArray[0], multBinArray[fMultiplicityBins.size() - 1]);
+        hRefJES_W = new TH3D("hRefJES_W", "Ref JES Weighted", nRatioBins, ratioBins.data(), nJetPtBins, jetPtBins.data(), nMultiplicityBins, multBinArray);
         hRefJES_W->Sumw2();
-        hRecoJES_Eta_W = new TH3D("hRecoJES_Eta_W", "Reco JES Weighted", 200, 0.0, 2.0, 200, -5.0, 5.0, nMultiplicityBins, multBinArray[0],
-                                  multBinArray[fMultiplicityBins.size() - 1]);
+        hRecoJES_Eta_W = new TH3D("hRecoJES_Eta_W", "Reco JES Weighted", nRatioBins, ratioBins.data(), nJetEtaBins, jetEtaBins.data(), nMultiplicityBins, multBinArray);
         hRecoJES_Eta_W->Sumw2();
-        hRefJES_Eta_W =
-            new TH3D("hRefJES_Eta_W", "Ref JES Weighted", 200, 0.0, 2.0, 200, -5.0, 5.0, nMultiplicityBins, multBinArray[0], multBinArray[fMultiplicityBins.size() - 1]);
+        hRefJES_Eta_W = new TH3D("hRefJES_Eta_W", "Ref JES Weighted", nRatioBins, ratioBins.data(), nJetEtaBins, jetEtaBins.data(), nMultiplicityBins, multBinArray);
         hRefJES_Eta_W->Sumw2();
-        hRecoJES_Eta_Pt100_W = new TH3D("hRecoJES_Eta_Pt100_W", "Reco JES Weighted", 200, 0.0, 2.0, 200, -5.0, 5.0, nMultiplicityBins, multBinArray[0],
-                                        multBinArray[fMultiplicityBins.size() - 1]);
+        hRecoJES_Eta_Pt100_W =
+            new TH3D("hRecoJES_Eta_Pt100_W", "Reco JES Weighted", nRatioBins, ratioBins.data(), nJetEtaBins, jetEtaBins.data(), nMultiplicityBins, multBinArray);
         hRecoJES_Eta_Pt100_W->Sumw2();
-        hRecoJES_Eta_Pt120_W = new TH3D("hRecoJES_Eta_Pt120_W", "Reco JES Weighted", 200, 0.0, 2.0, 200, -5.0, 5.0, nMultiplicityBins, multBinArray[0],
-                                        multBinArray[fMultiplicityBins.size() - 1]);
+        hRecoJES_Eta_Pt120_W =
+            new TH3D("hRecoJES_Eta_Pt120_W", "Reco JES Weighted", nRatioBins, ratioBins.data(), nJetEtaBins, jetEtaBins.data(), nMultiplicityBins, multBinArray);
         hRecoJES_Eta_Pt120_W->Sumw2();
-        hRefJES_Eta_Pt100_W = new TH3D("hRefJES_Eta_Pt100_W", "Ref JES Weighted", 200, 0.0, 2.0, 200, -5.0, 5.0, nMultiplicityBins, multBinArray[0],
-                                       multBinArray[fMultiplicityBins.size() - 1]);
+        hRefJES_Eta_Pt100_W =
+            new TH3D("hRefJES_Eta_Pt100_W", "Ref JES Weighted", nRatioBins, ratioBins.data(), nJetEtaBins, jetEtaBins.data(), nMultiplicityBins, multBinArray);
         hRefJES_Eta_Pt100_W->Sumw2();
-        hRefJES_Eta_Pt120_W = new TH3D("hRefJES_Eta_Pt120_W", "Ref JES Weighted", 200, 0.0, 2.0, 200, -5.0, 5.0, nMultiplicityBins, multBinArray[0],
-                                       multBinArray[fMultiplicityBins.size() - 1]);
+        hRefJES_Eta_Pt120_W =
+            new TH3D("hRefJES_Eta_Pt120_W", "Ref JES Weighted", nRatioBins, ratioBins.data(), nJetEtaBins, jetEtaBins.data(), nMultiplicityBins, multBinArray);
         hRefJES_Eta_Pt120_W->Sumw2();
     }
 
@@ -1082,42 +1149,42 @@ void HistoManagerDiJet::projectHistograms()
     {
         hXj_Projection_W.push_back(hMultVsXj_W->ProjectionX(Form("hXj_C%i_W", i), hMultVsXj_W->GetYaxis()->FindBin(i), hMultVsXj_W->GetYaxis()->FindBin(i)));
         hXj_Projection_W.at(i)->SetTitle(
-            Form("Xj Projection for %i-%i Weighted", static_cast<int>(fMultiplicityBinThresholds.at(i)), static_cast<int>(fMultiplicityBinThresholds.at(i + 1))));
+            Form("Xj Projection for %i-%i Weighted", static_cast<int>(fMultiplicityBins.at(i)), static_cast<int>(fMultiplicityBins.at(i + 1))));
         hXj_Projection_DiJetW.push_back(
             hMultVsXj_DiJetW->ProjectionX(Form("hXj_C%i_DiJetW", i), hMultVsXj_DiJetW->GetYaxis()->FindBin(i), hMultVsXj_DiJetW->GetYaxis()->FindBin(i)));
         hXj_Projection_DiJetW.at(i)->SetTitle(
-            Form("Xj Projection %i-%i Dijet Weighted", static_cast<int>(fMultiplicityBinThresholds.at(i)), static_cast<int>(fMultiplicityBinThresholds.at(i + 1))));
+            Form("Xj Projection %i-%i Dijet Weighted", static_cast<int>(fMultiplicityBins.at(i)), static_cast<int>(fMultiplicityBins.at(i + 1))));
         hXj_Projection_HiHFW.push_back(
             hMultVsXj_HiHFW->ProjectionX(Form("hXj_C%i_HiHFW", i), hMultVsXj_HiHFW->GetYaxis()->FindBin(i), hMultVsXj_HiHFW->GetYaxis()->FindBin(i)));
         hXj_Projection_HiHFW.at(i)->SetTitle(
-            Form("Xj Projection %i-%i HiHF Weighted", static_cast<int>(fMultiplicityBinThresholds.at(i)), static_cast<int>(fMultiplicityBinThresholds.at(i + 1))));
+            Form("Xj Projection %i-%i HiHF Weighted", static_cast<int>(fMultiplicityBins.at(i)), static_cast<int>(fMultiplicityBins.at(i + 1))));
 
         if (fIsMC)
         {
             hGenXj_Projection_W.push_back(
                 hMultVsGenXj_W->ProjectionX(Form("hGenXj_C%i_W", i), hMultVsGenXj_W->GetYaxis()->FindBin(i), hMultVsGenXj_W->GetYaxis()->FindBin(i)));
             hGenXj_Projection_W.at(i)->SetTitle(
-                Form("Gen Xj Projection %i-%i Weighted", static_cast<int>(fMultiplicityBinThresholds.at(i)), static_cast<int>(fMultiplicityBinThresholds.at(i + 1))));
+                Form("Gen Xj Projection %i-%i Weighted", static_cast<int>(fMultiplicityBins.at(i)), static_cast<int>(fMultiplicityBins.at(i + 1))));
             hGenXj_Projection_DiJetW.push_back(
                 hMultVsGenXj_DiJetW->ProjectionX(Form("hGenXj_C%i_DiJetW", i), hMultVsGenXj_DiJetW->GetYaxis()->FindBin(i), hMultVsGenXj_DiJetW->GetYaxis()->FindBin(i)));
-            hGenXj_Projection_DiJetW.at(i)->SetTitle(Form("Gen Xj Projection %i-%i Dijet Weighted", static_cast<int>(fMultiplicityBinThresholds.at(i)),
-                                                          static_cast<int>(fMultiplicityBinThresholds.at(i + 1))));
+            hGenXj_Projection_DiJetW.at(i)->SetTitle(
+                Form("Gen Xj Projection %i-%i Dijet Weighted", static_cast<int>(fMultiplicityBins.at(i)), static_cast<int>(fMultiplicityBins.at(i + 1))));
             hRefXj_Projection_W.push_back(
                 hMultVsRefXj_W->ProjectionX(Form("hRefXj_C%i_W", i), hMultVsRefXj_W->GetYaxis()->FindBin(i), hMultVsRefXj_W->GetYaxis()->FindBin(i)));
             hRefXj_Projection_W.at(i)->SetTitle(
-                Form("Ref Xj Projection %i-%i Weighted", static_cast<int>(fMultiplicityBinThresholds.at(i)), static_cast<int>(fMultiplicityBinThresholds.at(i + 1))));
+                Form("Ref Xj Projection %i-%i Weighted", static_cast<int>(fMultiplicityBins.at(i)), static_cast<int>(fMultiplicityBins.at(i + 1))));
             hRefXj_Projection_DiJetW.push_back(
                 hMultVsRefXj_DiJetW->ProjectionX(Form("hRefXj_C%i_DiJetW", i), hMultVsRefXj_DiJetW->GetYaxis()->FindBin(i), hMultVsRefXj_DiJetW->GetYaxis()->FindBin(i)));
-            hRefXj_Projection_DiJetW.at(i)->SetTitle(Form("Ref Xj Projection %i-%i Dijet Weighted", static_cast<int>(fMultiplicityBinThresholds.at(i)),
-                                                          static_cast<int>(fMultiplicityBinThresholds.at(i + 1))));
+            hRefXj_Projection_DiJetW.at(i)->SetTitle(
+                Form("Ref Xj Projection %i-%i Dijet Weighted", static_cast<int>(fMultiplicityBins.at(i)), static_cast<int>(fMultiplicityBins.at(i + 1))));
             hMatchedRefXj_Projection_W.push_back(hMultVsMatchedRefXj_W->ProjectionX(Form("hMatchedRefXj_C%i_W", i), hMultVsMatchedRefXj_W->GetYaxis()->FindBin(i),
                                                                                     hMultVsMatchedRefXj_W->GetYaxis()->FindBin(i)));
-            hMatchedRefXj_Projection_W.at(i)->SetTitle(Form("Matched Ref Xj Projection %i-%i Weighted", static_cast<int>(fMultiplicityBinThresholds.at(i)),
-                                                            static_cast<int>(fMultiplicityBinThresholds.at(i + 1))));
+            hMatchedRefXj_Projection_W.at(i)->SetTitle(
+                Form("Matched Ref Xj Projection %i-%i Weighted", static_cast<int>(fMultiplicityBins.at(i)), static_cast<int>(fMultiplicityBins.at(i + 1))));
             hMatchedRefXj_Projection_DiJetW.push_back(hMultVsMatchedRefXj_DiJetW->ProjectionX(
                 Form("hMatchedRefXj_C%i_DiJetW", i), hMultVsMatchedRefXj_DiJetW->GetYaxis()->FindBin(i), hMultVsMatchedRefXj_DiJetW->GetYaxis()->FindBin(i)));
-            hMatchedRefXj_Projection_DiJetW.at(i)->SetTitle(Form("Matched Ref Xj Projection %i-%i Dijet Weighted", static_cast<int>(fMultiplicityBinThresholds.at(i)),
-                                                                 static_cast<int>(fMultiplicityBinThresholds.at(i + 1))));
+            hMatchedRefXj_Projection_DiJetW.at(i)->SetTitle(
+                Form("Matched Ref Xj Projection %i-%i Dijet Weighted", static_cast<int>(fMultiplicityBins.at(i)), static_cast<int>(fMultiplicityBins.at(i + 1))));
         }
     }
     std::cout << "=======>Projecting Xj Histograms in HiHFBins" << std::endl;
@@ -1126,12 +1193,12 @@ void HistoManagerDiJet::projectHistograms()
     for (int i = 0; i < fHiHFEnergyBins.size() - 1; i++)
     {
         hXj_ProjectionHiHF_W.push_back(hHiHFVsXj_W->ProjectionX(Form("hXj_HiHFC%i_W", i), hHiHFVsXj_W->GetYaxis()->FindBin(i), hHiHFVsXj_W->GetYaxis()->FindBin(i)));
-        hXj_ProjectionHiHF_W.at(i)->SetTitle(Form("Xj Projection for HiHF %0.1f-%0.1f Weighted", static_cast<float>(fHiHFEnergyBinThresholds.at(i)),
-                                                  static_cast<float>(fHiHFEnergyBinThresholds.at(i + 1))));
+        hXj_ProjectionHiHF_W.at(i)->SetTitle(
+            Form("Xj Projection for HiHF %0.1f-%0.1f Weighted", static_cast<float>(fHiHFEnergyBins.at(i)), static_cast<float>(fHiHFEnergyBins.at(i + 1))));
         hXj_ProjectionHiHF_HiHFW.push_back(
             hHiHFVsXj_HiHFW->ProjectionX(Form("hXj_HiHFC%i_HiHFW", i), hHiHFVsXj_HiHFW->GetYaxis()->FindBin(i), hHiHFVsXj_HiHFW->GetYaxis()->FindBin(i)));
-        hXj_ProjectionHiHF_HiHFW.at(i)->SetTitle(Form("Xj Projection HiHF %0.1f-%0.1f HiHF Weighted", static_cast<float>(fHiHFEnergyBinThresholds.at(i)),
-                                                      static_cast<float>(fHiHFEnergyBinThresholds.at(i + 1))));
+        hXj_ProjectionHiHF_HiHFW.at(i)->SetTitle(
+            Form("Xj Projection HiHF %0.1f-%0.1f HiHF Weighted", static_cast<float>(fHiHFEnergyBins.at(i)), static_cast<float>(fHiHFEnergyBins.at(i + 1))));
     }
     std::cout << "Projecting Histograms Complete" << std::endl;
     std::cout << "====================================" << std::endl;

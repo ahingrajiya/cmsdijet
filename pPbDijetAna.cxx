@@ -51,9 +51,8 @@ int main(int argc, char* argv[])
     TString path2JEC = "..";
     Double_t ptHatCut[2]{15., 30.};
     Bool_t isEmbedded{kTRUE};
-    std::vector<std::pair<double, double>> multiplicityBins = {{0, 0.0}, {10, 1.0}, {60, 2.0}, {120, 3.0}, {185, 4.0}, {250, 5.0}, {400, 6.0}};
-    std::vector<std::pair<double, double>> hiHFBins = {{0., 0.0},  {10., 1.0}, {20., 2.0},  {30., 3.0},  {40., 4.0},   {50., 5.0},
-                                                       {70., 6.0}, {90., 7.0}, {120., 8.0}, {150., 9.0}, {1000., 10.0}};
+    std::vector<double> multiplicityBins = {0.0, 10.0, 60., 120., 185., 250., 400.};
+    std::vector<double> hiHFBins = {0., 10., 20., 30., 40., 50., 70., 90., 120., 150., 1000.};
     std::string path2DijetWeight = "../aux_files/pPb_8160/Dijet_Weight/DJWEPOS.root";
     std::vector<std::string> filters{"pBeamScrapingFilter", "pPAprimaryVertexFilter", "HBHENoiseFilterResultRun2Loose", "phfCoincFilter", "pVertexFilterCutdz1p0"};
     std::vector<std::string> triggers{"HLT_PAAK4PFJet80_Eta5p1_v3"};
@@ -248,8 +247,6 @@ int main(int argc, char* argv[])
     analysis->setInclusiveJetEtaRange(-2.1, 2.1);
     analysis->setInclusiveCorrectedJetPtMin(50.0);
     analysis->doInJetMultiplicity();
-    analysis->setMultBins(multiplicityBins);
-    analysis->setHiHFBins(hiHFBins);
     analysis->setUEType(UEType);
     analysis->setTrackingTable("../aux_files/pPb_8160/trk_eff_table/pPb_EPOS_2D_efftables.root");
     // analysis->setDebug(kTRUE);

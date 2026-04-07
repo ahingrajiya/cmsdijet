@@ -48,27 +48,9 @@ class HistoManagerDiJet : public BaseHistoManager
     ///@brief Histogram manager report
     void report();
     ///@brief Set Multiplicity bins
-    void setMultiplicityBins(const std::vector<std::pair<Double_t, Double_t>>& bins)
-    {
-        fMultiplicityBins.clear();
-        fMultiplicityBinThresholds.clear();
-        for (const auto& [threshold, value] : bins)
-        {
-            fMultiplicityBins.push_back(static_cast<float>(value));
-            fMultiplicityBinThresholds.push_back(static_cast<int>(threshold));
-        }
-    }
+    void setMultiplicityBins(const std::vector<double>& bins) { fMultiplicityBins = std::move(bins); }
 
-    void setHiHFEnergyBins(const std::vector<std::pair<Double_t, Double_t>>& bins)
-    {
-        fHiHFEnergyBins.clear();
-        fHiHFEnergyBinThresholds.clear();
-        for (const auto& [threshold, value] : bins)
-        {
-            fHiHFEnergyBins.push_back(static_cast<float>(value));
-            fHiHFEnergyBinThresholds.push_back(static_cast<int>(threshold));
-        }
-    }
+    void setHiHFEnergyBins(const std::vector<double>& bins) { fHiHFEnergyBins = std::move(bins); }
     ///@brief Set Collision System
     void setCollSystem(const TString& collSystem) { fCollSystem = collSystem; }
 
@@ -232,10 +214,8 @@ class HistoManagerDiJet : public BaseHistoManager
    private:
     Bool_t fIsMC;
 
-    std::vector<float> fMultiplicityBins;
-    std::vector<int> fMultiplicityBinThresholds;
-    std::vector<float> fHiHFEnergyBins;
-    std::vector<int> fHiHFEnergyBinThresholds;
+    std::vector<double> fMultiplicityBins;
+    std::vector<double> fHiHFEnergyBins;
     TString fCollSystem;
 
     // Projection Histograms
