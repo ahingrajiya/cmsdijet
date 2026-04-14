@@ -37,6 +37,11 @@ int main(int argc, char* argv[])
     TString jetBranchName{"akCs4PFJetAnalyzer"};
     Double_t ptHatCut[2]{15., 30.};
     std::vector<double> multiplicityBins = {-10., 0., 10., 20., 60., 100., 160., 180., 200.};
+    std::vector<double> hiHFBins = {0., 10., 20., 30., 40., 50., 70., 90., 120., 150., 1000.};
+    std::vector<double> ptBins = {50.0, 55., 60., 65., 70., 80., 90., 200.};
+    std::vector<double> xjBins = {0.0,  0.025, 0.05, 0.075, 0.1,  0.125, 0.15, 0.175, 0.2,  0.225, 0.25, 0.275, 0.3,  0.325,
+                                  0.35, 0.375, 0.4,  0.425, 0.45, 0.475, 0.5,  0.525, 0.55, 0.575, 0.6,  0.625, 0.65, 0.675,
+                                  0.7,  0.725, 0.75, 0.775, 0.8,  0.825, 0.85, 0.875, 0.9,  0.925, 0.95, 0.975, 1.0};
     std::vector<std::string> filters{"collisionEventSelectionAOD", "phfCoincFilter2Th4", "pclusterCompatibilityFilter", "pprimaryVertexFilter",
                                      "HBHENoiseFilterResultRun2Loose"};
     std::vector<std::string> triggers{"HLT_HIPuAK4CaloJet80Eta5p1_v1"};

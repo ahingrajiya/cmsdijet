@@ -21,24 +21,24 @@
 ClassImp(HistoManagerDiJet)
 
     HistoManagerDiJet::HistoManagerDiJet() :
-    BaseHistoManager(), fIsMC{kFALSE}, fMultiplicityBins{0.0}, hRecoMultiplicity_W{nullptr}, hCorrectedMultiplicity_W{nullptr}, hGenMultiplicity_W{nullptr},
-    hSubEventMultiplicity_W{nullptr}, hSelectedMultiplicity_W{nullptr}, hMultiplicities{nullptr}, hMultiplicities_W{nullptr}, hPtHat{nullptr}, hPtHat_W{nullptr},
-    hHiBin{nullptr}, hHiBin_W{nullptr}, hVz{nullptr}, hVz_W{nullptr}, hMultiplicities_DiJet_W{nullptr}, hRecoQuenching_W{nullptr}, hGenQuenching_W{nullptr},
-    hDeltaPhi_W{nullptr}, hMultVsXj_W{nullptr}, hNDijetEvent{nullptr}, hNEventsInMult{nullptr}, hGenDeltaPhi_W{nullptr}, hMultVsGenXj_W{nullptr},
-    hNGenDijetEvent{nullptr}, hInJetMultiplicity_W{nullptr}, hGenInJetMultiplicity_W{nullptr}, hLeadSubLeadJets{nullptr}, hGenLeadGenSubLeadJets{nullptr},
-    hGenLeadGenSubLeadJets_W{nullptr}, hLeadSubLeadJets_W{nullptr}, hVzWithDijet_W{nullptr}, hMultVsXj_DiJetW{nullptr}, hMultVsRefXj_W{nullptr},
-    hMultVsRefXj_DiJetW{nullptr}, hMultVsMatchedRefXj_W{nullptr}, hMultVsMatchedRefXj_DiJetW{nullptr}, hRefLeadRefSubLeadJets{nullptr}, hRefLeadRefSubLeadJets_W{nullptr},
-    hMultVsGenXj_DiJetW{nullptr}, hRecoJES_W{nullptr}, hRefJES_W{nullptr}, hGenLeadingVsGenSubLeading_WO_DiJet_W{nullptr}, hLeadPtvsSubLeadPt_DiJetW{nullptr},
-    hRefLeadPtvsRefSubLeadPt_DiJetW{nullptr}, hLeadSubLeadJets_MidRapidity_W{nullptr}, hGenLeadGenSubLeadJets_MidRapidity_W{nullptr},
-    hRefLeadRefSubLeadJets_MidRapidity_W{nullptr}, hGenLeadPtvsGenSubLeadPt_DiJetW{nullptr}, hLeadSubLeadJets_WithDijet_W{nullptr},
-    hGenLeadGenSubLeadJets_WithDijet_W{nullptr}, hRefLeadRefSubLeadJets_WithDijet_W{nullptr}, hGenLeadPtvsGenSubLeadPt_PtHatW{nullptr},
-    hRefLeadPtvsRefSubLeadPt_PtHatW{nullptr}, hLeadPtvsSubLeadPt_PtHatW{nullptr}, hDeltaPhi_WithDiJet_W{nullptr}, hGenDeltaPhi_WithDiJet_W{nullptr},
-    hInclusiveUncorrectedRecoJets{nullptr}, hInclusiveUncorrectedRecoJets_W{nullptr}, hInclusiveRecoJetsLabFrame{nullptr}, hInclusiveRecoJetsLabFrame_W{nullptr},
-    hInclusiveRecoJetsCMFrame{nullptr}, hInclusiveRecoJetsCMFrame_W{nullptr}, hSelectedInclusiveRecoJetsMidRapidity_W{nullptr}, hInclusiveGenJetsLabFrame{nullptr},
-    hInclusiveGenJetsLabFrame_W{nullptr}, hInclusiveGenJetsCMFrame{nullptr}, hInclusiveGenJetsCMFrame_W{nullptr}, hSelectedInclusiveGenJetsMidRapidity_W{nullptr},
-    hInclusiveRecoJetPtVsEtaLabFrame_W{nullptr}, hInclusiveRecoJetPtVsEtaCMFrame_W{nullptr}, hInclusiveUnCorrectedRecoPtVsEtaLabFrame_W{nullptr},
-    hInclusiveUnCorrectedRecoPtVsEtaCMFrame_W{nullptr}, hInclusiveRecoJetPt{nullptr}, hInclusiveRecoJetPt_W{nullptr}, hInclusiveGenJetPt{nullptr},
-    hInclusiveGenJetPt_W{nullptr}, hSelectedInclusiveRecoJetPt_MidRapidity_W{nullptr}, hSelectedInclusiveGenJetPt_MidRapidity_W{nullptr},
+    BaseHistoManager(), fIsMC{kFALSE}, fMultiplicityBins{0.0}, fXjBins{0.0}, fHiHFEnergyBins{0.0}, fPtBins{0.0}, hRecoMultiplicity_W{nullptr},
+    hCorrectedMultiplicity_W{nullptr}, hGenMultiplicity_W{nullptr}, hSubEventMultiplicity_W{nullptr}, hSelectedMultiplicity_W{nullptr}, hMultiplicities{nullptr},
+    hMultiplicities_W{nullptr}, hPtHat{nullptr}, hPtHat_W{nullptr}, hHiBin{nullptr}, hHiBin_W{nullptr}, hVz{nullptr}, hVz_W{nullptr}, hMultiplicities_DiJet_W{nullptr},
+    hRecoQuenching_W{nullptr}, hGenQuenching_W{nullptr}, hDeltaPhi_W{nullptr}, hMultVsXj_W{nullptr}, hNDijetEvent{nullptr}, hNEventsInMult{nullptr},
+    hGenDeltaPhi_W{nullptr}, hMultVsGenXj_W{nullptr}, hNGenDijetEvent{nullptr}, hInJetMultiplicity_W{nullptr}, hGenInJetMultiplicity_W{nullptr},
+    hLeadSubLeadJets{nullptr}, hGenLeadGenSubLeadJets{nullptr}, hGenLeadGenSubLeadJets_W{nullptr}, hLeadSubLeadJets_W{nullptr}, hVzWithDijet_W{nullptr},
+    hMultVsXj_DiJetW{nullptr}, hMultVsRefXj_W{nullptr}, hMultVsRefXj_DiJetW{nullptr}, hMultVsMatchedRefXj_W{nullptr}, hMultVsMatchedRefXj_DiJetW{nullptr},
+    hRefLeadRefSubLeadJets{nullptr}, hRefLeadRefSubLeadJets_W{nullptr}, hMultVsGenXj_DiJetW{nullptr}, hRecoJES_W{nullptr}, hRefJES_W{nullptr},
+    hGenLeadingVsGenSubLeading_WO_DiJet_W{nullptr}, hLeadPtvsSubLeadPt_DiJetW{nullptr}, hRefLeadPtvsRefSubLeadPt_DiJetW{nullptr}, hLeadSubLeadJets_MidRapidity_W{nullptr},
+    hGenLeadGenSubLeadJets_MidRapidity_W{nullptr}, hRefLeadRefSubLeadJets_MidRapidity_W{nullptr}, hGenLeadPtvsGenSubLeadPt_DiJetW{nullptr},
+    hLeadSubLeadJets_WithDijet_W{nullptr}, hGenLeadGenSubLeadJets_WithDijet_W{nullptr}, hRefLeadRefSubLeadJets_WithDijet_W{nullptr},
+    hGenLeadPtvsGenSubLeadPt_PtHatW{nullptr}, hRefLeadPtvsRefSubLeadPt_PtHatW{nullptr}, hLeadPtvsSubLeadPt_PtHatW{nullptr}, hDeltaPhi_WithDiJet_W{nullptr},
+    hGenDeltaPhi_WithDiJet_W{nullptr}, hInclusiveUncorrectedRecoJets{nullptr}, hInclusiveUncorrectedRecoJets_W{nullptr}, hInclusiveRecoJetsLabFrame{nullptr},
+    hInclusiveRecoJetsLabFrame_W{nullptr}, hInclusiveRecoJetsCMFrame{nullptr}, hInclusiveRecoJetsCMFrame_W{nullptr}, hSelectedInclusiveRecoJetsMidRapidity_W{nullptr},
+    hInclusiveGenJetsLabFrame{nullptr}, hInclusiveGenJetsLabFrame_W{nullptr}, hInclusiveGenJetsCMFrame{nullptr}, hInclusiveGenJetsCMFrame_W{nullptr},
+    hSelectedInclusiveGenJetsMidRapidity_W{nullptr}, hInclusiveRecoJetPtVsEtaLabFrame_W{nullptr}, hInclusiveRecoJetPtVsEtaCMFrame_W{nullptr},
+    hInclusiveUnCorrectedRecoPtVsEtaLabFrame_W{nullptr}, hInclusiveUnCorrectedRecoPtVsEtaCMFrame_W{nullptr}, hInclusiveRecoJetPt{nullptr}, hInclusiveRecoJetPt_W{nullptr},
+    hInclusiveGenJetPt{nullptr}, hInclusiveGenJetPt_W{nullptr}, hSelectedInclusiveRecoJetPt_MidRapidity_W{nullptr}, hSelectedInclusiveGenJetPt_MidRapidity_W{nullptr},
     hInclusiveRecoJetEtaCMFrame{nullptr}, hInclusiveRecoJetEtaCMFrame_W{nullptr}, hInclusiveGenJetEtaLabFrame{nullptr}, hInclusiveRecoJetEtaLabFrame_W{nullptr},
     hSelectedInclusiveRecoJetEtaMidRapidity_W{nullptr}, hInclusiveGenJetEtaCMFrame{nullptr}, hInclusiveGenJetEtaCMFrame_W{nullptr},
     hSelectedInclusiveGenJetEtaMidRapidity_W{nullptr}, hLeadingRecoJetPt{nullptr}, hLeadingRecoJetPt_W{nullptr}, hSubLeadingRecoJetPt{nullptr},
@@ -66,7 +66,9 @@ ClassImp(HistoManagerDiJet)
     hMultVsUnflippedMatchedRecoXj_W{nullptr}, hMultVsUnflippedMatchedRefXj_DiJetW{nullptr}, hMultVsUnflippedMatchedRefXj_W{nullptr}, hMultVsMatchedRecoXj_W{nullptr},
     hRefDeltaPhi_W{nullptr}, hRefDeltaPhi_WithDiJet_W{nullptr}, hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W{nullptr}, hMultVsFakeRefXjToBeUnfolded_W{nullptr},
     hMultVsFakeRefXjForTesting_W{nullptr}, hFakeLeadXj_W{nullptr}, hFakeSubLeadXj_W{nullptr}, hLeadPtVsRecoXj_W{nullptr}, hLeadPtVsRefXj_W{nullptr},
-    hLeadPtVsGenXj_W{nullptr}, hAverageRecoPt_W{nullptr}, hAverageGenPt_W{nullptr}
+    hLeadPtVsGenXj_W{nullptr}, hAverageRecoPt_W{nullptr}, hAverageGenPt_W{nullptr}, hResponseMatrix_W{nullptr}, hResponseMatrixA_W{nullptr}, hResponseMatrixB_W{nullptr},
+    hTotalReco_W{nullptr}, hTotalRecoA_W{nullptr}, hTotalRecoB_W{nullptr}, hTotalTruth_W{nullptr}, hTotalTruthA_W{nullptr}, hTotalTruthB_W{nullptr},
+    hMatchedGen_W{nullptr}, hMatchedGenA_W{nullptr}, hMatchedGenB_W{nullptr}, hMatchedReco_W{nullptr}, hMatchedRecoA_W{nullptr}, hMatchedRecoB_W{nullptr}
 {
     /* Empty*/
 }
@@ -298,13 +300,13 @@ void HistoManagerDiJet::init()
 {
     int nMultiplicityBins = fMultiplicityBins.size() - 1;
     int nHiHFEnergyBins = fHiHFEnergyBins.size() - 1;
+    int nLeadPtBins = fPtBins.size() - 1;
+    int nXjAjBins = fXjBins.size() - 1;
 
-    double multBinArray[fMultiplicityBins.size() + 1];
-    copy(fMultiplicityBins.begin(), fMultiplicityBins.end(), multBinArray);
-    multBinArray[fMultiplicityBins.size()] = fMultiplicityBins[fMultiplicityBins.size() - 1] + 1;
-    double hiHFEnergyBinArray[fHiHFEnergyBins.size() + 1];
-    copy(fHiHFEnergyBins.begin(), fHiHFEnergyBins.end(), hiHFEnergyBinArray);
-    hiHFEnergyBinArray[fHiHFEnergyBins.size()] = fHiHFEnergyBins[fHiHFEnergyBins.size() - 1] + 1;
+    double* multBinArray = fMultiplicityBins.data();
+    double* hiHFEnergyBinArray = fHiHFEnergyBins.data();
+    double* leadPtBins = fPtBins.data();
+    double* XjBins = fXjBins.data();
 
     hRecoMultiplicity_W = new TH1D("hRecoMultiplicity_W", "Reco Multiplicity Weighted", 600, 0.0, 600.0);
     hRecoMultiplicity_W->Sumw2();
@@ -567,27 +569,17 @@ void HistoManagerDiJet::init()
                                       3.0368729,
                                       3.08923278,
                                       TMath::Pi()};
-    // const int nXjAjBins = 16; // number of bins
-    // double XjBins[nXjAjBins + 1] = {0.0, 0.1, 0.2, 0.3, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0};
-    const int nXjAjBins = 40;  // number of bins
-    double XjBins[nXjAjBins + 1] = {0.0,  0.025, 0.05, 0.075, 0.1,  0.125, 0.15, 0.175, 0.2,  0.225, 0.25, 0.275, 0.3,  0.325,
-                                    0.35, 0.375, 0.4,  0.425, 0.45, 0.475, 0.5,  0.525, 0.55, 0.575, 0.6,  0.625, 0.65, 0.675,
-                                    0.7,  0.725, 0.75, 0.775, 0.8,  0.825, 0.85, 0.875, 0.9,  0.925, 0.95, 0.975, 1.0};
-    // double XjBins[nXjAjBins + 1] = {0.0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9,
-    // 0.95, 1.0, 1.05, 1.1, 1.15, 1.2, 1.25, 1.3, 1.35, 1.4, 1.45, 1.5, 1.55, 1.6, 1.65, 1.7, 1.75, 1.8, 1.85, 1.9, 1.95, 2.0};
+
+    // const int nXjAjBins = 40;  // number of bins
+    // double XjBins[nXjAjBins + 1] = {0.0,  0.025, 0.05, 0.075, 0.1,  0.125, 0.15, 0.175, 0.2,  0.225, 0.25, 0.275, 0.3,  0.325,
+    //                                 0.35, 0.375, 0.4,  0.425, 0.45, 0.475, 0.5,  0.525, 0.55, 0.575, 0.6,  0.625, 0.65, 0.675,
+    //                                 0.7,  0.725, 0.75, 0.775, 0.8,  0.825, 0.85, 0.875, 0.9,  0.925, 0.95, 0.975, 1.0};
 
     const int nXjAjBins_ER = 15;  // number of bins
     double XjBins_ER[nXjAjBins_ER + 1] = {0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5};
 
-    // const int nXjAjBinsUnfolding = 10;  // number of bins
-    // double XjBinsUnfolding[nXjAjBinsUnfolding + 1] = {0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.80, 0.9, 1.0};
-    const int nXjAjBinsUnfolding = 40;  // number of bins
-    double XjBinsUnfolding[nXjAjBinsUnfolding + 1] = {0.0,  0.025, 0.05, 0.075, 0.1,  0.125, 0.15, 0.175, 0.2,  0.225, 0.25, 0.275, 0.3,  0.325,
-                                                      0.35, 0.375, 0.4,  0.425, 0.45, 0.475, 0.5,  0.525, 0.55, 0.575, 0.6,  0.625, 0.65, 0.675,
-                                                      0.7,  0.725, 0.75, 0.775, 0.8,  0.825, 0.85, 0.875, 0.9,  0.925, 0.95, 0.975, 1.0};
-
-    const int nLeadPtBins = 10;
-    double leadPtBins[nLeadPtBins + 1] = {0.0, 25.0, 50., 55., 60., 65., 70., 80., 90., 200., 5360.};
+    // const int nLeadPtBins = 8;
+    // double leadPtBins[nLeadPtBins + 1] = {25.0, 50., 55., 60., 65., 70., 80., 90., 200.};
 
     int QuenchBins[5] = {nXjAjBins, nDphiBins, 200, 200, nMultiplicityBins + 1};
     Double_t QuenchMin[5] = {0.0, 0.0, 0.0, 0.0, fMultiplicityBins[0]};
@@ -692,45 +684,91 @@ void HistoManagerDiJet::init()
         hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W->GetAxis(3)->Set(UnfoldingBins[3], leadPtBins);
         hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W->Sumw2();
         hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W =
-            new TH3D("hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W", "Unfolding RefXj vs RecoXj vs Multiplicity Missing Jets Weighted", nXjAjBinsUnfolding,
-                     XjBinsUnfolding, nXjAjBinsUnfolding, XjBinsUnfolding, nMultiplicityBins, multBinArray);
+            new TH3D("hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W", "Unfolding RefXj vs RecoXj vs Multiplicity Missing Jets Weighted", nXjAjBins, XjBins,
+                     nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
         hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W->Sumw2();
         hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W =
-            new TH3D("hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W", "Unfolding RefXj vs RecoXj vs Multiplicity Missing Jets Weighted", nXjAjBinsUnfolding,
-                     XjBinsUnfolding, nXjAjBinsUnfolding, XjBinsUnfolding, nMultiplicityBins, multBinArray);
+            new TH3D("hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W", "Unfolding RefXj vs RecoXj vs Multiplicity Missing Jets Weighted", nXjAjBins, XjBins, nXjAjBins,
+                     XjBins, nMultiplicityBins, multBinArray);
         hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W->Sumw2();
-        hMultVsFakeRecoXjForTesting_W = new TH2D("hMultVsFakeRecoXjForTesting_W", "Fake Reco Xj Distribution For Testing Weighted", nXjAjBinsUnfolding, XjBinsUnfolding,
-                                                 nMultiplicityBins, multBinArray);
+        hMultVsFakeRecoXjForTesting_W =
+            new TH2D("hMultVsFakeRecoXjForTesting_W", "Fake Reco Xj Distribution For Testing Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
         hMultVsFakeRecoXjForTesting_W->Sumw2();
-        hMultVsFakeRecoXjToBeUnfolded_W = new TH2D("hMultVsFakeRecoXjToBeUnfolded_W", "Fake Reco Xj Distribution To Be Unfolded Weighted", nXjAjBinsUnfolding,
-                                                   XjBinsUnfolding, nMultiplicityBins, multBinArray);
+        hMultVsFakeRecoXjToBeUnfolded_W =
+            new TH2D("hMultVsFakeRecoXjToBeUnfolded_W", "Fake Reco Xj Distribution To Be Unfolded Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
         hMultVsFakeRecoXjToBeUnfolded_W->Sumw2();
-        hMultVsMissingRefXjForTesting_W = new TH2D("hMultVsMissingRefXjForTesting_W", "Missing Ref Xj Distribution For Testing Weighted", nXjAjBinsUnfolding,
-                                                   XjBinsUnfolding, nMultiplicityBins, multBinArray);
+        hMultVsMissingRefXjForTesting_W =
+            new TH2D("hMultVsMissingRefXjForTesting_W", "Missing Ref Xj Distribution For Testing Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
         hMultVsMissingRefXjForTesting_W->Sumw2();
-        hMultVsMissingRefXjToBeUnfolded_W = new TH2D("hMultVsMissingRefXjToBeUnfolded_W", "Missing Ref Xj Distribution To Be Unfolded Weighted", nXjAjBinsUnfolding,
-                                                     XjBinsUnfolding, nMultiplicityBins, multBinArray);
+        hMultVsMissingRefXjToBeUnfolded_W =
+            new TH2D("hMultVsMissingRefXjToBeUnfolded_W", "Missing Ref Xj Distribution To Be Unfolded Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
         hMultVsMissingRefXjToBeUnfolded_W->Sumw2();
 
-        hMultVsFakeRefXjForTesting_W = new TH2D("hMultVsFakeRefXjForTesting_W", "Fake Ref Xj Distribution For Testing Weighted", nXjAjBinsUnfolding, XjBinsUnfolding,
-                                                nMultiplicityBins, multBinArray);
+        hMultVsFakeRefXjForTesting_W =
+            new TH2D("hMultVsFakeRefXjForTesting_W", "Fake Ref Xj Distribution For Testing Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
         hMultVsFakeRefXjForTesting_W->Sumw2();
-        hMultVsFakeRefXjToBeUnfolded_W = new TH2D("hMultVsFakeRefXjToBeUnfolded_W", "Fake Ref Xj Distribution To Be Unfolded Weighted", nXjAjBinsUnfolding,
-                                                  XjBinsUnfolding, nMultiplicityBins, multBinArray);
+        hMultVsFakeRefXjToBeUnfolded_W =
+            new TH2D("hMultVsFakeRefXjToBeUnfolded_W", "Fake Ref Xj Distribution To Be Unfolded Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray);
         hMultVsFakeRefXjToBeUnfolded_W->Sumw2();
-        hFakeLeadXj_W = new TH3D("hFakeLeadXj_W", "Fake Lead Xj Weighted", nXjAjBinsUnfolding, XjBinsUnfolding, nMultiplicityBins, multBinArray, nLeadPtBins, leadPtBins);
+        hFakeLeadXj_W = new TH3D("hFakeLeadXj_W", "Fake Lead Xj Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray, nLeadPtBins, leadPtBins);
         hFakeLeadXj_W->Sumw2();
-        hFakeSubLeadXj_W =
-            new TH3D("hFakeSubLeadXj_W", "Fake SubLead Xj Weighted", nXjAjBinsUnfolding, XjBinsUnfolding, nMultiplicityBins, multBinArray, nLeadPtBins, leadPtBins);
+        hFakeSubLeadXj_W = new TH3D("hFakeSubLeadXj_W", "Fake SubLead Xj Weighted", nXjAjBins, XjBins, nMultiplicityBins, multBinArray, nLeadPtBins, leadPtBins);
         hFakeSubLeadXj_W->Sumw2();
 
-        hLeadPtVsRecoXj_W = new TH2D("hLeadPtVsRecoXj_W", "Lead Pt vs Reco Xj Weighted", nXjAjBinsUnfolding, XjBinsUnfolding, nLeadPtBins, leadPtBins);
+        hLeadPtVsRecoXj_W = new TH2D("hLeadPtVsRecoXj_W", "Lead Pt vs Reco Xj Weighted", nXjAjBins, XjBins, nLeadPtBins, leadPtBins);
         hLeadPtVsRecoXj_W->Sumw2();
-        hLeadPtVsRefXj_W = new TH2D("hLeadPtVsRefXj_W", "Lead Pt vs Ref Xj Weighted", nXjAjBinsUnfolding, XjBinsUnfolding, nLeadPtBins, leadPtBins);
+        hLeadPtVsRefXj_W = new TH2D("hLeadPtVsRefXj_W", "Lead Pt vs Ref Xj Weighted", nXjAjBins, XjBins, nLeadPtBins, leadPtBins);
         hLeadPtVsRefXj_W->Sumw2();
-        hLeadPtVsGenXj_W = new TH2D("hLeadPtVsGenXj_W", "Lead Pt vs Gen Xj Weighted", nXjAjBinsUnfolding, XjBinsUnfolding, nLeadPtBins, leadPtBins);
+        hLeadPtVsGenXj_W = new TH2D("hLeadPtVsGenXj_W", "Lead Pt vs Gen Xj Weighted", nXjAjBins, XjBins, nLeadPtBins, leadPtBins);
         hLeadPtVsGenXj_W->Sumw2();
     }
+    int nFlatBins = nLeadPtBins * nXjAjBins;
+    std::vector<double> flatEdges(nFlatBins + 1);
+    for (int i = 0; i <= nFlatBins; ++i)
+    {
+        flatEdges[i] = i + 0.5;
+    }
+
+    if (fIsMC)
+    {
+        hResponseMatrix_W = new TH3D("hResponseMatrix_W", "Response Matrix", nFlatBins, flatEdges.data(), nFlatBins, flatEdges.data(), nMultiplicityBins, multBinArray);
+        hResponseMatrix_W->Sumw2();
+        hResponseMatrixA_W =
+            new TH3D("hResponseMatrixA_W", "Response Matrix for Sample A", nFlatBins, flatEdges.data(), nFlatBins, flatEdges.data(), nMultiplicityBins, multBinArray);
+        hResponseMatrixA_W->Sumw2();
+        hResponseMatrixB_W =
+            new TH3D("hResponseMatrixB_W", "Response Matrix for Sample B", nFlatBins, flatEdges.data(), nFlatBins, flatEdges.data(), nMultiplicityBins, multBinArray);
+        hResponseMatrixB_W->Sumw2();
+
+        hTotalReco_W = new TH2D("hTotalReco_W", "Total Reco Xj Flattened Weighted", nFlatBins, flatEdges.data(), nMultiplicityBins, multBinArray);
+        hTotalReco_W->Sumw2();
+        hTotalRecoA_W = new TH2D("hTotalRecoA_W", "Reco Xj Flattened for Sample A Weighted", nFlatBins, flatEdges.data(), nMultiplicityBins, multBinArray);
+        hTotalRecoA_W->Sumw2();
+        hTotalRecoB_W = new TH2D("hTotalRecoB_W", "Reco Xj Flattened for Sample B Weighted", nFlatBins, flatEdges.data(), nMultiplicityBins, multBinArray);
+        hTotalRecoB_W->Sumw2();
+
+        hTotalTruth_W = new TH2D("hTotalTruth_W", "Total Truth Xj Flattened Weighted", nFlatBins, flatEdges.data(), nMultiplicityBins, multBinArray);
+        hTotalTruth_W->Sumw2();
+        hTotalTruthA_W = new TH2D("hTotalTruthA_W", "Truth Xj Flattened for Sample A Weighted", nFlatBins, flatEdges.data(), nMultiplicityBins, multBinArray);
+        hTotalTruthA_W->Sumw2();
+        hTotalTruthB_W = new TH2D("hTotalTruthB_W", "Truth Xj Flattened for Sample B Weighted", nFlatBins, flatEdges.data(), nMultiplicityBins, multBinArray);
+        hTotalTruthB_W->Sumw2();
+
+        hMatchedGen_W = new TH2D("hMatchedGen_W", "Total Matched Gen Xj Flattened Weighted", nFlatBins, flatEdges.data(), nMultiplicityBins, multBinArray);
+        hMatchedGen_W->Sumw2();
+        hMatchedGenA_W = new TH2D("hMatchedGenA_W", "Matched Gen Xj Flattened for Sample A Weighted", nFlatBins, flatEdges.data(), nMultiplicityBins, multBinArray);
+        hMatchedGenA_W->Sumw2();
+        hMatchedGenB_W = new TH2D("hMatchedGenB_W", "Matched Gen Xj Flattened for Sample B Weighted", nFlatBins, flatEdges.data(), nMultiplicityBins, multBinArray);
+        hMatchedGenB_W->Sumw2();
+
+        hMatchedReco_W = new TH2D("hMatchedReco_W", "Total Matched Reco Xj Flattened Weighted", nFlatBins, flatEdges.data(), nMultiplicityBins, multBinArray);
+        hMatchedReco_W->Sumw2();
+        hMatchedRecoA_W = new TH2D("hMatchedRecoA_W", "Matched Reco Xj Flattened for Sample A Weighted", nFlatBins, flatEdges.data(), nMultiplicityBins, multBinArray);
+        hMatchedRecoA_W->Sumw2();
+        hMatchedRecoB_W = new TH2D("hMatchedRecoB_W", "Matched Reco Xj Flattened for Sample B Weighted", nFlatBins, flatEdges.data(), nMultiplicityBins, multBinArray);
+        hMatchedRecoB_W->Sumw2();
+    }
+
     // Float_t LeadSubLeadPtBins[] = {0.0, 50., 60., 70., 80., 90., 100., 110., 120., 130., 140., 150., 160., 170., 180., 190., 200., 220., 240., 260., 280., 300.,
     // 350., 400., 450., 500., 600., 700., 1200.};
     Float_t LeadSubLeadPtBins[] = {0.0,  10.,  20.,  30.,  40.,  50.,  60.,  70.,  80.,  90.,  100., 110., 120.,
@@ -1516,21 +1554,37 @@ void HistoManagerDiJet ::writeOutput()
         gDirectory->mkdir("Unfolding");
         gDirectory->cd("Unfolding");
 
-        hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W->Write();
-        hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W->Write();
-        hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W->Write();
-        hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W->Write();
-        hMultVsFakeRecoXjForTesting_W->Write();
-        hMultVsMissingRefXjForTesting_W->Write();
-        hMultVsFakeRecoXjToBeUnfolded_W->Write();
-        hMultVsMissingRefXjToBeUnfolded_W->Write();
-        hMultVsFakeRefXjForTesting_W->Write();
-        hMultVsFakeRefXjToBeUnfolded_W->Write();
-        hFakeLeadXj_W->Write();
-        hFakeSubLeadXj_W->Write();
-        hLeadPtVsRecoXj_W->Write();
-        hLeadPtVsRefXj_W->Write();
-        hLeadPtVsGenXj_W->Write();
+        // hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W->Write();
+        // hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W->Write();
+        // hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W->Write();
+        // hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W->Write();
+        // hMultVsFakeRecoXjForTesting_W->Write();
+        // hMultVsMissingRefXjForTesting_W->Write();
+        // hMultVsFakeRecoXjToBeUnfolded_W->Write();
+        // hMultVsMissingRefXjToBeUnfolded_W->Write();
+        // hMultVsFakeRefXjForTesting_W->Write();
+        // hMultVsFakeRefXjToBeUnfolded_W->Write();
+        // hFakeLeadXj_W->Write();
+        // hFakeSubLeadXj_W->Write();
+        // hLeadPtVsRecoXj_W->Write();
+        // hLeadPtVsRefXj_W->Write();
+        // hLeadPtVsGenXj_W->Write();
+
+        hResponseMatrix_W->Write();
+        hTotalReco_W->Write();
+        hTotalTruth_W->Write();
+        hMatchedGen_W->Write();
+        hMatchedReco_W->Write();
+        hResponseMatrixA_W->Write();
+        hTotalRecoA_W->Write();
+        hTotalTruthA_W->Write();
+        hMatchedGenA_W->Write();
+        hMatchedRecoA_W->Write();
+        hResponseMatrixB_W->Write();
+        hTotalRecoB_W->Write();
+        hTotalTruthB_W->Write();
+        hMatchedGenB_W->Write();
+        hMatchedRecoB_W->Write();
     }
 
     std::cout << "Writing Histograms Complete" << std::endl;

@@ -48,10 +48,17 @@ class HistoManagerDiJet : public BaseHistoManager
     ///@brief Histogram manager report
     void report();
     ///@brief Set Multiplicity bins
+    ///@param bins vector of bin boundaries
     void setMultiplicityBins(const std::vector<double>& bins) { fMultiplicityBins = std::move(bins); }
-
+    /// @brief set Forward Calorimeter energy bins
+    /// @param bins vector of bin boundaries
     void setHiHFEnergyBins(const std::vector<double>& bins) { fHiHFEnergyBins = std::move(bins); }
-    ///@brief Set Collision System
+    /// @brief Set Pt bins. It could be average pt bins or leading pt bins
+    /// @param bins vector of pt bin boundaries
+    void setPtBins(const std::vector<double>& bins) { fPtBins = std::move(bins); }
+    /// @brief set xj bins
+    /// @param bins xj bin boundaries vector
+    void setXjBins(const std::vector<double>& bins) { fXjBins = std::move(bins); }  ///@brief Set Collision System
     void setCollSystem(const TString& collSystem) { fCollSystem = collSystem; }
 
     TH1D* hPtHat;
@@ -204,6 +211,26 @@ class HistoManagerDiJet : public BaseHistoManager
     TH3D* hFakeLeadXj_W;
     TH3D* hFakeSubLeadXj_W;
 
+    TH3D* hResponseMatrix_W;
+    TH3D* hResponseMatrixA_W;
+    TH3D* hResponseMatrixB_W;
+
+    TH2D* hTotalReco_W;
+    TH2D* hTotalRecoA_W;
+    TH2D* hTotalRecoB_W;
+
+    TH2D* hTotalTruth_W;
+    TH2D* hTotalTruthA_W;
+    TH2D* hTotalTruthB_W;
+
+    TH2D* hMatchedReco_W;
+    TH2D* hMatchedRecoA_W;
+    TH2D* hMatchedRecoB_W;
+
+    TH2D* hMatchedGen_W;
+    TH2D* hMatchedGenA_W;
+    TH2D* hMatchedGenB_W;
+
     TH2D* hLeadPtVsRecoXj_W;
     TH2D* hLeadPtVsRefXj_W;
     TH2D* hLeadPtVsGenXj_W;
@@ -216,6 +243,8 @@ class HistoManagerDiJet : public BaseHistoManager
 
     std::vector<double> fMultiplicityBins;
     std::vector<double> fHiHFEnergyBins;
+    std::vector<double> fPtBins;
+    std::vector<double> fXjBins;
     TString fCollSystem;
 
     // Projection Histograms

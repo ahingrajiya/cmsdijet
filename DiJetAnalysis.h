@@ -75,6 +75,12 @@ class DiJetAnalysis : public BaseAnalysis
         fMultiplicityRange[0] = low;
         fMultiplicityRange[1] = hi;
     }
+    void setUnfolding(const bool& unfold, const std::vector<double> ptBins, const std::vector<double> xjBins)
+    {
+        fDoUnfolding = unfold;
+        fPtBins = std::move(ptBins);
+        fXjBins = std::move(xjBins);
+    }
     ///@brief Set Reader
     void setReader(ForestReader* reader) { fReader = reader; }
     /// @brief Set Center of mass reference frame for pPb
@@ -312,6 +318,30 @@ class DiJetAnalysis : public BaseAnalysis
     /// @param subleadpt subleading jet pt
     /// @return double value of average jet pt
     double averagePt(const double& leadpt, const double& subleadpt);
+    /// @brief get bin indices for the unfolding flattening
+    /// @param value xj or pt value
+    /// @param edges xj or pt bin edges
+    /// @return returns index for xj or pt bin
+    int getBinIndex(const double value, const std::vector<double>& edges);
+    /// @brief Find the flattened index for unfolding
+    /// @param xj Xj value
+    /// @param pt pt value
+    /// @param xjBins xj bin endges
+    /// @param ptBins pt bin edges
+    /// @return integer index calculated for flattening of unfolding distribution
+    int getFlattenedIndex(const double xj, const double pt, const std::vector<double>& xjBins, const std::vector<double>& ptBins);
+    /// @brief Unfolding processing loop
+    /// @param event event
+    /// @param eventWeight event level weight to apply to histogram
+    /// @param multBin multiplicity bin
+    void unfolding(const Event* event, const double& eventWeight, const double& multBin);
+    /// @brief Finding matched gen jet for given reco jet
+    /// @param recoEta reco jet pseudorapidity
+    /// @param recoPhi reco jet phi
+    /// @param genEta gen jet pseudorapidity
+    /// @param genPhi gen jet phi
+    /// @return if given gen jet is matched to reco jet
+    bool jetMatching(const double& recoEta, const double& recoPhi, const double& genEta, const double& genPhi);
     ///@brief Print debug information
     Bool_t fDebug;
     ///@brief Delta Phi selection for dijet
@@ -442,6 +472,12 @@ class DiJetAnalysis : public BaseAnalysis
 
     ///@brief Double comparison precision value
     static constexpr double fEpsilon = 1e-6;
+    ///@brief Boolean for Unfolding
+    bool fDoUnfolding;
+    /// @brief Pt bin boundries
+    std::vector<double> fPtBins;
+    ///@brief Xj bins boundries
+    std::vector<double> fXjBins;
 
     ClassDef(DiJetAnalysis, 0)
 };
