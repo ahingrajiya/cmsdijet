@@ -351,9 +351,9 @@ void HistoManagerDiJet::init()
         hNGenDijetEvent->Sumw2();
     }
 
-    int MultBins[7] = {5000, 5000, 5000, 5000, 5000, 200, nMultiplicityBins + 1};
+    int MultBins[7] = {5000, 5000, 5000, 5000, 5000, 200, nMultiplicityBins};
     Double_t MultMin[7] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, fMultiplicityBins[0]};
-    Double_t MultMax[7] = {5000.0, 5000.0, 5000.0, 5000.0, 5000.0, 200, fMultiplicityBins[fMultiplicityBins.size() - 1] + 1};
+    Double_t MultMax[7] = {5000.0, 5000.0, 5000.0, 5000.0, 5000.0, 200, fMultiplicityBins[fMultiplicityBins.size() - 1]};
     hMultiplicities = new THnSparseD("hMultiplicities", "Multiplicity Distribution", 7, MultBins, MultMin, MultMax);
     hMultiplicities->GetAxis(6)->Set(MultBins[6], multBinArray);
     hMultiplicities->Sumw2();
@@ -364,9 +364,9 @@ void HistoManagerDiJet::init()
     hMultiplicities_DiJet_W->GetAxis(6)->Set(MultBins[6], multBinArray);
     hMultiplicities_DiJet_W->Sumw2();
 
-    int JetBins[5] = {200, 52, 64, 5, nMultiplicityBins + 1};
+    int JetBins[5] = {200, 52, 64, 5, nMultiplicityBins};
     Double_t JetMin[5] = {0.0, -5.2, -TMath::Pi(), -2, fMultiplicityBins[0]};
-    Double_t JetMax[5] = {1000.0, 5.2, TMath::Pi(), 2, fMultiplicityBins[fMultiplicityBins.size() - 1] + 1};
+    Double_t JetMax[5] = {1000.0, 5.2, TMath::Pi(), 2, fMultiplicityBins[fMultiplicityBins.size() - 1]};
     hInclusiveUncorrectedRecoJets = new THnSparseD("hInclusiveUncorrectedRecoJets", "Inclusive Uncorrected Reco Jets", 5, JetBins, JetMin, JetMax);
     hInclusiveUncorrectedRecoJets->GetAxis(4)->Set(JetBins[4], multBinArray);
     hInclusiveUncorrectedRecoJets->Sumw2();
@@ -436,17 +436,17 @@ void HistoManagerDiJet::init()
         new TH2D("hInclusiveUnCorrectedRecoPtVsEtaLabFrame_W", "Inclusive Uncorrected Reco Jet Pt vs Eta in Lab Frame Weighted", 100, -5., 5., 200, 0., 1000.);
     hInclusiveUnCorrectedRecoPtVsEtaLabFrame_W->Sumw2();
 
-    int JetFractionBins[5] = {200, 100, 64, 50, nMultiplicityBins + 1};
+    int JetFractionBins[5] = {200, 100, 64, 50, nMultiplicityBins};
     Double_t JetFractionMin[5] = {0.0, -5.0, -TMath::Pi(), 0.0, fMultiplicityBins[0]};
-    Double_t JetFractionMax[5] = {1000.0, 5.0, TMath::Pi(), 50.0, fMultiplicityBins[fMultiplicityBins.size() - 1] + 1};
+    Double_t JetFractionMax[5] = {1000.0, 5.0, TMath::Pi(), 50.0, fMultiplicityBins[fMultiplicityBins.size() - 1]};
 
     hJetFlavorFractions_W = new THnSparseD("hJetFlavorFractions_W", "Jet Flavor Fractions Weighted", 5, JetFractionBins, JetFractionMin, JetFractionMax);
     hJetFlavorFractions_W->GetAxis(4)->Set(JetFractionBins[4], multBinArray);
     hJetFlavorFractions_W->Sumw2();
 
-    int TrackBins[4] = {100, 60, 64, nMultiplicityBins + 1};
+    int TrackBins[4] = {100, 60, 64, nMultiplicityBins};
     Double_t TrackMin[4] = {0.0, -3.0, -TMath::Pi(), fMultiplicityBins[0]};
-    Double_t TrackMax[4] = {5.0, 3.0, TMath::Pi(), fMultiplicityBins[fMultiplicityBins.size() - 1] + 1};
+    Double_t TrackMax[4] = {5.0, 3.0, TMath::Pi(), fMultiplicityBins[fMultiplicityBins.size() - 1]};
 
     hRecoTracks = new THnSparseD("hRecoTracks", "Reco Tracks", 4, TrackBins, TrackMin, TrackMax);
     hRecoTracks->GetAxis(3)->Set(TrackBins[3], multBinArray);
@@ -467,9 +467,9 @@ void HistoManagerDiJet::init()
     hGenTracks_Pt1_W->GetAxis(3)->Set(TrackBins[3], multBinArray);
     hGenTracks_Pt1_W->Sumw2();
 
-    int LeadSLeadJetBins[7] = {200, 100, 64, 200, 100, 64, nMultiplicityBins + 1};
+    int LeadSLeadJetBins[7] = {200, 100, 64, 200, 100, 64, nMultiplicityBins};
     Double_t LeadSLeadJetMin[7] = {0.0, -5.0, -TMath::Pi(), 0.0, -5.0, -TMath::Pi(), fMultiplicityBins[0]};
-    Double_t LeadSLeadJetMax[7] = {1000.0, 5.0, TMath::Pi(), 1000.0, 5.0, TMath::Pi(), fMultiplicityBins[fMultiplicityBins.size() - 1] + 1};
+    Double_t LeadSLeadJetMax[7] = {1000.0, 5.0, TMath::Pi(), 1000.0, 5.0, TMath::Pi(), fMultiplicityBins[fMultiplicityBins.size() - 1]};
 
     hLeadSubLeadJets = new THnSparseD("hLeadSubLeadJets", "Lead vs SubLead Pt", 7, LeadSLeadJetBins, LeadSLeadJetMin, LeadSLeadJetMax);
     hLeadSubLeadJets->GetAxis(6)->Set(LeadSLeadJetBins[6], multBinArray);
@@ -581,13 +581,13 @@ void HistoManagerDiJet::init()
     // const int nLeadPtBins = 8;
     // double leadPtBins[nLeadPtBins + 1] = {25.0, 50., 55., 60., 65., 70., 80., 90., 200.};
 
-    int QuenchBins[5] = {nXjAjBins, nDphiBins, 200, 200, nMultiplicityBins + 1};
+    int QuenchBins[5] = {nXjAjBins, nDphiBins, 200, 200, nMultiplicityBins};
     Double_t QuenchMin[5] = {0.0, 0.0, 0.0, 0.0, fMultiplicityBins[0]};
-    Double_t QuenchMax[5] = {1.0, TMath::Pi(), 1000.0, 1000.0, fMultiplicityBins[fMultiplicityBins.size() - 1] + 1};
+    Double_t QuenchMax[5] = {1.0, TMath::Pi(), 1000.0, 1000.0, fMultiplicityBins[fMultiplicityBins.size() - 1]};
 
-    int QuenchBinsWithDijet[4] = {nXjAjBins, 500, 500, nMultiplicityBins + 1};
+    int QuenchBinsWithDijet[4] = {nXjAjBins, 500, 500, nMultiplicityBins};
     Double_t QuenchMinWithDijet[4] = {0.0, 0.0, 0.0, fMultiplicityBins[0]};
-    Double_t QuenchMaxWithDijet[4] = {1.0, 1000.0, 1000.0, fMultiplicityBins[fMultiplicityBins.size() - 1] + 1};
+    Double_t QuenchMaxWithDijet[4] = {1.0, 1000.0, 1000.0, fMultiplicityBins[fMultiplicityBins.size() - 1]};
 
     int UnfoldingBins[4] = {nXjAjBins, nXjAjBins, nMultiplicityBins + 1, nLeadPtBins};
     double UnfoldingMin[4] = {0., 0., fMultiplicityBins[0], 0.};
