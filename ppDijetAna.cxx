@@ -152,6 +152,7 @@ int main(int argc, char* argv[])
             filters.clear();
             filters.push_back("pprimaryVertexFilter");
             reader->setFilters(filters);
+            reader->setStoreLocation(true);
         }
     }
     if (isMC && collEnergyGeV == 5020)
