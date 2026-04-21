@@ -238,6 +238,9 @@ class HistoManagerDiJet : public BaseHistoManager
     TH1D* hAverageRecoPt_W;
     TH1D* hAverageGenPt_W;
 
+    TH2D* hHiBinVsMultiplicity_W;
+    TH2D* hHiBinVsCorrectedMultiplicity_W;
+
    private:
     Bool_t fIsMC;
 

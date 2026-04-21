@@ -1217,6 +1217,11 @@ void DiJetAnalysis::processEvent(const Event* event)
         fHM->hHiHFPlusVsHiHFMinus_WithDijet_W->Fill(event->hiHFMinus(), event->hiHFPlus(), Event_Weight * HiHFWeight(event->hiHFPlus()));
         fHM->hHiHFPlusVsMultiplicity_WithDijet_W->Fill(iRecoMult, event->hiHFPlus(), Event_Weight);
         fHM->hHiHFMinusVsMultiplicity_WithDijet_W->Fill(iRecoMult, event->hiHFMinus(), Event_Weight);
+        if (fIsOO)
+        {
+            fHM->hHiBinVsMultiplicity_W->Fill(iRecoMult, event->hiBinWithShift());
+            fHM->hHiBinVsCorrectedMultiplicity_W->Fill(iRecoCorrectedMult.second, event->hiBinWithShift());
+        }
     }
 
     processRecoTracks(event, Event_Weight, iMultiplicityBin);

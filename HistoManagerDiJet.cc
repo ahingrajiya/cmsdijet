@@ -68,7 +68,8 @@ ClassImp(HistoManagerDiJet)
     hMultVsFakeRefXjForTesting_W{nullptr}, hFakeLeadXj_W{nullptr}, hFakeSubLeadXj_W{nullptr}, hLeadPtVsRecoXj_W{nullptr}, hLeadPtVsRefXj_W{nullptr},
     hLeadPtVsGenXj_W{nullptr}, hAverageRecoPt_W{nullptr}, hAverageGenPt_W{nullptr}, hResponseMatrix_W{nullptr}, hResponseMatrixA_W{nullptr}, hResponseMatrixB_W{nullptr},
     hTotalReco_W{nullptr}, hTotalRecoA_W{nullptr}, hTotalRecoB_W{nullptr}, hTotalTruth_W{nullptr}, hTotalTruthA_W{nullptr}, hTotalTruthB_W{nullptr},
-    hMatchedGen_W{nullptr}, hMatchedGenA_W{nullptr}, hMatchedGenB_W{nullptr}, hMatchedReco_W{nullptr}, hMatchedRecoA_W{nullptr}, hMatchedRecoB_W{nullptr}
+    hMatchedGen_W{nullptr}, hMatchedGenA_W{nullptr}, hMatchedGenB_W{nullptr}, hMatchedReco_W{nullptr}, hMatchedRecoA_W{nullptr}, hMatchedRecoB_W{nullptr},
+    hHiBinVsMultiplicity_W{nullptr}, hHiBinVsCorrectedMultiplicity_W{nullptr}
 {
     /* Empty*/
 }
@@ -158,6 +159,8 @@ HistoManagerDiJet::~HistoManagerDiJet()
     if (hGenQuenching_W) delete hGenQuenching_W;
     if (hRecoQuenching_WithDijet_W) delete hRecoQuenching_WithDijet_W;
     if (hGenQuenching_WithDijet_W) delete hGenQuenching_WithDijet_W;
+    if (hHiBinVsMultiplicity_W) delete hHiBinVsMultiplicity_W;
+    if (hHiBinVsCorrectedMultiplicity_W) delete hHiBinVsCorrectedMultiplicity_W;
 
     if (hInclusiveUncorrectedRecoJets) delete hInclusiveUncorrectedRecoJets;
     if (hInclusiveUncorrectedRecoJets_W) delete hInclusiveUncorrectedRecoJets_W;
@@ -335,6 +338,10 @@ void HistoManagerDiJet::init()
     hHiHF_PF->Sumw2();
     hHiHF_PF_W = new TH1D("hHiHF_PF_W", "HiHF PF Distribution Weighted", 100, 0.0, 1000.0);
     hHiHF_PF_W->Sumw2();
+    hHiBinVsMultiplicity_W = new TH2D("hHiBinvsMultiplicity_W", "HiBin vs Multiplicity Weighted", 600, 0.0, 600., 200, 0.0, 200.);
+    hHiBinVsMultiplicity_W->Sumw2();
+    hHiBinVsCorrectedMultiplicity_W = new TH2D("hHiBinVsCorrectedMultiplicity_W", "HiBin vs Corrected Multiplicities Weighted", 600, 0., 600., 200, 0., 200.);
+    hHiBinVsCorrectedMultiplicity_W->Sumw2();
     if (fIsMC)
     {
         hGenMultiplicity_W = new TH1D("hGenMultiplicity_W", "Gen Multiplicity Weighted", 600, 0.0, 600.0);
@@ -1277,6 +1284,11 @@ void HistoManagerDiJet ::writeOutput()
         hGenMultiplicity_W->Write();
         hSubEventMultiplicity_W->Write();
     }
+    if (fCollSystem == "OO")
+    {
+        hHiBinVsMultiplicity_W->Write();
+        hHiBinVsCorrectedMultiplicity_W->Write();
+    }
     hNEventsInMult->Write();
     hHiHFPlusVsHiHFMinus->Write();
     hHiHFPlusVsHiHFMinus_W->Write();
@@ -1470,6 +1482,7 @@ void HistoManagerDiJet ::writeOutput()
     hSubLeadingRecoJetPtWithDijet_W->Write();
     hLeadingRecoJetPtWithDijet_DiJetW->Write();
     hSubLeadingRecoJetPtWithDijet_DiJetW->Write();
+
     if (fIsMC)
     {
         hInclusiveGenJetPt->Write();

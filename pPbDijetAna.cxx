@@ -242,13 +242,13 @@ int main(int argc, char* argv[])
     }
     analysis->setMultiplicityType(0);
     analysis->setMinTrkPt(0.40);
-    analysis->setDeltaPhi(2.7);
+    analysis->setDeltaPhi(5 * TMath::Pi() / 6);
     analysis->setUseCMFrame();
     analysis->setEtaBoost(etaBoost);
-    analysis->setLeadJetPt(50.);
-    analysis->setSubLeadJetPt(30.);
-    analysis->setLeadJetEtaRange(-2.1, 2.1);
-    analysis->setSubLeadJetEtaRange(-2.1, 2.1);
+    analysis->setLeadJetPt(100.);
+    analysis->setSubLeadJetPt(50.);
+    analysis->setLeadJetEtaRange(-1., 1.);
+    analysis->setSubLeadJetEtaRange(-1., 1.);
     analysis->setInclusiveJetEtaRange(-2.1, 2.1);
     analysis->setInclusiveCorrectedJetPtMin(50.0);
     // analysis->doInJetMultiplicity();
