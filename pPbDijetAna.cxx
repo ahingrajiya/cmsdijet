@@ -247,8 +247,8 @@ int main(int argc, char* argv[])
     analysis->setEtaBoost(etaBoost);
     analysis->setLeadJetPt(100.);
     analysis->setSubLeadJetPt(50.);
-    analysis->setLeadJetEtaRange(-1., 1.);
-    analysis->setSubLeadJetEtaRange(-1., 1.);
+    analysis->setLeadJetEtaRange(-2.1, 2.1);
+    analysis->setSubLeadJetEtaRange(-2.1, 2.1);
     analysis->setInclusiveJetEtaRange(-2.1, 2.1);
     analysis->setInclusiveCorrectedJetPtMin(50.0);
     // analysis->doInJetMultiplicity();
