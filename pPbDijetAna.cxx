@@ -245,8 +245,8 @@ int main(int argc, char* argv[])
     analysis->setDeltaPhi(5 * TMath::Pi() / 6);
     analysis->setUseCMFrame();
     analysis->setEtaBoost(etaBoost);
-    analysis->setLeadJetPt(100.);
-    analysis->setSubLeadJetPt(50.);
+    analysis->setLeadJetPt(60.);
+    analysis->setSubLeadJetPt(40.);
     analysis->setLeadJetEtaRange(-2.1, 2.1);
     analysis->setSubLeadJetEtaRange(-2.1, 2.1);
     analysis->setInclusiveJetEtaRange(-2.1, 2.1);
