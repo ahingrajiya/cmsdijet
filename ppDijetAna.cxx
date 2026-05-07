@@ -198,6 +198,7 @@ int main(int argc, char* argv[])
     {
         analysis->setUnfolding(true, ptBins, xjBins);
     }
+    analysis->setUseJetPtWeight();
 
     // if (isMC)
     // {

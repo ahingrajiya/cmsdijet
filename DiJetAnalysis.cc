@@ -22,7 +22,8 @@ ClassImp(DiJetAnalysis)
     hDijetWeight{nullptr}, fDijetWeightFile{nullptr}, fDijetWeight{1.0}, fDijetWeightType{"Reco"}, fIspp{kFALSE}, fIsPbPb{kFALSE}, fIsOO{kFALSE}, fCollSystem{""},
     fUEType{""}, fDoTrackingClosures{kFALSE}, fVertexZWeight{nullptr}, fDoVzWeight{kFALSE}, fRecoType{kFALSE}, fRefType{kFALSE}, fGenType{kFALSE},
     fMultWeightFunctions{nullptr}, fXBinEdges{}, fYBinEdges{}, fBinContent{}, fXBinCount{0}, fYBinCount{0}, fInclusiveCorrectedJetPtMin{50.}, fUseHiHFWeight{kFALSE},
-    fHiHFWeight{nullptr}, gen_{SEED}, dist_{0.0, 1.0}, fUseAveragePt{false}, fDoUnfolding{false}, fPtBins{0.0}, fXjBins{0.0}
+    fHiHFWeight{nullptr}, gen_{SEED}, dist_{0.0, 1.0}, fUseAveragePt{false}, fDoUnfolding{false}, fPtBins{0.0}, fXjBins{0.0}, fJetPtWeight{nullptr},
+    fUseJetPtWeight{false}
 {
     fLeadJetEtaRange[0] = {-1.};
     fLeadJetEtaRange[1] = {1.};
@@ -134,6 +135,7 @@ void DiJetAnalysis::SetUpWeightFunctions()
     std::cout << "Use VertexZ Weights : " << std::boolalpha << fDoVzWeight << std::endl;
     std::cout << "Use Multiplicity Weights : " << std::boolalpha << fUseMultiplicityWeight << std::endl;
     std::cout << "Use HiHF Weights : " << std::boolalpha << fUseHiHFWeight << std::endl;
+    std::cout << "Use JetPt Weights : " << std::boolalpha << fUseJetPtWeight << std::endl;
     if (fIspPb && fIsMC)
     {
         if (fDoVzWeight)
@@ -169,6 +171,15 @@ void DiJetAnalysis::SetUpWeightFunctions()
             fCentWeightFunctions[0]->SetParameters(1.19999e+01, 7.01699e-01, -4.39143e-02, 6.78303e-04);
             fCentWeightFunctions[1] = new TF1("fCentWeightFunctions1", "pol3", 30, 180, TF1::EAddToList::kNo);
             fCentWeightFunctions[1]->SetParameters(2.27178e+01, -4.09285e-01, 2.53942e-03, -5.29161e-06);
+        }
+    }
+    if (fIspp)
+    {
+        if (fIsMC && fUseJetPtWeight)
+        {
+            std::cout << "DiJetAnalysis::SetUpWeightFunctions Setting up JetPt Weight Functions" << std::endl;
+            fJetPtWeight = new TF1("fJetPtWeight", "pol2", 50, 500);
+            fJetPtWeight->SetParameters(9.54788e-01, 6.57695e-04);
         }
     }
     std::cout << "DiJetAnalysis::SetUpWeightFunctions Setting up Weight Functions for " << fCollSystem << " completed." << std::endl;
@@ -1500,7 +1511,9 @@ void DiJetAnalysis::processRecoJets(const Event* event, const Double_t& event_We
             double jetPt = (fUseAveragePt) ? averagePt(leadJetPt, subLeadJetPt) : leadJetPt;
             fIsRecoDiJetFound = kTRUE;
             fHM->hDeltaPhi_WithDiJet_W->Fill(deltaPhi, event_Weight);
-            fHM->hMultVsXj_W->Fill(Xj, multiplicityBin, jetPt, event_Weight);
+            double leadPtWeight = jetPtWeight(leadJetPt);
+            // std::cout << leadJetPt << "    " << leadPtWeight << std::endl;
+            fHM->hMultVsXj_W->Fill(Xj, multiplicityBin, jetPt, event_Weight * leadPtWeight);
             fHM->hMultVsXj_DiJetW->Fill(Xj, multiplicityBin, jetPt, event_Weight * fDijetWeight);
             fHM->hMultVsXj_HiHFW->Fill(Xj, multiplicityBin, event_Weight * HiHFWeight(event->hiHFPlus()));
             fHM->hHiHFVsXj_W->Fill(Xj, event->hiHFPlus(), event_Weight);
@@ -2138,6 +2151,17 @@ bool DiJetAnalysis::jetMatching(const double& recoEta, const double& recoPhi, co
     else
         return false;
 }
+
+float DiJetAnalysis::jetPtWeight(const double& recoLeadPt)
+{
+    if (!fIsMC) return 1.0;
+    if (!fIspp) return 1.0;
+    if (fJetPtWeight == nullptr) return 1.0;
+    if (recoLeadPt < 50 || recoLeadPt > 500) return 1.0;
+
+    return fJetPtWeight->Eval(recoLeadPt);
+}
+
 void DiJetAnalysis::report()
 {
     TString reportString = "\n===========DiJetAnalysis::Reporting Analysis Setup===============\n";

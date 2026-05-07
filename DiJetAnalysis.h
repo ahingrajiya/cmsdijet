@@ -113,6 +113,8 @@ class DiJetAnalysis : public BaseAnalysis
     }
     ///@brief Set if to use centrality weight
     void setUseCentralityWeight() { fUseCentralityWeight = kTRUE; }
+    /// @brief Set if to use jetpt weight
+    void setUseJetPtWeight() { fUseJetPtWeight = true; }
     ///@brief Set if to use multiplicity weight
     void setUseMultiplicityWeigth() { fUseMultiplicityWeight = kTRUE; }
     ///@brief Set if to use dijet weight
@@ -342,6 +344,10 @@ class DiJetAnalysis : public BaseAnalysis
     /// @param genPhi gen jet phi
     /// @return if given gen jet is matched to reco jet
     bool jetMatching(const double& recoEta, const double& recoPhi, const double& genEta, const double& genPhi);
+    /// @brief Calculate the leading jet pt weight
+    /// @param recoLeadPt reco lead jet pt
+    /// @return leading jet pt weight
+    float jetPtWeight(const double& recoLeadPt);
     ///@brief Print debug information
     Bool_t fDebug;
     ///@brief Delta Phi selection for dijet
@@ -478,6 +484,10 @@ class DiJetAnalysis : public BaseAnalysis
     std::vector<double> fPtBins;
     ///@brief Xj bins boundries
     std::vector<double> fXjBins;
+    /// @brief JetPt Weight Function
+    TF1* fJetPtWeight;
+    ///@brief Use jetpt weight
+    bool fUseJetPtWeight;
 
     ClassDef(DiJetAnalysis, 0)
 };
