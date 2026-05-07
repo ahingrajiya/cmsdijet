@@ -1521,7 +1521,7 @@ void DiJetAnalysis::processRecoJets(const Event* event, const Double_t& event_We
             fHM->hAverageRecoPt_W->Fill(averagePt(leadJetPt, subLeadJetPt), event_Weight);
 
             Double_t LeadSLeadJetsWithDijet[7] = {leadJetPt, leadJetEtaCM, leadJetPhi, subLeadJetPt, subLeadJetEtaCM, subLeadJetPhi, multiplicityBin};
-            fHM->hLeadSubLeadJets_WithDijet_W->Fill(LeadSLeadJetsWithDijet, event_Weight);
+            fHM->hLeadSubLeadJets_WithDijet_W->Fill(LeadSLeadJetsWithDijet, event_Weight * leadPtWeight);
             fHM->hLeadSubLeadJets_WithDijet_DiJetW->Fill(LeadSLeadJetsWithDijet, event_Weight * fDijetWeight);
 
             fHM->hLeadPtvsSubLeadPt_PtHatW->Fill(subLeadJetPt, leadJetPt, event_Weight);
