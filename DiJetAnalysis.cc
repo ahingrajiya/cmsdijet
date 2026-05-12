@@ -1941,7 +1941,6 @@ void DiJetAnalysis::unfolding(const Event* event, const double& eventWeight, con
     Float_t genSubLeadJetPhi = -999.;
 
     GenJetIterator genJetIterator;
-    GenTrackIterator genTrackIterator;
     for (genJetIterator = event->genJetCollection()->begin(); genJetIterator != event->genJetCollection()->end(); genJetIterator++)
     {
         Float_t genJetPt = (*genJetIterator)->pt();
@@ -2032,6 +2031,7 @@ void DiJetAnalysis::unfolding(const Event* event, const double& eventWeight, con
     Bool_t isRecoDiJet = CheckDijet(leadJetPt, leadJetEtaCM, subLeadJetPt, subLeadJetEtaCM, leadJetID, subLeadJetID);
     bool recoDijetEvent = false;
 
+    // std::cout << leadJetPt << "                  " << subLeadJetPt << std::endl;
     double Xj;
     double deltaPhi;
     int recoFlatBin;
@@ -2062,6 +2062,39 @@ void DiJetAnalysis::unfolding(const Event* event, const double& eventWeight, con
             genRecoMatching = jetMatching(leadJetEtaCM, leadJetPhi, genSubLeadJetEtaCM, genSubLeadJetPhi) &&
                               jetMatching(subLeadJetEtaCM, subLeadJetPhi, genLeadJetEtaCM, genLeadJetPhi);
         }
+    }
+
+    float matchedGenLeadPt = -999.;
+    float matchedGenSubLeadPt = -999.;
+    bool genRecoLeadMatch = false;
+    bool genRecoSubleadMatch = false;
+
+    if (!genRecoMatching && recoDijetEvent)
+    {
+        for (genJetIterator = event->genJetCollection()->begin(); genJetIterator != event->genJetCollection()->end(); genJetIterator++)
+        {
+            Float_t genJetPt = (*genJetIterator)->pt();
+            Float_t genJetEta = (*genJetIterator)->eta();
+            Float_t genJetPhi = (*genJetIterator)->phi();
+
+            if (!genRecoLeadMatch)
+            {
+                genRecoLeadMatch = jetMatching(leadJetEtaCM, leadJetPhi, genJetEta, genJetPhi);
+                matchedGenLeadPt = genJetPt;
+            }
+            if (!genRecoSubleadMatch)
+            {
+                genRecoSubleadMatch = jetMatching(subLeadJetEtaCM, subLeadJetPhi, genJetEta, genJetPhi);
+                matchedGenSubLeadPt = genJetPt;
+            }
+        }
+        // std::cout << std::boolalpha << genRecoMatching << std::endl;
+        // std::cout << std::boolalpha << genRecoLeadMatch << std::endl;
+        // std::cout << std::boolalpha << genRecoSubleadMatch << std::endl;
+        // std::cout << leadJetPt << "     " << matchedGenLeadPt << std::endl;
+        // std::cout << subLeadJetPt << "       " << matchedGenSubLeadPt << std::endl;
+        // std::cout << genLeadJetPt << "         " << genSubLeadJetPt << std::endl;
+        // std::cout << std::endl;
     }
 
     double rndm = uniform01();
@@ -2107,6 +2140,28 @@ void DiJetAnalysis::unfolding(const Event* event, const double& eventWeight, con
             fHM->hMatchedGenB_W->Fill(genFlatBin, multBin, eventWeight);
             fHM->hMatchedRecoB_W->Fill(recoFlatBin, multBin, eventWeight);
             fHM->hResponseMatrixB_W->Fill(recoFlatBin, genFlatBin, multBin, eventWeight);
+        }
+    }
+
+    if (!genRecoMatching && genRecoLeadMatch && genRecoSubleadMatch)
+    {
+        double matchedGenXj = Asymmetry(matchedGenLeadPt, matchedGenSubLeadPt);
+        if (matchedGenXj > 1.0) matchedGenXj = 1. / matchedGenXj;
+        int genMatchedFlatBin = getFlattenedIndex(matchedGenXj, matchedGenLeadPt, fXjBins, fPtBins);
+
+        // std::cout << leadJetPt << "     " << matchedGenLeadPt << std::endl;
+        // std::cout << subLeadJetPt << "       " << matchedGenSubLeadPt << std::endl;
+        // std::cout << genMatchedFlatBin << std::endl;
+        // std::cout << std::endl;
+
+        fHM->hResponseMatrix_W->Fill(recoFlatBin, genMatchedFlatBin, multBin, eventWeight);
+        if (rndm <= 0.5)
+        {
+            fHM->hResponseMatrixA_W->Fill(recoFlatBin, genMatchedFlatBin, multBin, eventWeight);
+        }
+        else
+        {
+            fHM->hResponseMatrixB_W->Fill(recoFlatBin, genMatchedFlatBin, multBin, eventWeight);
         }
     }
 }
