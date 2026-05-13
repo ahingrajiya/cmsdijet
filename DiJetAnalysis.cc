@@ -536,7 +536,7 @@ Double_t DiJetAnalysis::MultiplicityWeight(const Double_t& multiplicity)
     }
 }
 
-Float_t DiJetAnalysis::DijetWeight(const Bool_t& ispPb, const Double_t& leadPt, const Double_t& subLeadPt)
+Float_t DiJetAnalysis::getDijetWeight(const Double_t& leadPt, const Double_t& subLeadPt)
 {
     if (fDebug)
     {
@@ -728,7 +728,7 @@ Float_t DiJetAnalysis::DijetWeight(const Event* event)
         {
             if (fRecoType)
             {
-                dijetWeight = DijetWeight(fIspPb, leadJetPt, subLeadJetPt);
+                dijetWeight = getDijetWeight(leadJetPt, subLeadJetPt);
             }
             else if (fRefType)
             {
@@ -738,7 +738,7 @@ Float_t DiJetAnalysis::DijetWeight(const Event* event)
                 {
                     std::swap(matchedLeadRefPt, matchedSubLeadRefPt);
                 }
-                dijetWeight = DijetWeight(fIspPb, matchedLeadRefPt, matchedSubLeadRefPt);
+                dijetWeight = getDijetWeight(matchedLeadRefPt, matchedSubLeadRefPt);
             }
             else if (fGenType)
             {
@@ -774,7 +774,7 @@ Float_t DiJetAnalysis::DijetWeight(const Event* event)
                         }
                     }
                 }
-                dijetWeight = DijetWeight(fIspPb, leadJetPt, subLeadJetPt);
+                dijetWeight = getDijetWeight(leadJetPt, subLeadJetPt);
                 // std::cout << "Dijet Weight : " << fDijetWeight << std::endl;
             }
             else
@@ -1113,7 +1113,8 @@ void DiJetAnalysis::processEvent(const Event* event)
     if (fUseDijetWeight)
     {
         fDijetWeight = DijetWeight(event);
-        fDijetWeight = pow(fDijetWeight, 1.45);  // std::cout << "Dijet Weight : " << fDijetWeight << std::endl;
+        // fDijetWeight = pow(fDijetWeight, 1.45);
+        // std::cout << "Dijet Weight : " << fDijetWeight << std::endl;
     }
     else
     {
