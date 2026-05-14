@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
     std::vector<std::string> filters{"pBeamScrapingFilter", "pPAprimaryVertexFilter", "HBHENoiseFilterResultRun2Loose"};
     // std::string path2DijetWeight = "../aux_files/pp_5020/Dijet_Weight/PYTHIA_DiJetWeight_Table.root";
     std::string path2DijetWeight = "../aux_files/pp_5360/Dijet_Weight/DiJetWeight.root";
-    std::string dijetWeightType{"Gen"};
+    std::string dijetWeightType{"Ref"};
 
     if (argc <= 1)
     {
@@ -199,7 +199,7 @@ int main(int argc, char* argv[])
     {
         analysis->setUnfolding(true, ptBins, xjBins);
     }
-    analysis->setUseJetPtWeight();
+    // analysis->setUseJetPtWeight();
 
     if (isMC)
     {
