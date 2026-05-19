@@ -39,7 +39,6 @@ int main(int argc, char* argv[])
     Bool_t useMultWeight{kFALSE};
     TString jetBranchNameEmbedded{"akCs4PFJetAnalyzer"};
     TString jetBranchNameUnembedded{"ak4PFJetAnalyzer"};
-    std::string dijetWeightType{"Gen"};
     TString oFileName{};
     TString JECFileName{};
     TString JECFileDataName{};
@@ -62,6 +61,8 @@ int main(int argc, char* argv[])
     Bool_t useJERSmearing{kFALSE};  // Use JER Smearing for MC
     Bool_t useJEU{kFALSE};          // 0 - No JEC Uncertainty, 1 - JEC Uncertainty Up, -1 - JEC Uncertainty Down
     Int_t JEUType{-1};              // 0 - No JEU, 1 - JEU Up, -1 - JEU Down
+    std::string path2DijetWeight = "../aux_files/pp_5360/Dijet_Weight/DiJetWeight.root";
+    std::string dijetWeightType{"Gen"};
     // Command line arguments
     /*
     inputFileList               - input file list with forest file paths
@@ -198,7 +199,11 @@ int main(int argc, char* argv[])
     {
         // analysis->setUseCentralityWeight();
         analysis->setUnfolding(unfold, ptBins, xjBins);
+        analysis->setUseDijetWeight();
+        analysis->setDijetWeightType(dijetWeightType);
+        analysis->setDijetWeightTable(path2DijetWeight);
     }
+
     // Initialize Histomanager
     HistoManagerDiJet* hm = new HistoManagerDiJet{};
     hm->setMultiplicityBins(multiplicityBins);
