@@ -128,7 +128,7 @@ int main(int argc, char* argv[])
         reader->setIsMc(isMC);
         if (collEnergyGeV == 5360)
         {
-            // reader->setStoreLocation(kTRUE);
+            reader->setStoreLocation(kTRUE);
         }
         // reader->useGenTrackBranch();
     }
