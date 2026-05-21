@@ -781,6 +781,10 @@ void HistoManagerDiJet::init()
     Float_t LeadSubLeadPtBins[] = {0.0,  10.,  20.,  30.,  40.,  50.,  60.,  70.,  80.,  90.,  100., 110., 120.,
                                    130., 140., 150., 160., 170., 180., 190., 200., 220., 250., 300., 350., 400.};
     Int_t nLeadSubLeadPtBins = sizeof(LeadSubLeadPtBins) / sizeof(Float_t) - 1;
+
+    Float_t GenLeadGenSubLeadPtBins[] = {0.0, 5.0,  10.,  15.,  20.,  25.,  30.,  35.,  40.,  45.,  50.,  55. 60., 65.,  70.,  75.,  80.,  85., 90.,
+                                         95., 100., 110., 120., 130., 140., 150., 160., 170., 180., 190., 200.,    220., 250., 300., 350., 400.};
+    Int_t nGenLeadGenSubLeadPtBins = sizeof(GenLeadSubGenLeadPtBins) / sizeof(Float_t) - 1;
     hLeadPtvsSubLeadPt_PtHatW =
         new TH2D("hLeadPtvsSubLeadPt_PtHatW", "Lead Pt vs SubLead Pt", nLeadSubLeadPtBins, LeadSubLeadPtBins, nLeadSubLeadPtBins, LeadSubLeadPtBins);
     hLeadPtvsSubLeadPt_PtHatW->Sumw2();
@@ -790,25 +794,25 @@ void HistoManagerDiJet::init()
 
     if (fIsMC)
     {
-        hGenLeadPtvsGenSubLeadPt_PtHatW =
-            new TH2D("hGenLeadPtvsGenSubLeadPt_PtHatW", "Gen Lead Pt vs Gen SubLead Pt", nLeadSubLeadPtBins, LeadSubLeadPtBins, nLeadSubLeadPtBins, LeadSubLeadPtBins);
+        hGenLeadPtvsGenSubLeadPt_PtHatW = new TH2D("hGenLeadPtvsGenSubLeadPt_PtHatW", "Gen Lead Pt vs Gen SubLead Pt", nGenLeadGenSubLeadPtBins, GenLeadGenSubLeadPtBins,
+                                                   nGenLeadGenSubLeadPtBins, GenLeadGenSubLeadPtBins);
         hGenLeadPtvsGenSubLeadPt_PtHatW->Sumw2();
-        hGenLeadPtvsGenSubLeadPt_DiJetW = new TH2D("hGenLeadPtvsGenSubLeadPt_DiJetW", "Gen Lead Pt vs Gen SubLead Pt Weighted", nLeadSubLeadPtBins, LeadSubLeadPtBins,
-                                                   nLeadSubLeadPtBins, LeadSubLeadPtBins);
+        hGenLeadPtvsGenSubLeadPt_DiJetW = new TH2D("hGenLeadPtvsGenSubLeadPt_DiJetW", "Gen Lead Pt vs Gen SubLead Pt Weighted", nGenLeadGenSubLeadPtBins,
+                                                   GenLeadGenSubLeadPtBins, nGenLeadGenSubLeadPtBins, GenLeadGenSubLeadPtBins);
         hGenLeadPtvsGenSubLeadPt_DiJetW->Sumw2();
 
-        hRefLeadPtvsRefSubLeadPt_PtHatW =
-            new TH2D("hRefLeadPtvsRefSubLeadPt_PtHatW", "Ref Lead Pt vs Ref SubLead Pt", nLeadSubLeadPtBins, LeadSubLeadPtBins, nLeadSubLeadPtBins, LeadSubLeadPtBins);
+        hRefLeadPtvsRefSubLeadPt_PtHatW = new TH2D("hRefLeadPtvsRefSubLeadPt_PtHatW", "Ref Lead Pt vs Ref SubLead Pt", nGenLeadGenSubLeadPtBins, GenLeadGenSubLeadPtBins,
+                                                   nGenLeadGenSubLeadPtBins, GenLeadGenSubLeadPtBins);
         hRefLeadPtvsRefSubLeadPt_PtHatW->Sumw2();
-        hRefLeadPtvsRefSubLeadPt_DiJetW = new TH2D("hRefLeadPtvsRefSubLeadPt_DiJetW", "Ref Lead Pt vs Ref SubLead Pt Weighted", nLeadSubLeadPtBins, LeadSubLeadPtBins,
-                                                   nLeadSubLeadPtBins, LeadSubLeadPtBins);
+        hRefLeadPtvsRefSubLeadPt_DiJetW = new TH2D("hRefLeadPtvsRefSubLeadPt_DiJetW", "Ref Lead Pt vs Ref SubLead Pt Weighted", nGenLeadGenSubLeadPtBins,
+                                                   GenLeadGenSubLeadPtBins, nGenLeadGenSubLeadPtBins, GenLeadGenSubLeadPtBins);
         hRefLeadPtvsRefSubLeadPt_DiJetW->Sumw2();
 
-        hRefLeadPtVsRefSubLeadPtMatched_DiJetW = new TH2D("hRefLeadPtvsRefSubLeadPtMatched_DiJetW", "Ref Lead Pt vs Ref SubLead Pt Matched", nLeadSubLeadPtBins,
-                                                          LeadSubLeadPtBins, nLeadSubLeadPtBins, LeadSubLeadPtBins);
+        hRefLeadPtVsRefSubLeadPtMatched_DiJetW = new TH2D("hRefLeadPtvsRefSubLeadPtMatched_DiJetW", "Ref Lead Pt vs Ref SubLead Pt Matched", nGenLeadGenSubLeadPtBins,
+                                                          GenLeadGenSubLeadPtBins, nGenLeadGenSubLeadPtBins, GenLeadGenSubLeadPtBins);
         hRefLeadPtVsRefSubLeadPtMatched_DiJetW->Sumw2();
         hRefLeadPtVsRefSubLeadPtMatched_PtHatW = new TH2D("hRefLeadPtvsRefSubLeadPtMatched_PtHatW", "Ref Lead Pt vs Ref SubLead Pt Matched Pt Weighted",
-                                                          nLeadSubLeadPtBins, LeadSubLeadPtBins, nLeadSubLeadPtBins, LeadSubLeadPtBins);
+                                                          nGenLeadGenSubLeadPtBins, GenLeadGenSubLeadPtBins, nGenLeadGenSubLeadPtBins, GenLeadGenSubLeadPtBins);
         hRefLeadPtVsRefSubLeadPtMatched_PtHatW->Sumw2();
 
         int nJetPtBins = 500;
