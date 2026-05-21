@@ -1115,7 +1115,7 @@ void DiJetAnalysis::processEvent(const Event* event)
         fDijetWeight = DijetWeight(event);
         // std::cout << "Dijet Weight : " << fDijetWeight << std::endl;
 
-        fDijetWeight = pow(fDijetWeight, 1.9);
+        // fDijetWeight = pow(fDijetWeight, 1.9);
         // std::cout << "Dijet Weight Pow : " << fDijetWeight << std::endl;
     }
     else

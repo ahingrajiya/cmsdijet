@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
     std::vector<std::string> filters{"pBeamScrapingFilter", "pPAprimaryVertexFilter", "HBHENoiseFilterResultRun2Loose"};
     // std::string path2DijetWeight = "../aux_files/pp_5020/Dijet_Weight/PYTHIA_DiJetWeight_Table.root";
     std::string path2DijetWeight = "../aux_files/pp_5360/Dijet_Weight/DiJetWeight.root";
-    std::string dijetWeightType{"Gen"};
+    std::string dijetWeightType{"Reco"};
 
     if (argc <= 1)
     {
