@@ -123,16 +123,7 @@ int main(int argc, char* argv[])
 
     ForestReader* reader = new ForestReader{inFileName};
     reader->setForestFileType(ForestReader::ForestFileType::MiniAOD);
-    if (isMC)
-    {
-        reader->setIsMc(isMC);
-        if (collEnergyGeV == 5360)
-        {
-            // reader->setStoreLocation(kTRUE);
-        }
-        // reader->useGenTrackBranch();
-    }
-
+    reader->setIsMc(isMC);
     // reader->useTrackBranch();
     reader->useJets();
     reader->setJetCollectionBranchName(jetBranchName.Data());
