@@ -87,17 +87,14 @@ int main(int argc, char* argv[])
         isEmbedded = atoi(argv[4]);
     }
 
-    if (isMC)
-    {
-        JECFileName = "Winter25Prompt25_V1_MC_L2Relative_AK4PFPuppi.txt";
-    }
+    JECFileName = "Prompt25HIOO_V1_MC_L2Relative_AK4PF.txt";
 
-    else
-    {
-        JECFileName = "Winter25Prompt25_V1_MC_L2Relative_AK4PFPuppi.txt";
-        // JECFileDataName = "Summer16_23Sep2016HV4_DATA_L2L3Residual_AK4PF.txt";
-        // JEUFileName = "Summer16_23Sep2016HV4_DATA_Uncertainty_AK4PF.txt";
-    }
+    // if (!isMC)
+    // {
+    //     JECFileName = "Prompt25HIOO_V1_MC_L2Relative_AK4PF.txt";
+    //     // JECFileDataName = "Summer16_23Sep2016HV4_DATA_L2L3Residual_AK4PF.txt";
+    //     // JEUFileName = "Summer16_23Sep2016HV4_DATA_Uncertainty_AK4PF.txt";
+    // }
 
     // Initialize package manager
     Manager* manager = new Manager{};
