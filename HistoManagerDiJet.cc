@@ -782,9 +782,9 @@ void HistoManagerDiJet::init()
                                    130., 140., 150., 160., 170., 180., 190., 200., 220., 250., 300., 350., 400.};
     Int_t nLeadSubLeadPtBins = sizeof(LeadSubLeadPtBins) / sizeof(Float_t) - 1;
 
-    Float_t GenLeadGenSubLeadPtBins[] = {0.0, 5.0,  10.,  15.,  20.,  25.,  30.,  35.,  40.,  45.,  50.,  55. 60., 65.,  70.,  75.,  80.,  85., 90.,
-                                         95., 100., 110., 120., 130., 140., 150., 160., 170., 180., 190., 200.,    220., 250., 300., 350., 400.};
-    Int_t nGenLeadGenSubLeadPtBins = sizeof(GenLeadSubGenLeadPtBins) / sizeof(Float_t) - 1;
+    Float_t GenLeadGenSubLeadPtBins[] = {0.0, 5.0, 10.,  15.,  20.,  25.,  30.,  35.,  40.,  45.,  50.,  55.,  60.,  65.,  70.,  75.,  80.,  85.,
+                                         90., 95., 100., 110., 120., 130., 140., 150., 160., 170., 180., 190., 200., 220., 250., 300., 350., 400.};
+    Int_t nGenLeadGenSubLeadPtBins = sizeof(GenLeadGenSubLeadPtBins) / sizeof(Float_t) - 1;
     hLeadPtvsSubLeadPt_PtHatW =
         new TH2D("hLeadPtvsSubLeadPt_PtHatW", "Lead Pt vs SubLead Pt", nLeadSubLeadPtBins, LeadSubLeadPtBins, nLeadSubLeadPtBins, LeadSubLeadPtBins);
     hLeadPtvsSubLeadPt_PtHatW->Sumw2();
