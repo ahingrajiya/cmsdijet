@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
     std::vector<std::string> filters{"pBeamScrapingFilter", "pPAprimaryVertexFilter", "HBHENoiseFilterResultRun2Loose"};
     // std::string path2DijetWeight = "../aux_files/pp_5020/Dijet_Weight/PYTHIA_DiJetWeight_Table.root";
     std::string path2DijetWeight = "../aux_files/pp_5360/Dijet_Weight/DiJetWeight.root";
-    std::string dijetWeightType{"Reco"};
+    std::string dijetWeightType{"Gen"};
 
     if (argc <= 1)
     {
@@ -73,7 +73,8 @@ int main(int argc, char* argv[])
     {
         if (collYear == 2025)
         {
-            JECFileName = "Prompt24HIpp_V1_MC_L2Relative_AK4PF.txt";
+            // JECFileName = "Prompt24HIpp_V1_MC_L2Relative_AK4PF.txt";
+            JECFileName = "2024ppRef_withPU_L2Relative_AK4PF.txt";
         }
         else
         {
