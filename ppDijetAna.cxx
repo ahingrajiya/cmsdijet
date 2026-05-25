@@ -73,8 +73,7 @@ int main(int argc, char* argv[])
     {
         if (collYear == 2025)
         {
-            // JECFileName = "Prompt24HIpp_V1_MC_L2Relative_AK4PF.txt";
-            JECFileName = "2024ppRef_withPU_L2Relative_AK4PF.txt";
+            JECFileName = "Prompt24HIpp_V1_MC_L2Relative_AK4PF.txt";
         }
         else
         {
@@ -194,12 +193,12 @@ int main(int argc, char* argv[])
     }
     // analysis->setUseJetPtWeight();
 
-    if (isMC)
-    {
-        analysis->setUseDijetWeight();
-        analysis->setDijetWeightType(dijetWeightType);
-        analysis->setDijetWeightTable(path2DijetWeight);
-    }
+    // if (isMC)
+    // {
+    //     analysis->setUseDijetWeight();
+    //     analysis->setDijetWeightType(dijetWeightType);
+    //     analysis->setDijetWeightTable(path2DijetWeight);
+    // }
 
     manager->addAnalysis(analysis);
     manager->init();
