@@ -775,6 +775,11 @@ Float_t DiJetAnalysis::DijetWeight(const Event* event)
                     }
                 }
                 dijetWeight = getDijetWeight(leadJetPt, subLeadJetPt);
+                float xj = Asymmetry(leadJetPt, subLeadJetPt);
+                if (xj > 0.85 && dijetWeight != 1.0)
+                {
+                    dijetWeight += 0.1 * dijetWeight;
+                }
                 // std::cout << "Dijet Weight : " << fDijetWeight << std::endl;
             }
             else
@@ -1114,9 +1119,9 @@ void DiJetAnalysis::processEvent(const Event* event)
     {
         fDijetWeight = DijetWeight(event);
 
-        fDijetWeight = pow(fDijetWeight, 1.5);
+        // fDijetWeight = pow(fDijetWeight, 1.5);
         // std::cout << "Dijet Weight Pow : " << fDijetWeight << std::endl;
-        // if (fDijetWeight != 1) std::cout << "Dijet Weight : " << fDijetWeight << std::endl;
+        // std::cout << "Dijet Weight : " << fDijetWeight << std::endl;
     }
     else
     {
