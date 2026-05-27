@@ -742,41 +742,41 @@ Float_t DiJetAnalysis::DijetWeight(const Event* event)
             }
             else if (fGenType)
             {
-                leadJetPt = -999.;
-                subLeadJetPt = -999.;
-                leadJetEta = -999.;
-                subLeadJetEta = -999.;
-                leadJetPhi = -999.;
-                subLeadJetPhi = -999.;
+                float genLeadJetPt = -999.;
+                float genSubLeadJetPt = -999.;
+                float genLeadJetEta = -999.;
+                float genSubLeadJetEta = -999.;
+                float genLeadJetPhi = -999.;
+                float genSubLeadJetPhi = -999.;
                 GenJetIterator genJetIterator;
                 for (genJetIterator = event->genJetCollection()->begin(); genJetIterator != event->genJetCollection()->end(); genJetIterator++)
                 {
-                    Float_t jetPt = (*genJetIterator)->pt();
-                    Float_t jetEta = (*genJetIterator)->eta();
-                    Float_t jetPhi = (*genJetIterator)->phi();
+                    float genJetPt = (*genJetIterator)->pt();
+                    float genJetEta = (*genJetIterator)->eta();
+                    float genJetPhi = (*genJetIterator)->phi();
 
                     if (fIsMC)
                     {
-                        if (jetPt > leadJetPt)
+                        if (genJetPt > genLeadJetPt)
                         {
-                            subLeadJetPt = leadJetPt;
-                            subLeadJetEta = leadJetEta;
-                            subLeadJetPhi = leadJetPhi;
-                            leadJetPt = jetPt;
-                            leadJetEta = jetEta;
-                            leadJetPhi = jetPhi;
+                            genSubLeadJetPt = genLeadJetPt;
+                            genSubLeadJetEta = genLeadJetEta;
+                            genSubLeadJetPhi = genLeadJetPhi;
+                            genLeadJetPt = genJetPt;
+                            genLeadJetEta = genJetEta;
+                            genLeadJetPhi = genJetPhi;
                         }
-                        else if (jetPt > subLeadJetPt)
+                        else if (genJetPt > genSubLeadJetPt)
                         {
-                            subLeadJetPt = jetPt;
-                            subLeadJetEta = jetEta;
-                            subLeadJetPhi = jetPhi;
+                            genSubLeadJetPt = genJetPt;
+                            genSubLeadJetEta = genJetEta;
+                            genSubLeadJetPhi = genJetPhi;
                         }
                     }
                 }
-                dijetWeight = getDijetWeight(leadJetPt, subLeadJetPt);
-                float xj = Asymmetry(leadJetPt, subLeadJetPt);
-                if (xj > 0.85 && dijetWeight != 1.0)
+                dijetWeight = getDijetWeight(genLeadJetPt, genSubLeadJetPt);
+                float xj = Asymmetry(genLeadJetPt, genSubLeadJetPt);
+                if (xj > 0.9 && dijetWeight != 1.0)
                 {
                     dijetWeight += 0.1 * dijetWeight;
                 }
