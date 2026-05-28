@@ -778,7 +778,7 @@ Float_t DiJetAnalysis::DijetWeight(const Event* event)
                 float xj = Asymmetry(genLeadJetPt, genSubLeadJetPt);
                 if (xj > 0.9 && dijetWeight != 1.0)
                 {
-                    dijetWeight += -0.03 * dijetWeight;
+                    dijetWeight += -0.05 * dijetWeight;
                 }
             }
             else
