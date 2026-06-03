@@ -776,9 +776,11 @@ Float_t DiJetAnalysis::DijetWeight(const Event* event)
                 }
                 dijetWeight = getDijetWeight(genLeadJetPt, genSubLeadJetPt);
                 float xj = Asymmetry(genLeadJetPt, genSubLeadJetPt);
-                if (xj > 0.9 && dijetWeight != 1.0)
+                if (fIspp || fIsOO)
                 {
-                    dijetWeight += -0.05 * dijetWeight;
+                    double multiplier = getWeightMultiplier(xj);
+                    // std::cout << "Gen Xj : " << xj << " Multiplier : " << multiplier << std::endl;
+                    dijetWeight *= multiplier;
                 }
             }
             else
@@ -2222,6 +2224,10 @@ float DiJetAnalysis::jetPtWeight(const double& recoLeadPt)
     if (recoLeadPt < 50 || recoLeadPt > 500) return 1.0;
 
     return fJetPtWeight->Eval(recoLeadPt);
+}
+double DiJetAnalysis::getWeightMultiplier(double xj)
+{
+    return 1.0 - (0.1 / (1.0 + std::exp(-120 * (xj - 0.95))));
 }
 
 void DiJetAnalysis::report()

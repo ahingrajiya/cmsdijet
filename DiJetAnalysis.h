@@ -348,6 +348,10 @@ class DiJetAnalysis : public BaseAnalysis
     /// @param recoLeadPt reco lead jet pt
     /// @return leading jet pt weight
     float jetPtWeight(const double& recoLeadPt);
+    /// @brief weight multiplier for dijet weight tuning
+    /// @param xj dijet pt ratios
+    /// @return weight multiplier
+    double getWeightMultiplier(double xj);
     ///@brief Print debug information
     Bool_t fDebug;
     ///@brief Delta Phi selection for dijet
