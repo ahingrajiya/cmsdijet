@@ -2227,7 +2227,7 @@ float DiJetAnalysis::jetPtWeight(const double& recoLeadPt)
 }
 double DiJetAnalysis::getWeightMultiplier(double xj)
 {
-    return 1.0 - (0.1 / (1.0 + std::exp(-200. * (xj - 0.93))));
+    return 1.0 - (0.20 / (1.0 + std::exp(-37. * (xj - 1.0))));
 }
 
 void DiJetAnalysis::report()
