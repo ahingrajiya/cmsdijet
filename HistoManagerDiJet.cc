@@ -12,291 +12,18 @@
 // Jet Analysis headers
 #include "HistoManagerDiJet.h"
 
-// ROOT headers
-#include "TString.h"
-
 // C++ Headers
 #include <iostream>
 
 ClassImp(HistoManagerDiJet)
 
-    HistoManagerDiJet::HistoManagerDiJet() :
-    BaseHistoManager(), fIsMC{kFALSE}, fMultiplicityBins{0.0}, fXjBins{0.0}, fHiHFEnergyBins{0.0}, fPtBins{0.0}, hRecoMultiplicity_W{nullptr},
-    hCorrectedMultiplicity_W{nullptr}, hGenMultiplicity_W{nullptr}, hSubEventMultiplicity_W{nullptr}, hSelectedMultiplicity_W{nullptr}, hMultiplicities{nullptr},
-    hMultiplicities_W{nullptr}, hPtHat{nullptr}, hPtHat_W{nullptr}, hHiBin{nullptr}, hHiBin_W{nullptr}, hVz{nullptr}, hVz_W{nullptr}, hMultiplicities_DiJet_W{nullptr},
-    hRecoQuenching_W{nullptr}, hGenQuenching_W{nullptr}, hDeltaPhi_W{nullptr}, hMultVsXj_W{nullptr}, hNDijetEvent{nullptr}, hNEventsInMult{nullptr},
-    hGenDeltaPhi_W{nullptr}, hMultVsGenXj_W{nullptr}, hNGenDijetEvent{nullptr}, hInJetMultiplicity_W{nullptr}, hGenInJetMultiplicity_W{nullptr},
-    hLeadSubLeadJets{nullptr}, hGenLeadGenSubLeadJets{nullptr}, hGenLeadGenSubLeadJets_W{nullptr}, hLeadSubLeadJets_W{nullptr}, hVzWithDijet_W{nullptr},
-    hMultVsXj_DiJetW{nullptr}, hMultVsRefXj_W{nullptr}, hMultVsRefXj_DiJetW{nullptr}, hMultVsMatchedRefXj_W{nullptr}, hMultVsMatchedRefXj_DiJetW{nullptr},
-    hRefLeadRefSubLeadJets{nullptr}, hRefLeadRefSubLeadJets_W{nullptr}, hMultVsGenXj_DiJetW{nullptr}, hRecoJES_W{nullptr}, hRefJES_W{nullptr},
-    hGenLeadingVsGenSubLeading_WO_DiJet_W{nullptr}, hLeadPtvsSubLeadPt_DiJetW{nullptr}, hRefLeadPtvsRefSubLeadPt_DiJetW{nullptr}, hLeadSubLeadJets_MidRapidity_W{nullptr},
-    hGenLeadGenSubLeadJets_MidRapidity_W{nullptr}, hRefLeadRefSubLeadJets_MidRapidity_W{nullptr}, hGenLeadPtvsGenSubLeadPt_DiJetW{nullptr},
-    hLeadSubLeadJets_WithDijet_W{nullptr}, hGenLeadGenSubLeadJets_WithDijet_W{nullptr}, hRefLeadRefSubLeadJets_WithDijet_W{nullptr},
-    hGenLeadPtvsGenSubLeadPt_PtHatW{nullptr}, hRefLeadPtvsRefSubLeadPt_PtHatW{nullptr}, hLeadPtvsSubLeadPt_PtHatW{nullptr}, hDeltaPhi_WithDiJet_W{nullptr},
-    hGenDeltaPhi_WithDiJet_W{nullptr}, hInclusiveUncorrectedRecoJets{nullptr}, hInclusiveUncorrectedRecoJets_W{nullptr}, hInclusiveRecoJetsLabFrame{nullptr},
-    hInclusiveRecoJetsLabFrame_W{nullptr}, hInclusiveRecoJetsCMFrame{nullptr}, hInclusiveRecoJetsCMFrame_W{nullptr}, hSelectedInclusiveRecoJetsMidRapidity_W{nullptr},
-    hInclusiveGenJetsLabFrame{nullptr}, hInclusiveGenJetsLabFrame_W{nullptr}, hInclusiveGenJetsCMFrame{nullptr}, hInclusiveGenJetsCMFrame_W{nullptr},
-    hSelectedInclusiveGenJetsMidRapidity_W{nullptr}, hInclusiveRecoJetPtVsEtaLabFrame_W{nullptr}, hInclusiveRecoJetPtVsEtaCMFrame_W{nullptr},
-    hInclusiveUnCorrectedRecoPtVsEtaLabFrame_W{nullptr}, hInclusiveUnCorrectedRecoPtVsEtaCMFrame_W{nullptr}, hInclusiveRecoJetPt{nullptr}, hInclusiveRecoJetPt_W{nullptr},
-    hInclusiveGenJetPt{nullptr}, hInclusiveGenJetPt_W{nullptr}, hSelectedInclusiveRecoJetPt_MidRapidity_W{nullptr}, hSelectedInclusiveGenJetPt_MidRapidity_W{nullptr},
-    hInclusiveRecoJetEtaCMFrame{nullptr}, hInclusiveRecoJetEtaCMFrame_W{nullptr}, hInclusiveGenJetEtaLabFrame{nullptr}, hInclusiveRecoJetEtaLabFrame_W{nullptr},
-    hSelectedInclusiveRecoJetEtaMidRapidity_W{nullptr}, hInclusiveGenJetEtaCMFrame{nullptr}, hInclusiveGenJetEtaCMFrame_W{nullptr},
-    hSelectedInclusiveGenJetEtaMidRapidity_W{nullptr}, hLeadingRecoJetPt{nullptr}, hLeadingRecoJetPt_W{nullptr}, hSubLeadingRecoJetPt{nullptr},
-    hSubLeadingRecoJetPt_W{nullptr}, hLeadingGenJetPt{nullptr}, hLeadingGenJetPt_W{nullptr}, hSubLeadingGenJetPt{nullptr}, hSubLeadingGenJetPt_W{nullptr},
-    hLeadingRecoJetPtWithDijet_W{nullptr}, hSubLeadingRecoJetPtWithDijet_W{nullptr}, hLeadingGenJetPtWithDijet_W{nullptr}, hSubLeadingGenJetPtWithDijet_W{nullptr},
-    hXj_Projection_W{nullptr}, hXj_Projection_DiJetW{nullptr}, hGenXj_Projection_W{nullptr}, hGenXj_Projection_DiJetW{nullptr}, hInclusiveRefJetPt{nullptr},
-    hInclusiveRefJetPt_W{nullptr}, hInclusiveRefJetsCMFrame{nullptr}, hInclusiveRefJetsCMFrame_W{nullptr}, hInclusiveRefJetsLabFrame{nullptr},
-    hInclusiveRefJetsLabFrame_W{nullptr}, hSelectedInclusiveRefJetsMidRapidity_W{nullptr}, hSelectedInclusiveRefJetPt_MidRapidity_W{nullptr}, hLeadingRefJetPt{nullptr},
-    hLeadingRefJetPt_W{nullptr}, hSubLeadingRefJetPt{nullptr}, hSubLeadingRefJetPt_W{nullptr}, hLeadingRefJetPtWithDijet_W{nullptr},
-    hSubLeadingRefJetPtWithDijet_W{nullptr}, hXj_C0_W{nullptr}, hXj_C0_DiJetW{nullptr}, hGenXj_C0_W{nullptr}, hGenXj_C0_DiJetW{nullptr}, hTrackPtVsEta{nullptr},
-    hTrackPtVsEta_W{nullptr}, hTrackPtVsEtaCorrected{nullptr}, hTrackPtVsEtaCorrected_W{nullptr}, hGenTrackPtVsEta{nullptr}, hGenTrackPtVsEta_W{nullptr},
-    hRecoJES_Eta_W{nullptr}, hRefJES_Eta_W{nullptr}, hRecoJES_Eta_Pt100_W{nullptr}, hRefJES_Eta_Pt100_W{nullptr}, hRecoJES_Eta_Pt120_W{nullptr},
-    hRefJES_Eta_Pt120_W{nullptr}, hRecoTracks{nullptr}, hRecoTracks_W{nullptr}, hRecoTracks_Pt1_W{nullptr}, hGenTracks{nullptr}, hGenTracks_W{nullptr},
-    hGenTracks_Pt1_W{nullptr}, hJetFlavorFractions_W{nullptr}, hLeadSubLeadJets_WithDijet_DiJetW{nullptr}, hGenLeadGenSubLeadJets_WithDijet_DiJetW{nullptr},
-    hRefLeadRefSubLeadJets_WithDijet_DiJetW{nullptr}, hLeadingGenJetPtWithDijet_DiJetW{nullptr}, hSubLeadingGenJetPtWithDijet_DiJetW{nullptr},
-    hLeadingRefJetPtWithDijet_DiJetW{nullptr}, hSubLeadingRefJetPtWithDijet_DiJetW{nullptr}, hLeadingRecoJetPtWithDijet_DiJetW{nullptr},
-    hSubLeadingRecoJetPtWithDijet_DiJetW{nullptr}, hRefLeadPtVsRefSubLeadPtMatched_DiJetW{nullptr}, hRefLeadPtVsRefSubLeadPtMatched_PtHatW{nullptr},
-    hHiHFPlusVsHiHFMinus{nullptr}, hHiHFPlusVsHiHFMinus_W{nullptr}, hHiHFPlusVsHiHFMinus_WithDijet_W{nullptr}, hHiHFPlus{nullptr}, hHiHFPlus_W{nullptr},
-    hHiHFMinus{nullptr}, hHiHFMinus_W{nullptr}, hHiHFPlus_WithDijet_W{nullptr}, hHiHFMinus_WithDijet_W{nullptr}, hHiHFPlusVsMultiplicity_W{nullptr},
-    hHiHFMinusVsMultiplicity_W{nullptr}, hHiHFPlusVsMultiplicity_WithDijet_W{nullptr}, hHiHFMinusVsMultiplicity_WithDijet_W{nullptr}, hHiHFVsXj_W{nullptr},
-    hHiHFVsXj_HiHFW{nullptr}, hXj_ProjectionHiHF_W{nullptr}, hXj_ProjectionHiHF_HiHFW{nullptr}, hMultVsXj_HiHFW{nullptr}, hXj_Projection_HiHFW{nullptr},
-    hHiHF_PF{nullptr}, hHiHF_PF_W{nullptr}, hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W{nullptr}, hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W{nullptr},
-    hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W{nullptr}, hMultVsFakeRecoXjForTesting_W{nullptr}, hMultVsFakeRecoXjToBeUnfolded_W{nullptr},
-    hMultVsMissingRefXjForTesting_W{nullptr}, hMultVsMissingRefXjToBeUnfolded_W{nullptr}, hRecoQuenching_WithDijet_W{nullptr}, hGenQuenching_WithDijet_W{nullptr},
-    hMultVsUnflippedMatchedRecoXj_W{nullptr}, hMultVsUnflippedMatchedRefXj_DiJetW{nullptr}, hMultVsUnflippedMatchedRefXj_W{nullptr}, hMultVsMatchedRecoXj_W{nullptr},
-    hRefDeltaPhi_W{nullptr}, hRefDeltaPhi_WithDiJet_W{nullptr}, hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W{nullptr}, hMultVsFakeRefXjToBeUnfolded_W{nullptr},
-    hMultVsFakeRefXjForTesting_W{nullptr}, hFakeLeadXj_W{nullptr}, hFakeSubLeadXj_W{nullptr}, hLeadPtVsRecoXj_W{nullptr}, hLeadPtVsRefXj_W{nullptr},
-    hLeadPtVsGenXj_W{nullptr}, hAverageRecoPt_W{nullptr}, hAverageGenPt_W{nullptr}, hResponseMatrix_W{nullptr}, hResponseMatrixA_W{nullptr}, hResponseMatrixB_W{nullptr},
-    hTotalReco_W{nullptr}, hTotalRecoA_W{nullptr}, hTotalRecoB_W{nullptr}, hTotalTruth_W{nullptr}, hTotalTruthA_W{nullptr}, hTotalTruthB_W{nullptr},
-    hMatchedGen_W{nullptr}, hMatchedGenA_W{nullptr}, hMatchedGenB_W{nullptr}, hMatchedReco_W{nullptr}, hMatchedRecoA_W{nullptr}, hMatchedRecoB_W{nullptr},
-    hHiBinVsMultiplicity_W{nullptr}, hHiBinVsCorrectedMultiplicity_W{nullptr}
+    HistoManagerDiJet::HistoManagerDiJet() : BaseHistoManager()
 {
     /* Empty*/
 }
 
 HistoManagerDiJet::~HistoManagerDiJet()
 {
-    if (hRecoMultiplicity_W) delete hRecoMultiplicity_W;
-    if (hCorrectedMultiplicity_W) delete hCorrectedMultiplicity_W;
-    if (hGenMultiplicity_W) delete hGenMultiplicity_W;
-    if (hSubEventMultiplicity_W) delete hSubEventMultiplicity_W;
-    if (hSelectedMultiplicity_W) delete hSelectedMultiplicity_W;
-    if (hPtHat) delete hPtHat;
-    if (hPtHat_W) delete hPtHat_W;
-    if (hHiBin) delete hHiBin;
-    if (hHiBin_W) delete hHiBin_W;
-    if (hVz) delete hVz;
-    if (hVz_W) delete hVz_W;
-    if (hVzWithDijet_W) delete hVzWithDijet_W;
-    if (hDeltaPhi_W) delete hDeltaPhi_W;
-    if (hMultVsXj_W) delete hMultVsXj_W;
-    if (hHiHFVsXj_W) delete hHiHFVsXj_W;
-    if (hMultVsXj_DiJetW) delete hMultVsXj_DiJetW;
-    if (hHiHFVsXj_HiHFW) delete hHiHFVsXj_HiHFW;
-    if (hMultVsXj_HiHFW) delete hMultVsXj_HiHFW;
-    if (hMultVsRefXj_W) delete hMultVsRefXj_W;
-    if (hMultVsRefXj_DiJetW) delete hMultVsRefXj_DiJetW;
-    if (hMultVsMatchedRefXj_W) delete hMultVsMatchedRefXj_W;
-    if (hMultVsMatchedRefXj_DiJetW) delete hMultVsMatchedRefXj_DiJetW;
-    if (hNDijetEvent) delete hNDijetEvent;
-    if (hGenDeltaPhi_W) delete hGenDeltaPhi_W;
-    if (hMultVsGenXj_W) delete hMultVsGenXj_W;
-    if (hMultVsGenXj_DiJetW) delete hMultVsGenXj_DiJetW;
-    if (hNGenDijetEvent) delete hNGenDijetEvent;
-    if (hNEventsInMult) delete hNEventsInMult;
-    if (hDeltaPhi_WithDiJet_W) delete hDeltaPhi_WithDiJet_W;
-    if (hGenDeltaPhi_WithDiJet_W) delete hGenDeltaPhi_WithDiJet_W;
-    if (hHiHF_PF) delete hHiHF_PF;
-    if (hHiHF_PF_W) delete hHiHF_PF_W;
-    if (hMultVsMatchedRecoXj_W) delete hMultVsMatchedRecoXj_W;
-    if (hMultVsUnflippedMatchedRecoXj_W) delete hMultVsUnflippedMatchedRecoXj_W;
-    if (hMultVsUnflippedMatchedRefXj_DiJetW) delete hMultVsUnflippedMatchedRefXj_DiJetW;
-    if (hMultVsUnflippedMatchedRefXj_W) delete hMultVsUnflippedMatchedRefXj_W;
-    if (hRefDeltaPhi_W) delete hRefDeltaPhi_W;
-    if (hRefDeltaPhi_WithDiJet_W) delete hRefDeltaPhi_WithDiJet_W;
-
-    if (hInJetMultiplicity_W) delete hInJetMultiplicity_W;
-    if (hGenInJetMultiplicity_W) delete hGenInJetMultiplicity_W;
-
-    if (hLeadSubLeadJets) delete hLeadSubLeadJets;
-    if (hGenLeadGenSubLeadJets) delete hGenLeadGenSubLeadJets;
-    if (hLeadSubLeadJets_W) delete hLeadSubLeadJets_W;
-    if (hGenLeadGenSubLeadJets_W) delete hGenLeadGenSubLeadJets_W;
-    if (hRefLeadRefSubLeadJets) delete hRefLeadRefSubLeadJets;
-    if (hRefLeadRefSubLeadJets_W) delete hRefLeadRefSubLeadJets_W;
-    if (hRefLeadPtVsRefSubLeadPtMatched_PtHatW) delete hRefLeadPtVsRefSubLeadPtMatched_PtHatW;
-    if (hRefLeadPtVsRefSubLeadPtMatched_DiJetW) delete hRefLeadPtVsRefSubLeadPtMatched_DiJetW;
-    if (hRecoJES_W) delete hRecoJES_W;
-    if (hRefJES_W) delete hRefJES_W;
-    if (hRecoJES_Eta_W) delete hRecoJES_Eta_W;
-    if (hRecoJES_Eta_Pt100_W) delete hRecoJES_Eta_Pt100_W;
-    if (hRecoJES_Eta_Pt120_W) delete hRecoJES_Eta_Pt120_W;
-    if (hRefJES_Eta_W) delete hRefJES_Eta_W;
-    if (hRefJES_Eta_Pt100_W) delete hRefJES_Eta_Pt100_W;
-    if (hRefJES_Eta_Pt120_W) delete hRefJES_Eta_Pt120_W;
-    if (hLeadPtvsSubLeadPt_DiJetW) delete hLeadPtvsSubLeadPt_DiJetW;
-    if (hGenLeadPtvsGenSubLeadPt_DiJetW) delete hGenLeadPtvsGenSubLeadPt_DiJetW;
-    if (hRefLeadPtvsRefSubLeadPt_DiJetW) delete hRefLeadPtvsRefSubLeadPt_DiJetW;
-    if (hLeadSubLeadJets_MidRapidity_W) delete hLeadSubLeadJets_MidRapidity_W;
-    if (hGenLeadGenSubLeadJets_MidRapidity_W) delete hGenLeadGenSubLeadJets_MidRapidity_W;
-    if (hRefLeadRefSubLeadJets_MidRapidity_W) delete hRefLeadRefSubLeadJets_MidRapidity_W;
-    if (hLeadSubLeadJets_WithDijet_W) delete hLeadSubLeadJets_WithDijet_W;
-    if (hGenLeadGenSubLeadJets_WithDijet_W) delete hGenLeadGenSubLeadJets_WithDijet_W;
-    if (hRefLeadRefSubLeadJets_WithDijet_W) delete hRefLeadRefSubLeadJets_WithDijet_W;
-    if (hLeadSubLeadJets_WithDijet_DiJetW) delete hLeadSubLeadJets_WithDijet_DiJetW;
-    if (hGenLeadGenSubLeadJets_WithDijet_DiJetW) delete hGenLeadGenSubLeadJets_WithDijet_DiJetW;
-    if (hRefLeadRefSubLeadJets_WithDijet_DiJetW) delete hRefLeadRefSubLeadJets_WithDijet_DiJetW;
-    if (hLeadPtvsSubLeadPt_PtHatW) delete hLeadPtvsSubLeadPt_PtHatW;
-    if (hGenLeadPtvsGenSubLeadPt_PtHatW) delete hGenLeadPtvsGenSubLeadPt_PtHatW;
-    if (hRefLeadPtvsRefSubLeadPt_PtHatW) delete hRefLeadPtvsRefSubLeadPt_PtHatW;
-    if (hJetFlavorFractions_W) delete hJetFlavorFractions_W;
-
-    if (hMultiplicities) delete hMultiplicities;
-    if (hMultiplicities_W) delete hMultiplicities_W;
-    if (hMultiplicities_DiJet_W) delete hMultiplicities_DiJet_W;
-    if (hGenLeadingVsGenSubLeading_WO_DiJet_W) delete hGenLeadingVsGenSubLeading_WO_DiJet_W;
-    if (hRecoQuenching_W) delete hRecoQuenching_W;
-    if (hGenQuenching_W) delete hGenQuenching_W;
-    if (hRecoQuenching_WithDijet_W) delete hRecoQuenching_WithDijet_W;
-    if (hGenQuenching_WithDijet_W) delete hGenQuenching_WithDijet_W;
-    if (hHiBinVsMultiplicity_W) delete hHiBinVsMultiplicity_W;
-    if (hHiBinVsCorrectedMultiplicity_W) delete hHiBinVsCorrectedMultiplicity_W;
-
-    if (hInclusiveUncorrectedRecoJets) delete hInclusiveUncorrectedRecoJets;
-    if (hInclusiveUncorrectedRecoJets_W) delete hInclusiveUncorrectedRecoJets_W;
-    if (hInclusiveRecoJetsLabFrame) delete hInclusiveRecoJetsLabFrame;
-    if (hInclusiveRecoJetsLabFrame_W) delete hInclusiveRecoJetsLabFrame_W;
-    if (hInclusiveRecoJetsCMFrame) delete hInclusiveRecoJetsCMFrame;
-    if (hInclusiveRecoJetsCMFrame_W) delete hInclusiveRecoJetsCMFrame_W;
-    if (hSelectedInclusiveRecoJetsMidRapidity_W) delete hSelectedInclusiveRecoJetsMidRapidity_W;
-
-    if (hInclusiveRefJetsCMFrame) delete hInclusiveRefJetsCMFrame;
-    if (hInclusiveRefJetsCMFrame_W) delete hInclusiveRefJetsCMFrame_W;
-    if (hInclusiveRefJetsLabFrame) delete hInclusiveRefJetsLabFrame;
-    if (hInclusiveRefJetsLabFrame_W) delete hInclusiveRefJetsLabFrame_W;
-    if (hSelectedInclusiveRefJetsMidRapidity_W) delete hSelectedInclusiveRefJetsMidRapidity_W;
-
-    if (hInclusiveGenJetsLabFrame) delete hInclusiveGenJetsLabFrame;
-    if (hInclusiveGenJetsLabFrame_W) delete hInclusiveGenJetsLabFrame_W;
-    if (hInclusiveGenJetsCMFrame) delete hInclusiveGenJetsCMFrame;
-    if (hInclusiveGenJetsCMFrame_W) delete hInclusiveGenJetsCMFrame_W;
-    if (hSelectedInclusiveGenJetsMidRapidity_W) delete hSelectedInclusiveGenJetsMidRapidity_W;
-
-    if (hInclusiveRecoJetPtVsEtaLabFrame_W) delete hInclusiveRecoJetPtVsEtaLabFrame_W;
-    if (hInclusiveRecoJetPtVsEtaCMFrame_W) delete hInclusiveRecoJetPtVsEtaCMFrame_W;
-    if (hInclusiveUnCorrectedRecoPtVsEtaLabFrame_W) delete hInclusiveUnCorrectedRecoPtVsEtaLabFrame_W;
-    if (hInclusiveUnCorrectedRecoPtVsEtaCMFrame_W) delete hInclusiveUnCorrectedRecoPtVsEtaCMFrame_W;
-
-    if (hInclusiveRecoJetPt) delete hInclusiveRecoJetPt;
-    if (hInclusiveRecoJetPt_W) delete hInclusiveRecoJetPt_W;
-    if (hSelectedInclusiveGenJetPt_MidRapidity_W) delete hSelectedInclusiveGenJetPt_MidRapidity_W;
-    if (hInclusiveRecoJetEtaCMFrame) delete hInclusiveRecoJetEtaCMFrame;
-    if (hInclusiveRecoJetEtaCMFrame_W) delete hInclusiveRecoJetEtaCMFrame_W;
-    if (hInclusiveRecoJetEtaLabFrame) delete hInclusiveRecoJetEtaLabFrame;
-    if (hInclusiveRecoJetEtaLabFrame_W) delete hInclusiveRecoJetEtaLabFrame_W;
-    if (hSelectedInclusiveRecoJetEtaMidRapidity_W) delete hSelectedInclusiveRecoJetEtaMidRapidity_W;
-
-    if (hInclusiveRefJetPt) delete hInclusiveRefJetPt;
-    if (hInclusiveRefJetPt_W) delete hInclusiveRefJetPt_W;
-    if (hSelectedInclusiveRefJetPt_MidRapidity_W) delete hSelectedInclusiveRefJetPt_MidRapidity_W;
-
-    if (hInclusiveGenJetPt) delete hInclusiveGenJetPt;
-    if (hInclusiveGenJetPt_W) delete hInclusiveGenJetPt_W;
-    if (hSelectedInclusiveRecoJetPt_MidRapidity_W) delete hSelectedInclusiveRecoJetPt_MidRapidity_W;
-    if (hInclusiveGenJetEtaCMFrame) delete hInclusiveGenJetEtaCMFrame;
-    if (hInclusiveGenJetEtaCMFrame_W) delete hInclusiveGenJetEtaCMFrame_W;
-    if (hInclusiveGenJetEtaLabFrame) delete hInclusiveGenJetEtaLabFrame;
-    if (hInclusiveGenJetEtaLabFrame_W) delete hInclusiveGenJetEtaLabFrame_W;
-    if (hSelectedInclusiveGenJetEtaMidRapidity_W) delete hSelectedInclusiveGenJetEtaMidRapidity_W;
-
-    if (hLeadingRecoJetPt) delete hLeadingRecoJetPt;
-    if (hLeadingRecoJetPt_W) delete hLeadingRecoJetPt_W;
-    if (hSubLeadingRecoJetPt) delete hSubLeadingRecoJetPt;
-    if (hSubLeadingRecoJetPt_W) delete hSubLeadingRecoJetPt_W;
-    if (hLeadingGenJetPt) delete hLeadingGenJetPt;
-    if (hLeadingGenJetPt_W) delete hLeadingGenJetPt_W;
-    if (hSubLeadingGenJetPt) delete hSubLeadingGenJetPt;
-    if (hSubLeadingGenJetPt_W) delete hSubLeadingGenJetPt_W;
-    if (hLeadingRecoJetPtWithDijet_W) delete hLeadingRecoJetPtWithDijet_W;
-    if (hSubLeadingRecoJetPtWithDijet_W) delete hSubLeadingRecoJetPtWithDijet_W;
-    if (hLeadingGenJetPtWithDijet_W) delete hLeadingGenJetPtWithDijet_W;
-    if (hSubLeadingGenJetPtWithDijet_W) delete hSubLeadingGenJetPtWithDijet_W;
-    if (hLeadingRefJetPt) delete hLeadingRefJetPt;
-    if (hSubLeadingRefJetPt) delete hSubLeadingRefJetPt;
-    if (hLeadingRefJetPt_W) delete hLeadingRefJetPt_W;
-    if (hSubLeadingRefJetPt_W) delete hSubLeadingRefJetPt_W;
-    if (hLeadingRefJetPtWithDijet_W) delete hLeadingRefJetPtWithDijet_W;
-    if (hSubLeadingRefJetPtWithDijet_W) delete hSubLeadingRefJetPtWithDijet_W;
-    if (hLeadingRecoJetPtWithDijet_DiJetW) delete hLeadingRecoJetPtWithDijet_DiJetW;
-    if (hSubLeadingRecoJetPtWithDijet_DiJetW) delete hSubLeadingRecoJetPtWithDijet_DiJetW;
-    if (hLeadingGenJetPtWithDijet_DiJetW) delete hLeadingGenJetPtWithDijet_DiJetW;
-    if (hSubLeadingGenJetPtWithDijet_DiJetW) delete hSubLeadingGenJetPtWithDijet_DiJetW;
-    if (hLeadingRefJetPtWithDijet_DiJetW) delete hLeadingRefJetPtWithDijet_DiJetW;
-    if (hSubLeadingRefJetPtWithDijet_DiJetW) delete hSubLeadingRefJetPtWithDijet_DiJetW;
-
-    if (hGenTrackPtVsEta) delete hGenTrackPtVsEta;
-    if (hGenTrackPtVsEta_W) delete hGenTrackPtVsEta_W;
-    if (hTrackPtVsEta) delete hTrackPtVsEta;
-    if (hTrackPtVsEta_W) delete hTrackPtVsEta_W;
-    if (hTrackPtVsEtaCorrected) delete hTrackPtVsEtaCorrected;
-    if (hTrackPtVsEtaCorrected_W) delete hTrackPtVsEtaCorrected_W;
-
-    if (hAverageGenPt_W) delete hAverageGenPt_W;
-    if (hAverageRecoPt_W) delete hAverageRecoPt_W;
-
-    if (hRecoTracks) delete hRecoTracks;
-    if (hRecoTracks_W) delete hRecoTracks_W;
-    if (hRecoTracks_Pt1_W) delete hRecoTracks_Pt1_W;
-
-    if (hGenTracks) delete hGenTracks;
-    if (hGenTracks_W) delete hGenTracks_W;
-    if (hGenTracks_Pt1_W) delete hGenTracks_Pt1_W;
-
-    if (hXj_C0_DiJetW) delete hXj_C0_DiJetW;
-    if (hXj_C0_W) delete hXj_C0_W;
-    if (hGenXj_C0_DiJetW) delete hGenXj_C0_DiJetW;
-    if (hGenXj_C0_W) delete hGenXj_C0_W;
-
-    if (hHiHFPlusVsHiHFMinus) delete hHiHFPlusVsHiHFMinus;
-    if (hHiHFPlusVsHiHFMinus_W) delete hHiHFPlusVsHiHFMinus_W;
-    if (hHiHFPlusVsHiHFMinus_WithDijet_W) delete hHiHFPlusVsHiHFMinus_WithDijet_W;
-    if (hHiHFPlus) delete hHiHFPlus;
-    if (hHiHFPlus_W) delete hHiHFPlus_W;
-    if (hHiHFMinus) delete hHiHFMinus;
-    if (hHiHFMinus_W) delete hHiHFMinus_W;
-    if (hHiHFPlus_WithDijet_W) delete hHiHFPlus_WithDijet_W;
-    if (hHiHFMinus_WithDijet_W) delete hHiHFMinus_WithDijet_W;
-    if (hHiHFPlusVsMultiplicity_W) delete hHiHFPlusVsMultiplicity_W;
-    if (hHiHFMinusVsMultiplicity_W) delete hHiHFMinusVsMultiplicity_W;
-    if (hHiHFPlusVsMultiplicity_WithDijet_W) delete hHiHFPlusVsMultiplicity_WithDijet_W;
-    if (hHiHFMinusVsMultiplicity_WithDijet_W) delete hHiHFMinusVsMultiplicity_WithDijet_W;
-    if (hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W) delete hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W;
-    if (hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W) delete hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W;
-    if (hMultVsFakeRecoXjForTesting_W) delete hMultVsFakeRecoXjForTesting_W;
-    if (hMultVsFakeRecoXjToBeUnfolded_W) delete hMultVsFakeRecoXjToBeUnfolded_W;
-    if (hMultVsMissingRefXjForTesting_W) delete hMultVsMissingRefXjForTesting_W;
-    if (hMultVsMissingRefXjToBeUnfolded_W) delete hMultVsMissingRefXjToBeUnfolded_W;
-    if (hMultVsFakeRefXjToBeUnfolded_W) delete hMultVsFakeRefXjToBeUnfolded_W;
-    if (hMultVsFakeRefXjForTesting_W) delete hMultVsFakeRefXjForTesting_W;
-    if (hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W) delete hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W;
-    if (hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W) delete hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W;
-    if (hFakeLeadXj_W) delete hFakeLeadXj_W;
-    if (hFakeSubLeadXj_W) delete hFakeSubLeadXj_W;
-    if (hLeadPtVsRefXj_W) delete hLeadPtVsRefXj_W;
-    if (hLeadPtVsRecoXj_W) delete hLeadPtVsRecoXj_W;
-    if (hLeadPtVsGenXj_W) delete hLeadPtVsGenXj_W;
-
-    for (auto hist : hXj_Projection_W) delete hist;
-    for (auto hist : hXj_ProjectionHiHF_W) delete hist;
-    for (auto hist : hXj_Projection_DiJetW) delete hist;
-    for (auto hist : hXj_ProjectionHiHF_HiHFW) delete hist;
-    for (auto hist : hGenXj_Projection_W) delete hist;
-    for (auto hist : hGenXj_Projection_DiJetW) delete hist;
-    for (auto hist : hRefXj_Projection_W) delete hist;
-    for (auto hist : hRefXj_Projection_DiJetW) delete hist;
-    for (auto hist : hMatchedRefXj_Projection_W) delete hist;
-    for (auto hist : hMatchedRefXj_Projection_DiJetW) delete hist;
-    for (auto hist : hXj_Projection_HiHFW) delete hist;
 }
 
 void HistoManagerDiJet::init()
@@ -1262,7 +989,7 @@ void HistoManagerDiJet ::writeOutput()
     std::cout << "  ===> Writing Event Histograms" << std::endl;
     gDirectory->mkdir("Events");
     gDirectory->cd("Events");
-    if (fCollSystem == "PbPb" || fCollSystem == "OO")
+    if (fCollSystem == CollisionSystem::PbPb || fCollSystem == CollisionSystem::OO)
     {
         hHiBin->Write();
         hHiBin_W->Write();
@@ -1288,7 +1015,7 @@ void HistoManagerDiJet ::writeOutput()
         hGenMultiplicity_W->Write();
         hSubEventMultiplicity_W->Write();
     }
-    if (fCollSystem == "OO")
+    if (fCollSystem == CollisionSystem::OO)
     {
         hHiBinVsMultiplicity_W->Write();
         hHiBinVsCorrectedMultiplicity_W->Write();
@@ -1318,7 +1045,7 @@ void HistoManagerDiJet ::writeOutput()
     hJetFlavorFractions_W->Write();
     hAverageRecoPt_W->Write();
 
-    if (fCollSystem == "pPb")
+    if (fCollSystem == CollisionSystem::pPb)
     {
         hInclusiveRecoJetsLabFrame->Write();
         hInclusiveRecoJetsLabFrame_W->Write();
@@ -1334,7 +1061,7 @@ void HistoManagerDiJet ::writeOutput()
         hInclusiveRefJetsCMFrame_W->Write();
         hSelectedInclusiveGenJetsMidRapidity_W->Write();
         hSelectedInclusiveRefJetsMidRapidity_W->Write();
-        if (fCollSystem == "pPb")
+        if (fCollSystem == CollisionSystem::pPb)
         {
             hInclusiveGenJetsLabFrame->Write();
             hInclusiveGenJetsLabFrame_W->Write();
@@ -1360,7 +1087,7 @@ void HistoManagerDiJet ::writeOutput()
     hLeadSubLeadJets_MidRapidity_W->Write();
     hLeadSubLeadJets_WithDijet_W->Write();
     hLeadSubLeadJets_WithDijet_DiJetW->Write();
-    if (fCollSystem == "pPb" || fCollSystem == "pp")
+    if (fCollSystem == CollisionSystem::pPb || fCollSystem == CollisionSystem::pp)
     {
         hLeadPtvsSubLeadPt_PtHatW->Write();
         hLeadPtvsSubLeadPt_DiJetW->Write();
@@ -1380,7 +1107,7 @@ void HistoManagerDiJet ::writeOutput()
         hRefLeadRefSubLeadJets_WithDijet_W->Write();
         hRefLeadRefSubLeadJets_WithDijet_W->Write();
 
-        if (fCollSystem == "pPb" || fCollSystem == "pp")
+        if (fCollSystem == CollisionSystem::pPb || fCollSystem == CollisionSystem::pp)
         {
             hRefLeadPtvsRefSubLeadPt_PtHatW->Write();
             hRefLeadPtvsRefSubLeadPt_DiJetW->Write();
@@ -1423,7 +1150,7 @@ void HistoManagerDiJet ::writeOutput()
     hDeltaPhi_WithDiJet_W->Write();
     hMultVsXj_W->Write();
     hHiHFVsXj_W->Write();
-    if (fCollSystem == "pPb" || fCollSystem == "pp" || fCollSystem == "OO")
+    if (fCollSystem != CollisionSystem::PbPb)
     {
         hMultVsXj_DiJetW->Write();
         hMultVsXj_HiHFW->Write();
@@ -1447,7 +1174,7 @@ void HistoManagerDiJet ::writeOutput()
         hRefDeltaPhi_WithDiJet_W->Write();
         hMultVsGenXj_W->Write();
         hNGenDijetEvent->Write();
-        if (fCollSystem == "pPb" || fCollSystem == "pp")
+        if (fCollSystem == CollisionSystem::pPb || fCollSystem == CollisionSystem::pp)
         {
             hMultVsRefXj_DiJetW->Write();
             hMultVsMatchedRefXj_DiJetW->Write();
@@ -1471,7 +1198,7 @@ void HistoManagerDiJet ::writeOutput()
     hSelectedInclusiveRecoJetPt_MidRapidity_W->Write();
     hInclusiveRecoJetEtaCMFrame->Write();
     hInclusiveRecoJetEtaCMFrame_W->Write();
-    if (fCollSystem == "pPb")
+    if (fCollSystem == CollisionSystem::pPb)
     {
         hInclusiveRecoJetEtaLabFrame->Write();
         hInclusiveRecoJetEtaLabFrame_W->Write();
@@ -1505,7 +1232,7 @@ void HistoManagerDiJet ::writeOutput()
         hLeadingGenJetPtWithDijet_DiJetW->Write();
         hSubLeadingGenJetPtWithDijet_DiJetW->Write();
 
-        if (fCollSystem == "pPb")
+        if (fCollSystem == CollisionSystem::pPb)
         {
             hInclusiveGenJetEtaLabFrame->Write();
             hInclusiveGenJetEtaLabFrame_W->Write();
@@ -1523,14 +1250,14 @@ void HistoManagerDiJet ::writeOutput()
         hSubLeadingRefJetPtWithDijet_DiJetW->Write();
     }
     hXj_C0_W->Write();
-    if (fCollSystem == "pPb" || fCollSystem == "pp" || fCollSystem == "OO")
+    if (fCollSystem != CollisionSystem::PbPb)
     {
         hXj_C0_DiJetW->Write();
     }
     if (fIsMC)
     {
         hGenXj_C0_W->Write();
-        if (fCollSystem == "pPb")
+        if (fCollSystem == CollisionSystem::pPb)
         {
             hGenXj_C0_DiJetW->Write();
         }
@@ -1538,7 +1265,7 @@ void HistoManagerDiJet ::writeOutput()
     for (Int_t i = 0; i < hXj_Projection_W.size(); i++)
     {
         hXj_Projection_W[i]->Write();
-        if (fCollSystem == "pPb" || fCollSystem == "pp" || fCollSystem == "OO")
+        if (fCollSystem != CollisionSystem::PbPb)
         {
             hXj_Projection_DiJetW[i]->Write();
             hXj_Projection_HiHFW[i]->Write();
@@ -1548,7 +1275,7 @@ void HistoManagerDiJet ::writeOutput()
             hGenXj_Projection_W[i]->Write();
             hRefXj_Projection_W[i]->Write();
             hMatchedRefXj_Projection_W[i]->Write();
-            if (fCollSystem == "pPb" || fCollSystem == "pp")
+            if (fCollSystem == CollisionSystem::pPb || fCollSystem == CollisionSystem::pp)
             {
                 hGenXj_Projection_DiJetW[i]->Write();
                 hRefXj_Projection_DiJetW[i]->Write();
@@ -1556,7 +1283,7 @@ void HistoManagerDiJet ::writeOutput()
             }
         }
     }
-    if (fCollSystem == "pPb" || fCollSystem == "OO")
+    if (fCollSystem == CollisionSystem::pPb || fCollSystem == CollisionSystem::OO)
     {
         for (size_t i = 0; i < hXj_ProjectionHiHF_W.size(); i++)
         {

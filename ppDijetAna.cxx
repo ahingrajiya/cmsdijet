@@ -196,7 +196,7 @@ int main(int argc, char* argv[])
     if (isMC)
     {
         analysis->setUseDijetWeight();
-        analysis->setDijetWeightType(DijetWeightType::Gen);
+        analysis->setDijetWeightType(DijetWeightType::Reco);
         analysis->setDijetWeightTable(path2DijetWeight);
     }
 
