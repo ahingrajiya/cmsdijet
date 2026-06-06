@@ -263,15 +263,15 @@ int main(int argc, char* argv[])
     HistoManagerDiJet* hm = new HistoManagerDiJet{};
     hm->setMultiplicityBins(multiplicityBins);
     hm->setHiHFEnergyBins(hiHFBins);
-    hm->setCollSystem(collSystem);
     hm->setIsMC(isMC);
     hm->setPtBins(ptBins);
     hm->setXjBins(xjBins);
-    hm->init();
+    hm->setForestReader(reader);
 
     analysis->addHistoManager(hm);
     manager->addAnalysis(analysis);
     manager->init();
+    hm->init();
     analysis->setNEventsInSample(reader->nEventsTotal());
 
     manager->performAnalysis();

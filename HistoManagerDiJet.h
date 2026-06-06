@@ -18,6 +18,7 @@
 
 // ROOT Headers
 
+#include "ForestReader.h"
 #include "TDirectory.h"
 #include "TH1.h"
 #include "TH2.h"
@@ -69,7 +70,7 @@ class HistoManagerDiJet : public BaseHistoManager
     void setXjBins(const std::vector<double>& bins) { fXjBins = std::move(bins); }
 
     ///@brief Set Collision System
-    void setCollSystem(const CollisionSystem& collSys) { fCollSystem = collSys; }
+    void setForestReader(ForestReader* reader) { fReader = reader; }
 
     TH1D* hPtHat{nullptr};
     TH1D* hPtHat_W{nullptr};
@@ -252,13 +253,16 @@ class HistoManagerDiJet : public BaseHistoManager
     TH2D* hHiBinVsCorrectedMultiplicity_W{nullptr};
 
    private:
+    void setCollisionSystem(const ForestReader& reader);
     bool fIsMC{false};
+    CollisionSystem fCollSystem{CollisionSystem::Unknown};
+
+    ForestReader* fReader{nullptr};
 
     std::vector<double> fMultiplicityBins{};
     std::vector<double> fHiHFEnergyBins{};
     std::vector<double> fPtBins{};
     std::vector<double> fXjBins{};
-    CollisionSystem fCollSystem{};
 
     // Projection Histograms
     TH1D* hInclusiveRecoJetPt{nullptr};

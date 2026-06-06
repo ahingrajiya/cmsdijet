@@ -207,13 +207,13 @@ int main(int argc, char* argv[])
     hm->setHiHFEnergyBins(hiHFBins);
     hm->setPtBins(ptBins);
     hm->setXjBins(xjBins);
-    hm->setCollSystem(collSystem);
+    hm->setForestReader(reader);
     hm->setIsMC(isMC);
-    hm->init();
 
     analysis->addHistoManager(hm);
     manager->addAnalysis(analysis);
     manager->init();
+    hm->init();
     analysis->setNEventsInSample(reader->nEventsTotal());
     manager->performAnalysis();
     manager->finish();

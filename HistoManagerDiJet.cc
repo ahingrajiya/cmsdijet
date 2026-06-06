@@ -26,8 +26,50 @@ HistoManagerDiJet::~HistoManagerDiJet()
 {
 }
 
+void HistoManagerDiJet::setCollisionSystem(const ForestReader& reader)
+{
+    std::cout << "============HistoManagerDiJet::SettingCollisionSystem============" << std::endl;
+
+    ForestReader::CollidingSystemType collSystem = reader.getCollidingSystem();
+    {
+        if (collSystem == ForestReader::CollidingSystemType::pp)
+        {
+            fCollSystem = CollisionSystem::pp;
+            std::cout << "Collision System set to be : pp" << std::endl;
+        }
+        else if (collSystem == ForestReader::CollidingSystemType::pPb)
+        {
+            fCollSystem = CollisionSystem::pPb;
+            std::cout << "Collision System set to be : pPb" << std::endl;
+        }
+        else if (collSystem == ForestReader::CollidingSystemType::PbPb)
+        {
+            fCollSystem = CollisionSystem::PbPb;
+            std::cout << "Collision System set to be : PbPb" << std::endl;
+        }
+        else if (collSystem == ForestReader::CollidingSystemType::OO)
+        {
+            fCollSystem = CollisionSystem::OO;
+            std::cout << "Collision System set to be : OO" << std::endl;
+        }
+        else
+        {
+            std::cerr << "Invalid collision system. Please choose from pp, pPb, PbPb or OO" << std::endl;
+        }
+        std::cout << "==================================[Done]================================" << std::endl;
+    }
+}
+
 void HistoManagerDiJet::init()
 {
+    std::cout << std::endl;
+    std::cout << "=======================================================================" << std::endl;
+
+    std::cout << "============HistoManagerDiJet::init Initializing Histograms============" << std::endl;
+    std::cout << "=======================================================================" << std::endl;
+
+    std::cout << std::endl;
+    setCollisionSystem(*fReader);
     int nMultiplicityBins = fMultiplicityBins.size() - 1;
     int nHiHFEnergyBins = fHiHFEnergyBins.size() - 1;
     int nLeadPtBins = fPtBins.size() - 1;
@@ -323,7 +365,7 @@ void HistoManagerDiJet::init()
     Double_t QuenchMinWithDijet[4] = {0.0, 0.0, 0.0, fMultiplicityBins[0]};
     Double_t QuenchMaxWithDijet[4] = {1.0, 1000.0, 1000.0, fMultiplicityBins[fMultiplicityBins.size() - 1]};
 
-    int UnfoldingBins[4] = {nXjAjBins, nXjAjBins, nMultiplicityBins + 1, nLeadPtBins};
+    int UnfoldingBins[4] = {nXjAjBins, nXjAjBins, nMultiplicityBins, nLeadPtBins};
     double UnfoldingMin[4] = {0., 0., fMultiplicityBins[0], 0.};
     double UnfoldingMax[4] = {1.0, 1.0, fMultiplicityBins[fMultiplicityBins.size() - 1] + 1, 1.};
 
@@ -630,6 +672,10 @@ void HistoManagerDiJet::init()
         new TH2D("hHiHFMinusVsMultiplicity_WithDijet_W", "Forward Calorimeter in Minus Eta (Pb-going)  vs Multiplicity With Dijet Present Weighted", 500, 0.0, 500., 1000,
                  0.0, 500.);
     hHiHFMinusVsMultiplicity_WithDijet_W->Sumw2();
+
+    std::cout << "=======================================================================" << std::endl;
+    std::cout << "============HistoManagerDiJet::init Initialization Complete============" << std::endl;
+    std::cout << "=======================================================================" << std::endl;
 }
 
 void HistoManagerDiJet::projectHistograms()

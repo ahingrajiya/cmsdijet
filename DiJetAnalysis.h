@@ -317,10 +317,7 @@ class DiJetAnalysis : public BaseAnalysis
     void CollSystem(ForestReader& reader);
     ///@brief Set up weight functions
     void SetUpWeightFunctions();
-    ///@brief Dijet weight calculator
-    ///@param event Event object
-    ///@return Dijet weight
-    float DijetWeight(const Event* event);
+
     ///@brief Get DiJet Region based on jet eta
     ///@param jetEta Jet Eta
     ///@return Returns 1 for Backward , 2 for Mid , 3 for Forward, and -1 for not in any region

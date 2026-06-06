@@ -138,8 +138,7 @@ int main(int argc, char* argv[])
     HistoManagerDiJet* hm = new HistoManagerDiJet{};
     hm->setIsMC(isMC);
     hm->setMultiplicityBins(multiplicityBins);
-    hm->setCollSystem(collSystem);
-    hm->init();
+    hm->setForestReader(reader);
 
     DiJetAnalysis* analysis = new DiJetAnalysis{};
     analysis->setReader(reader);
@@ -161,6 +160,7 @@ int main(int argc, char* argv[])
 
     manager->addAnalysis(analysis);
     manager->init();
+    hm->init();
     analysis->setNEventsInSample(reader->nEventsTotal());
     manager->performAnalysis();
     manager->finish();
