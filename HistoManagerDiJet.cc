@@ -1035,133 +1035,152 @@ void HistoManagerDiJet ::writeOutput()
     std::cout << "  ===> Writing Event Histograms" << std::endl;
     gDirectory->mkdir("Events");
     gDirectory->cd("Events");
-    if (fCollSystem == CollisionSystem::PbPb || fCollSystem == CollisionSystem::OO)
+    if (fConfig.saveQA)
     {
+        hVz->Write();
+        hRecoMultiplicity_W->Write();
+        hCorrectedMultiplicity_W->Write();
+        hSelectedMultiplicity_W->Write();
+        hInJetMultiplicity_W->Write();
+        hMultiplicities->Write();
         hHiBin->Write();
         hHiBin_W->Write();
-    }
-    hVz->Write();
-    hVz_W->Write();
-    hVzWithDijet_W->Write();
-    hRecoMultiplicity_W->Write();
-    hCorrectedMultiplicity_W->Write();
-    hSelectedMultiplicity_W->Write();
-    hMultiplicities->Write();
-    hMultiplicities_W->Write();
-    hInJetMultiplicity_W->Write();
-    hMultiplicities_DiJet_W->Write();
-    hHiHF_PF->Write();
-    hHiHF_PF_W->Write();
 
-    if (fIsMC)
-    {
-        hPtHat->Write();
-        hPtHat_W->Write();
-        hGenInJetMultiplicity_W->Write();
-        hGenMultiplicity_W->Write();
-        hSubEventMultiplicity_W->Write();
+        hHiHF_PF->Write();
+        hHiHF_PF_W->Write();
+        if (fIsMC)
+        {
+            hPtHat->Write();
+            hGenInJetMultiplicity_W->Write();
+            hSubEventMultiplicity_W->Write();
+            hGenMultiplicity_W->Write();
+        }
+        hNEventsInMult->Write();
+        hHiHFPlusVsHiHFMinus->Write();
+        hHiHFPlusVsHiHFMinus_W->Write();
+        hHiHFPlusVsHiHFMinus_WithDijet_W->Write();
+        hHiHFPlusVsMultiplicity_W->Write();
+        hHiHFMinusVsMultiplicity_W->Write();
+        hHiHFPlusVsMultiplicity_WithDijet_W->Write();
+        hHiHFMinusVsMultiplicity_WithDijet_W->Write();
     }
-    if (fCollSystem == CollisionSystem::OO)
+    if (fConfig.saveEvent)
     {
-        hHiBinVsMultiplicity_W->Write();
-        hHiBinVsCorrectedMultiplicity_W->Write();
-    }
-    hNEventsInMult->Write();
-    hHiHFPlusVsHiHFMinus->Write();
-    hHiHFPlusVsHiHFMinus_W->Write();
-    hHiHFPlusVsHiHFMinus_WithDijet_W->Write();
-    hHiHFPlusVsMultiplicity_W->Write();
-    hHiHFMinusVsMultiplicity_W->Write();
-    hHiHFPlusVsMultiplicity_WithDijet_W->Write();
-    hHiHFMinusVsMultiplicity_WithDijet_W->Write();
+        if (fCollSystem == CollisionSystem::PbPb || fCollSystem == CollisionSystem::OO)
+        {
+            hHiBinVsMultiplicity_W->Write();
+            hHiBinVsCorrectedMultiplicity_W->Write();
+        }
+        hVz_W->Write();
+        hVzWithDijet_W->Write();
+        hMultiplicities_W->Write();
+        hMultiplicities_DiJet_W->Write();
 
+        if (fIsMC)
+        {
+            hPtHat_W->Write();
+        }
+    }
     std::cout << "  ===> Writing Jets Histograms" << std::endl;
 
     gDirectory->cd("..");
     gDirectory->mkdir("Jets");
     gDirectory->cd("Jets");
 
-    hInclusiveUncorrectedRecoJets->Write();
-    hInclusiveUncorrectedRecoJets_W->Write();
-    hInclusiveRecoJetsCMFrame->Write();
-    hInclusiveRecoJetsCMFrame_W->Write();
-    hSelectedInclusiveRecoJetsMidRapidity_W->Write();
-    hInclusiveRecoJetPtVsEtaCMFrame_W->Write();
-    hInclusiveUnCorrectedRecoPtVsEtaCMFrame_W->Write();
-    hJetFlavorFractions_W->Write();
-    hAverageRecoPt_W->Write();
-
-    if (fCollSystem == CollisionSystem::pPb)
+    if (fConfig.saveInclusive)
     {
-        hInclusiveRecoJetsLabFrame->Write();
-        hInclusiveRecoJetsLabFrame_W->Write();
-        hInclusiveRecoJetPtVsEtaLabFrame_W->Write();
-        hInclusiveUnCorrectedRecoPtVsEtaLabFrame_W->Write();
-    }
-
-    if (fIsMC)
-    {
-        hInclusiveGenJetsCMFrame->Write();
-        hInclusiveGenJetsCMFrame_W->Write();
-        hInclusiveRefJetsCMFrame->Write();
-        hInclusiveRefJetsCMFrame_W->Write();
-        hSelectedInclusiveGenJetsMidRapidity_W->Write();
-        hSelectedInclusiveRefJetsMidRapidity_W->Write();
+        hInclusiveUncorrectedRecoJets->Write();
+        hInclusiveUncorrectedRecoJets_W->Write();
+        hInclusiveRecoJetsCMFrame->Write();
+        hInclusiveRecoJetsCMFrame_W->Write();
+        hSelectedInclusiveRecoJetsMidRapidity_W->Write();
+        hInclusiveRecoJetPtVsEtaCMFrame_W->Write();
+        hInclusiveUnCorrectedRecoPtVsEtaCMFrame_W->Write();
+        hJetFlavorFractions_W->Write();
+        hAverageRecoPt_W->Write();
         if (fCollSystem == CollisionSystem::pPb)
         {
-            hInclusiveGenJetsLabFrame->Write();
-            hInclusiveGenJetsLabFrame_W->Write();
-            hInclusiveRefJetsLabFrame->Write();
-            hInclusiveRefJetsLabFrame_W->Write();
+            hInclusiveRecoJetsLabFrame->Write();
+            hInclusiveRecoJetsLabFrame_W->Write();
+            hInclusiveRecoJetPtVsEtaLabFrame_W->Write();
+            hInclusiveUnCorrectedRecoPtVsEtaLabFrame_W->Write();
+        }
+        if (fIsMC)
+        {
+            hInclusiveGenJetsCMFrame->Write();
+            hInclusiveGenJetsCMFrame_W->Write();
+            hInclusiveRefJetsCMFrame->Write();
+            hInclusiveRefJetsCMFrame_W->Write();
+            hSelectedInclusiveGenJetsMidRapidity_W->Write();
+            hSelectedInclusiveRefJetsMidRapidity_W->Write();
+            if (fCollSystem == CollisionSystem::pPb)
+            {
+                hInclusiveGenJetsLabFrame->Write();
+                hInclusiveGenJetsLabFrame_W->Write();
+                hInclusiveRefJetsLabFrame->Write();
+                hInclusiveRefJetsLabFrame_W->Write();
+            }
+
+            hRecoJES_W->Write();
+            hRefJES_W->Write();
+            hRecoJES_Eta_W->Write();
+            hRefJES_Eta_W->Write();
+            hRecoJES_Eta_Pt100_W->Write();
+            hRecoJES_Eta_Pt120_W->Write();
+            hRefJES_Eta_Pt100_W->Write();
+            hRefJES_Eta_Pt120_W->Write();
+            hAverageGenPt_W->Write();
         }
     }
-    if (fIsMC)
+
+    if (fConfig.saveRecoDijet)
     {
-        hRecoJES_W->Write();
-        hRefJES_W->Write();
-        hRecoJES_Eta_W->Write();
-        hRefJES_Eta_W->Write();
-        hRecoJES_Eta_Pt100_W->Write();
-        hRecoJES_Eta_Pt120_W->Write();
-        hRefJES_Eta_Pt100_W->Write();
-        hRefJES_Eta_Pt120_W->Write();
-        hAverageGenPt_W->Write();
-    }
+        if (fConfig.saveQA)
+        {
+            hLeadSubLeadJets->Write();
+            hLeadSubLeadJets_W->Write();
+            hLeadSubLeadJets_MidRapidity_W->Write();
+        }
 
-    hLeadSubLeadJets->Write();
-    hLeadSubLeadJets_W->Write();
-    hLeadSubLeadJets_MidRapidity_W->Write();
-    hLeadSubLeadJets_WithDijet_W->Write();
-    hLeadSubLeadJets_WithDijet_DiJetW->Write();
-    if (fCollSystem == CollisionSystem::pPb || fCollSystem == CollisionSystem::pp)
-    {
-        hLeadPtvsSubLeadPt_PtHatW->Write();
-        hLeadPtvsSubLeadPt_DiJetW->Write();
-    }
-
-    if (fIsMC)
-    {
-        hGenLeadGenSubLeadJets->Write();
-        hGenLeadGenSubLeadJets_W->Write();
-        hGenLeadGenSubLeadJets_MidRapidity_W->Write();
-        hGenLeadGenSubLeadJets_WithDijet_W->Write();
-        hGenLeadGenSubLeadJets_WithDijet_DiJetW->Write();
-
-        hRefLeadRefSubLeadJets->Write();
-        hRefLeadRefSubLeadJets_W->Write();
-        hRefLeadRefSubLeadJets_MidRapidity_W->Write();
-        hRefLeadRefSubLeadJets_WithDijet_W->Write();
-        hRefLeadRefSubLeadJets_WithDijet_W->Write();
-
+        hLeadSubLeadJets_WithDijet_W->Write();
+        hLeadSubLeadJets_WithDijet_DiJetW->Write();
         if (fCollSystem == CollisionSystem::pPb || fCollSystem == CollisionSystem::pp)
         {
-            hRefLeadPtvsRefSubLeadPt_PtHatW->Write();
-            hRefLeadPtvsRefSubLeadPt_DiJetW->Write();
-            hGenLeadingVsGenSubLeading_WO_DiJet_W->Write();
-            hGenLeadPtvsGenSubLeadPt_DiJetW->Write();
-            hGenLeadPtvsGenSubLeadPt_PtHatW->Write();
-            hRefLeadPtVsRefSubLeadPtMatched_DiJetW->Write();
-            hRefLeadPtVsRefSubLeadPtMatched_PtHatW->Write();
+            hLeadPtvsSubLeadPt_PtHatW->Write();
+            hLeadPtvsSubLeadPt_DiJetW->Write();
+        }
+    }
+
+    if (fIsMC)
+    {
+        if (fConfig.saveGenDijet)
+        {
+            if (fConfig.saveQA)
+            {
+                hGenLeadGenSubLeadJets->Write();
+                hGenLeadGenSubLeadJets_W->Write();
+                hGenLeadGenSubLeadJets_MidRapidity_W->Write();
+                hRefLeadRefSubLeadJets->Write();
+                hRefLeadRefSubLeadJets_W->Write();
+                hRefLeadRefSubLeadJets_MidRapidity_W->Write();
+            }
+
+            hGenLeadGenSubLeadJets_WithDijet_W->Write();
+            hGenLeadGenSubLeadJets_WithDijet_DiJetW->Write();
+
+            hRefLeadRefSubLeadJets_WithDijet_W->Write();
+            hRefLeadRefSubLeadJets_WithDijet_W->Write();
+
+            if (fCollSystem == CollisionSystem::pPb || fCollSystem == CollisionSystem::pp)
+            {
+                hRefLeadPtvsRefSubLeadPt_PtHatW->Write();
+                hRefLeadPtvsRefSubLeadPt_DiJetW->Write();
+                hGenLeadingVsGenSubLeading_WO_DiJet_W->Write();
+                hGenLeadPtvsGenSubLeadPt_DiJetW->Write();
+                hGenLeadPtvsGenSubLeadPt_PtHatW->Write();
+                hRefLeadPtVsRefSubLeadPtMatched_DiJetW->Write();
+                hRefLeadPtVsRefSubLeadPtMatched_PtHatW->Write();
+            }
         }
     }
     std::cout << "  ===> Writing Track Histograms" << std::endl;
@@ -1169,20 +1188,23 @@ void HistoManagerDiJet ::writeOutput()
     gDirectory->cd("..");
     gDirectory->mkdir("Tracks");
     gDirectory->cd("Tracks");
-    hGenTrackPtVsEta->Write();
-    hGenTrackPtVsEta_W->Write();
-    hTrackPtVsEta->Write();
-    hTrackPtVsEta_W->Write();
-    hTrackPtVsEtaCorrected->Write();
-    hTrackPtVsEtaCorrected_W->Write();
-    hRecoTracks->Write();
-    hRecoTracks_W->Write();
-    hRecoTracks_Pt1_W->Write();
-    if (fIsMC)
+    if (fConfig.saveTracking)
     {
-        hGenTracks->Write();
-        hGenTracks_W->Write();
-        hGenTracks_Pt1_W->Write();
+        hGenTrackPtVsEta->Write();
+        hGenTrackPtVsEta_W->Write();
+        hTrackPtVsEta->Write();
+        hTrackPtVsEta_W->Write();
+        hTrackPtVsEtaCorrected->Write();
+        hTrackPtVsEtaCorrected_W->Write();
+        hRecoTracks->Write();
+        hRecoTracks_W->Write();
+        hRecoTracks_Pt1_W->Write();
+        if (fIsMC)
+        {
+            hGenTracks->Write();
+            hGenTracks_W->Write();
+            hGenTracks_Pt1_W->Write();
+        }
     }
 
     std::cout << "  ===> Writing Quenching Histograms" << std::endl;
@@ -1190,71 +1212,105 @@ void HistoManagerDiJet ::writeOutput()
     gDirectory->cd("..");
     gDirectory->mkdir("Quenching");
     gDirectory->cd("Quenching");
-    hRecoQuenching_W->Write();
-    hRecoQuenching_WithDijet_W->Write();
-    hDeltaPhi_W->Write();
-    hDeltaPhi_WithDiJet_W->Write();
-    hMultVsXj_W->Write();
-    hHiHFVsXj_W->Write();
-    if (fCollSystem != CollisionSystem::PbPb)
+    if (fConfig.saveQuenching)
     {
-        hMultVsXj_DiJetW->Write();
-        hMultVsXj_HiHFW->Write();
-        hHiHFVsXj_HiHFW->Write();
-    }
-    hNDijetEvent->Write();
-
-    if (fIsMC)
-    {
-        hMultVsRefXj_W->Write();
-        hMultVsMatchedRefXj_W->Write();
-        hMultVsMatchedRecoXj_W->Write();
-        hMultVsUnflippedMatchedRecoXj_W->Write();
-        hMultVsUnflippedMatchedRefXj_DiJetW->Write();
-        hMultVsUnflippedMatchedRefXj_W->Write();
-        hGenQuenching_W->Write();
-        hGenQuenching_WithDijet_W->Write();
-        hGenDeltaPhi_W->Write();
-        hGenDeltaPhi_WithDiJet_W->Write();
-        hRefDeltaPhi_W->Write();
-        hRefDeltaPhi_WithDiJet_W->Write();
-        hMultVsGenXj_W->Write();
-        hNGenDijetEvent->Write();
-        if (fCollSystem == CollisionSystem::pPb || fCollSystem == CollisionSystem::pp)
+        hMultVsXj_W->Write();
+        hHiHFVsXj_W->Write();
+        if (fCollSystem != CollisionSystem::PbPb)
         {
-            hMultVsRefXj_DiJetW->Write();
-            hMultVsMatchedRefXj_DiJetW->Write();
-            hMultVsGenXj_DiJetW->Write();
+            hMultVsXj_DiJetW->Write();
+            hMultVsXj_HiHFW->Write();
+            hHiHFVsXj_HiHFW->Write();
+        }
+        if (fIsMC)
+        {
+            hMultVsRefXj_W->Write();
+            hMultVsMatchedRefXj_W->Write();
+            hMultVsMatchedRecoXj_W->Write();
+
+            hMultVsGenXj_W->Write();
         }
     }
 
+    if (fConfig.saveQA)
+    {
+        hDeltaPhi_W->Write();
+        hDeltaPhi_WithDiJet_W->Write();
+        hNDijetEvent->Write();
+        hRecoQuenching_W->Write();
+        hRecoQuenching_WithDijet_W->Write();
+        if (fIsMC)
+        {
+            hMultVsUnflippedMatchedRecoXj_W->Write();
+            hMultVsUnflippedMatchedRefXj_DiJetW->Write();
+            hMultVsUnflippedMatchedRefXj_W->Write();
+            hGenDeltaPhi_W->Write();
+            hGenDeltaPhi_WithDiJet_W->Write();
+            hRefDeltaPhi_W->Write();
+            hRefDeltaPhi_WithDiJet_W->Write();
+            hNGenDijetEvent->Write();
+            hGenQuenching_W->Write();
+            hGenQuenching_WithDijet_W->Write();
+            if (fCollSystem == CollisionSystem::pPb || fCollSystem == CollisionSystem::pp)
+            {
+                hMultVsRefXj_DiJetW->Write();
+                hMultVsMatchedRefXj_DiJetW->Write();
+                hMultVsGenXj_DiJetW->Write();
+            }
+        }
+    }
     std::cout << "  ===> Writing Projections Histograms" << std::endl;
 
     gDirectory->cd("..");
     gDirectory->mkdir("Projections");
     gDirectory->cd("Projections");
-    hHiHFPlus->Write();
-    hHiHFMinus->Write();
-    hHiHFPlus_W->Write();
-    hHiHFMinus_W->Write();
-    hHiHFPlus_WithDijet_W->Write();
-    hHiHFMinus_WithDijet_W->Write();
-    hInclusiveRecoJetPt->Write();
-    hInclusiveRecoJetPt_W->Write();
-    hSelectedInclusiveRecoJetPt_MidRapidity_W->Write();
-    hInclusiveRecoJetEtaCMFrame->Write();
-    hInclusiveRecoJetEtaCMFrame_W->Write();
-    if (fCollSystem == CollisionSystem::pPb)
+    if (fConfig.saveQA)
     {
-        hInclusiveRecoJetEtaLabFrame->Write();
-        hInclusiveRecoJetEtaLabFrame_W->Write();
+        hHiHFPlus->Write();
+        hHiHFMinus->Write();
+        hHiHFPlus_W->Write();
+        hHiHFMinus_W->Write();
+        hHiHFPlus_WithDijet_W->Write();
+        hHiHFMinus_WithDijet_W->Write();
+        hInclusiveRecoJetPt->Write();
+        if (fCollSystem == CollisionSystem::pPb)
+        {
+            hInclusiveRecoJetEtaLabFrame->Write();
+            hInclusiveRecoJetEtaLabFrame_W->Write();
+        }
+        hInclusiveRecoJetPt_W->Write();
+        hInclusiveRecoJetEtaCMFrame->Write();
+        hLeadingRecoJetPt->Write();
+        hLeadingRecoJetPt_W->Write();
+        hSubLeadingRecoJetPt->Write();
+        hSubLeadingRecoJetPt_W->Write();
+        if (fIsMC)
+        {
+            hInclusiveGenJetPt->Write();
+            hInclusiveGenJetPt_W->Write();
+            hInclusiveGenJetEtaCMFrame->Write();
+            hLeadingGenJetPt->Write();
+            hLeadingGenJetPt_W->Write();
+            hSubLeadingGenJetPt->Write();
+            hSubLeadingGenJetPt_W->Write();
+            if (fCollSystem == CollisionSystem::pPb)
+            {
+                hInclusiveGenJetEtaLabFrame->Write();
+                hInclusiveGenJetEtaLabFrame_W->Write();
+            }
+            hInclusiveRefJetPt->Write();
+            hInclusiveRefJetPt_W->Write();
+            hLeadingRefJetPt->Write();
+            hLeadingRefJetPt_W->Write();
+            hSubLeadingRefJetPt->Write();
+            hSubLeadingRefJetPt_W->Write();
+        }
     }
 
+    hSelectedInclusiveRecoJetPt_MidRapidity_W->Write();
+    hInclusiveRecoJetEtaCMFrame_W->Write();
     hSelectedInclusiveRecoJetEtaMidRapidity_W->Write();
-    hLeadingRecoJetPt->Write();
-    hLeadingRecoJetPt_W->Write();
-    hSubLeadingRecoJetPt->Write();
-    hSubLeadingRecoJetPt_W->Write();
+
     hLeadingRecoJetPtWithDijet_W->Write();
     hSubLeadingRecoJetPtWithDijet_W->Write();
     hLeadingRecoJetPtWithDijet_DiJetW->Write();
@@ -1262,34 +1318,16 @@ void HistoManagerDiJet ::writeOutput()
 
     if (fIsMC)
     {
-        hInclusiveGenJetPt->Write();
-        hInclusiveGenJetPt_W->Write();
         hSelectedInclusiveGenJetPt_MidRapidity_W->Write();
-        hInclusiveGenJetEtaCMFrame->Write();
         hInclusiveGenJetEtaCMFrame_W->Write();
         hSelectedInclusiveGenJetEtaMidRapidity_W->Write();
 
-        hLeadingGenJetPt->Write();
-        hLeadingGenJetPt_W->Write();
-        hSubLeadingGenJetPt->Write();
-        hSubLeadingGenJetPt_W->Write();
         hLeadingGenJetPtWithDijet_W->Write();
         hSubLeadingGenJetPtWithDijet_W->Write();
         hLeadingGenJetPtWithDijet_DiJetW->Write();
         hSubLeadingGenJetPtWithDijet_DiJetW->Write();
 
-        if (fCollSystem == CollisionSystem::pPb)
-        {
-            hInclusiveGenJetEtaLabFrame->Write();
-            hInclusiveGenJetEtaLabFrame_W->Write();
-        }
-        hInclusiveRefJetPt->Write();
-        hInclusiveRefJetPt_W->Write();
         hSelectedInclusiveRefJetPt_MidRapidity_W->Write();
-        hLeadingRefJetPt->Write();
-        hLeadingRefJetPt_W->Write();
-        hSubLeadingRefJetPt->Write();
-        hSubLeadingRefJetPt_W->Write();
         hLeadingRefJetPtWithDijet_W->Write();
         hSubLeadingRefJetPtWithDijet_W->Write();
         hLeadingRefJetPtWithDijet_DiJetW->Write();
@@ -1344,22 +1382,24 @@ void HistoManagerDiJet ::writeOutput()
         gDirectory->mkdir("Unfolding");
         gDirectory->cd("Unfolding");
 
-        // hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W->Write();
-        // hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W->Write();
-        // hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W->Write();
-        // hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W->Write();
-        // hMultVsFakeRecoXjForTesting_W->Write();
-        // hMultVsMissingRefXjForTesting_W->Write();
-        // hMultVsFakeRecoXjToBeUnfolded_W->Write();
-        // hMultVsMissingRefXjToBeUnfolded_W->Write();
-        // hMultVsFakeRefXjForTesting_W->Write();
-        // hMultVsFakeRefXjToBeUnfolded_W->Write();
-        // hFakeLeadXj_W->Write();
-        // hFakeSubLeadXj_W->Write();
-        // hLeadPtVsRecoXj_W->Write();
-        // hLeadPtVsRefXj_W->Write();
-        // hLeadPtVsGenXj_W->Write();
-
+        if (fConfig.saveUnfolding)
+        {
+            hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W->Write();
+            hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W->Write();
+            hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W->Write();
+            hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W->Write();
+            hMultVsFakeRecoXjForTesting_W->Write();
+            hMultVsMissingRefXjForTesting_W->Write();
+            hMultVsFakeRecoXjToBeUnfolded_W->Write();
+            hMultVsMissingRefXjToBeUnfolded_W->Write();
+            hMultVsFakeRefXjForTesting_W->Write();
+            hMultVsFakeRefXjToBeUnfolded_W->Write();
+            hFakeLeadXj_W->Write();
+            hFakeSubLeadXj_W->Write();
+            hLeadPtVsRecoXj_W->Write();
+            hLeadPtVsRefXj_W->Write();
+            hLeadPtVsGenXj_W->Write();
+        }
         hResponseMatrix_W->Write();
         hTotalReco_W->Write();
         hTotalTruth_W->Write();

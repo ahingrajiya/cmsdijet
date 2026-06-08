@@ -43,7 +43,6 @@ int main(int argc, char* argv[])
     Double_t etaBoost{0.4654094531};
     TString jetBranchNameEmbedded{"ak4PFJetAnalyzer"};
     TString jetBranchNameUnembedded{"ak4PFJetAnalyzer"};
-    std::string dijetWeightType{"Gen"};
     TString oFileName{};
     TString JECFileName{};
     TString JECFileDataName{};
@@ -65,6 +64,8 @@ int main(int argc, char* argv[])
     Bool_t useJERSmearing{kTRUE};  // Use JER Smearing for MC
     Bool_t useJEU{kFALSE};         // 0 - No JEC Uncertainty, 1 - JEC Uncertainty Up, -1 - JEC Uncertainty Down
     Int_t JEUType{0};              // 0 - No JEU, 1 - JEU Up, -1 - JEU Down
+    HistoConfig writeConfig = {false, true, true, true, false, true, false, true};
+
     // Command line arguments
     /*
     inputFileList               - input file list with forest file paths

@@ -30,6 +30,19 @@
 #include "TProfile.h"
 #include "TString.h"
 
+// Define the logical groups of your histograms
+struct HistoConfig
+{
+    bool saveInclusive = true;   // Core inclusive jet plots
+    bool saveRecoDijet = true;   // Main Reco dijet kinematic plots
+    bool saveGenDijet = false;   // MC truth plots
+    bool saveUnfolding = false;  // Huge response matrices
+    bool saveQA = false;         // Multiplicities, Vz, etc.
+    bool saveEvent = false;      // Event histograms
+    bool saveTracking = false;   // Save Tracking histogram
+    bool saveQuenching = false;  // Save quenching histograms
+};
+
 class HistoManagerDiJet : public BaseHistoManager
 {
    public:
@@ -71,6 +84,9 @@ class HistoManagerDiJet : public BaseHistoManager
 
     ///@brief Set Collision System
     void setForestReader(ForestReader* reader) { fReader = reader; }
+    /// @brief Set writing config
+    /// @param config condifguration
+    void setConfig(const HistoConfig& config) { fConfig = config; }
 
     TH1D* hPtHat{nullptr};
     TH1D* hPtHat_W{nullptr};
@@ -338,7 +354,7 @@ class HistoManagerDiJet : public BaseHistoManager
     std::vector<TH1D*> hMatchedRefXj_Projection_W{};
     std::vector<TH1D*> hMatchedRefXj_Projection_DiJetW{};
 
-    // static constexpr double HiHFEnergyBins[] = {0.0, 10.0, 20.0, 30.0, 40.0, 50.0, 70.0, 90.0, 120.0, 150.0, 1000.0};
+    HistoConfig fConfig;
 
     ClassDef(HistoManagerDiJet, 1)
 };

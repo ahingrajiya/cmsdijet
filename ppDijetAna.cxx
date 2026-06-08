@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
     std::vector<std::string> filters{"pBeamScrapingFilter", "pPAprimaryVertexFilter", "HBHENoiseFilterResultRun2Loose"};
     // std::string path2DijetWeight = "../aux_files/pp_5020/Dijet_Weight/PYTHIA_DiJetWeight_Table.root";
     std::string path2DijetWeight = "../aux_files/pp_5360/Dijet_Weight/DiJetWeight.root";
-    std::string dijetWeightType{"Gen"};
+    HistoConfig writeConfig = {false, true, true, true, false, true, false, true};
 
     if (argc <= 1)
     {
@@ -168,6 +168,7 @@ int main(int argc, char* argv[])
     hm->setPtBins(ptBins);
     hm->setXjBins(xjBins);
     hm->setForestReader(reader);
+    hm->setConfig(writeConfig);
 
     // Initialize analysis
     DiJetAnalysis* analysis = new DiJetAnalysis{};
@@ -195,7 +196,7 @@ int main(int argc, char* argv[])
     if (isMC)
     {
         analysis->setUseDijetWeight();
-        analysis->setDijetWeightType(DijetWeightType::Reco);
+        analysis->setDijetWeightType(DijetWeightType::Gen);
         analysis->setDijetWeightTable(path2DijetWeight);
     }
 

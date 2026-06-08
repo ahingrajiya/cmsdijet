@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
     std::vector<std::string> triggers{"HLT_HIPuAK4CaloJet80Eta5p1_v1"};
     std::string path2MultWeight = "../aux_files/PbPb_5020/Multiplicity_Weight/mult_weight_1p0.root";
     std::string path2DijetWeight = "../aux_files/pp_5020/Dijet_Weight/PYTHIA_DiJetWeight_Table.root";
-    std::string dijetWeightType{"Gen"};
+    HistoConfig writeConfig = {false, true, true, true, false, true, false, true};
 
     if (argc <= 1)
     {

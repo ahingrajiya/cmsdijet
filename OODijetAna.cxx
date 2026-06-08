@@ -62,7 +62,8 @@ int main(int argc, char* argv[])
     Bool_t useJEU{kFALSE};          // 0 - No JEC Uncertainty, 1 - JEC Uncertainty Up, -1 - JEC Uncertainty Down
     Int_t JEUType{-1};              // 0 - No JEU, 1 - JEU Up, -1 - JEU Down
     std::string path2DijetWeight = "../aux_files/pp_5360/Dijet_Weight/DiJetWeight.root";
-    std::string dijetWeightType{"Gen"};
+    HistoConfig writeConfig = {false, true, true, true, false, true, false, true};
+
     // Command line arguments
     /*
     inputFileList               - input file list with forest file paths
