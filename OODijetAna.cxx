@@ -57,10 +57,10 @@ int main(int argc, char* argv[])
     std::vector<std::string> filters{"pprimaryVertexFilter", "pphfCoincFilter2Th4"};  // pphfCoincFilterPF2Th4 pphfCoincFilter2Th4
     std::vector<std::string> filtersmc{"pprimaryVertexFilter"};
     std::string UEType{"HIJING"};
-    Int_t smearType{0};             // 0 - Nominal Smearing, 1 - JER Smearing, 2 - JEC Smearing
-    Bool_t useJERSmearing{kFALSE};  // Use JER Smearing for MC
-    Bool_t useJEU{kFALSE};          // 0 - No JEC Uncertainty, 1 - JEC Uncertainty Up, -1 - JEC Uncertainty Down
-    Int_t JEUType{-1};              // 0 - No JEU, 1 - JEU Up, -1 - JEU Down
+    Int_t smearType{0};            // 0 - Nominal Smearing, 1 - JER Smearing, 2 - JEC Smearing
+    Bool_t useJERSmearing{false};  // Use JER Smearing for MC
+    Bool_t useJEU{false};          // 0 - No JEC Uncertainty, 1 - JEC Uncertainty Up, -1 - JEC Uncertainty Down
+    Int_t JEUType{0};              // 0 - No JEU, 1 - JEU Up, -1 - JEU Down
     std::string path2DijetWeight = "../aux_files/pp_5360/Dijet_Weight/DiJetWeight.root";
     HistoConfig writeConfig = {false, true, true, true, false, true, false, true};
 
