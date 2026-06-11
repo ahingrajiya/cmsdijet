@@ -212,6 +212,7 @@ int main(int argc, char* argv[])
     // hm->projectHistograms();
     hm->writeOutput();
     std::cout << "Writing Done" << std ::endl;
+    outFile->Write();
     outFile->Close();
 
     return 0;
