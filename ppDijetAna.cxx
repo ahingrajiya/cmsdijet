@@ -209,7 +209,7 @@ int main(int argc, char* argv[])
     manager->finish();
 
     TFile* outFile = new TFile{oFileName, "RECREATE"};
-    hm->projectHistograms();
+    // hm->projectHistograms();
     hm->writeOutput();
     std::cout << "Writing Done" << std ::endl;
     outFile->Close();
