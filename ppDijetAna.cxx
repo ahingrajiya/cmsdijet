@@ -193,12 +193,12 @@ int main(int argc, char* argv[])
     }
     // analysis->setUseJetPtWeight();
 
-    // if (isMC)
-    // {
-    //     analysis->setUseDijetWeight();
-    //     analysis->setDijetWeightType(DijetWeightType::Gen);
-    //     analysis->setDijetWeightTable(path2DijetWeight);
-    // }
+    if (isMC)
+    {
+        analysis->setUseDijetWeight();
+        analysis->setDijetWeightType(DijetWeightType::Gen);
+        analysis->setDijetWeightTable(path2DijetWeight);
+    }
 
     manager->addAnalysis(analysis);
     manager->init();
@@ -209,7 +209,7 @@ int main(int argc, char* argv[])
     manager->finish();
 
     TFile* outFile = new TFile{oFileName, "RECREATE"};
-    // hm->projectHistograms();
+    hm->projectHistograms();
     hm->writeOutput();
     outFile->Write();
     outFile->Close();

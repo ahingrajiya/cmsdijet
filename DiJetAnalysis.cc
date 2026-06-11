@@ -48,10 +48,6 @@ DiJetAnalysis::DiJetAnalysis() : BaseAnalysis()
 
 DiJetAnalysis::~DiJetAnalysis()
 {
-    if (fUseDijetWeight && fDijetWeightFile && fDijetWeightFile->IsOpen())
-    {
-        fDijetWeightFile->Close();
-    }
 }
 
 void DiJetAnalysis::init()
@@ -131,7 +127,7 @@ void DiJetAnalysis::SetUpWeightFunctions()
         if (fIsMC && fUseJetPtWeight)
         {
             std::cout << "DiJetAnalysis::SetUpWeightFunctions Setting up JetPt Weight Functions" << std::endl;
-            fJetPtWeight = std::make_unique<TF1>("fJetPtWeight", "pol2", 50, 500);
+            fJetPtWeight = std::make_unique<TF1>("fJetPtWeight", "pol2", 50, 500, TF1::EAddToList::kNo);
             fJetPtWeight->SetParameters(9.54788e-01, 6.57695e-04);
         }
     }
@@ -159,23 +155,24 @@ void DiJetAnalysis::SetUpDijetWeight(const std::string& dijetWeightTable)
     std::cout << "============================================================================================" << std::endl;
     std::cout << std::endl;
     std::cout << "Dijet Weight Table: " << dijetWeightTable << std::endl;
-    fDijetWeightFile.reset(TFile::Open(dijetWeightTable.c_str(), "OPEN"));
-    if (!fDijetWeightFile || fDijetWeightFile->IsZombie())
+    std::unique_ptr<TFile> localWeightFile(TFile::Open(dijetWeightTable.c_str(), "OPEN"));
+    if (!localWeightFile || localWeightFile->IsZombie())
     {
         std::cerr << "Dijet weight table not found" << std::endl;
         return;
     }
+    TH2D* hDijetWeight = nullptr;
     if (fWeightType == DijetWeightType::Reco)
     {
-        hDijetWeight = (TH2D*)fDijetWeightFile->Get("Reco");
+        hDijetWeight = (TH2D*)localWeightFile->Get("Reco");
     }
     else if (fWeightType == DijetWeightType::Ref)
     {
-        hDijetWeight = (TH2D*)fDijetWeightFile->Get("Ref");
+        hDijetWeight = (TH2D*)localWeightFile->Get("Ref");
     }
     else if (fWeightType == DijetWeightType::Gen)
     {
-        hDijetWeight = (TH2D*)fDijetWeightFile->Get("Gen");
+        hDijetWeight = (TH2D*)localWeightFile->Get("Gen");
     }
     else
     {

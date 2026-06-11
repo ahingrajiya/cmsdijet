@@ -1261,120 +1261,120 @@ void HistoManagerDiJet ::writeOutput()
     }
     std::cout << "  ===> Writing Projections Histograms" << std::endl;
 
-    // gDirectory->cd("..");
-    // gDirectory->mkdir("Projections");
-    // gDirectory->cd("Projections");
-    // if (fConfig.saveQA)
-    // {
-    //     hHiHFPlus->Write();
-    //     hHiHFMinus->Write();
-    //     hHiHFPlus_W->Write();
-    //     hHiHFMinus_W->Write();
-    //     hHiHFPlus_WithDijet_W->Write();
-    //     hHiHFMinus_WithDijet_W->Write();
-    //     hInclusiveRecoJetPt->Write();
-    //     if (fCollSystem == CollisionSystem::pPb)
-    //     {
-    //         hInclusiveRecoJetEtaLabFrame->Write();
-    //         hInclusiveRecoJetEtaLabFrame_W->Write();
-    //     }
-    //     hInclusiveRecoJetPt_W->Write();
-    //     hInclusiveRecoJetEtaCMFrame->Write();
-    //     hLeadingRecoJetPt->Write();
-    //     hLeadingRecoJetPt_W->Write();
-    //     hSubLeadingRecoJetPt->Write();
-    //     hSubLeadingRecoJetPt_W->Write();
-    //     if (fIsMC)
-    //     {
-    //         hInclusiveGenJetPt->Write();
-    //         hInclusiveGenJetPt_W->Write();
-    //         hInclusiveGenJetEtaCMFrame->Write();
-    //         hLeadingGenJetPt->Write();
-    //         hLeadingGenJetPt_W->Write();
-    //         hSubLeadingGenJetPt->Write();
-    //         hSubLeadingGenJetPt_W->Write();
-    //         if (fCollSystem == CollisionSystem::pPb)
-    //         {
-    //             hInclusiveGenJetEtaLabFrame->Write();
-    //             hInclusiveGenJetEtaLabFrame_W->Write();
-    //         }
-    //         hInclusiveRefJetPt->Write();
-    //         hInclusiveRefJetPt_W->Write();
-    //         hLeadingRefJetPt->Write();
-    //         hLeadingRefJetPt_W->Write();
-    //         hSubLeadingRefJetPt->Write();
-    //         hSubLeadingRefJetPt_W->Write();
-    //     }
-    // }
+    gDirectory->cd("..");
+    gDirectory->mkdir("Projections");
+    gDirectory->cd("Projections");
+    if (fConfig.saveQA)
+    {
+        hHiHFPlus->Write();
+        hHiHFMinus->Write();
+        hHiHFPlus_W->Write();
+        hHiHFMinus_W->Write();
+        hHiHFPlus_WithDijet_W->Write();
+        hHiHFMinus_WithDijet_W->Write();
+        hInclusiveRecoJetPt->Write();
+        if (fCollSystem == CollisionSystem::pPb)
+        {
+            hInclusiveRecoJetEtaLabFrame->Write();
+            hInclusiveRecoJetEtaLabFrame_W->Write();
+        }
+        hInclusiveRecoJetPt_W->Write();
+        hInclusiveRecoJetEtaCMFrame->Write();
+        hLeadingRecoJetPt->Write();
+        hLeadingRecoJetPt_W->Write();
+        hSubLeadingRecoJetPt->Write();
+        hSubLeadingRecoJetPt_W->Write();
+        if (fIsMC)
+        {
+            hInclusiveGenJetPt->Write();
+            hInclusiveGenJetPt_W->Write();
+            hInclusiveGenJetEtaCMFrame->Write();
+            hLeadingGenJetPt->Write();
+            hLeadingGenJetPt_W->Write();
+            hSubLeadingGenJetPt->Write();
+            hSubLeadingGenJetPt_W->Write();
+            if (fCollSystem == CollisionSystem::pPb)
+            {
+                hInclusiveGenJetEtaLabFrame->Write();
+                hInclusiveGenJetEtaLabFrame_W->Write();
+            }
+            hInclusiveRefJetPt->Write();
+            hInclusiveRefJetPt_W->Write();
+            hLeadingRefJetPt->Write();
+            hLeadingRefJetPt_W->Write();
+            hSubLeadingRefJetPt->Write();
+            hSubLeadingRefJetPt_W->Write();
+        }
+    }
 
-    // hSelectedInclusiveRecoJetPt_MidRapidity_W->Write();
-    // hInclusiveRecoJetEtaCMFrame_W->Write();
-    // hSelectedInclusiveRecoJetEtaMidRapidity_W->Write();
+    hSelectedInclusiveRecoJetPt_MidRapidity_W->Write();
+    hInclusiveRecoJetEtaCMFrame_W->Write();
+    hSelectedInclusiveRecoJetEtaMidRapidity_W->Write();
 
-    // hLeadingRecoJetPtWithDijet_W->Write();
-    // hSubLeadingRecoJetPtWithDijet_W->Write();
-    // hLeadingRecoJetPtWithDijet_DiJetW->Write();
-    // hSubLeadingRecoJetPtWithDijet_DiJetW->Write();
+    hLeadingRecoJetPtWithDijet_W->Write();
+    hSubLeadingRecoJetPtWithDijet_W->Write();
+    hLeadingRecoJetPtWithDijet_DiJetW->Write();
+    hSubLeadingRecoJetPtWithDijet_DiJetW->Write();
 
-    // if (fIsMC)
-    // {
-    //     hSelectedInclusiveGenJetPt_MidRapidity_W->Write();
-    //     hInclusiveGenJetEtaCMFrame_W->Write();
-    //     hSelectedInclusiveGenJetEtaMidRapidity_W->Write();
+    if (fIsMC)
+    {
+        hSelectedInclusiveGenJetPt_MidRapidity_W->Write();
+        hInclusiveGenJetEtaCMFrame_W->Write();
+        hSelectedInclusiveGenJetEtaMidRapidity_W->Write();
 
-    //     hLeadingGenJetPtWithDijet_W->Write();
-    //     hSubLeadingGenJetPtWithDijet_W->Write();
-    //     hLeadingGenJetPtWithDijet_DiJetW->Write();
-    //     hSubLeadingGenJetPtWithDijet_DiJetW->Write();
+        hLeadingGenJetPtWithDijet_W->Write();
+        hSubLeadingGenJetPtWithDijet_W->Write();
+        hLeadingGenJetPtWithDijet_DiJetW->Write();
+        hSubLeadingGenJetPtWithDijet_DiJetW->Write();
 
-    //     hSelectedInclusiveRefJetPt_MidRapidity_W->Write();
-    //     hLeadingRefJetPtWithDijet_W->Write();
-    //     hSubLeadingRefJetPtWithDijet_W->Write();
-    //     hLeadingRefJetPtWithDijet_DiJetW->Write();
-    //     hSubLeadingRefJetPtWithDijet_DiJetW->Write();
-    // }
-    // hXj_C0_W->Write();
-    // if (fCollSystem != CollisionSystem::PbPb)
-    // {
-    //     hXj_C0_DiJetW->Write();
-    // }
-    // if (fIsMC)
-    // {
-    //     hGenXj_C0_W->Write();
-    //     if (fCollSystem == CollisionSystem::pPb)
-    //     {
-    //         hGenXj_C0_DiJetW->Write();
-    //     }
-    // }
-    // for (Int_t i = 0; i < hXj_Projection_W.size(); i++)
-    // {
-    //     hXj_Projection_W[i]->Write();
-    //     if (fCollSystem != CollisionSystem::PbPb)
-    //     {
-    //         hXj_Projection_DiJetW[i]->Write();
-    //         hXj_Projection_HiHFW[i]->Write();
-    //     }
-    //     if (fIsMC)
-    //     {
-    //         hGenXj_Projection_W[i]->Write();
-    //         hRefXj_Projection_W[i]->Write();
-    //         hMatchedRefXj_Projection_W[i]->Write();
-    //         if (fCollSystem == CollisionSystem::pPb || fCollSystem == CollisionSystem::pp)
-    //         {
-    //             hGenXj_Projection_DiJetW[i]->Write();
-    //             hRefXj_Projection_DiJetW[i]->Write();
-    //             hMatchedRefXj_Projection_DiJetW[i]->Write();
-    //         }
-    //     }
-    // }
-    // if (fCollSystem == CollisionSystem::pPb || fCollSystem == CollisionSystem::OO)
-    // {
-    //     for (size_t i = 0; i < hXj_ProjectionHiHF_W.size(); i++)
-    //     {
-    //         hXj_ProjectionHiHF_W[i]->Write();
-    //         hXj_ProjectionHiHF_HiHFW[i]->Write();
-    //     }
-    // }
+        hSelectedInclusiveRefJetPt_MidRapidity_W->Write();
+        hLeadingRefJetPtWithDijet_W->Write();
+        hSubLeadingRefJetPtWithDijet_W->Write();
+        hLeadingRefJetPtWithDijet_DiJetW->Write();
+        hSubLeadingRefJetPtWithDijet_DiJetW->Write();
+    }
+    hXj_C0_W->Write();
+    if (fCollSystem != CollisionSystem::PbPb)
+    {
+        hXj_C0_DiJetW->Write();
+    }
+    if (fIsMC)
+    {
+        hGenXj_C0_W->Write();
+        if (fCollSystem == CollisionSystem::pPb)
+        {
+            hGenXj_C0_DiJetW->Write();
+        }
+    }
+    for (Int_t i = 0; i < hXj_Projection_W.size(); i++)
+    {
+        hXj_Projection_W[i]->Write();
+        if (fCollSystem != CollisionSystem::PbPb)
+        {
+            hXj_Projection_DiJetW[i]->Write();
+            hXj_Projection_HiHFW[i]->Write();
+        }
+        if (fIsMC)
+        {
+            hGenXj_Projection_W[i]->Write();
+            hRefXj_Projection_W[i]->Write();
+            hMatchedRefXj_Projection_W[i]->Write();
+            if (fCollSystem == CollisionSystem::pPb || fCollSystem == CollisionSystem::pp)
+            {
+                hGenXj_Projection_DiJetW[i]->Write();
+                hRefXj_Projection_DiJetW[i]->Write();
+                hMatchedRefXj_Projection_DiJetW[i]->Write();
+            }
+        }
+    }
+    if (fCollSystem == CollisionSystem::pPb || fCollSystem == CollisionSystem::OO)
+    {
+        for (size_t i = 0; i < hXj_ProjectionHiHF_W.size(); i++)
+        {
+            hXj_ProjectionHiHF_W[i]->Write();
+            hXj_ProjectionHiHF_HiHFW[i]->Write();
+        }
+    }
 
     if (fIsMC)
     {

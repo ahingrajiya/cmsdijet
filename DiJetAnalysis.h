@@ -490,8 +490,8 @@ class DiJetAnalysis : public BaseAnalysis
     int fXBinCount{0};
     ///@brief Number of Bins on Y Axis
     int fYBinCount{0};
-    ///@brief Dijet Weight histograms
-    TH2* hDijetWeight{nullptr};
+    // ///@brief Dijet Weight histograms
+    // TH2* hDijetWeight{nullptr};
 
     // Unfolding Bins
     /// @brief Pt bin boundries
@@ -510,8 +510,8 @@ class DiJetAnalysis : public BaseAnalysis
     std::unique_ptr<TrkEff2018PbPb> fTrkEffPbPb;
     ///@brief Tracking efficiency for pPb
     std::unique_ptr<TrkEfficiency2016pPb> fTrkEffpPb;
-    ///@brief Dijet Weight file
-    std::unique_ptr<TFile> fDijetWeightFile;
+    // ///@brief Dijet Weight file
+    // std::unique_ptr<TFile> fDijetWeightFile;
     ///@brief Vertex Z weight function
     std::unique_ptr<TF1> fVertexZWeight;
     ///@brief Holds multiplicity weight functions
