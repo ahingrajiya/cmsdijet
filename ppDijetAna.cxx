@@ -193,12 +193,12 @@ int main(int argc, char* argv[])
     }
     // analysis->setUseJetPtWeight();
 
-    if (isMC)
-    {
-        analysis->setUseDijetWeight();
-        analysis->setDijetWeightType(DijetWeightType::Gen);
-        analysis->setDijetWeightTable(path2DijetWeight);
-    }
+    // if (isMC)
+    // {
+    //     analysis->setUseDijetWeight();
+    //     analysis->setDijetWeightType(DijetWeightType::Gen);
+    //     analysis->setDijetWeightTable(path2DijetWeight);
+    // }
 
     manager->addAnalysis(analysis);
     manager->init();
