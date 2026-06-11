@@ -211,6 +211,7 @@ int main(int argc, char* argv[])
     TFile* outFile = new TFile{oFileName, "RECREATE"};
     hm->projectHistograms();
     hm->writeOutput();
+    std::cout << "Writing Done" << std ::endl;
     outFile->Close();
 
     return 0;
