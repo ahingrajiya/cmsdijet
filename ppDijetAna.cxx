@@ -213,7 +213,7 @@ int main(int argc, char* argv[])
     hm->writeOutput();
     std::cout << "Writing Done" << std ::endl;
     outFile->Write();
-    outFile->Close();
+    // outFile->Close();
 
     return 0;
 }
