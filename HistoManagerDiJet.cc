@@ -1259,6 +1259,47 @@ void HistoManagerDiJet ::writeOutput()
             }
         }
     }
+
+    gDirectory->cd("..");
+    gDirectory->mkdir("Unfolding");
+    gDirectory->cd("Unfolding");
+    if (fIsMC)
+    {
+        if (fConfig.saveUnfolding)
+        {
+            hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W->Write();
+            hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W->Write();
+            hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W->Write();
+            hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W->Write();
+            hMultVsFakeRecoXjForTesting_W->Write();
+            hMultVsMissingRefXjForTesting_W->Write();
+            hMultVsFakeRecoXjToBeUnfolded_W->Write();
+            hMultVsMissingRefXjToBeUnfolded_W->Write();
+            hMultVsFakeRefXjForTesting_W->Write();
+            hMultVsFakeRefXjToBeUnfolded_W->Write();
+            hFakeLeadXj_W->Write();
+            hFakeSubLeadXj_W->Write();
+            hLeadPtVsRecoXj_W->Write();
+            hLeadPtVsRefXj_W->Write();
+            hLeadPtVsGenXj_W->Write();
+        }
+        hResponseMatrix_W->Write();
+        hTotalReco_W->Write();
+        hTotalTruth_W->Write();
+        hMatchedGen_W->Write();
+        hMatchedReco_W->Write();
+        hResponseMatrixA_W->Write();
+        hTotalRecoA_W->Write();
+        hTotalTruthA_W->Write();
+        hMatchedGenA_W->Write();
+        hMatchedRecoA_W->Write();
+        hResponseMatrixB_W->Write();
+        hTotalRecoB_W->Write();
+        hTotalTruthB_W->Write();
+        hMatchedGenB_W->Write();
+        hMatchedRecoB_W->Write();
+    }
+
     std::cout << "  ===> Writing Projections Histograms" << std::endl;
 
     gDirectory->cd("..");
@@ -1374,47 +1415,6 @@ void HistoManagerDiJet ::writeOutput()
             hXj_ProjectionHiHF_W[i]->Write();
             hXj_ProjectionHiHF_HiHFW[i]->Write();
         }
-    }
-
-    if (fIsMC)
-    {
-        gDirectory->cd("..");
-        gDirectory->mkdir("Unfolding");
-        gDirectory->cd("Unfolding");
-
-        if (fConfig.saveUnfolding)
-        {
-            hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W->Write();
-            hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W->Write();
-            hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W->Write();
-            hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W->Write();
-            hMultVsFakeRecoXjForTesting_W->Write();
-            hMultVsMissingRefXjForTesting_W->Write();
-            hMultVsFakeRecoXjToBeUnfolded_W->Write();
-            hMultVsMissingRefXjToBeUnfolded_W->Write();
-            hMultVsFakeRefXjForTesting_W->Write();
-            hMultVsFakeRefXjToBeUnfolded_W->Write();
-            hFakeLeadXj_W->Write();
-            hFakeSubLeadXj_W->Write();
-            hLeadPtVsRecoXj_W->Write();
-            hLeadPtVsRefXj_W->Write();
-            hLeadPtVsGenXj_W->Write();
-        }
-        hResponseMatrix_W->Write();
-        hTotalReco_W->Write();
-        hTotalTruth_W->Write();
-        hMatchedGen_W->Write();
-        hMatchedReco_W->Write();
-        hResponseMatrixA_W->Write();
-        hTotalRecoA_W->Write();
-        hTotalTruthA_W->Write();
-        hMatchedGenA_W->Write();
-        hMatchedRecoA_W->Write();
-        hResponseMatrixB_W->Write();
-        hTotalRecoB_W->Write();
-        hTotalTruthB_W->Write();
-        hMatchedGenB_W->Write();
-        hMatchedRecoB_W->Write();
     }
 
     std::cout << "Writing Histograms Complete" << std::endl;
