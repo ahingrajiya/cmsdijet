@@ -123,7 +123,7 @@ int main(int argc, char* argv[])
     trackCut->setPtErr(0.1);
     trackCut->setDXY(3.0);
     trackCut->setDZ(3.0);
-    trackCut->setHighPurity();
+    // trackCut->setHighPurity();
     trackCut->setCharge();
     // trackCut->setVerbose();
 
