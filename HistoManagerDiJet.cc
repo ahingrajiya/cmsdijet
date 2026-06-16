@@ -1229,6 +1229,13 @@ void HistoManagerDiJet ::writeOutput()
             hMultVsMatchedRecoXj_W->Write();
 
             hMultVsGenXj_W->Write();
+
+            if (fCollSystem == CollisionSystem::pPb || fCollSystem == CollisionSystem::pp || fCollSystem == CollisionSystem::OO)
+            {
+                hMultVsRefXj_DiJetW->Write();
+                hMultVsMatchedRefXj_DiJetW->Write();
+                hMultVsGenXj_DiJetW->Write();
+            }
         }
     }
 
@@ -1251,12 +1258,6 @@ void HistoManagerDiJet ::writeOutput()
             hNGenDijetEvent->Write();
             hGenQuenching_W->Write();
             hGenQuenching_WithDijet_W->Write();
-            if (fCollSystem == CollisionSystem::pPb || fCollSystem == CollisionSystem::pp)
-            {
-                hMultVsRefXj_DiJetW->Write();
-                hMultVsMatchedRefXj_DiJetW->Write();
-                hMultVsGenXj_DiJetW->Write();
-            }
         }
     }
 

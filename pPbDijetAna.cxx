@@ -268,6 +268,7 @@ int main(int argc, char* argv[])
     hm->setPtBins(ptBins);
     hm->setXjBins(xjBins);
     hm->setForestReader(reader);
+    hm->setConfig(writeConfig);
 
     analysis->addHistoManager(hm);
     manager->addAnalysis(analysis);
