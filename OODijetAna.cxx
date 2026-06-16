@@ -131,19 +131,20 @@ int main(int argc, char* argv[])
 
     ForestReader* reader = new ForestReader{inFileName};
     reader->setForestFileType(ForestReader::ForestFileType::MiniAOD);
-    reader->setIsSkim(true);
     reader->setIsMc(isMC);
 
     if (isMC)
     {
         // reader->useGenTrackBranch();
-        reader->setFilters(filtersmc);
+        // reader->setFilters(filtersmc);
         // reader->setStoreLocation(kTRUE);
 
         if (isEmbedded)
         {
             reader->setJetCollectionBranchName(jetBranchNameEmbedded.Data());
             reader->setMatchedJets();
+            reader->useTrackBranch();
+            reader->useGenTrackBranch();
         }
         else
         {
@@ -154,8 +155,9 @@ int main(int argc, char* argv[])
     if (!isMC)
     {
         reader->setFilters(filters);
+        reader->useSkimmingBranch();
+        reader->setIsSkim(true);
     }
-    reader->useSkimmingBranch();
     reader->useJets();
     reader->setCollidingEnergy(collEnergyGeV);
     reader->setCollidingSystem(ForestReader::CollidingSystemType::OO);
