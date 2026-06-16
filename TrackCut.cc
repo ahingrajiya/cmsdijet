@@ -22,7 +22,7 @@
 ClassImp(TrackCut)
 
     TrackCut::TrackCut() :
-    fTrackPt{0., 1e8}, fTrackEta{-2.4, 2.4}, fTrackDXY{3.0}, fTrackDZ{3.}, fPtError{0.1}, fCharge{kTRUE}, fHighPurity{kTRUE}, fCaloMatching{kFALSE}, fChi2{kFALSE},
+    fTrackPt{0., 1e8}, fTrackEta{-2.4, 2.4}, fTrackDXY{3.0}, fTrackDZ{3.}, fPtError{0.1}, fCharge{kFALSE}, fHighPurity{kFALSE}, fCaloMatching{kFALSE}, fChi2{kFALSE},
     fNHits{kFALSE}, fVerbose{kFALSE}, fMVAAlgo{kFALSE}
 {
     /* Empty*/
@@ -55,7 +55,7 @@ void TrackCut::report()
     std::cout << report.Data() << std::endl;
 }
 
-Bool_t TrackCut::RecoPass(const Track *track)
+Bool_t TrackCut::RecoPass(const Track* track)
 {
     if (fVerbose)
     {
@@ -173,7 +173,7 @@ Bool_t TrackCut::RecoPass(const Track *track)
     return isGood;
 }
 
-Bool_t TrackCut::GenPass(const GenTrack *track)
+Bool_t TrackCut::GenPass(const GenTrack* track)
 {
     if (fVerbose)
     {
