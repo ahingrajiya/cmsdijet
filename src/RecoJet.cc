@@ -10,7 +10,7 @@
  */
 
 // Jet analysis headers
-#include "RecoJet.h"
+#include "../interface/RecoJet.h"
 
 // ROOT headers
 #include "TString.h"

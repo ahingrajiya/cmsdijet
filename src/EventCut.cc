@@ -10,7 +10,7 @@
  */
 
 // Jet analysis headers
-#include "EventCut.h"
+#include "../interface/EventCut.h"
 
 ClassImp(EventCut)
 
@@ -42,7 +42,7 @@ void EventCut::report()
 }
 
 //________________
-Bool_t EventCut::pass(const Event *ev)
+Bool_t EventCut::pass(const Event* ev)
 {
     if (fVerbose)
     {

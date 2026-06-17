@@ -10,7 +10,7 @@
  */
 
 // Jet analysis headers
-#include "GenTrack.h"
+#include "../interface/GenTrack.h"
 
 #include <iostream>
 

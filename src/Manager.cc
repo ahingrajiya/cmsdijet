@@ -10,9 +10,9 @@
  */
 
 // Jet analysis headers
-#include "Manager.h"
+#include "../interface/Manager.h"
 
-#include "Event.h"
+#include "../interface/Event.h"
 
 ClassImp(Manager)
 
@@ -74,7 +74,7 @@ void Manager::performAnalysis()
     for (Long64_t iEvent = 0; iEvent < fEventsInChain; iEvent++)
     {
         // std::cout << "=================================" << std::endl;
-        Event *currentEvent = fEventReader->returnEvent();
+        Event* currentEvent = fEventReader->returnEvent();
 
         if (!currentEvent)
         {

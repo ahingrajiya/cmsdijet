@@ -17,7 +17,7 @@
  */
 
 // Jet analysis headers
-#include "JetUncertainty.h"
+#include "../interface/JetUncertainty.h"
 
 ClassImp(JetUncertainty)
 

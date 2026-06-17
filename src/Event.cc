@@ -10,7 +10,7 @@
  */
 
 // Jet analysis headers
-#include "Event.h"
+#include "../interface/Event.h"
 
 //________________
 Event::Event() :

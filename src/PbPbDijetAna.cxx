@@ -9,15 +9,15 @@
  *
  */
 
-#include "BaseAnalysis.h"
-#include "DiJetAnalysis.h"
-#include "Event.h"
-#include "EventCut.h"
-#include "ForestReader.h"
-#include "HistoManagerDiJet.h"
-#include "JetCut.h"
-#include "Manager.h"
-#include "TrackCut.h"
+#include "../interface/BaseAnalysis.h"
+#include "../interface/DiJetAnalysis.h"
+#include "../interface/Event.h"
+#include "../interface/EventCut.h"
+#include "../interface/ForestReader.h"
+#include "../interface/HistoManagerDiJet.h"
+#include "../interface/JetCut.h"
+#include "../interface/Manager.h"
+#include "../interface/TrackCut.h"
 int main(int argc, char* argv[])
 {
     Bool_t isMC{kTRUE};

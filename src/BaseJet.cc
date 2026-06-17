@@ -1,5 +1,5 @@
 // JetAnalysis headers
-#include "BaseJet.h"
+#include "../interface/BaseJet.h"
 
 ClassImp(BaseJet)
 

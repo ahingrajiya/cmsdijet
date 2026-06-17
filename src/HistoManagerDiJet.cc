@@ -10,7 +10,7 @@
  */
 
 // Jet Analysis headers
-#include "HistoManagerDiJet.h"
+#include "../interface/HistoManagerDiJet.h"
 
 // C++ Headers
 #include <iostream>

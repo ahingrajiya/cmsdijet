@@ -10,7 +10,7 @@
  */
 
 // Jet Analysis Header
-#include "DiJetAnalysis.h"
+#include "../interface/DiJetAnalysis.h"
 
 ClassImp(DiJetAnalysis)
 

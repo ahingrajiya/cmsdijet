@@ -10,9 +10,9 @@
  */
 
 // Jet analysis headers
-#include "JetCut.h"
+#include "../interface/JetCut.h"
 
-#include "GenJet.h"
+#include "../interface/GenJet.h"
 
 // ROOT headers
 #include "TMath.h"
@@ -45,7 +45,7 @@ void JetCut::report()
 }
 
 //________________
-Bool_t JetCut::pass(const RecoJet *jet)
+Bool_t JetCut::pass(const RecoJet* jet)
 {
     if (fVerbose)
     {
@@ -75,7 +75,7 @@ Bool_t JetCut::pass(const RecoJet *jet)
 }
 
 //________________
-Bool_t JetCut::pass(const GenJet *jet)
+Bool_t JetCut::pass(const GenJet* jet)
 {
     if (fVerbose)
     {
