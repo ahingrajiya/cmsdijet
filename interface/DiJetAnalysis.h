@@ -26,14 +26,14 @@
 #include "TVector3.h"
 
 // Jet analysis headers
+#include "../PbPb_TrackingEfficiencies/trackingEfficiency2018PbPb.h"
+#include "../pPb_TrackingEfficiency/TrkEfficiency2016pPb.h"
 #include "BaseAnalysis.h"
 #include "Event.h"
 #include "ForestReader.h"
 #include "HistoManagerDiJet.h"
-#include "PbPb_TrackingEfficiencies/trackingEfficiency2018PbPb.h"
 #include "TSpline.h"
 #include "TVector2.h"
-#include "pPb_TrackingEfficiency/TrkEfficiency2016pPb.h"
 
 enum class CollisionSystem
 {
