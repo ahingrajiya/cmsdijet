@@ -10,13 +10,13 @@
  */
 
 // Jet Analysis Headers
-#include "DiJetAnalysis.h"
-#include "EventCut.h"
-#include "ForestReader.h"
-#include "HistoManagerDiJet.h"
-#include "JetCut.h"
-#include "Manager.h"
-#include "TrackCut.h"
+#include "../interface/DiJetAnalysis.h"
+#include "../interface/EventCut.h"
+#include "../interface/ForestReader.h"
+#include "../interface/HistoManagerDiJet.h"
+#include "../interface/JetCut.h"
+#include "../interface/Manager.h"
+#include "../interface/TrackCut.h"
 
 // ROOT headers
 #include "TFile.h"
@@ -246,8 +246,8 @@ int main(int argc, char* argv[])
     analysis->setDeltaPhi(2.7);
     analysis->setUseCMFrame();
     analysis->setEtaBoost(etaBoost);
-    analysis->setLeadJetPt(60.);
-    analysis->setSubLeadJetPt(40.);
+    analysis->setLeadJetPt(50.);
+    analysis->setSubLeadJetPt(30.);
     analysis->setLeadJetEtaRange(-2.1, 2.1);
     analysis->setSubLeadJetEtaRange(-2.1, 2.1);
     analysis->setInclusiveJetEtaRange(-2.1, 2.1);

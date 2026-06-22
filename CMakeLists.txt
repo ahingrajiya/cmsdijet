@@ -36,6 +36,7 @@ include(${ROOT_USE_FILE})
 
 # Directories where to search for include files
 include_directories(
+        ${CMAKE_CURRENT_SOURCE_DIR}/interface
         ${CMAKE_CURRENT_SOURCE_DIR} 
         ${ROOT_INCLUDE_DIRS}
 )
@@ -45,59 +46,59 @@ add_definitions(${ROOT_CXX_FLAGS})
 
 # List all headers to be used to generate dictionary and added to the library
 set(HEADERS
-        DiJetAnalysis.h
-        Event.h
-        Track.h
-        GenTrack.h
-        RecoJet.h
-        GenJet.h
-        BaseAnalysis.h
-        BaseReader.h
-        BaseHistoManager.h
-        BaseJet.h
-        BaseTrack.h
-        HistoManagerDiJet.h
-        Collections.h
-        ForestReader.h
-        JetCorrector.h
-        JetUncertainty.h
-        EventCut.h
-        JetCut.h
-        TrackCut.h
-        Manager.h
+        interface/DiJetAnalysis.h
+        interface/Event.h
+        interface/Track.h
+        interface/GenTrack.h
+        interface/RecoJet.h
+        interface/GenJet.h
+        interface/BaseAnalysis.h
+        interface/BaseReader.h
+        interface/BaseHistoManager.h
+        interface/BaseJet.h
+        interface/BaseTrack.h
+        interface/HistoManagerDiJet.h
+        interface/Collections.h
+        interface/ForestReader.h
+        interface/JetCorrector.h
+        interface/JetUncertainty.h
+        interface/EventCut.h
+        interface/JetCut.h
+        interface/TrackCut.h
+        interface/Manager.h
         pPb_TrackingEfficiency/TrkEfficiency2016pPb.h
         PbPb_TrackingEfficiencies/trackingEfficiency2018PbPb.h
 )
 
 # List source files
 set(SRC 
-        DiJetAnalysis.cc
-        Event.cc
-        Track.cc
-        GenTrack.cc
-        RecoJet.cc
-        GenJet.cc
-        BaseReader.cc
-        BaseJet.cc
-        BaseTrack.cc
-        HistoManagerDiJet.cc
-        ForestReader.cc
-        JetCorrector.cc
-        JetUncertainty.cc
-        EventCut.cc
-        JetCut.cc
-        TrackCut.cc
-        Manager.cc
+        src/DiJetAnalysis.cc
+        src/Event.cc
+        src/Track.cc
+        src/GenTrack.cc
+        src/RecoJet.cc
+        src/GenJet.cc
+        src/BaseReader.cc
+        src/BaseJet.cc
+        src/BaseTrack.cc
+        src/HistoManagerDiJet.cc
+        src/ForestReader.cc
+        src/JetCorrector.cc
+        src/JetUncertainty.cc
+        src/EventCut.cc
+        src/JetCut.cc
+        src/TrackCut.cc
+        src/Manager.cc
 )
 
 # Generate ROOT dictionaries
 root_generate_dictionary(G__${libname} 
                          ${HEADERS}
-                         LINKDEF LinkDef.h
+                         LINKDEF interface/LinkDef.h
 )
 
 # Generate rootmap
-root_generate_rootmap(${libname} LINKDEF LinkDef.h)
+root_generate_rootmap(${libname} LINKDEF interface/LinkDef.h)
 
 #ROOT_LINKER_LIBRARY(${libname} ${SRC} G__${libname}.cxx)
 
@@ -111,10 +112,10 @@ target_link_libraries(${libname} ${ROOT_LIBRARIES})
 
 # Create main executable (to call from the command line)
 #add_executable(jetAna jetAna.cxx)
-add_executable(pPbDijetAna pPbDijetAna.cxx)
-add_executable(PbPbDijetAna PbPbDijetAna.cxx)
-add_executable(ppDijetAna ppDijetAna.cxx)
-add_executable(OODijetAna OODijetAna.cxx)
+add_executable(pPbDijetAna src/pPbDijetAna.cxx)
+add_executable(PbPbDijetAna src/PbPbDijetAna.cxx)
+add_executable(ppDijetAna src/ppDijetAna.cxx)
+add_executable(OODijetAna src/OODijetAna.cxx)
 
 
 # Link created libraries

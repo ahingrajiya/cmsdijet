@@ -10,7 +10,7 @@
  */
 
 // Jet Analysis Header
-#include "DiJetAnalysis.h"
+#include "../interface/DiJetAnalysis.h"
 
 ClassImp(DiJetAnalysis)
 
@@ -283,7 +283,8 @@ float DiJetAnalysis::CalculateDijetWeight(const DijetInfo& recoDijet, const Dije
         float weight = getDijetWeight(genDijet.lead.pt, genDijet.subLead.pt);
         if (fSystem == CollisionSystem::pp || fSystem == CollisionSystem::OO)
         {
-            weight *= getWeightMultiplier(genDijet.xj);
+            // weight *= getWeightMultiplier(genDijet.xj);
+            weight = getWeightMultiplier(genDijet.xj);
         }
         return weight;
     }

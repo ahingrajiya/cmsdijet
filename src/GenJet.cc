@@ -10,7 +10,7 @@
  */
 
 // JetAnalysis headers
-#include "GenJet.h"
+#include "../interface/GenJet.h"
 
 // ROOT headers
 #include "TString.h"

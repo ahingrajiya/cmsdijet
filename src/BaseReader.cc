@@ -10,7 +10,7 @@
  */
 
 // JetAnalysis headers
-#include "BaseReader.h"
+#include "../interface/BaseReader.h"
 
 ClassImp(BaseReader)
 

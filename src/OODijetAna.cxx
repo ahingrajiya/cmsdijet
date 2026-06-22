@@ -10,13 +10,13 @@
  */
 
 // Jet Analysis Headers
-#include "DiJetAnalysis.h"
-#include "EventCut.h"
-#include "ForestReader.h"
-#include "HistoManagerDiJet.h"
-#include "JetCut.h"
-#include "Manager.h"
-#include "TrackCut.h"
+#include "../interface/DiJetAnalysis.h"
+#include "../interface/EventCut.h"
+#include "../interface/ForestReader.h"
+#include "../interface/HistoManagerDiJet.h"
+#include "../interface/JetCut.h"
+#include "../interface/Manager.h"
+#include "../interface/TrackCut.h"
 
 // ROOT headers
 #include "TFile.h"

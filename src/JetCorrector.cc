@@ -17,7 +17,7 @@
  *
  */
 
-#include "JetCorrector.h"
+#include "../interface/JetCorrector.h"
 
 // ClassImp(JetCorrector) ClassImp(SingleJetCorrector)
 
@@ -363,7 +363,7 @@ double SingleJetCorrector::GetCorrection()
             V[i] = Value;
         }
 
-        TF1 *Function = nullptr;
+        TF1* Function = nullptr;
 
         if (Functions[iE] == nullptr)
         {

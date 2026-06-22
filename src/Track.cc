@@ -10,7 +10,7 @@
  */
 
 // Jet analysis headers
-#include "Track.h"
+#include "../interface/Track.h"
 
 ClassImp(Track)
 

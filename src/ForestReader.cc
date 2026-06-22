@@ -10,7 +10,7 @@
  */
 
 // Jet analysis headers
-#include "ForestReader.h"
+#include "../interface/ForestReader.h"
 
 ClassImp(ForestReader)
 
