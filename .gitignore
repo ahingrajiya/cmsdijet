@@ -48,3 +48,6 @@ executions_dir/*
 *.out
 *.sub
 ahingraj.cc
+
+*.png
+*.pdf
