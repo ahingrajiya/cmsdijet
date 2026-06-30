@@ -29,7 +29,8 @@ class Event : public TObject
     /// @brief Parametrized constructor
     Event(const UInt_t& runId, const ULong64_t& eventId, const UInt_t& lumi, const Float_t& vx, const Float_t& vy, const Float_t& vz, const Int_t& hiBin,
           const Int_t& hiBinShifted, const Float_t& ptHat, const Float_t& w, const Int_t& nBadJets, const Int_t& mult, const Int_t& genMult, const Long64_t& eveNumber,
-          const Float_t& hiHFPlus, const Float_t& hiHFMinus, const int& corrNtrkoff, const int& subEventMult, const int& pythiaMult, const Float_t& hiHFPF);
+          const Float_t& hiHFPlus, const Float_t& hiHFMinus, const int& corrNtrkoff, const int& subEventMult, const int& pythiaMult, const Float_t& hiHFPF,
+          const float& impactPara);
     /// @brief Destructor
     virtual ~Event();
 
@@ -90,6 +91,8 @@ class Event : public TObject
     void setPYTHIAMultiplicity(const int& pythiaMult) { fPYTHIAMultiplicity = pythiaMult; }
     ///@brief Set HiHFPF
     void setHiHFPF(const Float_t& hiHFPF) { fHiHFPF = hiHFPF; }
+    /// @brief set Impact parameter
+    void setImpactPara(const float& impactPara) { fImpactParameter = impactPara; }
 
     /// @brief  Print event information
     void print();
@@ -141,6 +144,8 @@ class Event : public TObject
     int subEventMultiplicity() const { return fSubEventMultiplicity; }
     ///@brief Return PYTHIA Multiplicity
     int pythiaMultiplicity() const { return fPYTHIAMultiplicity; }
+    /// @brief Rerturns impact parameter
+    float impactParameter() const { return fImpactParameter; }
     ///@brief Return HiHFPF
     Float_t hiHFPF() const { return fHiHFPF; }
     /// @brief Return pointer to a collection of tracks
@@ -203,6 +208,8 @@ class Event : public TObject
     std::vector<std::pair<std::string, Int_t>> fTriggerNamesAndValues;
     ///@brief Skim filter name and filter value vector for event
     std::vector<std::pair<std::string, Int_t>> fSkimFilterNamesAndValues;
+    /// @brief Impact parameter
+    float fImpactParameter;
 
     /// @brief Reco jet collection
     RecoJetCollection* fRecoJetCollection;

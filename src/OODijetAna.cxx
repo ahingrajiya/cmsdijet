@@ -137,7 +137,7 @@ int main(int argc, char* argv[])
     {
         // reader->useGenTrackBranch();
         // reader->setFilters(filtersmc);
-        // reader->setStoreLocation(kTRUE);
+        reader->setStoreLocation(kTRUE);
 
         if (isEmbedded)
         {
@@ -198,10 +198,10 @@ int main(int argc, char* argv[])
     if (isMC)
     {
         // analysis->setUseCentralityWeight();
-        analysis->setUnfolding(unfold, ptBins, xjBins);
-        analysis->setUseDijetWeight();
-        analysis->setDijetWeightType(DijetWeightType::Gen);
-        analysis->setDijetWeightTable(path2DijetWeight);
+        // analysis->setUnfolding(unfold, ptBins, xjBins);
+        // analysis->setUseDijetWeight();
+        // analysis->setDijetWeightType(DijetWeightType::Gen);
+        // analysis->setDijetWeightTable(path2DijetWeight);
     }
 
     // Initialize Histomanager

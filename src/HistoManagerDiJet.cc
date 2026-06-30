@@ -89,6 +89,13 @@ void HistoManagerDiJet::init()
     hInJetMultiplicity_W = new TH2D("hInJetMultiplicity_W", "Multiplicity in Jets", 30, 0., 30., 600, 0., 600.);
     hInJetMultiplicity_W->Sumw2();
 
+    hImpactParameter_W = new TH1D("hImpactParameter_W", "Impact Parameter Weighted", 150, 0, 15);
+    hImpactParameter_W->Sumw2();
+    hImpactParameterVsHiBin_W = new TH2D("hImpactParameterVsHiBin_W", "Impact Parameter vs HiBin Weighted", 200, 0., 200., 150, 0., 15.);
+    hImpactParameterVsHiBin_W->Sumw2();
+    hImpactParameterVsMultiplicity_W = new TH2D("hImpactParameterVsMultiplicity_W", "Impact Parameter vs Multiplicity Weighted", 700, 0., 700., 150, 0., 15.);
+    hImpactParameterVsMultiplicity_W->Sumw2();
+
     hHiBin = new TH1D("hHiBin", "HiBin Distribution", 200, 0.0, 200.0);
     hHiBin->Sumw2();
     hHiBin_W = new TH1D("hHiBin_W", "HiBin Distribution Weighted", 200, 0.0, 200.0);
@@ -1079,6 +1086,9 @@ void HistoManagerDiJet ::writeOutput()
         if (fIsMC)
         {
             hPtHat_W->Write();
+            hImpactParameter_W->Write();
+            hImpactParameterVsHiBin_W->Write();
+            hImpactParameterVsMultiplicity_W->Write();
         }
     }
     std::cout << "  ===> Writing Jets Histograms" << std::endl;

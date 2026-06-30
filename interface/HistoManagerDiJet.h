@@ -103,6 +103,10 @@ class HistoManagerDiJet : public BaseHistoManager
     TH1D* hHiHF_PF{nullptr};
     TH1D* hHiHF_PF_W{nullptr};
 
+    TH2D* hImpactParameterVsHiBin_W{nullptr};
+    TH2D* hImpactParameterVsMultiplicity_W{nullptr};
+    TH1D* hImpactParameter_W{nullptr};
+
     TH2D* hInJetMultiplicity_W{nullptr};
     TH2D* hGenInJetMultiplicity_W{nullptr};
 

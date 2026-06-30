@@ -397,6 +397,8 @@ class ForestReader : public BaseReader
     int fSubEventMultiplicity;
     ///@brief PYTHIA Multiplicity
     int fPYTHIAMultiplicity;
+    /// @brief impact parameter
+    float fImpactParameter = -1.;
 
     //
     // Trigger and skimming information

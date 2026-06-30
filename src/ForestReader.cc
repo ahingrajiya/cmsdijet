@@ -894,6 +894,11 @@ void ForestReader::setupBranches()
     fEventTree->SetBranchAddress("vz", &fVertexZ);
     fEventTree->SetBranchStatus("hiHFplus", 1);
     fEventTree->SetBranchStatus("hiHFminus", 1);
+    if (fIsMc)
+    {
+        fEventTree->SetBranchStatus("b", 1);
+        fEventTree->SetBranchAddress("b", &fImpactParameter);
+    }
 
     if (fIs_pPb)
     {
@@ -1294,6 +1299,10 @@ Event* ForestReader::returnEvent()
     {
         int iHiBin = getHiBin(fHiHFPF, fHiHFPFBins);
         fHiBin = iHiBin;
+        if (fIsMc)
+        {
+            fEvent->setImpactPara(fImpactParameter);
+        }
     }
     fEvent->setHiHFPF(fHiHFPF);
     fEvent->setHiBin(fHiBin);
