@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
     TString jetBranchName{"ak4PFJetAnalyzer"};
     std::vector<double> multiplicityBins = {0.0, 10.0, 60., 120., 185., 250., 400.};
     std::vector<double> hiHFBins = {0., 10., 20., 30., 40., 50., 70., 90., 120., 150., 1000.};
-    std::vector<double> ptBins = {0.0, 20.0, 30.0, 40.0, 50.0, 55., 60., 65., 70., 80., 90., 100., 120., 140., 160., 200.};
+    std::vector<double> ptBins = {0.0, 20.0, 30.0, 40.0, 50.0, 60., 70., 80., 90., 100., 120., 140., 160., 200.};
     std::vector<double> xjBins = {0.0,  0.025, 0.05, 0.075, 0.1,  0.125, 0.15, 0.175, 0.2,  0.225, 0.25, 0.275, 0.3,  0.325,
                                   0.35, 0.375, 0.4,  0.425, 0.45, 0.475, 0.5,  0.525, 0.55, 0.575, 0.6,  0.625, 0.65, 0.675,
                                   0.7,  0.725, 0.75, 0.775, 0.8,  0.825, 0.85, 0.875, 0.9,  0.925, 0.95, 0.975, 1.0};
@@ -136,8 +136,7 @@ int main(int argc, char* argv[])
     reader->addJECFile(JECFileName.Data());
     if (!isMC)
     {
-        // reader->addJECFile(JECFileDataName.Data());
-        // reader->setStoreLocation(kTRUE);
+        reader->addJECFile(JECFileDataName.Data());
         reader->useSkimmingBranch();
         reader->setFilters(filters);
         if (collEnergyGeV == 5360)
@@ -181,7 +180,7 @@ int main(int argc, char* argv[])
     analysis->setMultiplicityType(0);
     analysis->setLeadJetPt(50.);
     analysis->setSubLeadJetPt(30.);
-    analysis->setDeltaPhi(2.7);
+    analysis->setDeltaPhi(7 * M_PI / 8);
     analysis->setInclusiveCorrectedJetPtMin(20.);
     analysis->setInclusiveJetEtaRange(-2.1, 2.1);
     analysis->setMinTrkPt(0.5);
@@ -193,12 +192,12 @@ int main(int argc, char* argv[])
     }
     // analysis->setUseJetPtWeight();
 
-    if (isMC)
-    {
-        analysis->setUseDijetWeight();
-        analysis->setDijetWeightType(DijetWeightType::Gen);
-        analysis->setDijetWeightTable(path2DijetWeight);
-    }
+    // if (isMC)
+    // {
+    //     analysis->setUseDijetWeight();
+    //     analysis->setDijetWeightType(DijetWeightType::Gen);
+    //     analysis->setDijetWeightTable(path2DijetWeight);
+    // }
 
     manager->addAnalysis(analysis);
     manager->init();

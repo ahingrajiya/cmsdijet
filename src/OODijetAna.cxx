@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
     // std::vector<std::pair<double, double>> multiplicityBins = {{0, 0.0}, {10, 1.0}, {60, 2.0}, {120, 3.0}, {185, 4.0}, {250, 5.0}, {400, 6.0}, {500, 7.0}};
     std::vector<double> multiplicityBins = {0.0, 10., 20., 30., 40., 50., 60., 70., 80., 90., 100., 110., 120., 130., 140., 150., 160., 170., 180., 190., 200.};
     std::vector<double> hiHFBins = {0., 10., 20., 30., 40., 50., 70., 90., 120., 150., 180., 210., 250., 300., 350., 400., 450., 500., 550., 1000.};
-    std::vector<double> ptBins = {0.0, 20.0, 30.0, 40.0, 50.0, 55., 60., 65., 70., 80., 90., 100., 120., 140., 160., 200.};
+    std::vector<double> ptBins = {0.0, 20.0, 30.0, 40.0, 50.0, 60., 70., 80., 90., 100., 120., 140., 160., 200.};
     std::vector<double> xjBins = {0.0,  0.025, 0.05, 0.075, 0.1,  0.125, 0.15, 0.175, 0.2,  0.225, 0.25, 0.275, 0.3,  0.325,
                                   0.35, 0.375, 0.4,  0.425, 0.45, 0.475, 0.5,  0.525, 0.55, 0.575, 0.6,  0.625, 0.65, 0.675,
                                   0.7,  0.725, 0.75, 0.775, 0.8,  0.825, 0.85, 0.875, 0.9,  0.925, 0.95, 0.975, 1.0};
@@ -135,30 +135,20 @@ int main(int argc, char* argv[])
 
     if (isMC)
     {
-        // reader->useGenTrackBranch();
-        // reader->setFilters(filtersmc);
-        reader->setStoreLocation(kTRUE);
+        reader->useGenTrackBranch();
+        reader->setFilters(filtersmc);
+        // reader->setStoreLocation(kTRUE);
 
         if (isEmbedded)
         {
-            reader->setJetCollectionBranchName(jetBranchNameEmbedded.Data());
             reader->setMatchedJets();
             reader->useTrackBranch();
             reader->useGenTrackBranch();
         }
-        else
-        {
-            reader->setJetCollectionBranchName(jetBranchNameUnembedded.Data());
-            // reader->useTrackBranch();
-        }
     }
-    if (!isMC)
-    {
-        reader->setFilters(filters);
-        reader->useSkimmingBranch();
-        reader->setIsSkim(true);
-    }
+
     reader->useJets();
+    reader->setJetCollectionBranchName(jetBranchNameEmbedded.Data());
     reader->setCollidingEnergy(collEnergyGeV);
     reader->setCollidingSystem(ForestReader::CollidingSystemType::OO);
     reader->setYearOfDataTaking(collYear);
@@ -170,11 +160,6 @@ int main(int argc, char* argv[])
     reader->setJetCut(jetCut);
     reader->setTrackCut(trackCut);
     reader->setEventCut(eventCut);
-    if (!isMC)
-    {
-        reader->setJetCollectionBranchName(jetBranchNameEmbedded.Data());
-        reader->setFilters(filters);
-    }
 
     manager->setEventReader(reader);
 
@@ -186,7 +171,7 @@ int main(int argc, char* argv[])
     analysis->setMultiplicityRange(10, 500);
     analysis->setMultiplicityType(4);
     analysis->setMinTrkPt(0.40);
-    analysis->setDeltaPhi(2.7);
+    analysis->setDeltaPhi(7 * M_PI / 8);
     analysis->setLeadJetPt(50.);
     analysis->setSubLeadJetPt(30.);
     analysis->setLeadJetEtaRange(-2.1, 2.1);

@@ -229,19 +229,6 @@ class HistoManagerDiJet : public BaseHistoManager
     TH2D *hHiHFPlusVsMultiplicity_W{nullptr}, *hHiHFMinusVsMultiplicity_W{nullptr};
     TH2D *hHiHFPlusVsMultiplicity_WithDijet_W{nullptr}, *hHiHFMinusVsMultiplicity_WithDijet_W{nullptr};
 
-    THnSparseD* hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W{nullptr};
-    THnSparseD* hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W{nullptr};
-    TH3D* hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W{nullptr};
-    TH3D* hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W{nullptr};
-    TH2D* hMultVsFakeRefXjToBeUnfolded_W{nullptr};
-    TH2D* hMultVsFakeRecoXjToBeUnfolded_W{nullptr};
-    TH2D* hMultVsFakeRecoXjForTesting_W{nullptr};
-    TH2D* hMultVsFakeRefXjForTesting_W{nullptr};
-    TH2D* hMultVsMissingRefXjToBeUnfolded_W{nullptr};
-    TH2D* hMultVsMissingRefXjForTesting_W{nullptr};
-    TH3D* hFakeLeadXj_W{nullptr};
-    TH3D* hFakeSubLeadXj_W{nullptr};
-
     TH3D* hResponseMatrix_W{nullptr};
     TH3D* hResponseMatrixA_W{nullptr};
     TH3D* hResponseMatrixB_W{nullptr};
@@ -249,6 +236,7 @@ class HistoManagerDiJet : public BaseHistoManager
     TH2D* hTotalReco_W{nullptr};
     TH2D* hTotalRecoA_W{nullptr};
     TH2D* hTotalRecoB_W{nullptr};
+    TH2D* hTotalRecoFlat_W{nullptr};
 
     TH2D* hTotalTruth_W{nullptr};
     TH2D* hTotalTruthA_W{nullptr};

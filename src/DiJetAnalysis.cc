@@ -1384,21 +1384,23 @@ void DiJetAnalysis::processRecoJets(const Event* event, const double& event_Weig
                 fHM->hRefLeadPtVsRefSubLeadPtMatched_DiJetW->Fill(minMatchedPt, maxMatchedPt, event_Weight * fDijetWeight);
                 fHM->hLeadPtVsRefXj_W->Fill(matchedRefXj, maxMatchedPt, event_Weight);
             }
+
+            int recoFlatBin = getFlattenedIndex(recoDijet.xj, recoDijet.lead.pt, fXjBins, fPtBins);
+            if (recoFlatBin != -1) fHM->hTotalRecoFlat_W->Fill(recoFlatBin, multiplicityBin, event_Weight);
         }
         if (fIsMC)
         {
             if (recoDijet.lead.flavor == 0)
             {
-                fHM->hFakeLeadXj_W->Fill(recoDijet.xj, multiplicityBin, recoDijet.lead.pt, event_Weight);
                 recoDijetPass = false;
             }
             else if (recoDijet.subLead.flavor == 0)
             {
-                fHM->hFakeSubLeadXj_W->Fill(recoDijet.xj, multiplicityBin, recoDijet.lead.pt, event_Weight);
                 recoDijetPass = false;
             }
         }
     }
+
     bool refDijetPass = refDijet.isValidDijet && refDijet.deltaPhi > fDeltaPhi;
     if (fIsMC)
     {
@@ -1439,72 +1441,6 @@ void DiJetAnalysis::processRecoJets(const Event* event, const double& event_Weig
                 fHM->hMultVsRefXj_W->Fill(refDijet.xj, multiplicityBin, refDijet.lead.pt, event_Weight);
                 fHM->hMultVsRefXj_DiJetW->Fill(refDijet.xj, multiplicityBin, refDijet.lead.pt, event_Weight * fDijetWeight);
             }
-        }
-    }
-
-    if (fIsMC)
-    {
-        double rndm = uniform01();
-        double matchedRefXj = Asymmetry(recoDijet.lead.matchPt, recoDijet.subLead.matchPt);
-        double matchedRecoXj = Asymmetry(refDijet.lead.matchPt, refDijet.subLead.matchPt);
-        double unfoldingQuantities[4] = {recoDijet.xj, matchedRefXj, multiplicityBin, recoDijet.lead.pt};
-        if (rndm <= 0.5)
-        {
-            if (recoDijetPass)
-            {
-                fHM->hUnfoldingRefXjVsRecoXjVsMultiplicityForTesting_W->Fill(unfoldingQuantities, event_Weight);
-                if (!refDijetPass)
-                {
-                    fHM->hMultVsFakeRecoXjForTesting_W->Fill(recoDijet.xj, multiplicityBin, event_Weight);
-                    fHM->hMultVsFakeRefXjForTesting_W->Fill(matchedRefXj, multiplicityBin, event_Weight);
-                }
-            }
-
-            if (!recoDijetPass && refDijetPass)
-            {
-                // std::cout << "Is Reco Dijet : " << fIsRecoDiJetFound << std::endl;
-                // std::cout << "Matched Reco - Reco : " << matchedRecoXj << " " << Xj << std::endl;
-                // std::cout << leadMatchedRecoJetPt << "  " << leadJetPt << " " << leadJetEtaCM << "   " << leadJetEta << "   " << leadJetPhi << std::endl;
-                // std::cout << subLeadMatchedRecoJetPt << "   " << subLeadJetPt << "  " << subLeadJetEtaCM << "  " << subLeadJetEta << "  " << subLeadJetPhi <<
-                // std::endl; std::cout << leadJetID << "     " << subLeadJetID << std::endl; std::cout << "Delta Phi Diff : " << deltaPhi << std::endl; std::cout <<
-                // "Matched Ref - Ref : " << matchedRefXj << " " << refXj << std::endl; std::cout << leadMatchedJetPt << "  " << leadRefPt << "     " << leadRefEta <<
-                // " "
-                // << leadRefPhi << std::endl; std::cout << subLeadMatchedJetPt << "   " << subLeadRefPt << "   " << subLeadRefEta << "  " << subLeadRefPhi <<
-                // std::endl;
-                // std::cout << "Delta Ref Phi Diff : " << refDeltaPhi << std::endl;
-                // std::cout << std::endl;
-                fHM->hMultVsMissingRefXjForTesting_W->Fill(refDijet.xj, multiplicityBin, event_Weight);
-            }
-        }
-        else
-        {
-            if (recoDijetPass)
-            {
-                fHM->hUnfoldingRefXjVsRecoXjVsMultiplicityToBeUnfolded_W->Fill(unfoldingQuantities, event_Weight);
-                if (!refDijetPass)
-                {
-                    fHM->hMultVsFakeRecoXjToBeUnfolded_W->Fill(recoDijet.xj, multiplicityBin, event_Weight);
-                    fHM->hMultVsFakeRefXjToBeUnfolded_W->Fill(matchedRefXj, multiplicityBin, event_Weight);
-                }
-            }
-            if (!recoDijetPass && refDijetPass)
-            {
-                // fHM->hMultVsRefXjToBeUnfolded_W->Fill(refXj, multiplicityBin, event_Weight);
-                fHM->hMultVsMissingRefXjToBeUnfolded_W->Fill(refDijet.xj, multiplicityBin, event_Weight);
-            }
-        }
-
-        if (recoDijetPass && matchedRefXj < 0.0)
-        {
-            // std::cout << matchedRefXj << std::endl;
-            matchedRefXj = 0.5;
-            fHM->hUnfoldingRefXjVsRecoXjVsMultiplicity_FakeJets_W->Fill(recoDijet.xj, matchedRefXj, multiplicityBin, event_Weight);
-        }
-
-        if (!recoDijetPass && refDijetPass)
-        {
-            if (matchedRecoXj > 1.0) matchedRecoXj = 1.0 / matchedRecoXj;  // Ensure valid bounded Xj
-            fHM->hUnfoldingRefXjVsRecoXjVsMultiplicity_MissingJets_W->Fill(matchedRecoXj, refDijet.xj, multiplicityBin, event_Weight);
         }
     }
 }
