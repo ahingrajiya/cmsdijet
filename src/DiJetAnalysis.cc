@@ -1099,13 +1099,6 @@ void DiJetAnalysis::processEvent(const Event* event)
     {
         fHM->hPtHat->Fill(event->ptHat());
         fHM->hPtHat_W->Fill(event->ptHat(), Event_Weight);
-        if (fSystem == CollisionSystem::OO)
-        {
-            float impactPara = event->impactParameter();
-            fHM->hImpactParameter_W->Fill(impactPara, Event_Weight);
-            fHM->hImpactParameterVsHiBin_W->Fill(event->hiBinWithShift(), impactPara, Event_Weight);
-            fHM->hImpactParameterVsMultiplicity_W->Fill(iRecoMult, impactPara, Event_Weight);
-        }
     }
 
     fHM->hNEventsInMult->Fill(iMultiplicityBin);
@@ -1161,6 +1154,11 @@ void DiJetAnalysis::processEvent(const Event* event)
         {
             fHM->hHiBinVsMultiplicity_W->Fill(iRecoMult, event->hiBinWithShift());
             fHM->hHiBinVsCorrectedMultiplicity_W->Fill(iRecoCorrectedMult.second, event->hiBinWithShift());
+
+            float impactPara = event->impactParameter();
+            fHM->hImpactParameter_W->Fill(impactPara, Event_Weight);
+            fHM->hImpactParameterVsHiBin_W->Fill(event->hiBinWithShift(), impactPara, Event_Weight);
+            fHM->hImpactParameterVsMultiplicity_W->Fill(iRecoMult, impactPara, Event_Weight);
         }
     }
 
