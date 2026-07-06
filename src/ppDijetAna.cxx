@@ -186,10 +186,8 @@ int main(int argc, char* argv[])
     analysis->setMinTrkPt(0.5);
     analysis->setTrkEtaRange(-2.4, 2.4);
     analysis->doInJetMultiplicity();
-    if (isMC)
-    {
-        analysis->setUnfolding(true, ptBins, xjBins);
-    }
+    analysis->setUnfolding(true, ptBins, xjBins);
+
     // analysis->setUseJetPtWeight();
 
     // if (isMC)

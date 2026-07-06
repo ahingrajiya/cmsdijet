@@ -180,10 +180,11 @@ int main(int argc, char* argv[])
     analysis->setInclusiveCorrectedJetPtMin(20.);
     analysis->setInclusiveJetEtaRange(-2.1, 2.1);
     analysis->useAveragePt(false);
+    analysis->setUnfolding(unfold, ptBins, xjBins);
+
     if (isMC)
     {
         // analysis->setUseCentralityWeight();
-        // analysis->setUnfolding(unfold, ptBins, xjBins);
         // analysis->setUseDijetWeight();
         // analysis->setDijetWeightType(DijetWeightType::Gen);
         // analysis->setDijetWeightTable(path2DijetWeight);
