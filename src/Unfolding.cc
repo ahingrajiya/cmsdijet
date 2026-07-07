@@ -37,7 +37,7 @@ TH1D* Unfolding::unfold(RooUnfoldResponse* response, TH1D* measured, TH1D* purit
 {
     TH1D* toUnfold = (TH1D*)measured->Clone("toUnfold");
     toUnfold->Multiply(purity);
-    RooUnfoldBayes unfold(response, measured, iteration);
+    RooUnfoldBayes unfold(response, toUnfold, iteration);
     TH1D* unfolded = (TH1D*)unfold.Hreco()->Clone("unfolded");
     unfolded->Multiply(efficiency);
     return unfolded;
@@ -164,7 +164,7 @@ void Unfolding::performUnfolding()
             for (int j = 0; j < 2; ++j)
             {
                 RooUnfoldResponse response(hMatchedReco[j], hMatchedTruth[j], hResponseMatrix[j], "response", "Response Validation");
-                TH1D* validation = unfold(&response, hTotalReco[j], hPurity[j], hPurity[j], 1);
+                TH1D* validation = unfold(&response, hTotalReco[j], hPurity[j], hEfficiency[j], 1);
                 validation->SetName(Form("Validation%i_%i_%i", j, (int)fMultCentBins[i], (int)fMultCentBins[i + 1]));
 
                 std::stringstream validation_name;
@@ -173,13 +173,13 @@ void Unfolding::performUnfolding()
                 writeHisto(out, unfoldValidationHisto);
                 unfoldValidationHisto.clear();
 
-                validation_name.clear();
+                validation_name.str("");
                 validation_name << "Gen_" << fMultCentBins[i] << "_" << fMultCentBins[i + 1] << "_" << j;
                 genXjHisto = unflattenHistogram(fPtBins, fXjBins, hTotalTruth[j], validation_name.str());
                 writeHisto(out, genXjHisto);
                 genXjHisto.clear();
 
-                validation_name.clear();
+                validation_name.str("");
                 validation_name << "Reco_" << fMultCentBins[i] << "_" << fMultCentBins[i + 1] << "_" << j;
                 recoXjHisto = unflattenHistogram(fPtBins, fXjBins, hTotalReco[j], validation_name.str());
                 writeHisto(out, recoXjHisto);
@@ -187,7 +187,7 @@ void Unfolding::performUnfolding()
             }
 
             RooUnfoldResponse response0(hMatchedReco[0], hMatchedTruth[0], hResponseMatrix[0], "response0", "Response Validation");
-            TH1D* unfolded1 = unfold(&response0, hTotalReco[1], hPurity[0], hPurity[0], iterations);
+            TH1D* unfolded1 = unfold(&response0, hTotalReco[1], hPurity[0], hEfficiency[0], iterations);
             unfolded1->SetName(Form("Unfolded%i_%i_%i", 1, (int)fMultCentBins[i], (int)fMultCentBins[i + 1]));
             std::stringstream unfold_name;
             unfold_name << "Unfolded_" << 1 << "_" << fMultCentBins[i] << "_" << fMultCentBins[i + 1];
@@ -196,9 +196,9 @@ void Unfolding::performUnfolding()
             unfoldedHisto.clear();
 
             RooUnfoldResponse response1(hMatchedReco[1], hMatchedTruth[1], hResponseMatrix[1], "response0", "Response Validation");
-            TH1D* unfolded0 = unfold(&response1, hTotalReco[0], hPurity[1], hPurity[1], iterations);
+            TH1D* unfolded0 = unfold(&response1, hTotalReco[0], hPurity[1], hEfficiency[1], iterations);
             unfolded0->SetName(Form("Unfolded%i_%i_%i", 0, (int)fMultCentBins[i], (int)fMultCentBins[i + 1]));
-            unfold_name.clear();
+            unfold_name.str("");
             unfold_name << "Unfolded_" << 0 << "_" << fMultCentBins[i] << "_" << fMultCentBins[i + 1];
             unfoldedHisto = unflattenHistogram(fPtBins, fXjBins, unfolded0, unfold_name.str());
             writeHisto(out, unfoldedHisto);
@@ -207,7 +207,7 @@ void Unfolding::performUnfolding()
         else
         {
             RooUnfoldResponse response(hMatchedReco[0], hMatchedTruth[0], hResponseMatrix[0], "response", "Response Validation");
-            TH1D* dataUnfold = unfold(&response, hDataReco, hPurity[0], hPurity[0], iterations);
+            TH1D* dataUnfold = unfold(&response, hDataReco, hPurity[0], hEfficiency[0], iterations);
             dataUnfold->SetName(Form("dataUnfold_%i_%i", (int)fMultCentBins[i], (int)fMultCentBins[i + 1]));
 
             std::stringstream dataUnfold_name;
@@ -229,7 +229,9 @@ void Unfolding::performUnfolding()
             recoXjHisto.clear();
         }
     }
-    out->Write();
+    if (fMCIn) fMCIn->Close();
+    if (fDataIn) fDataIn->Close();
+    // out->Write();
     out->Close();
 }
 

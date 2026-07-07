@@ -16,15 +16,16 @@ void unfolding()
                                   0.35, 0.375, 0.4,  0.425, 0.45, 0.475, 0.5,  0.525, 0.55, 0.575, 0.6,  0.625, 0.65, 0.675,
                                   0.7,  0.725, 0.75, 0.775, 0.8,  0.825, 0.85, 0.875, 0.9,  0.925, 0.95, 0.975, 1.0};
 
-    std::vector<double> multiplicityBins = {0.0, 20., 40., 80., 120.};
+    // std::vector<double> multiplicityBins = {0.0, 20., 40., 80., 120.};
+    std::vector<double> multiplicityBins = {0.0, 10., 20.};
     std::vector<double> ptBins = {0.0, 20.0, 30.0, 40.0, 50.0, 60., 70., 80., 90., 100., 120., 140., 160., 200.};
 
     unfoldData.setBins(ptBins, xjBins, multiplicityBins);
-    unfoldData.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA_HIJING_Unfolding_Data.root",
-                          "/home/abhishek/analysis/pPb/Summed_Files/OOData_Unfolding_Data.root");
-    unfoldData.outputFileName("PYTHIA_HIJING_Validation.root");
-    unfoldData.setIterations(5);
+    unfoldData.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA5360_Unfolding_Data.root",
+                          "/home/abhishek/analysis/pPb/Summed_Files/ppRef5360_Unfolding_Data.root");
+    unfoldData.outputFileName("ppRef_Data_Unfolded.root");
+    unfoldData.setIterations(9);
 
-    unfoldData.doValidation(true);
+    unfoldData.doValidation(false);
     unfoldData.performUnfolding();
 }
