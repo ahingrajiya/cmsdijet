@@ -14,7 +14,7 @@
 
 //________________
 Event::Event() :
-    TObject(), fRunId{0}, fEventId{0}, fLumi{0}, fVx{0}, fVy{0}, fVz{0}, fHiBin{-1}, fHiBinShifted{-10}, fPtHat{-1}, fPtHatWeight{-1}, fNBadJets{0}, fMult{0},
+    TObject(), fRunId{0}, fEventId{0}, fLumi{0}, fVx{0}, fVy{0}, fVz{0}, fHiBin{-1}, fHiBinShifted{-10}, fPtHat{-1}, fPtHatWeight{-1}, fNBadJets{0}, fMult{10},
     fGenMult{0}, fEventNumber{0}, fGenJetsCollectionIsFilled{kFALSE}, fCorrectedNtrkoff{0}, fHiHFMinus{0}, fHiHFPlus{0}, fSubEventMultiplicity{-1},
     fPYTHIAMultiplicity{-1}, fHiHFPF{0.}, fImpactParameter{-1.}
 {
