@@ -1561,7 +1561,7 @@ Event* ForestReader::returnEvent()
                 track->setTrackEta(fTrackEtaVec->at(iTrack));
                 track->setTrackPhi(fTrackPhiVec->at(iTrack));
                 track->setTrackChg(fTrackChargeVec->at(iTrack));
-                if (fCollSysType != ForestReader::CollidingSystemType::OO) track->setTrackHighPurity(fTrackHighPurityVec->at(iTrack));
+                if (fCollSysType == ForestReader::CollidingSystemType::pPb) track->setTrackHighPurity(fTrackHighPurityVec->at(iTrack));
                 track->setTrackDxy(fTrackDcaXYVec->at(iTrack));
                 track->setTrackDxyErr(fTrackDcaXYErrVec->at(iTrack));
                 track->setTrackDz(fTrackDcaZVec->at(iTrack));
