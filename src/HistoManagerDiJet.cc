@@ -1006,7 +1006,6 @@ void HistoManagerDiJet ::writeOutput()
         hInJetMultiplicity_W->Write();
         hMultiplicities->Write();
         hHiBin->Write();
-        hHiBin_W->Write();
 
         hHiHF_PF->Write();
         hHiHF_PF_W->Write();
@@ -1032,6 +1031,7 @@ void HistoManagerDiJet ::writeOutput()
         {
             hHiBinVsMultiplicity_W->Write();
             hHiBinVsCorrectedMultiplicity_W->Write();
+            hHiBin_W->Write();
         }
         hVz_W->Write();
         hVzWithDijet_W->Write();

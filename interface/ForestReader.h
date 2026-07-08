@@ -132,7 +132,11 @@ class ForestReader : public BaseReader
     /// @brief Use gen track branch
     void useGenTrackBranch() { fUseGenTrackBranch = {kTRUE}; }
     /// Turn-on calorimeter jet branch to be read
-    void useTrackBranch() { fUseTrackBranch = {kTRUE}; }
+    void useTrackBranch(std::string trackTree = "PbPbTracks")
+    {
+        fTrackTreeName = trackTree;
+        fUseTrackBranch = {kTRUE};
+    }
 
     /// @brief Set colliding energy
     void setCollidingEnergy(const Int_t& ene = 5020) { fCollidingEnergyGeV = {ene}; }
@@ -328,6 +332,8 @@ class ForestReader : public BaseReader
     Bool_t fUseMatchedJets;
     /// @brief Switch track branch ON
     Bool_t fUseTrackBranch;
+    /// @brief Track tree name
+    std::string fTrackTreeName;
     /// @brief Switch MC track branch ON
     Bool_t fUseGenTrackBranch;
     ///@brief If forests are skim with non standard tree structure

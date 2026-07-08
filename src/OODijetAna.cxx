@@ -132,17 +132,13 @@ int main(int argc, char* argv[])
     ForestReader* reader = new ForestReader{inFileName};
     reader->setForestFileType(ForestReader::ForestFileType::MiniAOD);
     reader->setIsMc(isMC);
+    reader->useTrackBranch();
 
     if (isMC)
     {
-        reader->useGenTrackBranch();
-        reader->setFilters(filtersmc);
-        // reader->setStoreLocation(kTRUE);
-
         if (isEmbedded)
         {
             reader->setMatchedJets();
-            reader->useTrackBranch();
             reader->useGenTrackBranch();
         }
     }

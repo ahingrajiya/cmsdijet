@@ -718,14 +718,10 @@ Int_t ForestReader::setupChains()
     // Use reconstructed track branch
     if (fUseTrackBranch)
     {
-        if (fIsAOD)
-        {
-            fTrkTree = new TChain("ppTrack/trackTree");
-        }
-        if (fIsMiniAOD)
-        {
-            fTrkTree = new TChain("PbPbTracks/trackTree");
-        }
+        std::string treePath = fTrackTreeName + "/trackTree";
+
+        fTrkTree = new TChain(treePath.c_str());
+
         std::cout << "Setting Tree for Reconstructed Tracks : " << fTrkTree->GetName() << "\t [Done]" << std::endl;
     }
     // Use generated track branch

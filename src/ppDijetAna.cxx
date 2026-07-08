@@ -125,7 +125,6 @@ int main(int argc, char* argv[])
     ForestReader* reader = new ForestReader{inFileName};
     reader->setForestFileType(ForestReader::ForestFileType::MiniAOD);
     reader->setIsMc(isMC);
-    // reader->useTrackBranch();
     reader->useJets();
     reader->setJetCollectionBranchName(jetBranchName.Data());
     reader->setCollidingEnergy(collEnergyGeV);
@@ -134,18 +133,13 @@ int main(int argc, char* argv[])
     reader->setUseJetID();
     reader->setJetIDType(2);
     reader->addJECFile(JECFileName.Data());
+    if (collEnergyGeV == 5360)
+    {
+        reader->useTrackBranch("ppTrack");
+    }
     if (!isMC)
     {
         reader->addJECFile(JECFileDataName.Data());
-        reader->useSkimmingBranch();
-        reader->setFilters(filters);
-        if (collEnergyGeV == 5360)
-        {
-            filters.clear();
-            filters.push_back("pprimaryVertexFilter");
-            reader->setFilters(filters);
-            reader->setStoreLocation(true);
-        }
     }
     if (isMC && collEnergyGeV == 5020)
     {
