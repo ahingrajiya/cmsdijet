@@ -135,7 +135,7 @@ int main(int argc, char* argv[])
     reader->addJECFile(JECFileName.Data());
     if (collEnergyGeV == 5360)
     {
-        reader->useTrackBranch("ppTrack");
+        reader->useTrackBranch("ppTracks");
     }
     if (!isMC)
     {
