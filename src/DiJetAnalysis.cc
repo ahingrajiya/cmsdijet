@@ -1794,7 +1794,7 @@ double DiJetAnalysis::getWeightMultiplier(double xj)
 
 double DiJetAnalysis::getWeightFactor(double xj)
 {
-    return 1 + 0.1 * (xj - 0.74);
+    return 1 - 0.2 * (xj - 0.76);
 }
 
 void DiJetAnalysis::report()
