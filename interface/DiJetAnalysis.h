@@ -317,7 +317,6 @@ class DiJetAnalysis : public BaseAnalysis
     void CollSystem(ForestReader& reader);
     ///@brief Set up weight functions
     void SetUpWeightFunctions();
-
     ///@brief Get DiJet Region based on jet eta
     ///@param jetEta Jet Eta
     ///@return Returns 1 for Backward , 2 for Mid , 3 for Forward, and -1 for not in any region
@@ -392,6 +391,10 @@ class DiJetAnalysis : public BaseAnalysis
     /// @param xj dijet pt ratios
     /// @return weight multiplier
     double getWeightMultiplier(double xj);
+    /// @brief Weighting to modify truth for unfolding validation
+    /// @param xj dijet pt ratios
+    /// @return weight
+    double getWeightFactor(double xj);
 
     ///@brief Print debug information
     bool fDebug{false};

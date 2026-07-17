@@ -1724,6 +1724,8 @@ void DiJetAnalysis::unfolding(const Event* event, const double& eventWeight, con
     if (genDiJetEvent)
     {
         fHM->hTotalTruth_W->Fill(genFlatBin, multBin, eventWeight);
+        double weight = getWeightFactor(genDijet.xj);
+        fHM->hValidationTruth_W->Fill(genFlatBin, multBin, eventWeight * weight);
         if (rndm <= 0.5)
         {
             fHM->hTotalTruthA_W->Fill(genFlatBin, multBin, eventWeight);
@@ -1788,6 +1790,11 @@ float DiJetAnalysis::jetPtWeight(const double& recoLeadPt)
 double DiJetAnalysis::getWeightMultiplier(double xj)
 {
     return 1.0 - (0.10 / (1.0 + std::exp(-20. * (xj - 1.0))));
+}
+
+double DiJetAnalysis::getWeightFactor(double xj)
+{
+    return 1 + 0.1 * (xj - 0.74);
 }
 
 void DiJetAnalysis::report()

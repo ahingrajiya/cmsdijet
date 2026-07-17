@@ -502,6 +502,9 @@ void HistoManagerDiJet::init()
         hMatchedRecoA_W->Sumw2();
         hMatchedRecoB_W = new TH2D("hMatchedRecoB_W", "Matched Reco Xj Flattened for Sample B Weighted", nFlatBins, flatEdges.data(), nMultiplicityBins, multBinArray);
         hMatchedRecoB_W->Sumw2();
+
+        hValidationTruth_W = new TH2D("hValidationTruth_W", "Modified Truth for Validation", nFlatBins, flatEdges.data(), nMultiplicityBins, multBinArray);
+        hValidationTruth_W->Sumw2();
     }
 
     hTotalRecoFlat_W = new TH2D("hTotalRecoFlat_W", "Total Reco Xj Flattened Weighted", nFlatBins, flatEdges.data(), nMultiplicityBins, multBinArray);
@@ -1248,6 +1251,7 @@ void HistoManagerDiJet ::writeOutput()
             hTotalTruthB_W->Write();
             hMatchedGenB_W->Write();
             hMatchedRecoB_W->Write();
+            hValidationTruth_W->Write();
         }
     }
     hTotalRecoFlat_W->Write();
