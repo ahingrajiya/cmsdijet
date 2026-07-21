@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
     TString JECFileDataName{};
     TString JEUFileName{};
     TString path2JEC = "..";
-    Double_t ptHatCut[2]{15., 30.};
+    Double_t ptHatCut[2]{15., 10000.};
     Bool_t isEmbedded{kTRUE};
     bool unfold = true;
     // std::vector<std::pair<double, double>> multiplicityBins = {{0, 0.0}, {10, 1.0}, {60, 2.0}, {120, 3.0}, {185, 4.0}, {250, 5.0}, {400, 6.0}, {500, 7.0}};
