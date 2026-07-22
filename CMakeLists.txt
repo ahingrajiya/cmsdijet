@@ -79,18 +79,18 @@ target_link_libraries(${libname} ${ROOT_LIBRARIES})
 
 # Create main executable (to call from the command line)
 #add_executable(jetAna jetAna.cxx)
-add_executable(pPbDijetAna src/pPbDijetAna.c)
-add_executable(PbPbDijetAna src/PbPbDijetAna.cxx)
-add_executable(ppDijetAna src/ppDijetAna.cxx)
-add_executable(OODijetAna src/OODijetAna.cxx)
+# add_executable(pPbDijetAna src/pPbDijetAna.c)
+# add_executable(PbPbDijetAna src/PbPbDijetAna.cxx)
+# add_executable(ppDijetAna src/ppDijetAna.cxx)
+# add_executable(OODijetAna src/OODijetAna.cxx)
 
 
 # Link created libraries
 #target_link_libraries(jetAna ${libname})
-target_link_libraries(pPbDijetAna ${libname})
-target_link_libraries(PbPbDijetAna ${libname})
-target_link_libraries(ppDijetAna ${libname})
-target_link_libraries(OODijetAna ${libname})
+# target_link_libraries(pPbDijetAna ${libname})
+# target_link_libraries(PbPbDijetAna ${libname})
+# target_link_libraries(ppDijetAna ${libname})
+# target_link_libraries(OODijetAna ${libname})
 
 
 foreach(src_file IN LISTS SRC)
@@ -105,14 +105,14 @@ foreach(src_file IN LISTS SRC)
     )
 endforeach()
 
-foreach(exe pPbDijetAna PbPbDijetAna ppDijetAna OODijetAna)
-    add_custom_command(
-        TARGET ${exe}
-        POST_BUILD
-        COMMAND objdump -d -M intel $<TARGET_FILE:${exe}> > ${exe}.asm
-        COMMENT "Dumping machine code for ${exe} into ${exe}.asm"
-    )
-endforeach()
+# foreach(exe pPbDijetAna PbPbDijetAna ppDijetAna OODijetAna)
+#     add_custom_command(
+#         TARGET ${exe}
+#         POST_BUILD
+#         COMMAND objdump -d -M intel $<TARGET_FILE:${exe}> > ${exe}.asm
+#         COMMENT "Dumping machine code for ${exe} into ${exe}.asm"
+#     )
+# endforeach()
 
 
 # Include directories 
