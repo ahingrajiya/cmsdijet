@@ -1,5 +1,13 @@
 #include "../interface/JetEnergyScale.h"
 
+JetEnergyScale::JetEnergyScale()
+{
+}
+
+JetEnergyScale::~JetEnergyScale()
+{
+}
+
 void JetEnergyScale::init()
 {
     file_input = TFile::Open(fInputLocation.data(), "READ");

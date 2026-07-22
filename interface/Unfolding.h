@@ -12,14 +12,16 @@
 #if !(defined(__CINT__) || defined(__CLING__)) || defined(__ACLIC__)
 #include <iostream>
 
-#include "../../Unfoilding/build/RooUnfoldBayes.h"
-#include "../../Unfoilding/build/RooUnfoldResponse.h"
+#include "../../Unfoilding/RooUnfold/build/RooUnfoldBayes.h"
+#include "../../Unfoilding/RooUnfold/build/RooUnfoldResponse.h"
 #endif
 
 #ifndef UNFOLDING_H
 #define UNFOLDING_H
 
 #include "common.hpp"
+
+class RooUnfoldResponse;
 
 class Unfolding
 {

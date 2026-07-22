@@ -34,8 +34,8 @@ class JetEnergyScale
     TFile* file_input = nullptr;
 
     std::string fInputLocation = "";
-    std::vector<TH3D*> hEtaJES{};
-    std::vector<TH3D*> hPtJES{};
+    std::vector<TH3D*> vecEtaJES{};
+    std::vector<TH3D*> vecPtJES{};
     std::vector<double> fPtBins{};
     std::vector<double> fEtaBins{};
     std::vector<double> fMultCentBins{};
@@ -45,9 +45,8 @@ class JetEnergyScale
 
     void loadHistograms(TFile* f);
 
-    std::tuple<TGraphErrors*, TGraphErrors*, TGraphErrors*> fitJetPtResponseCustomBins(TH2D* h2d, const std::vector<double>& pt_bins, TDirectory* out_dir = nullptr);
-    std::tuple<TGraphErrors*, TGraphErrors*, TGraphErrors*> fitJetEtaResponseCustomBins(TH2D* h2d_eta, const std::vector<double>& eta_bins,
-                                                                                        TDirectory* out_dir = nullptr);
+    std::tuple<TGraphErrors*, TGraphErrors*, TGraphErrors*> fitJetPtResponseCustomBins(TH2D* h2d, const std::vector<double>& pt_bins, TDirectory* out_dir);
+    std::tuple<TGraphErrors*, TGraphErrors*, TGraphErrors*> fitJetEtaResponseCustomBins(TH2D* h2d_eta, const std::vector<double>& eta_bins, TDirectory* out_dir);
 
     void jetEnergyResponse();
 };

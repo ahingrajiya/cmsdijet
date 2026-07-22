@@ -9,15 +9,7 @@ set(libname JetAnalysis)
 set(CMAKE_BUILD_TYPE RelWithDebInfo)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -masm=intel")
 
-
-# set(CMAKE_CXX_STANDARD 17)
-# set(CMAKE_CXX_STANDARD_REQUIRED ON)
-# set(CMAKE_CXX_EXTENSIONS OFF)
-
-#set(CMAKE_CXX_STANDARD 17)
-#set(CMAKE_CXX_STANDARD_REQUIRED True)
-
-
+set(ROOUNFOLD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../Unfoilding/RooUnfold/build)
 message(STATUS "Looking for CERN ROOT")
 #Locate the ROOT package and defines a number of variables (e.g. ROOT_INCLUDE_DIRS)
 list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS})
@@ -31,6 +23,17 @@ else()
         message(FATAL_ERROR "ROOT not found. CMake will exit!")
 endif()
 
+find_library(ROOUNFOLD_LIBRARY
+        NAMES RooUnfold
+        PATHS ${ROOUNFOLD_DIR}
+        NO_DEFAULT_PATH
+)
+
+if (NOT ROOUNFOLD_LIBRARY)
+        message(FATAL_ERROR "RooUnfold library not found in ${ROOUNFOLD_DIR}. Build RooUnfold there first.")
+endif()
+
+message(STATUS "Found RooUnfold library at ${ROOUNFOLD_LIBRARY}")
 #Define useful ROOT functions and macros (e.g. ROOT_GENERATE_DICTIONARY)
 include(${ROOT_USE_FILE})
 
@@ -39,6 +42,7 @@ include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/interface
         ${CMAKE_CURRENT_SOURCE_DIR} 
         ${ROOT_INCLUDE_DIRS}
+        ${ROOUNFOLD_DIR}
 )
 
 # Add same CXX flags that were used to combile and build ROOT (including CXX standard)
@@ -67,31 +71,15 @@ root_generate_dictionary(G__${libname}
 # Generate rootmap
 root_generate_rootmap(${libname} LINKDEF interface/LinkDef.h)
 
-#ROOT_LINKER_LIBRARY(${libname} ${SRC} G__${libname}.cxx)
 
-# Create a shared library with geneated dictionary
 add_library(${libname} SHARED ${SRC} G__${libname}.cxx)
 # Link libraries need to run the code
 target_link_libraries(${libname} ${ROOT_LIBRARIES})
-
-# install(TARGETS $(libname)
-#         LIBRARY DESTINATION "${CMAKE_BINARY_DIR}/lib" OPTIONAL)
-
-# Create main executable (to call from the command line)
-#add_executable(jetAna jetAna.cxx)
-# add_executable(pPbDijetAna src/pPbDijetAna.c)
-# add_executable(PbPbDijetAna src/PbPbDijetAna.cxx)
-# add_executable(ppDijetAna src/ppDijetAna.cxx)
-# add_executable(OODijetAna src/OODijetAna.cxx)
+target_link_libraries(${libname} ${ROOT_LIBRARIES} ${ROOUNFOLD_LIBRARY})
 
 
-# Link created libraries
-#target_link_libraries(jetAna ${libname})
-# target_link_libraries(pPbDijetAna ${libname})
-# target_link_libraries(PbPbDijetAna ${libname})
-# target_link_libraries(ppDijetAna ${libname})
-# target_link_libraries(OODijetAna ${libname})
-
+add_executable(unfoldingAna src/unfoldingAna.cxx)
+target_link_libraries(unfoldingAna ${libname})
 
 foreach(src_file IN LISTS SRC)
     get_filename_component(src_name ${src_file} NAME_WE)
@@ -105,16 +93,4 @@ foreach(src_file IN LISTS SRC)
     )
 endforeach()
 
-# foreach(exe pPbDijetAna PbPbDijetAna ppDijetAna OODijetAna)
-#     add_custom_command(
-#         TARGET ${exe}
-#         POST_BUILD
-#         COMMAND objdump -d -M intel $<TARGET_FILE:${exe}> > ${exe}.asm
-#         COMMENT "Dumping machine code for ${exe} into ${exe}.asm"
-#     )
-# endforeach()
-
-
-# Include directories 
-#target_include_directories(jetAna PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${ROOT_INCLUDE_DIRS})
 
