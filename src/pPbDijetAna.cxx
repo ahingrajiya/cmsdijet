@@ -259,6 +259,7 @@ int main(int argc, char* argv[])
     // analysis->setVzWeight();
     // analysis->useAveragePt(true);
     analysis->setReader(reader);
+    analysis->setUnfolding(true, ptBins, xjBins);
 
     // Initialize Histomanager
     HistoManagerDiJet* hm = new HistoManagerDiJet{};
