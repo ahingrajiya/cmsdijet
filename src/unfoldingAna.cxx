@@ -20,14 +20,14 @@ int main()
                                   0.7,  0.725, 0.75, 0.775, 0.8,  0.825, 0.85, 0.875, 0.9,  0.925, 0.95, 0.975, 1.0};
 
     // std::vector<double> multiplicityBins = {0.0, 20., 40., 80., 120.};
-    std::vector<double> multiplicityBins = {0.0, 10.};
+    std::vector<double> multiplicityBins = {0.0, 100.};
     std::vector<double> ptBins = {0.0, 20.0, 30.0, 40.0, 50.0, 60., 70., 80., 90., 100., 120., 140., 160., 200.};
 
     unfoldData.setBins(ptBins, xjBins, multiplicityBins);
     unfoldData.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA5360_Unfolding_Data.root",
                           "/home/abhishek/analysis/pPb/Summed_Files/ppRef5360_Unfolding_Data.root");
-    unfoldData.outputFileName("ppRef_Data_Unfolded.root");
-    unfoldData.setIterations(6);
+    unfoldData.outputFileName("ppRef_Data_Unfolded_3iter.root");
+    unfoldData.setIterations(3);
 
     unfoldData.doValidation(false);
     unfoldData.performUnfolding();
@@ -38,10 +38,20 @@ int main()
     unfoldOOData.setBins(ptBins, xjBins, centBins);
     unfoldOOData.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA_HIJING_Unfolding_Data.root",
                             "/home/abhishek/analysis/pPb/Summed_Files/OOData_Unfolding_Data.root");
-    unfoldOOData.outputFileName("OOData_Unfold.root");
-    unfoldOOData.setIterations(6);
+    unfoldOOData.outputFileName("OOData_Unfold_3iter.root");
+    unfoldOOData.setIterations(3);
     unfoldOOData.doValidation(false);
     unfoldOOData.performUnfolding();
+
+    Unfolding unfoldpPbData;
+
+    unfoldpPbData.setBins(ptBins, xjBins, multiplicityBins);
+    unfoldpPbData.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA_EPOS_Unfolding_Data.root",
+                             "/home/abhishek/analysis/pPb/Summed_Files/pPbMB_Unfolding_Data.root");
+    unfoldpPbData.outputFileName("pPbData_Unfold_3iter.root");
+    unfoldpPbData.setIterations(3);
+    unfoldpPbData.doValidation(false);
+    unfoldpPbData.performUnfolding();
 
     return 0;
 }
