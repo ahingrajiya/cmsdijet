@@ -132,7 +132,7 @@ int main(int argc, char* argv[])
     ForestReader* reader = new ForestReader{inFileName};
     reader->setForestFileType(ForestReader::ForestFileType::MiniAOD);
     reader->setIsMc(isMC);
-    reader->useTrackBranch();
+    reader->useTrackBranch("PbPbTracks");
 
     if (isMC)
     {
