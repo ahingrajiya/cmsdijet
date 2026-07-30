@@ -38,7 +38,7 @@ TH1D* Unfolding::unfold(RooUnfoldResponse* response, TH1D* measured, TH1D* purit
     TH1D* toUnfold = (TH1D*)measured->Clone("toUnfold");
     toUnfold->Multiply(purity);
     RooUnfoldBayes unfold(response, toUnfold, iteration);
-    TH1D* unfolded = (TH1D*)unfold.Hreco()->Clone("unfolded");
+    TH1D* unfolded = (TH1D*)unfold.Hunfold(RooUnfold::kCovariance)->Clone("unfolded");
     unfolded->Multiply(efficiency);
     return unfolded;
 }
@@ -134,14 +134,14 @@ void Unfolding::projections(bool validation, float centMin, float centMax, float
 TH1D* Unfolding::purity(TH1D* totalReco, TH1D* matchedReco)
 {
     TH1D* hPurity_ = (TH1D*)matchedReco->Clone("hPurity_");
-    hPurity_->Divide(totalReco);
+    hPurity_->Divide(matchedReco, totalReco, 1.0, 1.0, "B");
     return hPurity_;
 }
 
 TH1D* Unfolding::efficiency(TH1D* totalTruth, TH1D* matchedtruth)
 {
     TH1D* hEfficiency_ = (TH1D*)totalTruth->Clone("hEfficiency_");
-    hEfficiency_->Divide(matchedtruth);
+    hEfficiency_->Divide(totalTruth, matchedtruth, 1., 1., "B");
     return hEfficiency_;
 }
 
