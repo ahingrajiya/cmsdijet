@@ -65,7 +65,7 @@ void Unfolding::readHistograms(TFile* mcIn, TFile* dataIn, bool validation)
     }
 }
 
-void Unfolding::projections(bool validation, float centMin, float centMax)
+void Unfolding::projections(bool validation, float centMin, float centMax, float centMinData, float centMaxData)
 {
     if (validation)
     {
@@ -104,7 +104,7 @@ void Unfolding::projections(bool validation, float centMin, float centMax)
         hResponseMatrix3D[i]->GetZaxis()->SetRange(hResponseMatrix3D[i]->GetZaxis()->FindBin(centMin), hResponseMatrix3D[i]->GetZaxis()->FindBin(centMax - 0.001));
         hTotalReco2D[i]->GetYaxis()->SetRange(hTotalReco2D[i]->GetYaxis()->FindBin(centMin), hTotalReco2D[i]->GetYaxis()->FindBin(centMax - 0.001));
         hTotalTruth2D[i]->GetYaxis()->SetRange(hTotalTruth2D[i]->GetYaxis()->FindBin(centMin), hTotalTruth2D[i]->GetYaxis()->FindBin(centMax - 0.001));
-        hDataReco2D->GetYaxis()->SetRange(hDataReco2D->GetYaxis()->FindBin(centMin), hDataReco2D->GetYaxis()->FindBin(centMax - 0.001));
+        hDataReco2D->GetYaxis()->SetRange(hDataReco2D->GetYaxis()->FindBin(centMinData), hDataReco2D->GetYaxis()->FindBin(centMaxData - 0.001));
 
         hResponseMatrix[i] = (TH2D*)hResponseMatrix3D[i]->Project3D("yx");
         hResponseMatrix[i]->SetName(Form("hResponseMatrix%i_%i_%i", i, (int)centMin, (int)centMax));
@@ -116,7 +116,7 @@ void Unfolding::projections(bool validation, float centMin, float centMax)
         hMatchedTruth[i]->SetName(Form("hMatchedTruth%i_%i_%i", i, (int)centMin, (int)centMax));
 
         hDataReco = hDataReco2D->ProjectionX();
-        hDataReco->SetName(Form("hDataReco%i_%i_%i", i, (int)centMin, (int)centMax));
+        hDataReco->SetName(Form("hDataReco%i_%i_%i", i, (int)centMinData, (int)centMaxData));
 
         hTotalReco[i] = hTotalReco2D[i]->ProjectionX();
         hTotalReco[i]->SetName(Form("hTotalReco%i_%i_%i", i, (int)centMin, (int)centMax));
@@ -154,33 +154,44 @@ void Unfolding::performUnfolding()
     std::vector<TH1D*> genXjHisto;
     std::vector<TH1D*> recoXjHisto;
     std::vector<TH1D*> unfoldedHisto;
+    std::vector<TH1D*> dataRecoHisto;
     std::vector<TH1D*> unfoldValidationHisto;
-    for (int i = 0; i < fMultCentBins.size() - 1; ++i)
+    if (fMultCentBinsData.size() != fMultCentBinsMC.size() || fMultCentBinsData.size() != 2)
     {
-        projections(performValidation, fMultCentBins[i], fMultCentBins[i + 1]);
-
+        std::runtime_error("Centrality Multiplicity Bins are different between MC and Data. Please fix it !");
+    }
+    for (int i = 0; i < fMultCentBinsMC.size() - 1; ++i)
+    {
+        if (fMultCentBinsData.size() == fMultCentBinsMC.size())
+        {
+            projections(performValidation, fMultCentBinsMC[i], fMultCentBinsMC[i + 1], fMultCentBinsData[i], fMultCentBinsData[i + 1]);
+        }
+        else
+        {
+            projections(performValidation, fMultCentBinsMC[i], fMultCentBinsMC[i + 1], fMultCentBinsData[0], fMultCentBinsData[1]);
+        }
         if (performValidation)
         {
             for (int j = 0; j < 2; ++j)
             {
                 RooUnfoldResponse response(hMatchedReco[j], hMatchedTruth[j], hResponseMatrix[j], "response", "Response Validation");
                 TH1D* validation = unfold(&response, hTotalReco[j], hPurity[j], hEfficiency[j], 1);
-                validation->SetName(Form("Validation%i_%i_%i", j, (int)fMultCentBins[i], (int)fMultCentBins[i + 1]));
+                validation->SetName(Form("Validation%i_%i_%i", j, (int)fMultCentBinsMC[i], (int)fMultCentBinsMC[i + 1]));
 
                 std::stringstream validation_name;
-                validation_name << "Validation_" << fMultCentBins[i] << "_" << fMultCentBins[i + 1] << "_" << j;
+                validation_name << "Validation_" << fMultCentBinsMC[i] << "_" << fMultCentBinsMC[i + 1] << "_" << j;
                 unfoldValidationHisto = unflattenHistogram(fPtBins, fXjBins, validation, validation_name.str());
                 writeHisto(out, unfoldValidationHisto);
                 unfoldValidationHisto.clear();
 
                 validation_name.str("");
-                validation_name << "Gen_" << fMultCentBins[i] << "_" << fMultCentBins[i + 1] << "_" << j;
+                validation_name << "Gen_" << fMultCentBinsMC[i] << "_" << fMultCentBinsMC[i + 1] << "_" << j;
                 genXjHisto = unflattenHistogram(fPtBins, fXjBins, hTotalTruth[j], validation_name.str());
                 writeHisto(out, genXjHisto);
                 genXjHisto.clear();
 
                 validation_name.str("");
-                validation_name << "Reco_" << fMultCentBins[i] << "_" << fMultCentBins[i + 1] << "_" << j;
+                validation_name << "Reco_" << fMultCentBinsMC[i] << "_" << fMultCentBinsMC[i + 1] << "_" << j;
                 recoXjHisto = unflattenHistogram(fPtBins, fXjBins, hTotalReco[j], validation_name.str());
                 writeHisto(out, recoXjHisto);
                 recoXjHisto.clear();
@@ -188,18 +199,18 @@ void Unfolding::performUnfolding()
 
             RooUnfoldResponse response0(hMatchedReco[0], hMatchedTruth[0], hResponseMatrix[0], "response0", "Response Validation");
             TH1D* unfolded1 = unfold(&response0, hTotalReco[1], hPurity[0], hEfficiency[0], iterations);
-            unfolded1->SetName(Form("Unfolded%i_%i_%i", 1, (int)fMultCentBins[i], (int)fMultCentBins[i + 1]));
+            unfolded1->SetName(Form("Unfolded%i_%i_%i", 1, (int)fMultCentBinsMC[i], (int)fMultCentBinsMC[i + 1]));
             std::stringstream unfold_name;
-            unfold_name << "Unfolded_" << 1 << "_" << fMultCentBins[i] << "_" << fMultCentBins[i + 1];
+            unfold_name << "Unfolded_" << 1 << "_" << fMultCentBinsMC[i] << "_" << fMultCentBinsMC[i + 1];
             unfoldedHisto = unflattenHistogram(fPtBins, fXjBins, unfolded1, unfold_name.str());
             writeHisto(out, unfoldedHisto);
             unfoldedHisto.clear();
 
             RooUnfoldResponse response1(hMatchedReco[1], hMatchedTruth[1], hResponseMatrix[1], "response0", "Response Validation");
             TH1D* unfolded0 = unfold(&response1, hTotalReco[0], hPurity[1], hEfficiency[1], iterations);
-            unfolded0->SetName(Form("Unfolded%i_%i_%i", 0, (int)fMultCentBins[i], (int)fMultCentBins[i + 1]));
+            unfolded0->SetName(Form("Unfolded%i_%i_%i", 0, (int)fMultCentBinsMC[i], (int)fMultCentBinsMC[i + 1]));
             unfold_name.str("");
-            unfold_name << "Unfolded_" << 0 << "_" << fMultCentBins[i] << "_" << fMultCentBins[i + 1];
+            unfold_name << "Unfolded_" << 0 << "_" << fMultCentBinsMC[i] << "_" << fMultCentBinsMC[i + 1];
             unfoldedHisto = unflattenHistogram(fPtBins, fXjBins, unfolded0, unfold_name.str());
             writeHisto(out, unfoldedHisto);
             unfoldedHisto.clear();
@@ -208,22 +219,28 @@ void Unfolding::performUnfolding()
         {
             RooUnfoldResponse response(hMatchedReco[0], hMatchedTruth[0], hResponseMatrix[0], "response", "Response Validation");
             TH1D* dataUnfold = unfold(&response, hDataReco, hPurity[0], hEfficiency[0], iterations);
-            dataUnfold->SetName(Form("dataUnfold_%i_%i", (int)fMultCentBins[i], (int)fMultCentBins[i + 1]));
+            dataUnfold->SetName(Form("dataUnfold_%i_%i", (int)fMultCentBinsMC[i], (int)fMultCentBinsMC[i + 1]));
 
             std::stringstream dataUnfold_name;
-            dataUnfold_name << "dataUnfold_" << fMultCentBins[i] << "_" << fMultCentBins[i + 1];
+            dataUnfold_name << "dataUnfold_" << fMultCentBinsMC[i] << "_" << fMultCentBinsMC[i + 1];
             unfoldedHisto = unflattenHistogram(fPtBins, fXjBins, dataUnfold, dataUnfold_name.str());
             writeHisto(out, unfoldedHisto);
             unfoldedHisto.clear();
 
+            std::stringstream dataReco_name;
+            dataReco_name << "dataReco_" << fMultCentBinsMC[i] << "_" << fMultCentBinsMC[i + 1];
+            dataRecoHisto = unflattenHistogram(fPtBins, fXjBins, hDataReco, dataReco_name.str());
+            writeHisto(out, dataRecoHisto);
+            dataRecoHisto.clear();
+
             std::stringstream gen_name;
-            gen_name << "Gen_" << fMultCentBins[i] << "_" << fMultCentBins[i + 1];
+            gen_name << "Gen_" << fMultCentBinsMC[i] << "_" << fMultCentBinsMC[i + 1];
             genXjHisto = unflattenHistogram(fPtBins, fXjBins, hTotalTruth[0], gen_name.str());
             writeHisto(out, genXjHisto);
             genXjHisto.clear();
 
             std::stringstream reco_name;
-            reco_name << "Reco_" << fMultCentBins[i] << "_" << fMultCentBins[i + 1];
+            reco_name << "Reco_" << fMultCentBinsMC[i] << "_" << fMultCentBinsMC[i + 1];
             recoXjHisto = unflattenHistogram(fPtBins, fXjBins, hTotalReco[0], reco_name.str());
             writeHisto(out, recoXjHisto);
             recoXjHisto.clear();

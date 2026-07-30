@@ -31,11 +31,12 @@ class Unfolding
 
     void doValidation(bool validation) { performValidation = validation; }
 
-    void setBins(std::vector<double> ptBins, std::vector<double> xjBins, std::vector<double> multCentBins)
+    void setBins(std::vector<double> ptBins, std::vector<double> xjBins, std::vector<double> multCentBinsMC, std::vector<double> multCentBinsData)
     {
         fPtBins = ptBins;
         fXjBins = xjBins;
-        fMultCentBins = multCentBins;
+        fMultCentBinsMC = multCentBinsMC;
+        fMultCentBinsData = multCentBinsData;
     }
 
     void setIterations(int iter) { iterations = iter; }
@@ -69,12 +70,13 @@ class Unfolding
 
     void readHistograms(TFile* inputMC, TFile* dataMac, bool validation = true);
 
-    void projections(bool validation, float centMin, float centMax);
+    void projections(bool validation, float centMin, float centMax, float centMinData, float centMaxData);
 
     void writeHisto(TFile* out, std::vector<TH1D*> histos);
     std::vector<double> fPtBins;
     std::vector<double> fXjBins;
-    std::vector<double> fMultCentBins;
+    std::vector<double> fMultCentBinsMC;
+    std::vector<double> fMultCentBinsData;
 
     bool performValidation = false;
     TString outputFile{""};
