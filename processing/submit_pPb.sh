@@ -158,7 +158,7 @@ for filename in ${input_files_list}/*.txt; do
         +JobFlavour     = "workday"
         getenv          = True
         requirements    =((OpSysAndVer =?= "AlmaLinux9") && (CERNEnvironment =?= "qa"))
-        RequestCpus     = 1
+        RequestCpus     = 3
         environment     = "X509_USER_PROXY=voms_proxy.txt"
 	
 	
