@@ -27,7 +27,6 @@
 #pragma link C++ class Manager + ;
 #pragma link C++ class HistoManagerDiJet + ;
 #pragma link C++ class TrkEff2018PbPb + ;
-#pragma link C++ class TrkEfficiency2016pPb + ;
 #pragma link C++ class ForestReader + ;
 #pragma link C++ class TrkEfficiencypPb + ;
 #pragma link C++ class TrkEfficiencyOO + ;

@@ -27,7 +27,6 @@
 
 // Jet analysis headers
 #include "../PbPb_TrackingEfficiencies/trackingEfficiency2018PbPb.h"
-#include "../pPb_TrackingEfficiency/TrkEfficiency2016pPb.h"
 #include "BaseAnalysis.h"
 #include "Event.h"
 #include "ForestReader.h"
