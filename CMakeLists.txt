@@ -67,7 +67,6 @@ set(HEADERS
         interface/TrackCut.h
         interface/Manager.h
         interface/TrackingEfficiency.h
-        pPb_TrackingEfficiency/TrkEfficiency2016pPb.h
         PbPb_TrackingEfficiencies/trackingEfficiency2018PbPb.h
 )
 
