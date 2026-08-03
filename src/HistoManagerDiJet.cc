@@ -624,18 +624,18 @@ void HistoManagerDiJet::init()
         1000, 0., 500., 1000, 0., 500.);
     hHiHFPlusVsHiHFMinus_WithDijet_W->Sumw2();
     hHiHFPlusVsMultiplicity_W =
-        new TH2D("hHiHFPlusVsMultiplicity_W", "Forward Calorimeter in Positive Eta (p-going)  vs Multiplicity Weighted", 500, 0.0, 500., 1000, 0.0, 500.);
+        new TH2D("hHiHFPlusVsMultiplicity_W", "Forward Calorimeter in Positive Eta (p-going)  vs Multiplicity Weighted", 1000, 0.0, 1000., 1000, 0.0, 500.);
     hHiHFPlusVsMultiplicity_W->Sumw2();
     hHiHFMinusVsMultiplicity_W =
-        new TH2D("hHiHFMinusVsMultiplicity_W", "Forward Calorimeter in Minus Eta (Pb-going)  vs Multiplicity Weighted", 500, 0.0, 500., 1000, 0.0, 500.);
+        new TH2D("hHiHFMinusVsMultiplicity_W", "Forward Calorimeter in Minus Eta (Pb-going)  vs Multiplicity Weighted", 1000, 0.0, 1000., 1000, 0.0, 500.);
     hHiHFMinusVsMultiplicity_W->Sumw2();
     hHiHFPlusVsMultiplicity_WithDijet_W =
-        new TH2D("hHiHFPlusVsMultiplicity_WithDijet_W", "Forward Calorimeter in Positive Eta (p-going)  vs Multiplicity With Dijet Present Weighted", 500, 0.0, 500.,
+        new TH2D("hHiHFPlusVsMultiplicity_WithDijet_W", "Forward Calorimeter in Positive Eta (p-going)  vs Multiplicity With Dijet Present Weighted", 1000, 0.0, 1000.,
                  1000, 0.0, 500.);
     hHiHFPlusVsMultiplicity_WithDijet_W->Sumw2();
     hHiHFMinusVsMultiplicity_WithDijet_W =
-        new TH2D("hHiHFMinusVsMultiplicity_WithDijet_W", "Forward Calorimeter in Minus Eta (Pb-going)  vs Multiplicity With Dijet Present Weighted", 500, 0.0, 500., 1000,
-                 0.0, 500.);
+        new TH2D("hHiHFMinusVsMultiplicity_WithDijet_W", "Forward Calorimeter in Minus Eta (Pb-going)  vs Multiplicity With Dijet Present Weighted", 1000, 0.0, 1000.,
+                 1000, 0.0, 500.);
     hHiHFMinusVsMultiplicity_WithDijet_W->Sumw2();
 
     std::cout << "=======================================================================" << std::endl;
@@ -1018,6 +1018,9 @@ void HistoManagerDiJet ::writeOutput()
             hGenInJetMultiplicity_W->Write();
             hSubEventMultiplicity_W->Write();
             hGenMultiplicity_W->Write();
+            hImpactParameter_W->Write();
+            hImpactParameterVsHiBin_W->Write();
+            hImpactParameterVsMultiplicity_W->Write();
         }
         hNEventsInMult->Write();
         hHiHFPlusVsHiHFMinus->Write();
@@ -1025,8 +1028,6 @@ void HistoManagerDiJet ::writeOutput()
         hHiHFPlusVsHiHFMinus_WithDijet_W->Write();
         hHiHFPlusVsMultiplicity_W->Write();
         hHiHFMinusVsMultiplicity_W->Write();
-        hHiHFPlusVsMultiplicity_WithDijet_W->Write();
-        hHiHFMinusVsMultiplicity_WithDijet_W->Write();
     }
     if (fConfig.saveEvent)
     {
@@ -1040,13 +1041,12 @@ void HistoManagerDiJet ::writeOutput()
         hVzWithDijet_W->Write();
         hMultiplicities_W->Write();
         hMultiplicities_DiJet_W->Write();
+        hHiHFPlusVsMultiplicity_WithDijet_W->Write();
+        hHiHFMinusVsMultiplicity_WithDijet_W->Write();
 
         if (fIsMC)
         {
             hPtHat_W->Write();
-            hImpactParameter_W->Write();
-            hImpactParameterVsHiBin_W->Write();
-            hImpactParameterVsMultiplicity_W->Write();
         }
     }
     std::cout << "  ===> Writing Jets Histograms" << std::endl;

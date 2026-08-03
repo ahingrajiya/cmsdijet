@@ -48,6 +48,7 @@ int main(int argc, char* argv[])
     std::string path2MultWeight = "../aux_files/PbPb_5020/Multiplicity_Weight/mult_weight_1p0.root";
     std::string path2DijetWeight = "../aux_files/pp_5020/Dijet_Weight/PYTHIA_DiJetWeight_Table.root";
     HistoConfig writeConfig = {false, true, true, true, false, true, false, true};
+    std::vector<std::string> trkEfftable = {"../PbPb_TrackingEfficiencies/"};
 
     if (argc <= 1)
     {
@@ -151,7 +152,7 @@ int main(int argc, char* argv[])
     analysis->setDeltaPhi(2. * TMath::Pi() / 3);
     analysis->setLeadJetPt(100.);
     analysis->setSubLeadJetPt(50.);
-    analysis->setTrackingTable("../PbPb_TrackingEfficiencies/");
+    analysis->setTrackingTable(trkEfftable);
     analysis->setMinTrkPt(1.0);
     analysis->setTrkEtaRange(-2.4, 2.4);
     analysis->doInJetMultiplicity();

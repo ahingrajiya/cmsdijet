@@ -63,6 +63,9 @@ int main(int argc, char* argv[])
     Int_t JEUType{0};              // 0 - No JEU, 1 - JEU Up, -1 - JEU Down
     std::string path2DijetWeight = "../aux_files/pp_5360/Dijet_Weight/DiJetWeight.root";
     HistoConfig writeConfig = {false, true, true, true, false, true, false, true};
+    std::vector<std::string> trkEffTable = {
+        "../aux_files/OO_5360/trk_eff_table/Eff_OO_2025_Hijing_MB_Centrality_fromHihfpf_NoPU_3D_Nominal_Official.root",
+        "../aux_files/OO_5360/trk_eff_table/Eff_OO_2025_PythiaHijing_QCD_pThat15_Centrality_fromHihfpf_NoPU_3D_Nominal_Official.root"};
 
     // Command line arguments
     /*
@@ -152,7 +155,7 @@ int main(int argc, char* argv[])
     reader->setPath2JetAnalysis(path2JEC.Data());
     reader->setUseJetID();
     reader->setJetIDType(2);
-    reader->eventsToProcess(-1);
+    reader->eventsToProcess(1000);
     reader->setJetCut(jetCut);
     reader->setTrackCut(trackCut);
     reader->setEventCut(eventCut);
@@ -164,7 +167,7 @@ int main(int argc, char* argv[])
     analysis->setIsMC(isMC);
 
     analysis->setReader(reader);
-    analysis->setMultiplicityRange(10, 500);
+    // analysis->setMultiplicityRange(10, 500);
     analysis->setMultiplicityType(4);
     analysis->setMinTrkPt(0.40);
     analysis->setDeltaPhi(7 * M_PI / 8);
@@ -177,6 +180,7 @@ int main(int argc, char* argv[])
     analysis->setInclusiveJetEtaRange(-2.1, 2.1);
     analysis->useAveragePt(false);
     analysis->setUnfolding(unfold, ptBins, xjBins);
+    analysis->setTrackingTable(trkEffTable);
 
     if (isMC)
     {

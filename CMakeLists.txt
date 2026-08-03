@@ -66,6 +66,7 @@ set(HEADERS
         interface/JetCut.h
         interface/TrackCut.h
         interface/Manager.h
+        interface/TrackingEfficiency.h
         pPb_TrackingEfficiency/TrkEfficiency2016pPb.h
         PbPb_TrackingEfficiencies/trackingEfficiency2018PbPb.h
 )
@@ -89,6 +90,7 @@ set(SRC
         src/JetCut.cc
         src/TrackCut.cc
         src/Manager.cc
+        src/TrackingEfficiency.cc
 )
 
 # Generate ROOT dictionaries

@@ -34,6 +34,7 @@
 #include "HistoManagerDiJet.h"
 #include "TSpline.h"
 #include "TVector2.h"
+#include "TrackingEfficiency.h"
 
 enum class CollisionSystem
 {
@@ -184,7 +185,7 @@ class DiJetAnalysis : public BaseAnalysis
     ///@brief Set which multiplicity type to use for the event selection
     void setMultiplicityType(int multType) noexcept { fMultiplicityType = multType; }
     ///@brief Set Tracking efficiency table
-    void setTrackingTable(const std::string& trackingTable) { fTrkEffTable = trackingTable; }
+    void setTrackingTable(std::vector<std::string> trackingTable) { fTrkEffTable = trackingTable; }
     /// @brief Set Dijet weight table
     /// @param dijetWeightTable Path to the dijet weight table
     void setDijetWeightTable(const std::string& dijetWeightTable) { fDijetWeightTable = dijetWeightTable; }
@@ -224,7 +225,7 @@ class DiJetAnalysis : public BaseAnalysis
     /// @brief Sets up correct efficiency tables for tracking efficiency correction
     /// @param trackingTable Path to the tracking efficiency correction table with its name
     /// included. Table is usually root file with .root extension
-    void SetUpTrackingEfficiency(const std::string& trackingTable);
+    void SetUpTrackingEfficiency(std::vector<std::string> trackingTable);
     /// @brief Gen and Subevent Multiplicity calculator
     /// @param event Event object
     /// @param eventWeight Event weight
@@ -403,7 +404,7 @@ class DiJetAnalysis : public BaseAnalysis
 
     // Selections and Ranges
     ///@brief Multiplicity Range
-    std::array<double, 2> fMultiplicityRange{10., 600.};
+    std::array<double, 2> fMultiplicityRange{0., 10000.};
     ///@brief Leading jet pt cut
     double fLeadJetPtLow{50.};
     ///@brief Subleading jet pt cut
@@ -450,7 +451,7 @@ class DiJetAnalysis : public BaseAnalysis
     ///@brief Set Number of events to process
     int fNEventsInSample{10000000};
     ///@brief Tracking efficiency table for PbPb
-    std::string fTrkEffTable{""};
+    std::vector<std::string> fTrkEffTable{""};
     ///@brief Underlying event
     std::string fUEType{""};
 
@@ -512,7 +513,9 @@ class DiJetAnalysis : public BaseAnalysis
     ///@brief Tracking efficiency for PbPb
     std::unique_ptr<TrkEff2018PbPb> fTrkEffPbPb;
     ///@brief Tracking efficiency for pPb
-    std::unique_ptr<TrkEfficiency2016pPb> fTrkEffpPb;
+    std::unique_ptr<TrkEfficiencypPb> fTrkEffpPb;
+    /// @brief Tracking efficiency for OO
+    std::unique_ptr<TrkEfficiencyOO> fTrkEffOO;
     // ///@brief Dijet Weight file
     // std::unique_ptr<TFile> fDijetWeightFile;
     ///@brief Vertex Z weight function

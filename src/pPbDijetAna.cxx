@@ -65,6 +65,7 @@ int main(int argc, char* argv[])
     Bool_t useJEU{kFALSE};         // 0 - No JEC Uncertainty, 1 - JEC Uncertainty Up, -1 - JEC Uncertainty Down
     Int_t JEUType{0};              // 0 - No JEU, 1 - JEU Up, -1 - JEU Down
     HistoConfig writeConfig = {false, true, true, true, false, true, false, true};
+    std::vector<std::string> trkEffTable = {"../aux_files/pPb_8160/trk_eff_table/pPb_EPOS_2D_efftables.root"};
 
     // Command line arguments
     /*
@@ -254,7 +255,7 @@ int main(int argc, char* argv[])
     analysis->setInclusiveCorrectedJetPtMin(50.0);
     // analysis->doInJetMultiplicity();
     analysis->setUEType(UEType);
-    analysis->setTrackingTable("../aux_files/pPb_8160/trk_eff_table/pPb_EPOS_2D_efftables.root");
+    analysis->setTrackingTable(trkEffTable);
     // analysis->setDebug(kTRUE);
     // analysis->setVzWeight();
     // analysis->useAveragePt(true);

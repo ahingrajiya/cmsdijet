@@ -292,11 +292,11 @@ float DiJetAnalysis::CalculateDijetWeight(const DijetInfo& recoDijet, const Dije
     return 1.0f;
 }
 
-void DiJetAnalysis::SetUpTrackingEfficiency(const std::string& trackingEfficiencyTable)
+void DiJetAnalysis::SetUpTrackingEfficiency(std::vector<std::string> trackingEfficiencyTable)
 {
     // std::cout << "Dijet Analysis::SetUpTrackingEfficiency Setting up Tracking EfficiencyT Tables"
     // << std::endl;
-    if (fSystem == CollisionSystem::PbPb)
+    if (fSystem == CollisionSystem::PbPb && trackingEfficiencyTable.size() > 0)
     {
         std::cout << std::endl;
         std::cout << "===================================================================================" << std::endl;
@@ -305,12 +305,12 @@ void DiJetAnalysis::SetUpTrackingEfficiency(const std::string& trackingEfficienc
                   << std::endl;
         std::cout << "===================================================================================" << std::endl;
         std::cout << std::endl;
-        std::cout << "Tracking Efficiency Table: " << trackingEfficiencyTable << std::endl;
-        fTrkEffPbPb = std::make_unique<TrkEff2018PbPb>("general", "", false, trackingEfficiencyTable);
+        std::cout << "Tracking Efficiency Table: " << trackingEfficiencyTable[0] << std::endl;
+        fTrkEffPbPb = std::make_unique<TrkEff2018PbPb>("general", "", false, trackingEfficiencyTable[0]);
         std::cout << "Tracking Efficiency Table Loaded Successfully" << std::endl;
         std::cout << "==================================[Done]================================" << std::endl;
     }
-    else if (fSystem == CollisionSystem::pPb)
+    else if (fSystem == CollisionSystem::pPb && trackingEfficiencyTable.size() > 0)
     {
         std::cout << std::endl;
         std::cout << "===================================================================================" << std::endl;
@@ -320,9 +320,26 @@ void DiJetAnalysis::SetUpTrackingEfficiency(const std::string& trackingEfficienc
                   << std::endl;
         std::cout << "===================================================================================" << std::endl;
         std::cout << std::endl;
-        std::cout << "Tracking Efficiency Table: " << trackingEfficiencyTable << std::endl;
+        std::cout << "Tracking Efficiency Table: " << trackingEfficiencyTable[0] << std::endl;
 
-        fTrkEffpPb = std::make_unique<TrkEfficiency2016pPb>(trackingEfficiencyTable, fUEType);
+        fTrkEffpPb = std::make_unique<TrkEfficiencypPb>(trackingEfficiencyTable[0], fUEType);
+        std::cout << "Tracking Efficiency Table Loaded Successfully" << std::endl;
+        std::cout << "==================================[Done]================================" << std::endl;
+    }
+    else if (fSystem == CollisionSystem::OO && trackingEfficiencyTable.size() > 0)
+    {
+        std::cout << std::endl;
+        std::cout << "===================================================================================" << std::endl;
+
+        std::cout << "Dijet Analysis::SetUpTrackingEfficiency Setting up Tracking Efficiency "
+                     "Tables for OO"
+                  << std::endl;
+        std::cout << "===================================================================================" << std::endl;
+        std::cout << std::endl;
+        std::cout << "Tracking Efficiency Table for MinimumBias : " << trackingEfficiencyTable[0] << std::endl;
+        std::cout << "Tracking Efficiency Table for QCD : " << trackingEfficiencyTable[1] << std::endl;
+
+        fTrkEffOO = std::make_unique<TrkEfficiencyOO>(trackingEfficiencyTable[0], trackingEfficiencyTable[1]);
         std::cout << "Tracking Efficiency Table Loaded Successfully" << std::endl;
         std::cout << "==================================[Done]================================" << std::endl;
     }
@@ -358,8 +375,9 @@ std::pair<int, float> DiJetAnalysis::RecoCorrectedMultiplicity(const Event* even
         bool isGoodTrack = (trackPt > fMinTrkPt && trackEta >= fTrkEtaRange[0] && trackEta <= fTrkEtaRange[1]);
         if (fDebug)
         {
-            Form("%5.2f < Track Pt: %5.2f , %5.2f < Track Eta: %5.2f < %5,2f \t %s \n", fMinTrkPt, trackPt, fTrkEtaRange[0], trackEta, fTrkEtaRange[1],
-                 (isGoodTrack) ? "True" : "False");
+            std::cout << Form("%5.2f < Track Pt: %5.2f , %5.2f < Track Eta: %5.2f < %5,2f \t %s \n", fMinTrkPt, trackPt, fTrkEtaRange[0], trackEta, fTrkEtaRange[1],
+                              (isGoodTrack) ? "True" : "False")
+                      << std::endl;
         }
 
         if (isGoodTrack)
@@ -399,6 +417,29 @@ std::pair<int, float> DiJetAnalysis::RecoCorrectedMultiplicity(const Event* even
                 else
                 {
                     iCorrectionFactor = fTrkEffPbPb->getCorrection(trackPt, trackEta, event->hiBin());
+                    iCorrectedMult += iCorrectionFactor;
+                    if (fDoTrackingClosures)
+                    {
+                        fHM->hTrackPtVsEta->Fill(trackEta, trackPt, multiplicityBin);
+                        fHM->hTrackPtVsEta_W->Fill(trackEta, trackPt, multiplicityBin, eventWeight);
+                        fHM->hTrackPtVsEtaCorrected->Fill(trackEta, trackPt, multiplicityBin, iCorrectionFactor);
+                        fHM->hTrackPtVsEtaCorrected_W->Fill(trackEta, trackPt, multiplicityBin, eventWeight * iCorrectionFactor);
+                    }
+                }
+            }
+
+            else if (fSystem == CollisionSystem::OO)
+            {
+                if (!fTrkEffOO)
+                {
+                    std::cerr << "Tracking efficiency table not found for OO" << std::endl;
+                    std::cout << "Please Set up Tracking table to calculate corrected multiplicity" << std::endl;
+                    std::cout << "Corrected Multiplicity will be returned as -1" << std::endl;
+                    iCorrectedMult = -1;
+                }
+                else
+                {
+                    iCorrectionFactor = fTrkEffOO->getCorrection(trackPt, trackEta, event->hiBin());
                     iCorrectedMult += iCorrectionFactor;
                     if (fDoTrackingClosures)
                     {
@@ -1076,15 +1117,6 @@ void DiJetAnalysis::processEvent(const Event* event)
         iGenSubeMult = GenSubeMultiplicity(event, Event_Weight, iMultiplicityBin);
     }
 
-    if (fSystem == CollisionSystem::OO)
-    {
-        iRecoMult = event->multiplicity();
-        iRecoCorrectedMult.first = event->multiplicity();
-        iRecoCorrectedMult.second = event->correctedNtrkoff();
-        iGenSubeMult.first = event->genMultiplicity();
-        iGenSubeMult.second = event->subEventMultiplicity();
-    }
-
     double iMultiplicity;
     iMultiplicity = (fMultiplicityType == 0)   ? static_cast<double>(iRecoMult)
                     : (fMultiplicityType == 1) ? static_cast<double>(iGenSubeMult.first)
@@ -1126,8 +1158,6 @@ void DiJetAnalysis::processEvent(const Event* event)
     {
         processGenJets(event, Event_Weight, iMultiplicityBin, genDijet, recoDijet);
     }
-    // std::cout << "HiHFPlus : " << event->hiHFPlus() << " HiHFMinus : " << event->hiHFMinus() << std::endl;
-    // std::cout << "Multiplicity : " << iMultiplicity << " Multiplicity Bins : " << iMultiplicityBin << std::endl;
 
     fHM->hVz->Fill(iVertexZ);
     fHM->hVz_W->Fill(iVertexZ, Event_Weight * fDijetWeight);
@@ -1139,6 +1169,7 @@ void DiJetAnalysis::processEvent(const Event* event)
                                 static_cast<double>(iGenSubeMult.second),
                                 static_cast<double>(event->hiBinWithShift()),
                                 iMultiplicityBin};
+
     fHM->hMultiplicities_W->Fill(Multiplicities, Event_Weight);
     fHM->hHiHFPlusVsHiHFMinus->Fill(event->hiHFMinus(), event->hiHFPlus());
     fHM->hHiHFPlusVsHiHFMinus_W->Fill(event->hiHFMinus(), event->hiHFPlus(), Event_Weight);
