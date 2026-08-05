@@ -510,6 +510,9 @@ void HistoManagerDiJet::init()
     hTotalRecoFlat_W = new TH2D("hTotalRecoFlat_W", "Total Reco Xj Flattened Weighted", nFlatBins, flatEdges.data(), nMultiplicityBins, multBinArray);
     hTotalRecoFlat_W->Sumw2();
 
+    hTotalRecoFlatHiHF_W = new TH2D("hTotalRecoFlatHiHF_W", "Total Reco Xj Flattened Weighted", nFlatBins, flatEdges.data(), nHiHFEnergyBins, hiHFEnergyBinArray);
+    hTotalRecoFlatHiHF_W->Sumw2();
+
     // Float_t LeadSubLeadPtBins[] = {0.0, 50., 60., 70., 80., 90., 100., 110., 120., 130., 140., 150., 160., 170., 180., 190., 200., 220., 240., 260., 280., 300.,
     // 350., 400., 450., 500., 600., 700., 1200.};
     Float_t LeadSubLeadPtBins[] = {0.0,  10.,  20.,  30.,  40.,  50.,  60.,  70.,  80.,  90.,  100., 110., 120.,
@@ -1255,6 +1258,7 @@ void HistoManagerDiJet ::writeOutput()
         }
     }
     hTotalRecoFlat_W->Write();
+    hTotalRecoFlatHiHF_W->Write();
 
     std::cout << "  ===> Writing Projections Histograms" << std::endl;
 

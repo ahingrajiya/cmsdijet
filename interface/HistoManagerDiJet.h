@@ -237,6 +237,7 @@ class HistoManagerDiJet : public BaseHistoManager
     TH2D* hTotalRecoA_W{nullptr};
     TH2D* hTotalRecoB_W{nullptr};
     TH2D* hTotalRecoFlat_W{nullptr};
+    TH2D* hTotalRecoFlatHiHF_W{nullptr};
 
     TH2D* hTotalTruth_W{nullptr};
     TH2D* hTotalTruthA_W{nullptr};

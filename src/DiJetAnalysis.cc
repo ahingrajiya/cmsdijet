@@ -1417,7 +1417,11 @@ void DiJetAnalysis::processRecoJets(const Event* event, const double& event_Weig
             }
 
             int recoFlatBin = getFlattenedIndex(recoDijet.xj, recoDijet.lead.pt, fXjBins, fPtBins);
-            if (recoFlatBin != -1) fHM->hTotalRecoFlat_W->Fill(recoFlatBin, multiplicityBin, event_Weight);
+            if (recoFlatBin != -1)
+            {
+                fHM->hTotalRecoFlat_W->Fill(recoFlatBin, multiplicityBin, event_Weight);
+                fHM->hTotalRecoFlatHiHF_W->Fill(recoFlatBin, event->hiHFPlus(), event_Weight);
+            }
         }
         if (fIsMC)
         {
