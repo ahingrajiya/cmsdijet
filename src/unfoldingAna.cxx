@@ -30,7 +30,7 @@ int main()
     unfoldData.setIterations(3);
 
     unfoldData.doValidation(false);
-    unfoldData.performUnfolding();
+    // unfoldData.performUnfolding();
 
     Unfolding unfoldOOData;
     std::vector<double> centBins = {0.0, 20.0, 40.0, 80.0, 120.0, 160.0, 200.};
@@ -41,41 +41,20 @@ int main()
     unfoldOOData.outputFileName("OOData_Unfold_3iter.root");
     unfoldOOData.setIterations(3);
     unfoldOOData.doValidation(false);
-    unfoldOOData.performUnfolding();
+    // unfoldOOData.performUnfolding();
 
-    // Unfolding unfoldpPbData;
+    Unfolding unfoldpPbData;
 
-    // unfoldpPbData.setBins(ptBins, xjBins, multiplicityBins, multiplicityBins);
-    // unfoldpPbData.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA_EPOS_Unfolding_Data.root",
-    //                          "/home/abhishek/analysis/pPb/Summed_Files/pPbMB_Unfolding_Data.root");
-    // unfoldpPbData.outputFileName("pPbMBData_Unfold_3iter.root");
-    // unfoldpPbData.setIterations(3);
-    // unfoldpPbData.doValidation(false);
-    // unfoldpPbData.performUnfolding();
+    std::vector<double> multiplicityBinspPb = {0.0, 400.};
+    std::vector<double> hiHFBinspPb = {0.0, 20., 60., 1000.};
 
-    // std::vector<double> multiplicityBinsHM185 = {0., 100.};
-
-    // Unfolding unfoldpPbHM185Data;
-
-    // unfoldpPbHM185Data.setBins(ptBins, xjBins, multiplicityBinsHM185, multiplicityBins);
-    // unfoldpPbHM185Data.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA_EPOS_Unfolding_Data.root",
-    //                               "/home/abhishek/analysis/pPb/Summed_Files/pPbHM185_Unfolding_Data.root");
-    // unfoldpPbHM185Data.outputFileName("pPbHM185Data_Unfold_3iter.root");
-    // unfoldpPbHM185Data.setIterations(3);
-    // unfoldpPbHM185Data.doValidation(false);
-    // unfoldpPbHM185Data.performUnfolding();
-
-    // std::vector<double> multiplicityBinsHM250 = {0.0, 100.};
-
-    // Unfolding unfoldpPbHM250Data;
-
-    // unfoldpPbHM250Data.setBins(ptBins, xjBins, multiplicityBinsHM250, multiplicityBins);
-    // unfoldpPbHM250Data.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA_EPOS_Unfolding_Data.root",
-    //                               "/home/abhishek/analysis/pPb/Summed_Files/pPbHM250_Unfolding_Data.root");
-    // unfoldpPbHM250Data.outputFileName("pPbHM250Data_Unfold_3iter.root");
-    // unfoldpPbHM250Data.setIterations(3);
-    // unfoldpPbHM250Data.doValidation(false);
-    // unfoldpPbHM250Data.performUnfolding();
+    unfoldpPbData.setBins(ptBins, xjBins, multiplicityBinspPb, hiHFBinspPb);
+    unfoldpPbData.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA_EPOS_Unfolding_Data_HiHF.root",
+                             "/home/abhishek/analysis/pPb/Summed_Files/pPbMB_Unfolding_Data_HiHF.root");
+    unfoldpPbData.outputFileName("pPbMBData_Unfold_3iter.root");
+    unfoldpPbData.setIterations(3);
+    unfoldpPbData.doValidation(false);
+    unfoldpPbData.performUnfolding();
 
     return 0;
 }
