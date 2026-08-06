@@ -51,7 +51,7 @@ int main()
     unfoldpPbData.setBins(ptBins, xjBins, multiplicityBinspPb, hiHFBinspPb);
     unfoldpPbData.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA_EPOS_Unfolding_Data_HiHF.root",
                              "/home/abhishek/analysis/pPb/Summed_Files/pPbMB_Unfolding_Data_HiHF.root");
-    unfoldpPbData.outputFileName("pPbMBData_Unfold_3iter.root");
+    unfoldpPbData.outputFileName("pPbMBData_Unfold_HiHF_3iter.root");
     unfoldpPbData.setIterations(3);
     unfoldpPbData.doValidation(false);
     unfoldpPbData.performUnfolding();

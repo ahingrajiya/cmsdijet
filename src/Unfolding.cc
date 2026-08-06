@@ -61,7 +61,8 @@ void Unfolding::readHistograms(TFile* mcIn, TFile* dataIn, bool validation)
         hResponseMatrix3D[0] = (TH3D*)mcIn->Get("Unfolding/hResponseMatrix_W");
         hTotalReco2D[0] = (TH2D*)mcIn->Get("Unfolding/hTotalReco_W");
         hTotalTruth2D[0] = (TH2D*)mcIn->Get("Unfolding/hTotalTruth_W");
-        hDataReco2D = (TH2D*)dataIn->Get("Unfolding/hTotalRecoFlat_W");
+        // hDataReco2D = (TH2D*)dataIn->Get("Unfolding/hTotalRecoFlat_W");
+        hDataReco2D = (TH2D*)dataIn->Get("Unfolding/hTotalRecoFlatHiHF_W");
     }
 }
 
