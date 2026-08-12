@@ -72,6 +72,8 @@ class Unfolding
 
     void projections(bool validation, float centMin, float centMax, float centMinData, float centMaxData);
 
+    TH1D* ErrHist(const TH1D* h, const char* name, bool rel);
+
     void writeHisto(TFile* out, std::vector<TH1D*> histos);
     std::vector<double> fPtBins;
     std::vector<double> fXjBins;

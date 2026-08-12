@@ -26,11 +26,11 @@ int main()
     unfoldData.setBins(ptBins, xjBins, multiplicityBins, multiplicityBins);
     unfoldData.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA5360_Unfolding_Data.root",
                           "/home/abhishek/analysis/pPb/Summed_Files/ppRef5360_Unfolding_Data.root");
-    unfoldData.outputFileName("ppRef_Data_Unfolded_3iter.root");
+    unfoldData.outputFileName("ppRef_Data_Unfolded_3iter_kCovToys.root");
     unfoldData.setIterations(3);
 
     unfoldData.doValidation(false);
-    // unfoldData.performUnfolding();
+    unfoldData.performUnfolding();
 
     Unfolding unfoldOOData;
     std::vector<double> centBins = {0.0, 20.0, 40.0, 80.0, 120.0, 160.0, 200.};
@@ -54,7 +54,7 @@ int main()
     unfoldpPbData.outputFileName("pPbMBData_Unfold_HiHF_3iter.root");
     unfoldpPbData.setIterations(3);
     unfoldpPbData.doValidation(false);
-    unfoldpPbData.performUnfolding();
+    // unfoldpPbData.performUnfolding();
 
     return 0;
 }
