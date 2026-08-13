@@ -60,26 +60,9 @@ class StyleFormatter
     // ------------------------------------------------------------------------
     static int GetMarkerStyle(const std::string& name)
     {
-        static const std::map<std::string, int> markerMap = {
-            {"dot", 1},
-            {"plus", 2},
-            {"star", 30},
-            {"filled star", 29},
-            {"circle", 24},
-            {"filled circle", 20},
-            {"square", 25},
-            {"filled square", 21},
-            {"triangle", 26},
-            {"triangle_up", 26},
-            {"filled triangle", 22},
-            {"filled triangle_up", 22},
-            {"triangle_down", 32},
-            {"filled triangle_down", 23},
-            {"diamond", 27},
-            {"filled diamond", 33},
-            {"cross", 28},
-            {"filled cross", 34},
-        };
+        static const std::map<std::string, int> markerMap = {{"dot", 1},     {"plus", 68},    {"circle", 71},        {"fcircle", 20},
+                                                             {"square", 72}, {"fsquare", 21}, {"diamond", 74},       {"fdiamond", 33},
+                                                             {"cross", 75},  {"fcross", 34},  {"doublediamond", 83}, {"fdoublediamond", 43}};
 
         std::string key = name;
         std::transform(key.begin(), key.end(), key.begin(), [](unsigned char c) { return std::tolower(c); });
@@ -97,10 +80,9 @@ class StyleFormatter
     static int GetColorByName(const std::string& name)
     {
         static const std::map<std::string, int> colorMap = {
-            {"black", kBlack},   {"red", kRed},       {"blue", kBlue},       {"green", kGreen + 2}, {"magenta", kMagenta},
-            {"cyan", kCyan + 1}, {"orange", kOrange + 7}, {"violet", kViolet},   {"gray", kGray + 2},   {"grey", kGray + 2},
-            {"yellow", kYellow + 2}, {"spring", kSpring + 4}, {"teal", kTeal + 2}, {"azure", kAzure + 2}, {"pink", kPink + 2},
-            {"white", kWhite},
+            {"black", kBlack},       {"red", kRed},         {"blue", kBlue},     {"green", kGreen + 2}, {"magenta", kMagenta},   {"cyan", kCyan + 1},
+            {"orange", kOrange + 7}, {"violet", kViolet},   {"gray", kGray + 2}, {"grey", kGray + 2},   {"yellow", kYellow + 2}, {"spring", kSpring + 4},
+            {"teal", kTeal + 2},     {"azure", kAzure + 2}, {"pink", kPink + 2}, {"white", kWhite},
         };
 
         std::string key = name;
@@ -113,7 +95,7 @@ class StyleFormatter
         return kBlack;
     }
 
-    static void FormatHist(TH1* h, int color, const std::string& markerStyleName, double markerSize = 1.2)
+    static void FormatHist(TH1* h, const int color, const std::string& markerStyleName, double markerSize = 1.2)
     {
         if (!h) return;
         h->SetLineColor(color);
@@ -160,8 +142,8 @@ class StyleFormatter
     // Draws on the current pad (gPad) - call after the pad you want it on is cd()'d.
     // tag examples: "Preliminary", "Work in Progress", "Simulation", "" (CMS only)
     // ------------------------------------------------------------------------
-    static void DrawCMSHeader(const std::string& tag = "Preliminary", const std::string& systemLabel = "pPb",
-                              const std::string& energyLabel = "#sqrt{s_{NN}} = 8.16 TeV", double xCMS = 0.15, double yCMS = 0.94, double textSize = 0.05)
+    static void DrawCMSHeader(const std::string& tag = "Preliminary", const std::string& systemLabel = "pPb", const std::string& energyLabel = "#sqrt{s_{NN}} = 8.16 TeV",
+                              double xCMS = 0.15, double yCMS = 0.94, double textSize = 0.05)
     {
         TLatex latex;
         latex.SetNDC();
