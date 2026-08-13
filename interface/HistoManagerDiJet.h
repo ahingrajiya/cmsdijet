@@ -151,6 +151,8 @@ class HistoManagerDiJet : public BaseHistoManager
     THnSparseD* hLeadSubLeadJets_WithDijet_DiJetW{nullptr};
     THnSparseD* hGenLeadGenSubLeadJets_WithDijet_DiJetW{nullptr};
     THnSparseD* hRefLeadRefSubLeadJets_WithDijet_DiJetW{nullptr};
+    TH2D* hLeadPtVsHiHFPlus_WithDijet_W{nullptr};
+    TH2D* hGenLeadPtVsHiHFPlus_WithDijet_W{nullptr};
 
     TH2D* hLeadPtvsSubLeadPt_DiJetW{nullptr};
     TH2D* hLeadPtvsSubLeadPt_PtHatW{nullptr};

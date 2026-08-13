@@ -274,6 +274,9 @@ void HistoManagerDiJet::init()
     hLeadSubLeadJets_WithDijet_DiJetW->Sumw2();
     hAverageRecoPt_W = new TH1D("hAverageRecoPt_W", "Average Reco Jet Pt", 200, 0.0, 1000.);
     hAverageRecoPt_W->Sumw2();
+    hLeadPtVsHiHFPlus_WithDijet_W =
+        new TH2D("hLeadPtvsHiHFPlus_WithDijet_W", "Leading Pt vs HiHFP+ with Dijet Weighted", nHiHFEnergyBins, hiHFEnergyBinArray, 200, 0.0, 500.0);
+    hLeadPtVsHiHFPlus_WithDijet_W->Sumw2();
     if (fIsMC)
     {
         hGenLeadingVsGenSubLeading_WO_DiJet_W = new TH2D("hGenLeadingVsGenSubLeading_WO_DiJet_W", "Gen Leading vs Gen SubLeading Jet", 100, 0., 1000., 100, 0., 1000.);
@@ -318,6 +321,10 @@ void HistoManagerDiJet::init()
         hRefLeadRefSubLeadJets_WithDijet_DiJetW->Sumw2();
         hAverageGenPt_W = new TH1D("hAverageGenPt_W", "Average Gen Jet Pt", 200, 0.0, 1000.);
         hAverageGenPt_W->Sumw2();
+
+        hGenLeadPtVsHiHFPlus_WithDijet_W =
+            new TH2D("hGenLeadPtvsHiHFPlus_WithDijet_W", "Gen Leading Pt vs HiHFP+ with Dijet Weighted", nHiHFEnergyBins, hiHFEnergyBinArray, 200, 0.0, 500.0);
+        hGenLeadPtVsHiHFPlus_WithDijet_W->Sumw2();
     }
 
     const int nDphiBins = 30;  // number of bins
@@ -1112,6 +1119,7 @@ void HistoManagerDiJet ::writeOutput()
             hLeadSubLeadJets_W->Write();
             hLeadSubLeadJets_MidRapidity_W->Write();
         }
+        hLeadPtVsHiHFPlus_WithDijet_W->Write();
 
         hLeadSubLeadJets_WithDijet_W->Write();
         hLeadSubLeadJets_WithDijet_DiJetW->Write();

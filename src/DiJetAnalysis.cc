@@ -16,7 +16,6 @@ ClassImp(DiJetAnalysis)
 
     namespace
 {
-    // Universal template to find leading/subleading jets for ANY jet collection
     template <typename JetIterator, typename Extractor>
     DijetInfo FindDijet(JetIterator begin, JetIterator end, Extractor extractKinematics)
     {
@@ -25,22 +24,21 @@ ClassImp(DiJetAnalysis)
 
         for (auto it = begin; it != end; ++it)
         {
-            // The lambda translates RecoJet or GenJet into our unified struct
             JetKinematics currentJet = extractKinematics(*it);
 
             if (currentJet.pt > info.lead.pt)
             {
-                info.subLead = info.lead;  // Push lead down to sublead
-                info.lead = currentJet;    // Assign new lead
+                info.subLead = info.lead;
+                info.lead = currentJet;
             }
             else if (currentJet.pt > info.subLead.pt)
             {
-                info.subLead = currentJet;  // Assign new sublead
+                info.subLead = currentJet;
             }
         }
         return info;
     }
-}  // end anonymous namespace
+}
 
 DiJetAnalysis::DiJetAnalysis() : BaseAnalysis()
 {
@@ -1394,6 +1392,7 @@ void DiJetAnalysis::processRecoJets(const Event* event, const double& event_Weig
             double QuenchingQuantitiesWithDijet[4] = {recoDijet.xj, recoDijet.lead.pt, recoDijet.subLead.pt, multiplicityBin};
             fHM->hRecoQuenching_WithDijet_W->Fill(QuenchingQuantitiesWithDijet, event_Weight);
             fHM->hNDijetEvent->Fill(1);
+            fHM->hLeadPtVsHiHFPlus_WithDijet_W->Fill(event->hiHFPlus(), recoDijet.lead.pt, event_Weight);
             if (fIsMC)
             {
                 fHM->hLeadPtVsRecoXj_W->Fill(recoDijet.xj, recoDijet.lead.pt, event_Weight);
@@ -1574,6 +1573,8 @@ void DiJetAnalysis::processGenJets(const Event* event, const double& event_Weigh
 
         double QuenchingQuantities[5] = {genDijet.xj, genDijet.deltaPhi, genDijet.lead.pt, genDijet.subLead.pt, multiplicityBin};
         fHM->hGenQuenching_W->Fill(QuenchingQuantities, event_Weight);
+
+        fHM->hGenLeadPtVsHiHFPlus_WithDijet_W->Fill(event->hiHFPlus(), genDijet.lead.pt, event_Weight);
 
         // std::cout << "Gen Xj : " << Xj << std::endl;
         // std::cout << Form("Gen Lead Pt : %f, Gen SubLead Pt : %f, Gen Lead Eta : %f, Gen SubLead Eta : %f", genLeadJetPt, genSubLeadJetPt, genLeadJetEtaCM,
