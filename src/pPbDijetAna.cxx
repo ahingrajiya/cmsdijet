@@ -143,6 +143,10 @@ int main(int argc, char* argv[])
     {
         eventCut->setPtHat(ptHatCut[0], ptHatCut[1]);
     }
+    if (!isMC)
+    {
+        eventCut->setMultiplicty(10, 600);
+    }
     // eventCut->setVerbose();
 
     // Initialize jet cuts
@@ -228,21 +232,14 @@ int main(int argc, char* argv[])
         if (!isEmbedded)
         {
             analysis->setMultiplicityRange(0, 400);
-            // analysis->setUseDijetWeight();
-            // analysis->setDijetWeightType(dijetWeightType);
-            // analysis->setDijetWeightTable(path2DijetWeight);
         }
         if (isEmbedded)
         {
             analysis->setMultiplicityRange(10, 400);
             analysis->setUseMultiplicityWeigth();
-            // analysis->doTrackingClosure();
-            // analysis->setUseDijetWeight();
-            // analysis->setDijetWeightType(DijetWeightType::Gen);
-            // analysis->setDijetWeightTable(path2DijetWeight);
         }
     }
-    analysis->setMultiplicityType(0);
+    analysis->setMultiplicityType(5);
     analysis->setMinTrkPt(0.40);
     analysis->setDeltaPhi(7. * M_PI / 8);
     analysis->setUseCMFrame();
@@ -253,18 +250,15 @@ int main(int argc, char* argv[])
     analysis->setSubLeadJetEtaRange(-2.1, 2.1);
     analysis->setInclusiveJetEtaRange(-2.1, 2.1);
     analysis->setInclusiveCorrectedJetPtMin(50.0);
-    // analysis->doInJetMultiplicity();
     analysis->setUEType(UEType);
     analysis->setTrackingTable(trkEffTable);
-    // analysis->setDebug(kTRUE);
-    // analysis->setVzWeight();
-    // analysis->useAveragePt(true);
     analysis->setReader(reader);
     analysis->setUnfolding(true, ptBins, xjBins);
 
     // Initialize Histomanager
     HistoManagerDiJet* hm = new HistoManagerDiJet{};
-    hm->setMultiplicityBins(multiplicityBins);
+    // hm->setMultiplicityBins(multiplicityBins);
+    hm->setMultiplicityBins(hiHFBins);
     hm->setHiHFEnergyBins(hiHFBins);
     hm->setIsMC(isMC);
     hm->setPtBins(ptBins);

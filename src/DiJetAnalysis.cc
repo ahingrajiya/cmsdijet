@@ -1123,6 +1123,7 @@ void DiJetAnalysis::processEvent(const Event* event)
                                                                          ? iGenSubeMult.first
                                                                          : (fSystem == CollisionSystem::PbPb ? iGenSubeMult.second : 0))
                     : (fMultiplicityType == 4) ? static_cast<double>(event->hiBinWithShift())
+                    : (fMultiplicityType == 5) ? static_cast<double>(event->hiHFPlus())
                                                : 0;
 
     if (fIsMC)
