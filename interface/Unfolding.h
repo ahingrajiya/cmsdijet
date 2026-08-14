@@ -29,7 +29,11 @@ class Unfolding
     Unfolding(/* args */);
     virtual ~Unfolding();
 
-    void doValidation(bool validation) { performValidation = validation; }
+    void doValidation(bool mcvalid = false, bool errvalid = false)
+    {
+        mcValidation = mcvalid;
+        errValidation = errvalid;
+    }
 
     void setBins(std::vector<double> ptBins, std::vector<double> xjBins, std::vector<double> multCentBinsMC, std::vector<double> multCentBinsData)
     {
@@ -80,7 +84,8 @@ class Unfolding
     std::vector<double> fMultCentBinsMC;
     std::vector<double> fMultCentBinsData;
 
-    bool performValidation = false;
+    bool mcValidation = false;
+    bool errValidation = false;
     TString outputFile{""};
 
     TFile* fDataIn{nullptr};

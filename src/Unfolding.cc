@@ -166,7 +166,7 @@ void Unfolding::performUnfolding()
 {
     TFile* out = TFile::Open(outputFile, "RECREATE");
 
-    readHistograms(fMCIn, fDataIn, performValidation);
+    readHistograms(fMCIn, fDataIn, mcValidation);
 
     std::vector<TH1D*> genXjHisto;
     std::vector<TH1D*> recoXjHisto;
@@ -185,13 +185,13 @@ void Unfolding::performUnfolding()
     {
         if (fMultCentBinsData.size() == fMultCentBinsMC.size())
         {
-            projections(performValidation, fMultCentBinsMC[i], fMultCentBinsMC[i + 1], fMultCentBinsData[i], fMultCentBinsData[i + 1]);
+            projections(mcValidation, fMultCentBinsMC[i], fMultCentBinsMC[i + 1], fMultCentBinsData[i], fMultCentBinsData[i + 1]);
         }
         else
         {
-            projections(performValidation, fMultCentBinsMC[i], fMultCentBinsMC[i + 1], fMultCentBinsData[0], fMultCentBinsData[1]);
+            projections(mcValidation, fMultCentBinsMC[i], fMultCentBinsMC[i + 1], fMultCentBinsData[0], fMultCentBinsData[1]);
         }
-        if (performValidation)
+        if (mcValidation)
         {
             for (int j = 0; j < 2; ++j)
             {
@@ -238,24 +238,14 @@ void Unfolding::performUnfolding()
         }
         else
         {
-            for (int k = 1; k <= iterations; ++k)
-            {
-                unfoldedHisto.clear();
-                iterErrHisto.clear();
-                RooUnfoldResponse response(hMatchedReco[0], hMatchedTruth[0], hResponseMatrix[0], "response", "Response Validation");
-                TH1D* dataUnfold = unfold(&response, hDataReco, hPurity[0], hEfficiency[0], k);
-                dataUnfold->SetName(Form("dataUnfold_%i_%i", (int)fMultCentBinsMC[i], (int)fMultCentBinsMC[i + 1]));
+            RooUnfoldResponse response(hMatchedReco[0], hMatchedTruth[0], hResponseMatrix[0], "response", "Response Validation");
+            TH1D* dataUnfold = unfold(&response, hDataReco, hPurity[0], hEfficiency[0], iterations);
+            dataUnfold->SetName(Form("dataUnfold_%i_%i", (int)fMultCentBinsMC[i], (int)fMultCentBinsMC[i + 1]));
 
-                std::stringstream dataUnfold_name;
-                dataUnfold_name << "dataUnfold_" << fMultCentBinsMC[i] << "_" << fMultCentBinsMC[i + 1];
-                unfoldedHisto = unflattenHistogram(fPtBins, fXjBins, dataUnfold, dataUnfold_name.str());
+            std::stringstream dataUnfold_name;
+            dataUnfold_name << "dataUnfold_" << fMultCentBinsMC[i] << "_" << fMultCentBinsMC[i + 1];
+            unfoldedHisto = unflattenHistogram(fPtBins, fXjBins, dataUnfold, dataUnfold_name.str());
 
-                std::stringstream iterErr_name;
-                iterErr_name << "iterErr_" << fMultCentBinsMC[i] << "_" << fMultCentBinsMC[i + 1] << "_" << k;
-                TH1D* iterErr = ErrHist(dataUnfold, Form("IterationErr_%i", iterations), false);
-                iterErrHisto = unflattenHistogram(fPtBins, fXjBins, iterErr, iterErr_name.str());
-                writeHisto(out, iterErrHisto);
-            }
             writeHisto(out, unfoldedHisto);
             unfoldedHisto.clear();
 
@@ -277,13 +267,38 @@ void Unfolding::performUnfolding()
             writeHisto(out, recoXjHisto);
             recoXjHisto.clear();
         }
+        if (errValidation)
+        {
+            for (int k = 1; k <= iterations; ++k)
+            {
+                unfoldedHisto.clear();
+                iterErrHisto.clear();
+                RooUnfoldResponse response(hMatchedReco[0], hMatchedTruth[0], hResponseMatrix[0], "response", "Response Validation");
+                TH1D* dataUnfold = unfold(&response, hDataReco, hPurity[0], hEfficiency[0], k);
+                dataUnfold->SetName(Form("dataUnfold_%i_%i", (int)fMultCentBinsMC[i], (int)fMultCentBinsMC[i + 1]));
+
+                std::stringstream dataUnfold_name;
+                dataUnfold_name << "dataUnfold_" << fMultCentBinsMC[i] << "_" << fMultCentBinsMC[i + 1];
+                unfoldedHisto = unflattenHistogram(fPtBins, fXjBins, dataUnfold, dataUnfold_name.str());
+
+                std::stringstream iterErr_name;
+                iterErr_name << "iterErr_" << fMultCentBinsMC[i] << "_" << fMultCentBinsMC[i + 1] << "_" << k;
+                TH1D* iterErr = ErrHist(dataUnfold, Form("IterationErr_%i", iterations), false);
+                iterErrHisto = unflattenHistogram(fPtBins, fXjBins, iterErr, iterErr_name.str());
+                writeHisto(out, iterErrHisto);
+            }
+        }
     }
-    TH1D* dataErr = ErrHist(hDataReco, "DataErrorHisto", false);
-    TH1D* priorErr = ErrHist(hMatchedTruth[0], "PriorErrorHisto", false);
-    dataErrHisto = unflattenHistogram(fPtBins, fXjBins, dataErr, "DataError");
-    priorErrHisto = unflattenHistogram(fPtBins, fXjBins, priorErr, "PriorError");
-    writeHisto(out, dataErrHisto);
-    writeHisto(out, priorErrHisto);
+
+    if (errValidation)
+    {
+        TH1D* dataErr = ErrHist(hDataReco, "DataErrorHisto", false);
+        TH1D* priorErr = ErrHist(hMatchedTruth[0], "PriorErrorHisto", false);
+        dataErrHisto = unflattenHistogram(fPtBins, fXjBins, dataErr, "DataError");
+        priorErrHisto = unflattenHistogram(fPtBins, fXjBins, priorErr, "PriorError");
+        writeHisto(out, dataErrHisto);
+        writeHisto(out, priorErrHisto);
+    }
     if (fMCIn) fMCIn->Close();
     if (fDataIn) fDataIn->Close();
     out->Close();
@@ -294,6 +309,7 @@ void Unfolding::writeHisto(TFile* out, std::vector<TH1D*> histo)
     out->cd();
     for (int i = 0; i < histo.size(); ++i)
     {
+        if (histo[i]->GetEffectiveEntries() == 0) continue;
         histo[i]->Write();
     }
 }

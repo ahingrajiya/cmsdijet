@@ -26,7 +26,7 @@ int main()
     unfoldData.setBins(ptBins, xjBins, multiplicityBins, multiplicityBins);
     unfoldData.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA5360_Unfolding_Data.root",
                           "/home/abhishek/analysis/pPb/Summed_Files/ppRef5360_Unfolding_Data.root");
-    unfoldData.outputFileName("ppRef_Data_Unfolded_3iter_kCovToys.root");
+    unfoldData.outputFileName("ppRef_Data_Unfolded_3iter.root");
     unfoldData.setIterations(3);
 
     unfoldData.doValidation(false);
@@ -36,12 +36,12 @@ int main()
     std::vector<double> centBins = {0.0, 20.0, 40.0, 80.0, 120.0, 160.0, 200.};
 
     unfoldOOData.setBins(ptBins, xjBins, centBins, centBins);
-    unfoldOOData.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA_HIJING_Unfolding_Data.root",
-                            "/home/abhishek/analysis/pPb/Summed_Files/OOData_Unfolding_Data.root");
-    unfoldOOData.outputFileName("OOData_Unfold_3iter.root");
+    unfoldOOData.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA_HIJING_Unfolding_Data_V3.root",
+                            "/home/abhishek/analysis/pPb/Summed_Files/OOData_Unfolding_Data_V3.root");
+    unfoldOOData.outputFileName("OO_Data_Unfolded_3iter.root");
     unfoldOOData.setIterations(3);
     unfoldOOData.doValidation(false);
-    // unfoldOOData.performUnfolding();
+    unfoldOOData.performUnfolding();
 
     Unfolding unfoldpPbData;
 
@@ -51,10 +51,10 @@ int main()
     unfoldpPbData.setBins(ptBins, xjBins, multiplicityBinspPb, hiHFBinspPb);
     unfoldpPbData.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA_EPOS_Unfolding_Data_HiHF.root",
                              "/home/abhishek/analysis/pPb/Summed_Files/pPbMB_Unfolding_Data_HiHF.root");
-    unfoldpPbData.outputFileName("pPbMBData_Unfold_HiHF_3iter.root");
+    unfoldpPbData.outputFileName("pPb_MBData_Unfolded_HiHF_3iter.root");
     unfoldpPbData.setIterations(3);
     unfoldpPbData.doValidation(false);
-    // unfoldpPbData.performUnfolding();
+    unfoldpPbData.performUnfolding();
 
     return 0;
 }
