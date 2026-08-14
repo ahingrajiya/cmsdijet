@@ -45,12 +45,14 @@ int main()
 
     Unfolding unfoldpPbData;
 
+    std::vector<double> ptBinspPb = {0.0, 20.0, 30.0, 40.0, 50.0, 70., 100., 500.};
+
     std::vector<double> multiplicityBinspPb = {0.0, 400.};
     std::vector<double> hiHFBinspPb = {0.0, 20., 60., 1000.};
 
-    unfoldpPbData.setBins(ptBins, xjBins, multiplicityBinspPb, hiHFBinspPb);
-    unfoldpPbData.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA_EPOS_Unfolding_Data_HiHF.root",
-                             "/home/abhishek/analysis/pPb/Summed_Files/pPbMB_Unfolding_Data_HiHF.root");
+    unfoldpPbData.setBins(ptBinspPb, xjBins, hiHFBinspPb, hiHFBinspPb);
+    unfoldpPbData.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA_EPOS_Data_Unfolding_HiHF.root",
+                             "/home/abhishek/analysis/pPb/Summed_Files/pPbMB_Data_Unfolding_HiHF.root");
     unfoldpPbData.outputFileName("pPb_MBData_Unfolded_HiHF_3iter.root");
     unfoldpPbData.setIterations(3);
     unfoldpPbData.doValidation(false);
