@@ -1326,12 +1326,12 @@ Event* ForestReader::returnEvent()
         }
         fEvent->setSkimFilterNameAndValue(iFilterPairs);
     }
-    if (fEventCut && !fEventCut->pass(fEvent))
-    {
-        delete fEvent;
-        fEvent = nullptr;
-        return fEvent;
-    }
+    // if (fEventCut && !fEventCut->pass(fEvent))
+    // {
+    //     delete fEvent;
+    //     fEvent = nullptr;
+    //     return fEvent;
+    // }
     // Create particle flow jet instances
     if (fUseJets)
     {
@@ -1596,6 +1596,10 @@ Event* ForestReader::returnEvent()
         fEvent->setPYTHIAMultiplicity(fPYTHIAMultiplicity);
         fEvent->setGenMultiplicity(fGenMultiplicity);
     }
-
+    if (fEvent && !fEventCut->pass(fEvent))
+    {
+        delete fEvent;
+        fEvent = nullptr;
+    }
     return fEvent;
 }

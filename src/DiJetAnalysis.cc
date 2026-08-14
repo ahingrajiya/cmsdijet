@@ -1089,6 +1089,7 @@ void DiJetAnalysis::processEvent(const Event* event)
     }
     // std::cout << "Event Weight * MultWeight : " << Event_Weight << std::endl;
 
+    // TODO : Please fix this nonsense of iMultiplicityBin
     double iMultiplicityBin;
     if (fMultiplicityType != 4)
     {
@@ -1132,7 +1133,6 @@ void DiJetAnalysis::processEvent(const Event* event)
         fHM->hPtHat_W->Fill(event->ptHat(), Event_Weight);
     }
 
-    fHM->hNEventsInMult->Fill(iMultiplicityBin);
     fHM->hHiBin->Fill(event->hiBinWithShift());
     fHM->hHiBin_W->Fill(event->hiBinWithShift(), Event_Weight);
     fHM->hHiHF_PF->Fill(event->hiHFPF());
@@ -1151,11 +1151,11 @@ void DiJetAnalysis::processEvent(const Event* event)
         fHM->hSelectedMultiplicity_W->Fill(iMultiplicity, Event_Weight * fDijetWeight);
     }
 
-    processRecoJets(event, Event_Weight, iMultiplicityBin, recoDijet, refDijet);
+    processRecoJets(event, Event_Weight, iMultiplicity, recoDijet, refDijet);
 
     if (fIsMC)
     {
-        processGenJets(event, Event_Weight, iMultiplicityBin, genDijet, recoDijet);
+        processGenJets(event, Event_Weight, iMultiplicity, genDijet, recoDijet);
     }
 
     fHM->hVz->Fill(iVertexZ);
@@ -1167,7 +1167,7 @@ void DiJetAnalysis::processEvent(const Event* event)
                                 static_cast<double>(iRecoCorrectedMult.second),
                                 static_cast<double>(iGenSubeMult.second),
                                 static_cast<double>(event->hiBinWithShift()),
-                                iMultiplicityBin};
+                                iMultiplicity};
 
     fHM->hMultiplicities_W->Fill(Multiplicities, Event_Weight);
     fHM->hHiHFPlusVsHiHFMinus->Fill(event->hiHFMinus(), event->hiHFPlus());
@@ -1192,13 +1192,13 @@ void DiJetAnalysis::processEvent(const Event* event)
         }
     }
 
-    processRecoTracks(event, Event_Weight, iMultiplicityBin);
+    // processRecoTracks(event, Event_Weight, iMultiplicity);
     if (fIsMC)
     {
-        processGenTracks(event, Event_Weight, iMultiplicityBin);
+        // processGenTracks(event, Event_Weight, iMultiplicity);
         if (fDoUnfolding)
         {
-            unfolding(event, Event_Weight, iMultiplicityBin, recoDijet, refDijet, genDijet);  // <--- Passed all 3 structs        }
+            unfolding(event, Event_Weight, iMultiplicity, recoDijet, refDijet, genDijet);  // <--- Passed all 3 structs        }
         }
     }
 }
