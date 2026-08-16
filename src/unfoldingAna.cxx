@@ -29,8 +29,8 @@ int main()
     unfoldData.outputFileName("ppRef_Data_Unfolded_3iter.root");
     unfoldData.setIterations(3);
 
-    unfoldData.doValidation(false);
-    unfoldData.performUnfolding();
+    unfoldData.doValidation(false, false);
+    // unfoldData.performUnfolding();
 
     Unfolding unfoldOOData;
     std::vector<double> centBins = {0.0, 20.0, 40.0, 80.0, 120.0, 160.0, 200.};
@@ -40,22 +40,23 @@ int main()
                             "/home/abhishek/analysis/pPb/Summed_Files/OOData_Unfolding_Data_V3.root");
     unfoldOOData.outputFileName("OO_Data_Unfolded_3iter.root");
     unfoldOOData.setIterations(3);
-    unfoldOOData.doValidation(false);
-    unfoldOOData.performUnfolding();
+    unfoldOOData.doValidation(false, false);
+    // unfoldOOData.performUnfolding();
 
     Unfolding unfoldpPbData;
 
     std::vector<double> ptBinspPb = {0.0, 20.0, 30.0, 40.0, 50.0, 70., 100., 500.};
 
     std::vector<double> multiplicityBinspPb = {0.0, 400.};
-    std::vector<double> hiHFBinspPb = {0.0, 20., 60., 1000.};
+    std::vector<double> hiHFBinspPb = {0.0, 1000.};
+    // std::vector<double> hiHFBinspPb = {0.0, 20., 60., 1000.};
 
     unfoldpPbData.setBins(ptBinspPb, xjBins, hiHFBinspPb, hiHFBinspPb);
     unfoldpPbData.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA_EPOS_Data_Unfolding_HiHF.root",
                              "/home/abhishek/analysis/pPb/Summed_Files/pPbMB_Data_Unfolding_HiHF.root");
-    unfoldpPbData.outputFileName("pPb_MBData_Unfolded_HiHF_3iter.root");
+    unfoldpPbData.outputFileName("pPb_MBData_Unfolded_InclusiveHiHF_3iter.root");
     unfoldpPbData.setIterations(3);
-    unfoldpPbData.doValidation(false);
+    unfoldpPbData.doValidation(false, false);
     unfoldpPbData.performUnfolding();
 
     return 0;

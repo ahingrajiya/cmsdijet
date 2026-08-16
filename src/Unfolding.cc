@@ -189,7 +189,8 @@ void Unfolding::performUnfolding()
         }
         else
         {
-            projections(mcValidation, fMultCentBinsMC[i], fMultCentBinsMC[i + 1], fMultCentBinsData[0], fMultCentBinsData[1]);
+            // projections(mcValidation, fMultCentBinsMC[i], fMultCentBinsMC[i + 1], fMultCentBinsData[0], fMultCentBinsData[1]);
+            continue;
         }
         if (mcValidation)
         {
