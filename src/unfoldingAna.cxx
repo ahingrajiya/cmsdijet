@@ -33,15 +33,15 @@ int main()
     // unfoldData.performUnfolding();
 
     Unfolding unfoldOOData;
-    std::vector<double> centBins = {0.0, 20.0, 40.0, 80.0, 120.0, 160.0, 200.};
+    std::vector<double> centBins = {0.0, 20.0, 40.0, 90.0, 120.0, 160.0, 200.};
 
     unfoldOOData.setBins(ptBins, xjBins, centBins, centBins);
     unfoldOOData.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA_HIJING_Unfolding_Data_V3.root",
                             "/home/abhishek/analysis/pPb/Summed_Files/OOData_Unfolding_Data_V3.root");
-    unfoldOOData.outputFileName("OO_Data_Unfolded_3iter.root");
+    unfoldOOData.outputFileName("OO_Data_Unfolded_3iter_PPbMatching.root");
     unfoldOOData.setIterations(3);
     unfoldOOData.doValidation(false, false);
-    // unfoldOOData.performUnfolding();
+    unfoldOOData.performUnfolding();
 
     Unfolding unfoldpPbData;
 
@@ -57,7 +57,7 @@ int main()
     unfoldpPbData.outputFileName("pPb_MBData_Unfolded_InclusiveHiHF_3iter.root");
     unfoldpPbData.setIterations(3);
     unfoldpPbData.doValidation(false, false);
-    unfoldpPbData.performUnfolding();
+    // unfoldpPbData.performUnfolding();
 
     return 0;
 }
