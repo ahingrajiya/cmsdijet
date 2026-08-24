@@ -23,14 +23,16 @@ int main()
     std::vector<double> multiplicityBins = {0.0, 100.};
     std::vector<double> ptBins = {0.0, 20.0, 30.0, 40.0, 50.0, 60., 70., 80., 90., 100., 120., 140., 160., 200.};
 
-    unfoldData.setBins(ptBins, xjBins, multiplicityBins, multiplicityBins);
-    unfoldData.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA5360_Unfolding_Data.root",
-                          "/home/abhishek/analysis/pPb/Summed_Files/ppRef5360_Unfolding_Data.root");
-    unfoldData.outputFileName("ppRef_Data_Unfolded_3iter.root");
+    std::vector<double> ptBinspPb = {0.0, 20.0, 30.0, 40.0, 50.0, 70., 100., 200.};
+
+    unfoldData.setBins(ptBinspPb, xjBins, multiplicityBins, multiplicityBins);
+    unfoldData.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA5360_Interpolation.root",
+                          "/home/abhishek/analysis/pPb/Summed_Files/ppRef5360_Interpolation.root");
+    unfoldData.outputFileName("ppRef_Data_Unfolded_3iter_Interpolation.root");
     unfoldData.setIterations(3);
 
     unfoldData.doValidation(false, false);
-    // unfoldData.performUnfolding();
+    unfoldData.performUnfolding();
 
     Unfolding unfoldOOData;
     std::vector<double> centBins = {0.0, 20.0, 40.0, 90.0, 120.0, 160.0, 200.};
@@ -41,11 +43,9 @@ int main()
     unfoldOOData.outputFileName("OO_Data_Unfolded_3iter_PPbMatching.root");
     unfoldOOData.setIterations(3);
     unfoldOOData.doValidation(false, false);
-    unfoldOOData.performUnfolding();
+    // unfoldOOData.performUnfolding();
 
     Unfolding unfoldpPbData;
-
-    std::vector<double> ptBinspPb = {0.0, 20.0, 30.0, 40.0, 50.0, 70., 100., 500.};
 
     std::vector<double> multiplicityBinspPb = {0.0, 400.};
     std::vector<double> hiHFBinspPb = {0.0, 1000.};
