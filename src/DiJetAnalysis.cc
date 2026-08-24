@@ -1577,7 +1577,7 @@ void DiJetAnalysis::processGenJets(const Event* event, const double& event_Weigh
 
         fHM->hGenLeadPtVsHiHFPlus_WithDijet_W->Fill(event->hiHFPlus(), genDijet.lead.pt, event_Weight);
 
-        // std::cout << "Gen Xj : " << Xj << std::endl;
+        // std::cout << "Gen Xj : " << genDijet.xj << std::endl;
         // std::cout << Form("Gen Lead Pt : %f, Gen SubLead Pt : %f, Gen Lead Eta : %f, Gen SubLead Eta : %f", genLeadJetPt, genSubLeadJetPt, genLeadJetEtaCM,
         //                   genSubLeadJetEtaCM)
         //           << std::endl;
@@ -1585,6 +1585,7 @@ void DiJetAnalysis::processGenJets(const Event* event, const double& event_Weigh
         // std::cout << std::endl;
         if (genDijetPass)
         {
+            // std::cout << "Gen Xj : " << genDijet.xj << std::endl;
             fHM->hGenDeltaPhi_WithDiJet_W->Fill(genDijet.deltaPhi, event_Weight);
             fHM->hMultVsGenXj_W->Fill(genDijet.xj, multiplicityBin, genDijet.lead.pt, event_Weight);
             fHM->hMultVsGenXj_DiJetW->Fill(genDijet.xj, multiplicityBin, genDijet.lead.pt, event_Weight * fDijetWeight);

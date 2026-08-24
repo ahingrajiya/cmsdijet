@@ -134,6 +134,10 @@ int main(int argc, char* argv[])
     reader->setUseJetID();
     reader->setJetIDType(2);
     reader->addJECFile(JECFileName.Data());
+    if (collEnergyGeV == 8160)
+    {
+        reader->setStoreLocation(true);
+    }
     if (collEnergyGeV == 5360)
     {
         reader->useTrackBranch("ppTracks");

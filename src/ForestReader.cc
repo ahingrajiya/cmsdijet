@@ -281,12 +281,30 @@ void ForestReader::setupJEC()
     fJECFiles = tmp;
 
     std::cout << "JEC files added: " << std::endl;
-    for (UInt_t i{0}; i < fJECFiles.size(); i++)
+    for (UInt_t i{0}; i < fJECFiles.size();)
     {
-        std::cout << Form("File %i : ", i + 1) << fJECFiles.at(i) << std::endl;
+        if (std::filesystem::exists(fJECFiles[i]))
+        {
+            std::cout << Form("File %i : ", i + 1) << fJECFiles.at(i) << std::endl;
+            ++i;
+        }
+        else
+        {
+            std::cerr << "JEC File : " << fJECFiles.at(i) << " does not exist !" << std::endl;
+            fJECFiles.erase(fJECFiles.begin() + i);
+        }
     }
 
-    fJEC = new JetCorrector(fJECFiles);
+    if (!fJECFiles.empty())
+    {
+        fJEC = new JetCorrector(fJECFiles);
+    }
+    else
+    {
+        std::cout << "No JEC files exist. Skipping JEC!" << std::endl;
+        delete fJEC;
+        fJEC = {nullptr};
+    }
     std::cout << "=============Setting Up JEC \t[DONE]==================" << std::endl;
     std::cout << std::endl;
 }
