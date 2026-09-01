@@ -527,7 +527,7 @@ Double_t ForestReader::retriveResolutionFactor(const Float_t& jeteta) const
     {
         value = fJERSmearingUp[idx];
     }
-    else if (fSmearType == 2)  // Down
+    else if (fSmearType == -1)  // Down
     {
         value = fJERSmearingDown[idx];
     }

@@ -61,10 +61,10 @@ int main(int argc, char* argv[])
     std::vector<std::string> filters{"pBeamScrapingFilter", "pPAprimaryVertexFilter", "HBHENoiseFilterResultRun2Loose", "phfCoincFilter", "pVertexFilterCutdz1p0"};
     std::vector<std::string> triggers{"HLT_PAAK4PFJet80_Eta5p1_v3"};
     std::string UEType{"EPOS"};
-    Int_t smearType{0};            // 0 - Nominal Smearing, 1 - JER Smearing, 2 - JEC Smearing
+    Int_t smearType{1};            // 0 - Nominal Smearing, 1 - JER Smearing Up, -1 - JER Smearing Down
     Bool_t useJERSmearing{kTRUE};  // Use JER Smearing for MC
     Bool_t useJEU{kFALSE};         // 0 - No JEC Uncertainty, 1 - JEC Uncertainty Up, -1 - JEC Uncertainty Down
-    Int_t JEUType{0};              // 0 - No JEU, 1 - JEU Up, -1 - JEU Down
+    Int_t JEUType{1};              // 0 - No JEU, 1 - JEU Up, -1 - JEU Down
     HistoConfig writeConfig = {false, true, true, true, false, true, false, true};
     std::vector<std::string> trkEffTable = {"../aux_files/pPb_8160/trk_eff_table/pPb_EPOS_2D_efftables.root"};
 
