@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
     std::vector<std::string> filters{"pBeamScrapingFilter", "pPAprimaryVertexFilter", "HBHENoiseFilterResultRun2Loose"};
     // std::string path2DijetWeight = "../aux_files/pp_5020/Dijet_Weight/PYTHIA_DiJetWeight_Table.root";
     std::string path2DijetWeight = "../aux_files/pp_5360/Dijet_Weight/DiJetWeight.root";
-    HistoConfig writeConfig = {false, true, true, true, false, true, false, true};
+    HistoConfig writeConfig = {true, true, true, true, false, true, false, true};
 
     if (argc <= 1)
     {
