@@ -86,7 +86,7 @@ int main(int argc, char* argv[])
         if (collYear == 2025)
         {
             JECFileName = "Prompt24HIpp_V1_MC_L2Relative_AK4PF.txt";
-            // JECFileDataName = "Prompt24HIpp_V1_DATA_L2Residual_AK4PF.txt";
+            JECFileDataName = "Prompt24HIpp_V1_DATA_L2Residual_AK4PF.txt";
         }
         else
         {
