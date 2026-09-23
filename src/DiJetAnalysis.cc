@@ -1010,7 +1010,6 @@ void DiJetAnalysis::processEvent(const Event* event)
     }
     double Event_Weight = EventWeight(event);
 
-    // A. Find Reco Dijet
     DijetInfo recoDijet = FindDijet(event->recoJetCollection()->begin(), event->recoJetCollection()->end(),
                                     [&](const auto& jetPtr)
                                     {
@@ -1027,7 +1026,6 @@ void DiJetAnalysis::processEvent(const Event* event)
                                         return k;
                                     });
 
-    // Calculate derived Reco properties
     recoDijet.isValidDijet = CheckDijet(recoDijet.lead.pt, recoDijet.lead.eta, recoDijet.subLead.pt, recoDijet.subLead.eta, recoDijet.lead.id, recoDijet.subLead.id);
     if (recoDijet.isValidDijet)
     {
@@ -1040,16 +1038,15 @@ void DiJetAnalysis::processEvent(const Event* event)
 
     if (fIsMC)
     {
-        // B. Find Ref Dijet (By swapping the lambda properties, the template perfectly sorts by RefPt instead of RecoPt!)
         refDijet = FindDijet(event->recoJetCollection()->begin(), event->recoJetCollection()->end(),
                              [&](const auto& jetPtr)
                              {
                                  JetKinematics k;
-                                 k.pt = jetPtr->RefJetPt();  // <--- Notice we map RefJetPt to primary pt!
+                                 k.pt = jetPtr->RefJetPt();
                                  k.eta = MoveToCMFrame(jetPtr->RefJetEta());
                                  k.phi = jetPtr->RefJetPhi();
-                                 k.id = true;                               //
-                                 k.flavor = jetPtr->JetPartonFlavorForB();  // Ref doesn't have ID check
+                                 k.id = true;
+                                 k.flavor = jetPtr->JetPartonFlavorForB();
                                  k.matchPt = jetPtr->ptJECCorr();
                                  return k;
                              });
@@ -1061,7 +1058,6 @@ void DiJetAnalysis::processEvent(const Event* event)
             refDijet.xj = Asymmetry(refDijet.lead.pt, refDijet.subLead.pt);
         }
 
-        // C. Find Gen Dijet
         genDijet = FindDijet(event->genJetCollection()->begin(), event->genJetCollection()->end(),
                              [&](const auto& jetPtr)
                              {
@@ -1107,7 +1103,6 @@ void DiJetAnalysis::processEvent(const Event* event)
         iVertexZ = FlipVertexZ(iVertexZ);
     }
 
-    // int iRecoMult = RecoMultiplicity(fSystem == CollisionSystem::pPb, event);
     int iRecoMult = event->multiplicity();
     std::pair<int, float> iRecoCorrectedMult = RecoCorrectedMultiplicity(event, Event_Weight, iMultiplicityBin);
     std::pair<int, int> iGenSubeMult = {0.0, 0.0};

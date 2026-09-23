@@ -142,10 +142,10 @@ int main(int argc, char* argv[])
     {
         reader->useTrackBranch("ppTracks");
     }
-    // if (!isMC)
-    // {
-    //     reader->addJECFile(JECFileDataName.Data());
-    // }
+    if (!isMC)
+    {
+        reader->addJECFile(JECFileDataName.Data());
+    }
     if (isMC && collEnergyGeV == 5020)
     {
         reader->useSkimmingBranch();
