@@ -52,4 +52,5 @@ ahingraj.cc
 *.png
 *.pdf
 
+paths/*
 macros/*.root
