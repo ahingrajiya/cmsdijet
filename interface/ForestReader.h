@@ -143,10 +143,9 @@ class ForestReader : public BaseReader
     void setCollidingEnergy(const Int_t& ene = 5020) { fCollidingEnergyGeV = {ene}; }
     /// @brief Set year of data taking
     void setYearOfDataTaking(const Int_t& year = 2018) { fYearOfDataTaking = {year}; }
-    ///@brief Set Path to jet analysis directory
-    void setPath2JetAnalysis(const Char_t* name = "../") { fJECPath = name; }
+
     ///@brief Add JEC files to the list of JEC files
-    void addJECFile(const Char_t* name = "Autumn18_HI_V8_MC_L2Relative_AK4PF") { fJECFiles.push_back(name); }
+    void addJECFile(const std::vector<std::string> files) { fJECFiles = files; }
     ///@brief Add JEU files to the list of JEU files
     void addJEUFile(const Char_t* name = "Autumn18_HI_V8_MC_L2Relative_AK4PF") { fJEUFiles.push_back(name); }
     /// @brief Apply jet pT-smearing
@@ -590,8 +589,7 @@ class ForestReader : public BaseReader
 
     /// @brief Jet Energy Corrector instance
     JetCorrector* fJEC;
-    /// @brief Path to jetAnalysis directory
-    TString fJECPath;
+
     /// @brief List of files with JEC
     std::vector<std::string> fJECFiles;
 

@@ -21,14 +21,9 @@
 int main(int argc, char* argv[])
 {
     Bool_t isMC{kTRUE};
-    Bool_t ispPb{kFALSE};
-    Bool_t useMultWeight{kFALSE};
-    Bool_t useCMFrame{kFALSE};
-    Double_t etaBoost{0.0};
     TString inFileName;
     TString oFileName;
-    TString JECFileName;
-    TString JECFileDataName;
+    std::vector<std::string> JECFiles;
     TString path2JEC = "..";
     Int_t collEnergyGeV{5020};
     TString collSystem{"PbPb"};
@@ -61,14 +56,11 @@ int main(int argc, char* argv[])
     oFileName = argv[2];
     isMC = atoi(argv[3]);
 
-    if (isMC)
+    JECFiles.push_back("Autumn18_HI_V8_MC_L2Relative_AK4PF.txt");
+
+    if (!isMC)
     {
-        JECFileName = "Autumn18_HI_V8_MC_L2Relative_AK4PF.txt";
-    }
-    else
-    {
-        JECFileName = "Autumn18_HI_V8_MC_L2Relative_AK4PF.txt";
-        JECFileDataName = "Autumn18_HI_V8_DATA_L2L3Residual_AK4PF.txt";
+        JECFiles.push_back("Autumn18_HI_V8_DATA_L2L3Residual_AK4PF.txt");
     }
 
     // Initialize analysis manager
@@ -122,24 +114,20 @@ int main(int argc, char* argv[])
     reader->setCollidingEnergy(collEnergyGeV);
     reader->setCollidingSystem(ForestReader::CollidingSystemType::PbPb);
     reader->setYearOfDataTaking(collYear);
-    reader->addJECFile(JECFileName.Data());
-    reader->setPath2JetAnalysis(path2JEC.Data());
+    reader->addJECFile(JECFiles);
     reader->setUseJetID();
     reader->setJetIDType(1);
     reader->eventsToProcess(-1);
     reader->setEventCut(eventCut);
     reader->setJetCut(jetCut);
     reader->setTrackCut(trackCut);
-    if (!isMC)
-    {
-        reader->addJECFile(JECFileDataName.Data());
-    }
     manager->setEventReader(reader);
 
     HistoManagerDiJet* hm = new HistoManagerDiJet{};
     hm->setIsMC(isMC);
     hm->setMultiplicityBins(multiplicityBins);
     hm->setForestReader(reader);
+    hm->setConfig(writeConfig);
 
     DiJetAnalysis* analysis = new DiJetAnalysis{};
     analysis->setReader(reader);

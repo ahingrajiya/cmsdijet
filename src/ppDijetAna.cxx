@@ -22,19 +22,13 @@
 int main(int argc, char* argv[])
 {
     Bool_t isMC{kTRUE};
-    Bool_t ispPb{kFALSE};
-    Bool_t useMultWeight{kFALSE};
-    Bool_t useCMFrame{kFALSE};
-    Double_t etaBoost{0.0};
     TString inFileName;
     TString oFileName;
-    TString JECFileName;
-    TString JECFileDataName;
-    TString path2JEC = "..";
+
+    std::vector<std::string> JECFiles;
     Int_t collEnergyGeV{5020};
     TString collSystem{"pp"};
     Int_t collYear{2018};
-    Bool_t useCentWeight{kFALSE};
     TString jetBranchName{"ak4PFJetAnalyzer"};
     std::vector<double> multiplicityBins = {0.0, 10.0, 60., 120., 185., 250., 400.};
     std::vector<double> hiHFBins = {0., 10., 20., 30., 40., 50., 70., 90., 120., 150., 1000.};
@@ -43,7 +37,6 @@ int main(int argc, char* argv[])
     std::vector<double> xjBins = {0.0,  0.025, 0.05, 0.075, 0.1,  0.125, 0.15, 0.175, 0.2,  0.225, 0.25, 0.275, 0.3,  0.325,
                                   0.35, 0.375, 0.4,  0.425, 0.45, 0.475, 0.5,  0.525, 0.55, 0.575, 0.6,  0.625, 0.65, 0.675,
                                   0.7,  0.725, 0.75, 0.775, 0.8,  0.825, 0.85, 0.875, 0.9,  0.925, 0.95, 0.975, 1.0};
-    // std::vector<std::string> filters{"pprimaryVertexFilter"};
     std::vector<std::string> filters{"pBeamScrapingFilter", "pPAprimaryVertexFilter", "HBHENoiseFilterResultRun2Loose"};
     // std::string path2DijetWeight = "../aux_files/pp_5020/Dijet_Weight/PYTHIA_DiJetWeight_Table.root";
     std::string path2DijetWeight = "../aux_files/pp_5360/Dijet_Weight/DiJetWeight.root";
@@ -63,36 +56,23 @@ int main(int argc, char* argv[])
 
     if (collEnergyGeV == 5360)
     {
-        collYear = 2025;
+        collYear = 2024;
     }
     else
     {
         collYear = 2018;
     }
 
-    if (isMC)
+    if (collYear == 2024)
     {
-        if (collYear == 2025)
-        {
-            JECFileName = "Prompt24HIpp_V1_MC_L2Relative_AK4PF.txt";
-        }
-        else
-        {
-            JECFileName = "Spring18_ppRef5TeV_V6_MC_L2Relative_AK4PF.txt";
-        }
+        JECFiles.push_back("Prompt24HIpp_V1_MC_L1FastJet_AK4PF.txt");
+        JECFiles.push_back("Prompt24HIpp_V1_MC_L2Relative_AK4PF.txt");
+        if (!isMC) JECFiles.push_back("Prompt24HIpp_V1_DATA_L2Residual_AK4PF.txt");
     }
-    else
+    if (collYear == 2018)
     {
-        if (collYear == 2025)
-        {
-            JECFileName = "Prompt24HIpp_V1_MC_L2Relative_AK4PF.txt";
-            JECFileDataName = "Prompt24HIpp_V1_DATA_L2Residual_AK4PF.txt";
-        }
-        else
-        {
-            JECFileName = "Spring18_ppRef5TeV_V6_MC_L2Relative_AK4PF.txt";
-            JECFileDataName = "Spring18_ppRef5TeV_V6_DATA_L2L3Residual_AK4PF.txt";
-        }
+        JECFiles.push_back("Spring18_ppRef5TeV_V6_MC_L2Relative_AK4PF.txt");
+        if (!isMC) JECFiles.push_back("Spring18_ppRef5TeV_V6_DATA_L2L3Residual_AK4PF.txt");
     }
 
     // Initialize package manager
@@ -133,7 +113,7 @@ int main(int argc, char* argv[])
     reader->setYearOfDataTaking(collYear);
     reader->setUseJetID();
     reader->setJetIDType(2);
-    reader->addJECFile(JECFileName.Data());
+    reader->addJECFile(JECFiles);
     if (collEnergyGeV == 8160)
     {
         reader->setStoreLocation(true);
@@ -142,16 +122,12 @@ int main(int argc, char* argv[])
     {
         reader->useTrackBranch("ppTracks");
     }
-    if (!isMC)
-    {
-        reader->addJECFile(JECFileDataName.Data());
-    }
+
     if (isMC && collEnergyGeV == 5020)
     {
         reader->useSkimmingBranch();
         reader->setFilters(filters);
     }
-    reader->setPath2JetAnalysis(path2JEC.Data());
     reader->setTrackCut(trackCut);
     reader->setJetCut(jetCut);
     reader->setEventCut(eventCut);

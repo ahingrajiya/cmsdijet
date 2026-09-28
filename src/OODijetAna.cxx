@@ -35,19 +35,14 @@ int main(int argc, char* argv[])
     Int_t collEnergyGeV{5360};
     TString collSystem{"OO"};
     Int_t collYear{2025};
-    Bool_t useCentWeight{kFALSE};
-    Bool_t useMultWeight{kFALSE};
     TString jetBranchNameEmbedded{"akCs4PFJetAnalyzer"};
     TString jetBranchNameUnembedded{"ak4PFJetAnalyzer"};
     TString oFileName{};
-    TString JECFileName{};
-    TString JECFileDataName{};
+    std::vector<std::string> JECFiles;
     TString JEUFileName{};
-    TString path2JEC = "..";
     Double_t ptHatCut[2]{15., 10000.};
     Bool_t isEmbedded{kTRUE};
     bool unfold = true;
-    // std::vector<std::pair<double, double>> multiplicityBins = {{0, 0.0}, {10, 1.0}, {60, 2.0}, {120, 3.0}, {185, 4.0}, {250, 5.0}, {400, 6.0}, {500, 7.0}};
     std::vector<double> multiplicityBins = {0.0, 10., 20., 30., 40., 50., 60., 70., 80., 90., 100., 110., 120., 130., 140., 150., 160., 170., 180., 190., 200.};
     std::vector<double> hiHFBins = {0., 10., 20., 30., 40., 50., 70., 90., 120., 150., 180., 210., 250., 300., 350., 400., 450., 500., 550., 1000.};
     // std::vector<double> ptBins = {0.0, 20.0, 30.0, 40.0, 50.0, 60., 70., 80., 90., 100., 120., 140., 160., 200.};
@@ -93,14 +88,7 @@ int main(int argc, char* argv[])
         isEmbedded = atoi(argv[4]);
     }
 
-    JECFileName = "Prompt25HIOO_V1_MC_L2Relative_AK4PF.txt";
-
-    // if (!isMC)
-    // {
-    //     JECFileName = "Prompt25HIOO_V1_MC_L2Relative_AK4PF.txt";
-    //     // JECFileDataName = "Summer16_23Sep2016HV4_DATA_L2L3Residual_AK4PF.txt";
-    //     // JEUFileName = "Summer16_23Sep2016HV4_DATA_Uncertainty_AK4PF.txt";
-    // }
+    JECFiles.push_back("Prompt25HIOO_V1_MC_L2Relative_AK4PF.txt");
 
     // Initialize package manager
     Manager* manager = new Manager{};
@@ -158,8 +146,7 @@ int main(int argc, char* argv[])
     reader->setCollidingEnergy(collEnergyGeV);
     reader->setCollidingSystem(ForestReader::CollidingSystemType::OO);
     reader->setYearOfDataTaking(collYear);
-    reader->addJECFile(JECFileName.Data());
-    reader->setPath2JetAnalysis(path2JEC.Data());
+    reader->addJECFile(JECFiles);
     reader->setUseJetID();
     reader->setJetIDType(2);
     reader->eventsToProcess(-1);

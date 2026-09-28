@@ -254,13 +254,6 @@ Int_t ForestReader::init()
 void ForestReader::setupJEC()
 {
     std::cout << "===========Setting up JEC correction============" << std::endl;
-    // If no path to the aux_file
-    if (fJECPath.Length() <= 0)
-    {
-        // Set default values
-        std::cout << "[WARNING] Default path to JEC files will be used" << std::endl;
-        setPath2JetAnalysis();
-    }
 
     if (fJECFiles.empty())
     {
@@ -274,7 +267,7 @@ void ForestReader::setupJEC()
     std::vector<std::string> tmp;
     for (UInt_t i{0}; i < fJECFiles.size(); i++)
     {
-        tmp.push_back(Form("%s/aux_files/%s_%i/JEC/%s", fJECPath.Data(), fCollidingSystem.Data(), fCollidingEnergyGeV, fJECFiles.at(i).c_str()));
+        tmp.push_back(Form("../aux_files/%s_%i/JEC/%s", fCollidingSystem.Data(), fCollidingEnergyGeV, fJECFiles.at(i).c_str()));
     }
 
     fJECFiles.clear();
@@ -334,13 +327,6 @@ void ForestReader::setupJEU()
         return;
     }
 
-    if (fJECPath.Length() <= 0)
-    {
-        // Set default values
-        std::cout << "[WARNING] Default path to JEU files will be used" << std::endl;
-        setPath2JetAnalysis();
-    }
-
     // If no correction file is specified
     if (fJEUFiles.empty())
     {
@@ -348,7 +334,7 @@ void ForestReader::setupJEU()
         std::runtime_error("No JEU files specified. Please add JEU files using addJEUFile() method.");
     }
 
-    TString tmp = Form("%s/aux_files/%s_%i/JEC/%s", fJECPath.Data(), fCollidingSystem.Data(), fCollidingEnergyGeV, fJEUFiles.at(0).c_str());
+    TString tmp = Form("../aux_files/%s_%i/JEC/%s", fCollidingSystem.Data(), fCollidingEnergyGeV, fJEUFiles.at(0).c_str());
 
     fJEU = new JetUncertainty(tmp.Data());
     std::cout << "JEU file: " << tmp.Data() << std::endl;
@@ -1228,11 +1214,17 @@ void ForestReader::report()
     report << "Use Track Branch             :\t " << fUseTrackBranch << "\n";
     report << "Use Gen Tracks               :\t " << fUseGenTrackBranch << "\n";
 
-    if (!fJECFiles.empty()) report << "JEC File Name                :\t " << fJECFiles[0] << "\n";
+    if (!fJECFiles.empty())
+    {
+        for (int j = 0; j < fJECFiles.size() - 1; ++j)
+        {
+            report << "JEC File Name                :\t " << fJECFiles[j] << "\n";
+        }
+    }
 
     if (!fIsMc)
     {
-        if (fJECFiles.size() > 1) report << "JEC Residuals               :\t " << fJECFiles[1] << "\n";
+        if (fJECFiles.size() > 1) report << "JEC Residuals               :\t " << fJECFiles[fJECFiles.size() - 1] << "\n";
 
         report << "Apply JEU                    :\t " << fDoJEU << "\n";
         if (fDoJEU)

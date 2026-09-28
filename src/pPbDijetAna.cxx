@@ -44,10 +44,9 @@ int main(int argc, char* argv[])
     TString jetBranchNameEmbedded{"ak4PFJetAnalyzer"};
     TString jetBranchNameUnembedded{"ak4PFJetAnalyzer"};
     TString oFileName{};
-    TString JECFileName{};
-    TString JECFileDataName{};
+    std::vector<std::string> JECFiles;
+
     TString JEUFileName{};
-    TString path2JEC = "..";
     Double_t ptHatCut[2]{15., 30.};
     Bool_t isEmbedded{kTRUE};
     std::vector<double> multiplicityBins = {0.0, 10.0, 60., 120., 185., 250., 400.};
@@ -101,22 +100,22 @@ int main(int argc, char* argv[])
         {
             if (isEmbedded)
             {
-                JECFileName = "Autumn16_HI_pPb_Pbgoing_Embedded_MC_L2Relative_AK4PF.txt";
+                JECFiles.push_back("Autumn16_HI_pPb_Pbgoing_Embedded_MC_L2Relative_AK4PF.txt");
             }
             else
             {
-                JECFileName = "Autumn16_HI_pPb_Pbgoing_Unembedded_MC_L2Relative_AK4PF.txt";
+                JECFiles.push_back("Autumn16_HI_pPb_Pbgoing_Unembedded_MC_L2Relative_AK4PF.txt");
             }
         }
         else
         {
             if (isEmbedded)
             {
-                JECFileName = "Autumn16_HI_pPb_pgoing_Embedded_MC_L2Relative_AK4PF.txt";
+                JECFiles.push_back("Autumn16_HI_pPb_pgoing_Embedded_MC_L2Relative_AK4PF.txt");
             }
             else
             {
-                JECFileName = "Autumn16_HI_pPb_pgoing_Unembedded_MC_L2Relative_AK4PF.txt";
+                JECFiles.push_back("Autumn16_HI_pPb_pgoing_Unembedded_MC_L2Relative_AK4PF.txt");
             }
         }
     }
@@ -124,13 +123,13 @@ int main(int argc, char* argv[])
     {
         if (isPbGoing)
         {
-            JECFileName = "Autumn16_HI_pPb_pgoing_Embedded_MC_L2Relative_AK4PF.txt";
+            JECFiles.push_back("Autumn16_HI_pPb_pgoing_Embedded_MC_L2Relative_AK4PF.txt");
         }
         else
         {
-            JECFileName = "Autumn16_HI_pPb_Pbgoing_Embedded_MC_L2Relative_AK4PF.txt";
+            JECFiles.push_back("Autumn16_HI_pPb_Pbgoing_Embedded_MC_L2Relative_AK4PF.txt");
         }
-        JECFileDataName = "Summer16_23Sep2016HV4_DATA_L2L3Residual_AK4PF.txt";
+        JECFiles.push_back("Summer16_23Sep2016HV4_DATA_L2L3Residual_AK4PF.txt");
         JEUFileName = "Summer16_23Sep2016HV4_DATA_Uncertainty_AK4PF.txt";
     }
 
@@ -196,8 +195,7 @@ int main(int argc, char* argv[])
     reader->setCollidingEnergy(collEnergyGeV);
     reader->setCollidingSystem(ForestReader::CollidingSystemType::pPb, isPbGoing);
     reader->setYearOfDataTaking(collYear);
-    reader->addJECFile(JECFileName.Data());
-    reader->setPath2JetAnalysis(path2JEC.Data());
+    reader->addJECFile(JECFiles);
     reader->setUseJetID();
     reader->setJetIDType(2);
     reader->eventsToProcess(-1);
@@ -207,7 +205,6 @@ int main(int argc, char* argv[])
     reader->setFilters(filters);
     if (!isMC)
     {
-        reader->addJECFile(JECFileDataName.Data());
         reader->setJetCollectionBranchName(jetBranchNameEmbedded.Data());
         reader->setJESCorrections();
         reader->setJEU(useJEU, JEUType);
