@@ -1,5 +1,7 @@
 
 #if !(defined(__CINT__) || defined(__CLING__)) || defined(__ACLIC__)
+#include <TSystem.h>
+
 #include <iostream>
 
 #include "../../Unfoilding/build/RooUnfoldBayes.h"
@@ -26,11 +28,12 @@ int main()
     std::vector<double> ptBinspPb = {0.0, 20.0, 30.0, 40.0, 50.0, 70., 100., 200.};
 
     unfoldData.setBins(ptBinspPb, xjBins, multiplicityBins, multiplicityBins);
-    unfoldData.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA5360_NewPtBins.root", "/home/abhishek/analysis/pPb/Summed_Files/ppRef5360_NewPtBins.root");
+    unfoldData.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA5360_NewPtBins_NewJEC.root",
+                          "/home/abhishek/analysis/pPb/Summed_Files/ppRef5360_NewPtBins_NewJEC.root");
     unfoldData.outputFileName("ppRef_Data_Unfolded_3iter_Interpolation.root");
     unfoldData.setIterations(3);
     unfoldData.doValidation(false, false);
-    // unfoldData.performUnfolding();
+    unfoldData.performUnfolding();
 
     Unfolding unfoldOOData;
     std::vector<double> centBins = {70.0, 150.0};
@@ -40,7 +43,7 @@ int main()
     unfoldOOData.outputFileName("OO_Data_Unfolded_3iter_HIHF_0_20_PPbMatching.root");
     unfoldOOData.setIterations(3);
     unfoldOOData.doValidation(false, false);
-    unfoldOOData.performUnfolding();
+    // unfoldOOData.performUnfolding();
 
     Unfolding unfoldpPbData;
 
