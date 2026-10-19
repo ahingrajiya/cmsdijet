@@ -166,7 +166,7 @@ int main(int argc, char* argv[])
     analysis->setMinTrkPt(0.40);
     analysis->setDeltaPhi(7 * M_PI / 8);
     analysis->setLeadJetPt(50.);
-    analysis->setSubLeadJetPt(30.);
+    analysis->setSubLeadJetPt(20.);
     analysis->setLeadJetEtaRange(-2.1, 2.1);
     analysis->setSubLeadJetEtaRange(-2.1, 2.1);
     analysis->setUEType(UEType);
