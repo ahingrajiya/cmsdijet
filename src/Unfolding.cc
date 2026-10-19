@@ -135,7 +135,6 @@ void Unfolding::projections(bool validation, float centMin, float centMax, float
 TH1D* Unfolding::purity(TH1D* totalReco, TH1D* matchedReco)
 {
     TH1D* hPurity_ = (TH1D*)matchedReco->Clone("hPurity_");
-    // hPurity_->Divide(matchedReco, totalReco, 1.0, 1.0, "B");
     hPurity_->Divide(totalReco);
     return hPurity_;
 }
@@ -143,7 +142,6 @@ TH1D* Unfolding::purity(TH1D* totalReco, TH1D* matchedReco)
 TH1D* Unfolding::efficiency(TH1D* totalTruth, TH1D* matchedtruth)
 {
     TH1D* hEfficiency_ = (TH1D*)totalTruth->Clone("hEfficiency_");
-    // hEfficiency_->Divide(totalTruth, matchedtruth, 1., 1., "B");
     hEfficiency_->Divide(matchedtruth);
     return hEfficiency_;
 }

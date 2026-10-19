@@ -27,23 +27,26 @@ int main()
 
     std::vector<double> ptBinspPb = {0.0, 20.0, 30.0, 40.0, 50.0, 70., 100., 200.};
 
-    unfoldData.setBins(ptBinspPb, xjBins, multiplicityBins, multiplicityBins);
-    unfoldData.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA5360_NewPtBins_NewJEC.root",
-                          "/home/abhishek/analysis/pPb/Summed_Files/ppRef5360_NewPtBins_NewJEC.root");
-    unfoldData.outputFileName("ppRef_Data_Unfolded_3iter_Interpolation.root");
-    unfoldData.setIterations(3);
+    unfoldData.setBins(ptBins, xjBins, multiplicityBins, multiplicityBins);
+    unfoldData.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA5360_OldPtBins_NewJEC.root",
+                          "/home/abhishek/analysis/pPb/Summed_Files/ppRef5360_OldPtBins_NewJEC.root");
+    unfoldData.outputFileName("ppRef_Data_Unfolded_3iter_NewJEC.root");
+    unfoldData.setIterations(8);
     unfoldData.doValidation(false, false);
     unfoldData.performUnfolding();
 
     Unfolding unfoldOOData;
-    std::vector<double> centBins = {70.0, 150.0};
+    // std::vector<double> centBins = {70.0, 150.0};
+    std::vector<double> centBins = {0.0, 20.0, 40.0, 80.0, 120.0, 160.0};
 
-    unfoldOOData.setBins(ptBinspPb, xjBins, centBins, centBins);
-    unfoldOOData.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA_HIJING_NewPtBins.root", "/home/abhishek/analysis/pPb/Summed_Files/OOData_NewPtBins.root");
-    unfoldOOData.outputFileName("OO_Data_Unfolded_3iter_HIHF_0_20_PPbMatching.root");
-    unfoldOOData.setIterations(3);
+    unfoldOOData.setBins(ptBins, xjBins, centBins, centBins);
+    // unfoldOOData.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA_HIJING_NewPtBins.root", "/home/abhishek/analysis/pPb/Summed_Files/OOData_NewPtBins.root");
+    unfoldOOData.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA_HIJING_Unfolding_Data_V3.root",
+                            "/home/abhishek/analysis/pPb/Summed_Files/OOData_Unfolding_Data_V3.root");
+    unfoldOOData.outputFileName("OO_ATLAS_CentBins_ATLAS_PtBins.root");
+    unfoldOOData.setIterations(8);
     unfoldOOData.doValidation(false, false);
-    // unfoldOOData.performUnfolding();
+    unfoldOOData.performUnfolding();
 
     Unfolding unfoldpPbData;
 
