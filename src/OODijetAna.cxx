@@ -96,10 +96,10 @@ int main(int argc, char* argv[])
     // Initialize event cuts
     EventCut* eventCut = new EventCut{};
     eventCut->setVz(-15., 15.);
-    if (isMC)
-    {
-        eventCut->setPtHat(ptHatCut[0], ptHatCut[1]);
-    }
+    // if (isMC)
+    // {
+    //     eventCut->setPtHat(ptHatCut[0], ptHatCut[1]);
+    // }
     // eventCut->setVerbose();
 
     // Initialize jet cuts
