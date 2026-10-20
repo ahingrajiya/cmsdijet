@@ -31,6 +31,7 @@
 #include "Event.h"
 #include "ForestReader.h"
 #include "HistoManagerDiJet.h"
+#include "OOCentralityWeights.h"
 #include "TSpline.h"
 #include "TVector2.h"
 #include "TrackingEfficiency.h"

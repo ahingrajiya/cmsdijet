@@ -656,7 +656,7 @@ double DiJetAnalysis::EventWeight(const Event* event)
     {
         std::cout << "PtHat Weight : " << ptHatWeight << std::endl;
         std::cout << "Vz Weight : " << vzWeight << std::endl;
-        std::cout << "Event Weight = PtHat Weight * Vz Weight = " << eventWeight << std::endl;
+        std::cout << "Event Weight = PtHat Weight * Vz Weight * Centrality Weight = " << eventWeight << std::endl;
     }
 
     return eventWeight;
@@ -854,12 +854,8 @@ float DiJetAnalysis::MoveToLabFrame(const float& jetEta)
 double DiJetAnalysis::CentralityWeight(const int& centrality)
 {
     if (fSystem != CollisionSystem::OO || !fIsMC || !fUseCentralityWeight) return 1.0;
-    if (centrality <= 30)
-        return fCentWeightFunctions[0]->Eval(centrality);
-    else if (centrality > 30 && centrality <= 180)
-        return fCentWeightFunctions[1]->Eval(centrality);
-    else
-        return 1.0;
+
+    return OODijetCentralityWeight(centrality);
 }
 
 bool DiJetAnalysis::CheckDijet(const float& leadpt, const float& leadeta, const float& subleadpt, const float& subleadeta, const bool& leadID, const bool& subleadID)

@@ -178,7 +178,7 @@ int main(int argc, char* argv[])
 
     if (isMC)
     {
-        // analysis->setUseCentralityWeight();
+        analysis->setUseCentralityWeight();
         // analysis->setUseDijetWeight();
         // analysis->setDijetWeightType(DijetWeightType::Gen);
         // analysis->setDijetWeightTable(path2DijetWeight);
