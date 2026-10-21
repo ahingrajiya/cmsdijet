@@ -41,7 +41,8 @@ int main()
 
     unfoldOOData.setBins(ptBins, xjBins, centBins, centBins);
     // unfoldOOData.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA_HIJING_NewPtBins.root", "/home/abhishek/analysis/pPb/Summed_Files/OOData_NewPtBins.root");
-    unfoldOOData.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA_HIJING_L50SL20_NewJEC.root", "/home/abhishek/analysis/pPb/Summed_Files/OOData_L50SL20.root");
+    unfoldOOData.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA_HIJING_L50SL20_NewJEC_NotPtHat.root",
+                            "/home/abhishek/analysis/pPb/Summed_Files/OOData_L50SL20.root");
     unfoldOOData.outputFileName("OO_ATLAS_CentBins_ATLAS_PtBins_SLPt20.root");
     unfoldOOData.setIterations(3);
     unfoldOOData.doValidation(false, false);
