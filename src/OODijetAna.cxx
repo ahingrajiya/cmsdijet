@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
     TString oFileName{};
     std::vector<std::string> JECFiles;
     TString JEUFileName{};
-    Double_t ptHatCut[2]{15., 10000.};
+    Double_t ptHatCut[2]{50., 10000.};
     Bool_t isEmbedded{kTRUE};
     bool unfold = true;
     std::vector<double> multiplicityBins = {0.0, 10., 20., 30., 40., 50., 60., 70., 80., 90., 100., 110., 120., 130., 140., 150., 160., 170., 180., 190., 200.};
@@ -59,7 +59,7 @@ int main(int argc, char* argv[])
     Bool_t useJEU{false};          // 0 - No JEC Uncertainty, 1 - JEC Uncertainty Up, -1 - JEC Uncertainty Down
     Int_t JEUType{0};              // 0 - No JEU, 1 - JEU Up, -1 - JEU Down
     std::string path2DijetWeight = "../aux_files/pp_5360/Dijet_Weight/DiJetWeight.root";
-    HistoConfig writeConfig = {false, true, true, true, false, true, false, true};
+    HistoConfig writeConfig = {false, true, true, false, false, true, false, true};
     std::vector<std::string> trkEffTable = {
         "../aux_files/OO_5360/trk_eff_table/Eff_OO_2025_Hijing_MB_Centrality_fromHihfpf_NoPU_3D_Nominal_Official.root",
         "../aux_files/OO_5360/trk_eff_table/Eff_OO_2025_PythiaHijing_QCD_pThat15_Centrality_fromHihfpf_NoPU_3D_Nominal_Official.root"};
@@ -166,7 +166,7 @@ int main(int argc, char* argv[])
     analysis->setMinTrkPt(0.40);
     analysis->setDeltaPhi(7 * M_PI / 8);
     analysis->setLeadJetPt(50.);
-    analysis->setSubLeadJetPt(30.);
+    analysis->setSubLeadJetPt(20.);
     analysis->setLeadJetEtaRange(-2.1, 2.1);
     analysis->setSubLeadJetEtaRange(-2.1, 2.1);
     analysis->setUEType(UEType);

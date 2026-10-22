@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
     std::vector<std::string> filters{"pBeamScrapingFilter", "pPAprimaryVertexFilter", "HBHENoiseFilterResultRun2Loose"};
     // std::string path2DijetWeight = "../aux_files/pp_5020/Dijet_Weight/PYTHIA_DiJetWeight_Table.root";
     std::string path2DijetWeight = "../aux_files/pp_5360/Dijet_Weight/DiJetWeight.root";
-    HistoConfig writeConfig = {true, true, true, true, false, true, false, true};
+    HistoConfig writeConfig = {false, true, true, false, false, true, false, true};
 
     if (argc <= 1)
     {
@@ -84,7 +84,7 @@ int main(int argc, char* argv[])
     eventCut->setMultiplicty(0, 10000);
     // if (isMC)
     // {
-    //     eventCut->setPtHat(10., 10000.);
+    //     eventCut->setPtHat(50., 10000.);
     // }
     // eventCut->setVerbose();
 
@@ -154,7 +154,7 @@ int main(int argc, char* argv[])
     analysis->setMultiplicityRange(0., 10000.);
     analysis->setMultiplicityType(0);
     analysis->setLeadJetPt(50.);
-    analysis->setSubLeadJetPt(30.);
+    analysis->setSubLeadJetPt(20.);
     analysis->setDeltaPhi(7 * M_PI / 8);
     analysis->setInclusiveCorrectedJetPtMin(20.);
     analysis->setInclusiveJetEtaRange(-2.1, 2.1);
