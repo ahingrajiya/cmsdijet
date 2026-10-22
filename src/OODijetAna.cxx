@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
     TString oFileName{};
     std::vector<std::string> JECFiles;
     TString JEUFileName{};
-    Double_t ptHatCut[2]{30., 10000.};
+    Double_t ptHatCut[2]{50., 10000.};
     Bool_t isEmbedded{kTRUE};
     bool unfold = true;
     std::vector<double> multiplicityBins = {0.0, 10., 20., 30., 40., 50., 60., 70., 80., 90., 100., 110., 120., 130., 140., 150., 160., 170., 180., 190., 200.};
