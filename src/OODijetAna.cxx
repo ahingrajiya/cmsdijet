@@ -149,7 +149,7 @@ int main(int argc, char* argv[])
     reader->addJECFile(JECFiles);
     reader->setUseJetID();
     reader->setJetIDType(2);
-    reader->eventsToProcess(-1);
+    reader->eventsToProcess(1000);
     reader->setJetCut(jetCut);
     reader->setTrackCut(trackCut);
     reader->setEventCut(eventCut);
