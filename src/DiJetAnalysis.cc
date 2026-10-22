@@ -1338,6 +1338,9 @@ void DiJetAnalysis::processRecoJets(const Event* event, const double& event_Weig
         fHM->hLeadSubLeadJets_W->Fill(LeadSLeadJets, event_Weight);
     }
 
+    double LeadSLeadJetsPtHat[8] = {recoDijet.lead.pt,     recoDijet.lead.eta,    recoDijet.lead.phi, recoDijet.subLead.pt,
+                                    recoDijet.subLead.eta, recoDijet.subLead.phi, multiplicityBin,    event->ptHat()};
+    fHM->hLeadSubLeadJetsPtHat_W->Fill(LeadSLeadJetsPtHat, event_Weight);
     if (recoDijet.isValidDijet)
     {
         double LeadSLeadJetsMidRapidity[7] = {recoDijet.lead.pt,     recoDijet.lead.eta,    recoDijet.lead.phi, recoDijet.subLead.pt,
@@ -1345,7 +1348,7 @@ void DiJetAnalysis::processRecoJets(const Event* event, const double& event_Weig
         fHM->hLeadSubLeadJets_MidRapidity_W->Fill(LeadSLeadJetsMidRapidity, event_Weight);
         fHM->hDeltaPhi_W->Fill(recoDijet.deltaPhi, event_Weight);
 
-        double QuenchingQuantities[5] = {recoDijet.xj, recoDijet.deltaPhi, recoDijet.lead.pt, recoDijet.subLead.pt, multiplicityBin};
+        double QuenchingQuantities[6] = {recoDijet.xj, recoDijet.deltaPhi, recoDijet.lead.pt, recoDijet.subLead.pt, multiplicityBin, event->ptHat()};
         fHM->hRecoQuenching_W->Fill(QuenchingQuantities, event_Weight);
 
         if (recoDijetPass)
@@ -1381,7 +1384,7 @@ void DiJetAnalysis::processRecoJets(const Event* event, const double& event_Weig
             fHM->hLeadPtvsSubLeadPt_DiJetW->Fill(recoDijet.subLead.pt, recoDijet.lead.pt, event_Weight * fDijetWeight);
             fHM->hVzWithDijet_W->Fill(event->vz(), event_Weight);
 
-            double QuenchingQuantitiesWithDijet[4] = {recoDijet.xj, recoDijet.lead.pt, recoDijet.subLead.pt, multiplicityBin};
+            double QuenchingQuantitiesWithDijet[5] = {recoDijet.xj, recoDijet.lead.pt, recoDijet.subLead.pt, multiplicityBin, event->ptHat()};
             fHM->hRecoQuenching_WithDijet_W->Fill(QuenchingQuantitiesWithDijet, event_Weight);
             fHM->hNDijetEvent->Fill(1);
             fHM->hLeadPtVsHiHFPlus_WithDijet_W->Fill(event->hiHFPlus(), recoDijet.lead.pt, event_Weight);
@@ -1548,6 +1551,10 @@ void DiJetAnalysis::processGenJets(const Event* event, const double& event_Weigh
         fHM->hGenLeadGenSubLeadJets->Fill(LeadSLeadGenJets);
         fHM->hGenLeadGenSubLeadJets_W->Fill(LeadSLeadGenJets, event_Weight);
     }
+
+    double LeadSLeadGenJetsPtHat[8] = {genDijet.lead.pt,     genDijet.lead.eta,    genDijet.lead.phi, genDijet.subLead.pt,
+                                       genDijet.subLead.eta, genDijet.subLead.phi, multiplicityBin,   event->ptHat()};
+    fHM->hGenLeadGenSubLeadJetsPtHat_W->Fill(LeadSLeadGenJetsPtHat, event_Weight);
     // if (!isGenDiJet && fIsRefDijetFound)
     // {
     //     std::cout << Form("Gen Lead Pt : %f, Gen SubLead Pt : %f, Gen Lead Eta : %f, Gen SubLead Eta : %f", genLeadJetPt, genSubLeadJetPt, genLeadJetEtaCM,
@@ -1563,7 +1570,7 @@ void DiJetAnalysis::processGenJets(const Event* event, const double& event_Weigh
         fHM->hGenLeadGenSubLeadJets_MidRapidity_W->Fill(LeadSLeadGenJetsMidRapidity, event_Weight);
         fHM->hGenDeltaPhi_W->Fill(genDijet.deltaPhi, event_Weight);
 
-        double QuenchingQuantities[5] = {genDijet.xj, genDijet.deltaPhi, genDijet.lead.pt, genDijet.subLead.pt, multiplicityBin};
+        double QuenchingQuantities[6] = {genDijet.xj, genDijet.deltaPhi, genDijet.lead.pt, genDijet.subLead.pt, multiplicityBin, event->ptHat()};
         fHM->hGenQuenching_W->Fill(QuenchingQuantities, event_Weight);
 
         fHM->hGenLeadPtVsHiHFPlus_WithDijet_W->Fill(event->hiHFPlus(), genDijet.lead.pt, event_Weight);
@@ -1582,7 +1589,7 @@ void DiJetAnalysis::processGenJets(const Event* event, const double& event_Weigh
             fHM->hMultVsGenXj_DiJetW->Fill(genDijet.xj, multiplicityBin, genDijet.lead.pt, event_Weight * fDijetWeight);
             fHM->hNGenDijetEvent->Fill(1);
 
-            double QuenchingQuantitiesWithDijet[4] = {genDijet.xj, genDijet.lead.pt, genDijet.subLead.pt, multiplicityBin};
+            double QuenchingQuantitiesWithDijet[5] = {genDijet.xj, genDijet.lead.pt, genDijet.subLead.pt, multiplicityBin, event->ptHat()};
             fHM->hGenQuenching_WithDijet_W->Fill(QuenchingQuantitiesWithDijet, event_Weight);
             fHM->hLeadPtVsGenXj_W->Fill(genDijet.xj, genDijet.lead.pt, event_Weight);
 

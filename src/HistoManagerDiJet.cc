@@ -254,12 +254,21 @@ void HistoManagerDiJet::init()
     Double_t LeadSLeadJetMin[7] = {0.0, -5.0, -TMath::Pi(), 0.0, -5.0, -TMath::Pi(), fMultiplicityBins[0]};
     Double_t LeadSLeadJetMax[7] = {1000.0, 5.0, TMath::Pi(), 1000.0, 5.0, TMath::Pi(), fMultiplicityBins[fMultiplicityBins.size() - 1]};
 
+    int LeadSLeadJetBinsPtHat[8] = {200, 100, 64, 200, 100, 64, nMultiplicityBins, 500};
+    Double_t LeadSLeadJetMinPtHat[8] = {0.0, -5.0, -TMath::Pi(), 0.0, -5.0, -TMath::Pi(), fMultiplicityBins[0], 0};
+    Double_t LeadSLeadJetMaxPtHat[8] = {1000.0, 5.0, TMath::Pi(), 1000.0, 5.0, TMath::Pi(), fMultiplicityBins[fMultiplicityBins.size() - 1], 1000};
+
     hLeadSubLeadJets = new THnSparseD("hLeadSubLeadJets", "Lead vs SubLead Pt", 7, LeadSLeadJetBins, LeadSLeadJetMin, LeadSLeadJetMax);
     hLeadSubLeadJets->GetAxis(6)->Set(LeadSLeadJetBins[6], multBinArray);
     hLeadSubLeadJets->Sumw2();
     hLeadSubLeadJets_W = new THnSparseD("hLeadSubLeadJets_W", "Lead vs SubLead Pt Weighted", 7, LeadSLeadJetBins, LeadSLeadJetMin, LeadSLeadJetMax);
     hLeadSubLeadJets_W->GetAxis(6)->Set(LeadSLeadJetBins[6], multBinArray);
     hLeadSubLeadJets_W->Sumw2();
+    hLeadSubLeadJetsPtHat_W =
+        new THnSparseD("hLeadSubLeadJetsPtHat_W", "Lead vs SubLead Pt with PtHat Weighted", 8, LeadSLeadJetBinsPtHat, LeadSLeadJetMinPtHat, LeadSLeadJetMaxPtHat);
+    hLeadSubLeadJetsPtHat_W->GetAxis(6)->Set(LeadSLeadJetBinsPtHat[6], multBinArray);
+    hLeadSubLeadJetsPtHat_W->Sumw2();
+
     hLeadSubLeadJets_MidRapidity_W =
         new THnSparseD("hLeadSubLeadJets_MidRapidity_W", "Lead vs SubLead Pt MidRapidity Weighted", 7, LeadSLeadJetBins, LeadSLeadJetMin, LeadSLeadJetMax);
     hLeadSubLeadJets_MidRapidity_W->GetAxis(6)->Set(LeadSLeadJetBins[6], multBinArray);
@@ -288,6 +297,12 @@ void HistoManagerDiJet::init()
             new THnSparseD("hGenLeadGenSubLeadJets_W", "Gen Lead vs Gen SubLead Pt Weighted", 7, LeadSLeadJetBins, LeadSLeadJetMin, LeadSLeadJetMax);
         hGenLeadGenSubLeadJets_W->GetAxis(6)->Set(LeadSLeadJetBins[6], multBinArray);
         hGenLeadGenSubLeadJets_W->Sumw2();
+
+        hGenLeadGenSubLeadJetsPtHat_W = new THnSparseD("hGenLeadGenSubLeadJetsPtHat_W", "Gen Lead vs Gen SubLead Pt PtHat Weighted", 8, LeadSLeadJetBinsPtHat,
+                                                       LeadSLeadJetMinPtHat, LeadSLeadJetMaxPtHat);
+        hGenLeadGenSubLeadJetsPtHat_W->GetAxis(6)->Set(LeadSLeadJetBinsPtHat[6], multBinArray);
+        hGenLeadGenSubLeadJetsPtHat_W->Sumw2();
+
         hGenLeadGenSubLeadJets_MidRapidity_W = new THnSparseD("hGenLeadGenSubLeadJets_MidRapidity_W", "Gen Lead vs Gen SubLead Pt MidRapidity Weighted", 7,
                                                               LeadSLeadJetBins, LeadSLeadJetMin, LeadSLeadJetMax);
         hGenLeadGenSubLeadJets_MidRapidity_W->GetAxis(6)->Set(LeadSLeadJetBins[6], multBinArray);
@@ -371,25 +386,25 @@ void HistoManagerDiJet::init()
     // const int nLeadPtBins = 8;
     // double leadPtBins[nLeadPtBins + 1] = {25.0, 50., 55., 60., 65., 70., 80., 90., 200.};
 
-    int QuenchBins[5] = {nXjAjBins, nDphiBins, 200, 200, nMultiplicityBins};
-    Double_t QuenchMin[5] = {0.0, 0.0, 0.0, 0.0, fMultiplicityBins[0]};
-    Double_t QuenchMax[5] = {1.0, TMath::Pi(), 1000.0, 1000.0, fMultiplicityBins[fMultiplicityBins.size() - 1]};
+    int QuenchBins[6] = {nXjAjBins, nDphiBins, 200, 200, nMultiplicityBins, 500};
+    Double_t QuenchMin[6] = {0.0, 0.0, 0.0, 0.0, fMultiplicityBins[0], 0};
+    Double_t QuenchMax[6] = {1.0, TMath::Pi(), 1000.0, 1000.0, fMultiplicityBins[fMultiplicityBins.size() - 1], 1000.0};
 
-    int QuenchBinsWithDijet[4] = {nXjAjBins, 500, 500, nMultiplicityBins};
-    Double_t QuenchMinWithDijet[4] = {0.0, 0.0, 0.0, fMultiplicityBins[0]};
-    Double_t QuenchMaxWithDijet[4] = {1.0, 1000.0, 1000.0, fMultiplicityBins[fMultiplicityBins.size() - 1]};
+    int QuenchBinsWithDijet[5] = {nXjAjBins, 500, 500, nMultiplicityBins, 500};
+    Double_t QuenchMinWithDijet[5] = {0.0, 0.0, 0.0, fMultiplicityBins[0], 0.0};
+    Double_t QuenchMaxWithDijet[5] = {1.0, 1000.0, 1000.0, fMultiplicityBins[fMultiplicityBins.size() - 1], 1000.0};
 
     int UnfoldingBins[4] = {nXjAjBins, nXjAjBins, nMultiplicityBins, nLeadPtBins};
     double UnfoldingMin[4] = {0., 0., fMultiplicityBins[0], 0.};
     double UnfoldingMax[4] = {1.0, 1.0, fMultiplicityBins[fMultiplicityBins.size() - 1] + 1, 1.};
 
-    hRecoQuenching_W = new THnSparseD("hRecoQuenching_W", "Reco Quenching", 5, QuenchBins, QuenchMin, QuenchMax);
+    hRecoQuenching_W = new THnSparseD("hRecoQuenching_W", "Reco Quenching", 6, QuenchBins, QuenchMin, QuenchMax);
     hRecoQuenching_W->GetAxis(0)->Set(QuenchBins[0], XjBins);
     hRecoQuenching_W->GetAxis(1)->Set(QuenchBins[1], DphiBins);
     hRecoQuenching_W->GetAxis(4)->Set(QuenchBins[4], multBinArray);
     hRecoQuenching_W->Sumw2();
     hRecoQuenching_WithDijet_W =
-        new THnSparseD("hRecoQuenching_WithDijet_W", "Reco Quenching With Dijet Present", 4, QuenchBinsWithDijet, QuenchMinWithDijet, QuenchMaxWithDijet);
+        new THnSparseD("hRecoQuenching_WithDijet_W", "Reco Quenching With Dijet Present", 5, QuenchBinsWithDijet, QuenchMinWithDijet, QuenchMaxWithDijet);
     hRecoQuenching_WithDijet_W->GetAxis(0)->Set(QuenchBinsWithDijet[0], XjBins);
     hRecoQuenching_WithDijet_W->GetAxis(3)->Set(QuenchBinsWithDijet[3], multBinArray);
     hRecoQuenching_WithDijet_W->Sumw2();
@@ -410,13 +425,13 @@ void HistoManagerDiJet::init()
 
     if (fIsMC)
     {
-        hGenQuenching_W = new THnSparseD("hGenQuenching_W", "Gen Quenching", 5, QuenchBins, QuenchMin, QuenchMax);
+        hGenQuenching_W = new THnSparseD("hGenQuenching_W", "Gen Quenching", 6, QuenchBins, QuenchMin, QuenchMax);
         hGenQuenching_W->GetAxis(0)->Set(QuenchBins[0], XjBins);
         hGenQuenching_W->GetAxis(1)->Set(QuenchBins[1], DphiBins);
         hGenQuenching_W->GetAxis(4)->Set(QuenchBins[4], multBinArray);
         hGenQuenching_W->Sumw2();
         hGenQuenching_WithDijet_W =
-            new THnSparseD("hGenQuenching_WithDijet_W", "Gen Quenching With Dijet Present", 4, QuenchBinsWithDijet, QuenchMinWithDijet, QuenchMaxWithDijet);
+            new THnSparseD("hGenQuenching_WithDijet_W", "Gen Quenching With Dijet Present", 5, QuenchBinsWithDijet, QuenchMinWithDijet, QuenchMaxWithDijet);
         hGenQuenching_WithDijet_W->GetAxis(0)->Set(QuenchBinsWithDijet[0], XjBins);
         hGenQuenching_WithDijet_W->GetAxis(3)->Set(QuenchBinsWithDijet[3], multBinArray);
         hGenQuenching_WithDijet_W->Sumw2();
@@ -1001,7 +1016,7 @@ void HistoManagerDiJet::projectHistograms()
     std::cout << "====================================" << std::endl;
 }
 
-void HistoManagerDiJet ::writeOutput()
+void HistoManagerDiJet::writeOutput()
 {
     std::cout << std::endl;
     std::cout << "====================================" << std::endl;
@@ -1120,6 +1135,7 @@ void HistoManagerDiJet ::writeOutput()
             hLeadSubLeadJets_MidRapidity_W->Write();
         }
         hLeadPtVsHiHFPlus_WithDijet_W->Write();
+        hLeadSubLeadJetsPtHat_W->Write();
 
         hLeadSubLeadJets_WithDijet_W->Write();
         hLeadSubLeadJets_WithDijet_DiJetW->Write();
@@ -1144,6 +1160,7 @@ void HistoManagerDiJet ::writeOutput()
                 hRefLeadRefSubLeadJets_MidRapidity_W->Write();
             }
 
+            hGenLeadGenSubLeadJetsPtHat_W->Write();
             hGenLeadGenSubLeadJets_WithDijet_W->Write();
             hGenLeadGenSubLeadJets_WithDijet_DiJetW->Write();
 
@@ -1216,6 +1233,13 @@ void HistoManagerDiJet ::writeOutput()
                 hMultVsGenXj_DiJetW->Write();
             }
         }
+        hRecoQuenching_W->Write();
+        hRecoQuenching_WithDijet_W->Write();
+        if (fIsMC)
+        {
+            hGenQuenching_W->Write();
+            hGenQuenching_WithDijet_W->Write();
+        }
     }
 
     if (fConfig.saveQA)
@@ -1223,8 +1247,7 @@ void HistoManagerDiJet ::writeOutput()
         hDeltaPhi_W->Write();
         hDeltaPhi_WithDiJet_W->Write();
         hNDijetEvent->Write();
-        hRecoQuenching_W->Write();
-        hRecoQuenching_WithDijet_W->Write();
+
         if (fIsMC)
         {
             hMultVsUnflippedMatchedRecoXj_W->Write();
