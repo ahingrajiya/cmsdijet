@@ -648,6 +648,7 @@ double DiJetAnalysis::EventWeight(const Event* event)
     else
     {
         ptHatWeight = event->ptHatWeight();
+        if (fSystem == CollisionSystem::OO && fUsePtHatReweight) ptHatWeight *= OOPtHatReweight(ptHat);
     }
     centWeight = CentralityWeight(event->hiBin());
     eventWeight = ptHatWeight * vzWeight * centWeight;

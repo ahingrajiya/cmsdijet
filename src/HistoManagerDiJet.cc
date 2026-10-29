@@ -381,11 +381,11 @@ void HistoManagerDiJet::init()
     // const int nLeadPtBins = 8;
     // double leadPtBins[nLeadPtBins + 1] = {25.0, 50., 55., 60., 65., 70., 80., 90., 200.};
 
-    int QuenchBins[6] = {nXjAjBins, nDphiBins, 200, 200, nMultiplicityBins, 500};
+    int QuenchBins[6] = {nXjAjBins, nDphiBins, 200, 200, nMultiplicityBins, 100};
     Double_t QuenchMin[6] = {0.0, 0.0, 0.0, 0.0, fMultiplicityBins[0], 0};
     Double_t QuenchMax[6] = {1.0, TMath::Pi(), 1000.0, 1000.0, fMultiplicityBins[fMultiplicityBins.size() - 1], 1000.0};
 
-    int QuenchBinsWithDijet[5] = {nXjAjBins, 500, 500, nMultiplicityBins, 500};
+    int QuenchBinsWithDijet[5] = {nXjAjBins, 500, 500, nMultiplicityBins, 100};
     Double_t QuenchMinWithDijet[5] = {0.0, 0.0, 0.0, fMultiplicityBins[0], 0.0};
     Double_t QuenchMaxWithDijet[5] = {1.0, 1000.0, 1000.0, fMultiplicityBins[fMultiplicityBins.size() - 1], 1000.0};
 

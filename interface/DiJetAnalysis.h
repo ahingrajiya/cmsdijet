@@ -32,6 +32,7 @@
 #include "ForestReader.h"
 #include "HistoManagerDiJet.h"
 #include "OOCentralityWeights.h"
+#include "OOPtHatWeights.h"
 #include "TSpline.h"
 #include "TVector2.h"
 #include "TrackingEfficiency.h"
@@ -146,6 +147,7 @@ class DiJetAnalysis : public BaseAnalysis
             }
         }
     }
+    void setUsePtHatReweight() noexcept { fUsePtHatReweight = true; }
     ///@brief Set if to use centrality weight
     void setUseCentralityWeight() noexcept { fUseCentralityWeight = true; }
     /// @brief Set if to use jetpt weight
@@ -456,6 +458,7 @@ class DiJetAnalysis : public BaseAnalysis
     std::string fUEType{""};
 
     // Config Flags
+    bool fUsePtHatReweight{false};
     ///@brief Use Centrality weight
     bool fUseCentralityWeight{false};
     ///@brief Use Multipicity weight
