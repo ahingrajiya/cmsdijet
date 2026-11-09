@@ -59,7 +59,7 @@ int main(int argc, char* argv[])
     Bool_t useJEU{false};          // 0 - No JEC Uncertainty, 1 - JEC Uncertainty Up, -1 - JEC Uncertainty Down
     Int_t JEUType{0};              // 0 - No JEU, 1 - JEU Up, -1 - JEU Down
     std::string path2DijetWeight = "../aux_files/pp_5360/Dijet_Weight/DiJetWeight.root";
-    HistoConfig writeConfig = {false, true, true, false, false, true, false, true};
+    HistoConfig writeConfig = {false, true, true, true, false, true, false, true};
     std::vector<std::string> trkEffTable = {
         "../aux_files/OO_5360/trk_eff_table/Eff_OO_2025_Hijing_MB_Centrality_fromHihfpf_NoPU_3D_Nominal_Official.root",
         "../aux_files/OO_5360/trk_eff_table/Eff_OO_2025_PythiaHijing_QCD_pThat15_Centrality_fromHihfpf_NoPU_3D_Nominal_Official.root"};
