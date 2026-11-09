@@ -116,7 +116,7 @@ int main(int argc, char* argv[])
     trackCut->setPtErr(0.1);
     trackCut->setDXY(3.0);
     trackCut->setDZ(3.0);
-    // trackCut->setHighPurity();
+    trackCut->setHighPurity();
     trackCut->setCharge();
     // trackCut->setVerbose();
 
@@ -133,6 +133,7 @@ int main(int argc, char* argv[])
         {
             reader->setMatchedJets();
             reader->useGenTrackBranch();
+            reader->setStoreLocation(kTRUE);
         }
     }
     if (!isMC)
@@ -178,8 +179,8 @@ int main(int argc, char* argv[])
 
     if (isMC)
     {
-        // analysis->setUseCentralityWeight();
-        analysis->setUsePtHatReweight();
+        analysis->setUseCentralityWeight();
+        // analysis->setUsePtHatReweight();
         // analysis->setUseDijetWeight();
         // analysis->setDijetWeightType(DijetWeightType::Gen);
         // analysis->setDijetWeightTable(path2DijetWeight);
