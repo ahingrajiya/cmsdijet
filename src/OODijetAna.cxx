@@ -150,7 +150,7 @@ int main(int argc, char* argv[])
     reader->addJECFile(JECFiles);
     reader->setUseJetID();
     reader->setJetIDType(2);
-    reader->eventsToProcess(10);
+    reader->eventsToProcess(-1);
     reader->setJetCut(jetCut);
     reader->setTrackCut(trackCut);
     reader->setEventCut(eventCut);
@@ -210,13 +210,6 @@ int main(int argc, char* argv[])
     oFile->Close();
     delete oFile;
     delete manager;
-
-    for (auto* obj : *gROOT->GetListOfFiles())
-    {
-        auto* f = static_cast<TFile*>(obj);
-        std::cout << "Still open: " << f->GetName() << '\n';
-        f->GetList()->ls();  // objects attached to it in memory
-    }
 
     return 0;
 }
