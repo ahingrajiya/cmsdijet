@@ -340,17 +340,17 @@ class ForestReader : public BaseReader
     bool fIsSkim;
 
     /// @brief Chain conaining HLT information (used to friend other trees)
-    TChain* fHltTree;
+    TChain* fHltTree{nullptr};
     /// @brief Chain containing skimming information
-    TChain* fSkimTree;
+    TChain* fSkimTree{nullptr};
     /// @brief Chain containing event information
-    TChain* fEventTree;
+    TChain* fEventTree{nullptr};
     /// @brief Chain containing jets
-    TChain* fJetTree;
+    TChain* fJetTree{nullptr};
     /// @brief Chain containing tracks
-    TChain* fTrkTree;
+    TChain* fTrkTree{nullptr};
     /// @brief Chain containing Monte Carlo tracks
-    TChain* fGenTrkTree;
+    TChain* fGenTrkTree{nullptr};
 
     /// @brief Name of the particle flow tree (e.g. akCs4PFJetAnalyzer for PbPb or ak4PFJetAnalyzer for pp)
     TString fJetCollection;

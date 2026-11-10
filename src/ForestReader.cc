@@ -23,7 +23,7 @@ ClassImp(ForestReader)
     fTrackCut{nullptr}, fUseMatchedJets{kFALSE}, fEventsToProcess{-1}, fUseJetID{kFALSE}, fJetIDType{0}, fHiBinShift{0}, fIs_pp{kFALSE}, fIs_PbPb{kFALSE},
     fIs_pPb{kFALSE}, fJetJESCorrectionsFunction{nullptr}, fApplyJetJESCorrections{kFALSE}, fJEUType{0}, fSmearType{0}, fJetPtSmearingFunction{nullptr},
     fJERSmearingNomial{0}, fJERSmearingUp{0}, fJERSmearingDown{0}, fJERSmearingEtaEdges{0}, fRandom{nullptr}, fDoJEU{kFALSE}, fIsAOD{kFALSE}, fIsMiniAOD{kFALSE},
-    fIs_OO{kFALSE}, fIsPbGoingSide{kFALSE}, fIsSkim{false}
+    fIs_OO{kFALSE}, fIsPbGoingSide{kFALSE}, fIsSkim{false}, fJetTree{nullptr}
 {
     // Initialize many variables
     clearVariables();

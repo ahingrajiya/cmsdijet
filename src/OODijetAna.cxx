@@ -207,9 +207,9 @@ int main(int argc, char* argv[])
     TFile* oFile = new TFile(oFileName, "RECREATE");
     hm->projectHistograms();
     hm->writeOutput();
-    std::cout << "Here" << std::endl;
     oFile->Close();
-    std::cout << "There" << std::endl;
+    delete oFile;
+    delete reader;
 
     for (auto* obj : *gROOT->GetListOfFiles())
     {
@@ -217,5 +217,6 @@ int main(int argc, char* argv[])
         std::cout << "Still open: " << f->GetName() << '\n';
         f->GetList()->ls();  // objects attached to it in memory
     }
+
     return 0;
 }
