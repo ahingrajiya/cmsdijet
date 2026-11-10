@@ -209,7 +209,7 @@ int main(int argc, char* argv[])
     hm->writeOutput();
     oFile->Close();
     delete oFile;
-    delete reader;
+    delete manager;
 
     for (auto* obj : *gROOT->GetListOfFiles())
     {
