@@ -37,13 +37,12 @@ int main()
 
     Unfolding unfoldOOData;
     // std::vector<double> centBins = {70.0, 150.0};
-    std::vector<double> centBins = {0.0, 20.0, 40.0, 80.0, 120.0, 160.0};
+    std::vector<double> centBins = {120.0, 160.0};
 
-    unfoldOOData.setBins(ptBins, xjBins, centBins, centBins);
+    unfoldOOData.setBins(ptBins, xjBins, multiplicityBins, centBins);
     // unfoldOOData.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA_HIJING_NewPtBins.root", "/home/abhishek/analysis/pPb/Summed_Files/OOData_NewPtBins.root");
-    unfoldOOData.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA_HIJING_L50SL20_NewJEC_NotPtHat.root",
-                            "/home/abhishek/analysis/pPb/Summed_Files/OOData_L50SL20.root");
-    unfoldOOData.outputFileName("OO_ATLAS_CentBins_ATLAS_PtBins_SLPt20.root");
+    unfoldOOData.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA5360_L50SL20_NewJEC.root", "/home/abhishek/analysis/pPb/Summed_Files/OOData_L50SL20.root");
+    unfoldOOData.outputFileName("OO_ATLAS_CentBins_ATLAS_PtBins_120_160.root");
     unfoldOOData.setIterations(3);
     unfoldOOData.doValidation(false, false);
     unfoldOOData.performUnfolding();
