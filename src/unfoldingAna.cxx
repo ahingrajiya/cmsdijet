@@ -26,26 +26,26 @@ int main()
     std::vector<double> ptBins = {0.0, 20.0, 30.0, 40.0, 50.0, 60., 70., 80., 90., 100., 120., 140., 160., 200.};
 
     std::vector<double> ptBinspPb = {0.0, 20.0, 30.0, 40.0, 50.0, 70., 100., 200.};
+    std::vector<double> centBins = {100.0, 160.0};
 
-    unfoldData.setBins(ptBins, xjBins, multiplicityBins, multiplicityBins);
-    unfoldData.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA5360_L50SL20_NewJEC.root",
+    unfoldData.setBins(ptBins, xjBins, centBins, multiplicityBins);
+    unfoldData.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA_HIJING_L50SL20_NewJEC.root",
                           "/home/abhishek/analysis/pPb/Summed_Files/ppRef5360_L50SL20_NewJEC.root");
-    unfoldData.outputFileName("ppRef_Data_Unfolded_3iter_SLPt20.root");
+    unfoldData.outputFileName("ppRef_Data_Unfolded_3iter_PHResponse.root");
     unfoldData.setIterations(3);
     unfoldData.doValidation(false, false);
     unfoldData.performUnfolding();
 
     Unfolding unfoldOOData;
     // std::vector<double> centBins = {70.0, 150.0};
-    std::vector<double> centBins = {120.0, 160.0};
 
     unfoldOOData.setBins(ptBins, xjBins, multiplicityBins, centBins);
     // unfoldOOData.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA_HIJING_NewPtBins.root", "/home/abhishek/analysis/pPb/Summed_Files/OOData_NewPtBins.root");
-    unfoldOOData.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA5360_L50SL20_NewJEC.root", "/home/abhishek/analysis/pPb/Summed_Files/OOData_L50SL20.root");
+    unfoldOOData.initialize("/home/abhishek/analysis/pPb/Summed_Files/PYTHIA_HIJING_L50SL20_NewJEC.root", "/home/abhishek/analysis/pPb/Summed_Files/OOData_L50SL20.root");
     unfoldOOData.outputFileName("OO_ATLAS_CentBins_ATLAS_PtBins_120_160.root");
     unfoldOOData.setIterations(3);
     unfoldOOData.doValidation(false, false);
-    unfoldOOData.performUnfolding();
+    // unfoldOOData.performUnfolding();
 
     Unfolding unfoldpPbData;
 
