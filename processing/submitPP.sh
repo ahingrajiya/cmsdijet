@@ -73,7 +73,7 @@ for filename in ${input_files_list}/*.txt; do
     echo "Submission file with name pp_${subfile%.*}.sub is Created"
     cat <<EOF > processing/pp_${subfile%.*}.sub
 universe                = vanilla
-executable              = ${EXEC_PATH}/processing/run_DijetAnapp.sh
+executable              = ${EXEC_PATH}/processing/runDijetAnaPP.sh
 +JobFlavour             = "longlunch"
 requirements            = (OpSysAndVer =?= "AlmaLinux9")
 RequestCpus             = 2
