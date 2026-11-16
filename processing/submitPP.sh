@@ -1,0 +1,102 @@
+#!/bin/bash
+CMS_PATH=${HOME}/private/analysis/CMSSW_13_0_5/src
+# CMS_PATH=${HOME}/analysis/jetAnalysis/
+
+cd ${CMS_PATH}
+# eval 'cmsenv'
+
+#Change the path to the CMSSW_13_0_5 directory
+EXEC_PATH=${HOME}/private/analysis/CMSSW_13_0_5/src/cmsdijet
+# EXEC_PATH=${HOME}/analysis/jetAnalysis/
+
+DataSet=$1
+files_per_job=$2
+energy=$3
+doBuild=$4
+
+# The job sets up this same CMSSW release from CVMFS, so it must be known here
+if [ -z "${CMSSW_VERSION}" ] || [ -z "${SCRAM_ARCH}" ]; then
+    echo "CMSSW environment not set. Run cmsenv before this script."
+    exit 1
+fi
+
+if [ "$doBuild" -eq 1 ]; then
+    echo "Building the code"
+    cd ${EXEC_PATH}/build
+    make
+    cd ${EXEC_PATH}
+    mkdir -p "executions_dir"
+    cp -r "$EXEC_PATH/build/ppDijetAna" "executions_dir"
+fi
+
+if [ "$DataSet" -eq 1 ]; then
+    echo "PYTHIA  Datasset is selected"    
+    cd ${EXEC_PATH}   
+    sample_prefix="PYTHIA"
+    input_files_list="${EXEC_PATH}/files_input/pp${energy}/PYTHIA/"
+    output_path="/eos/user/a/ahingraj/outputs/PYTHIA/${energy}/"
+    isMC=1
+fi
+
+if [ "$DataSet" -eq 2 ]; then
+    echo "ppRef Datasset is selected"    
+    cd ${EXEC_PATH}   
+    sample_prefix="ppRefData"
+    input_files_list="${EXEC_PATH}/files_input/pp${energy}/DATA/"
+    output_path="/eos/user/a/ahingraj/outputs/ppRefData/${energy}/"
+    isMC=0
+fi
+
+if [ "$DataSet" -gt 2 ]; then
+    echo "No Data Set Selected. Use numbers from 1 to 2"
+    exit 1
+fi
+
+echo "Input File List : ${input_files_list}"
+
+# Pack everything ppDijetAna needs at runtime. Paths stay relative to EXEC_PATH,
+# so ../aux_files/... still resolves from executions_dir inside the job.
+cd ${EXEC_PATH}
+aux_dirs=$(printf 'aux_files/pp_5360\naux_files/pp_%s\n' "${energy}" | sort -u)
+tar -czf processing/sandbox_pp.tgz executions_dir/ppDijetAna \
+    build/libJetAnalysis.so build/libJetAnalysis_rdict.pcm build/libJetAnalysis.rootmap \
+    ${aux_dirs} || { echo "Could not create processing/sandbox_pp.tgz"; exit 1; }
+
+mkdir -p processing/condor/logs
+
+PD_Number=1
+for filename in ${input_files_list}/*.txt; do
+    echo "Processing file: $(basename "$filename")"
+    echo "$PWD"
+    file_list=$(processing/split_files.sh ${input_files_list} $(basename "$filename") $files_per_job)
+    subfile=$(basename "$filename")
+    echo "Submission file with name pp_${subfile%.*}.sub is Created"
+    cat <<EOF > processing/pp_${subfile%.*}.sub
+universe                = vanilla
+executable              = ${EXEC_PATH}/processing/run_DijetAnapp.sh
++JobFlavour             = "longlunch"
+requirements            = (OpSysAndVer =?= "AlmaLinux9")
+RequestCpus             = 2
+x509userproxy           = ${EXEC_PATH}/processing/voms_proxy.txt
+environment             = "CMSSW_VERSION=${CMSSW_VERSION} SCRAM_ARCH=${SCRAM_ARCH}"
+should_transfer_files   = YES
+when_to_transfer_output = ON_EXIT
+max_retries             = 2
+
+EOF
+    jobid=0
+    for file in ${file_list}/*.txt; do
+        cat <<EOF >> processing/pp_${subfile%.*}.sub
+transfer_input_files    = ${EXEC_PATH}/processing/sandbox_pp.tgz, ${file_list}/$(basename "$file")
+arguments               = $(basename "$file") ${output_path}${sample_prefix}_PD${PD_Number}_${jobid}.root ${isMC} ${energy}
+output                  = processing/condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.out
+error                   = processing/condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.err
+log                     = processing/condor/logs/${sample_prefix}_PD${PD_Number}_${jobid}.log
+queue
+
+EOF
+        jobid=$((jobid+1))
+    done
+    PD_Number=$((PD_Number+1))
+    condor_submit processing/pp_${subfile%.*}.sub
+done
