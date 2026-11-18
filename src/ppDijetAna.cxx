@@ -121,10 +121,10 @@ int main(int argc, char* argv[])
     if (collEnergyGeV == 5360)
     {
         reader->useTrackBranch("ppTracks");
-        if (isMC)
-        {
-            reader->setStoreLocation(true);
-        }
+        // if (isMC)
+        // {
+        reader->setStoreLocation(true);
+        // }
     }
 
     if (isMC && collEnergyGeV == 5020)

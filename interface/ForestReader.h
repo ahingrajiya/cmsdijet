@@ -33,7 +33,7 @@
 #include <filesystem>
 #include <fstream>
 #include <list>
-
+#include <vector>
 //_________________
 class ForestReader : public BaseReader
 {
@@ -213,7 +213,13 @@ class ForestReader : public BaseReader
     void clearVariables();
 
     /// @brief Call read event
-    void readEvent();
+    bool readEvent();
+    /// @brief Read local entry `local` of file `file` in every chain; kFALSE if any of them fails
+    Bool_t readAllTrees(Int_t file, Long64_t local);
+    /// @brief Fill every chain's file offsets and check that all chains split their entries alike
+    void setupFileOffsets();
+    /// @brief Whether every chained tree is in f with as many entries as HiTree
+    Bool_t treesInStep(TFile* f) const;
 
     /// @brief Setup JEC
     void setupJEC();
@@ -316,6 +322,18 @@ class ForestReader : public BaseReader
     Long64_t fEvents2Read;
     /// @brief How many events were processed
     Long64_t fEventsProcessed;
+
+    /// @brief Chains in use, and the first entry of each file (then the total) in the event chain
+    std::vector<TChain*> fChains;
+    std::vector<Long64_t> fFileOffsets;
+    /// @brief File holding the current entry
+    Int_t fCurrentFile{0};
+    /// @brief Entries below this are skipped unread (the rest of a file that could not be read)
+    Long64_t fSkipUntil{0};
+    /// @brief Entries and files skipped because they could not be read
+    Long64_t fEntriesSkipped{0};
+    Int_t fFilesSkipped{0};
+
     /// @brief How many events to process
     Long64_t fEventsToProcess;
 

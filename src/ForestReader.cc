@@ -683,6 +683,9 @@ Bool_t ForestReader::JetIDType2(const Float_t& jtNHF, const Float_t& jtNEF, cons
 //_________________
 void ForestReader::finish()
 {
+    if (fFilesSkipped)
+        std::cerr << "ForestReader: " << fFilesSkipped << " file(s) could not be read to the end, " << fEntriesSkipped << " of " << fEvents2Read
+                  << " entries skipped (see SKIPPED FILE above)" << std::endl;
 }
 
 //_________________
@@ -809,7 +812,7 @@ Int_t ForestReader::setupChains()
                     // std::cout << ftmp << std::endl;
                     // std::cout << ftmp->IsZombie() << std::endl;
                     // std::cout << ftmp->GetNkeys() << std::endl;
-                    if (ftmp && !ftmp->IsZombie() && ftmp->GetNkeys())
+                    if (ftmp && !ftmp->IsZombie() && !ftmp->TestBit(TFile::kRecovered) && ftmp->GetNkeys() && treesInStep(ftmp))
                     {
                         std::cout << Form("Adding file to chain: %s\n", file.c_str());
                         // Adding file to chains
@@ -845,6 +848,7 @@ Int_t ForestReader::setupChains()
         }  // else {   if file list
         returnStatus = 0;
     }  // else {   if normal input
+    setupFileOffsets();
     return returnStatus;
 }
 
@@ -1244,7 +1248,7 @@ void ForestReader::report()
 }
 
 //_________________
-void ForestReader::readEvent()
+bool ForestReader::readEvent()
 {
     if (fIsMc)
     {
@@ -1259,16 +1263,84 @@ void ForestReader::readEvent()
         std::cerr << "ForestReader::readEvent() out of entry numbers\n";
         fReaderStatus = 2;  // End of input stream
     }
-    fEventTree->GetEntry(fEventsProcessed);
-    if (fUseHltBranch) fHltTree->GetEntry(fEventsProcessed);
-    if (fUseSkimmingBranch) fSkimTree->GetEntry(fEventsProcessed);
-    if (fUseJets) fJetTree->GetEntry(fEventsProcessed);
-    if (fUseTrackBranch) fTrkTree->GetEntry(fEventsProcessed);
-    if (fUseGenTrackBranch) fGenTrkTree->GetEntry(fEventsProcessed);
 
-    fEventsProcessed++;
+    const Long64_t i = fEventsProcessed++;
+    if (fReaderStatus == 2) return kFALSE;
+    // The rest of a file that could not be read: skipped without reading.
+    if (i < fSkipUntil) return kFALSE;
+    while (i >= fFileOffsets[fCurrentFile + 1]) ++fCurrentFile;
+    const Long64_t local = i - fFileOffsets[fCurrentFile];
+    if (readAllTrees(fCurrentFile, local)) return kTRUE;
+    fSkipUntil = fFileOffsets[fCurrentFile + 1];
+    fEntriesSkipped += fSkipUntil - i;
+    ++fFilesSkipped;
+    std::cerr << "ForestReader SKIPPED FILE " << fEventTree->GetListOfFiles()->At(fCurrentFile)->GetTitle() << ": entries " << local << "-"
+              << fSkipUntil - fFileOffsets[fCurrentFile] - 1 << " of the file not read" << std::endl;
+    return kFALSE;
     // if (fEventsProcessed - 1 == 25794)
     // std::cout << "Events processed: " << fEventsProcessed - 1 << std::endl;
+}
+
+Bool_t ForestReader::readAllTrees(Int_t file, Long64_t local)
+{
+    // Each chain reads through its own file offsets: a chain that cannot open a file counts it as
+    // empty and shifts every later file, so one common entry number could give another event's jets.
+    // GetEntry returns 0 if the entry or its file cannot be loaded and -1 on an I/O error.
+    for (TChain* chain : fChains)
+        if (chain->GetEntry(chain->GetTreeOffset()[file] + local) <= 0 || chain->GetTreeNumber() != file) return kFALSE;
+    return kTRUE;
+}
+
+void ForestReader::setupFileOffsets()
+{
+    // readEvent() needs every chain's file offsets, which GetEntries() does not fill; loading the
+    // last entry does.
+    fChains.clear();
+    for (TChain* chain : {fEventTree, fHltTree, fSkimTree, fJetTree, fTrkTree, fGenTrkTree})
+        if (chain) fChains.push_back(chain);
+    for (TChain* chain : fChains)
+        if (chain->GetEntries() > 0) chain->LoadTree(chain->GetEntries() - 1);
+    const Int_t nFiles = fEventTree->GetNtrees();
+    fFileOffsets.assign(fEventTree->GetTreeOffset(), fEventTree->GetTreeOffset() + nFiles + 1);
+    for (TChain* chain : fChains)
+    {
+        Bool_t same = (chain->GetNtrees() == nFiles);
+        for (Int_t k = 0; same && k <= nFiles; ++k) same = (chain->GetTreeOffset()[k] == fFileOffsets[k]);
+        if (!same)
+        {
+            std::cerr << "ForestReader::setupFileOffsets(): " << chain->GetName() << " splits its entries over the files differently from " << fEventTree->GetName()
+                      << ". Terminating." << std::endl;
+            exit(1);
+        }
+    }
+}
+
+Bool_t ForestReader::treesInStep(TFile* f) const
+{
+    // Every chained tree must be in the file with as many entries as HiTree.
+    TTree* evt = (TTree*)f->Get("hiEvtAnalyzer/HiTree");
+    if (!evt)
+    {
+        std::cerr << "Skipping " << f->GetName() << ": no hiEvtAnalyzer/HiTree" << std::endl;
+        return kFALSE;
+    }
+    std::vector<TString> trees;
+    if (fUseHltBranch) trees.push_back("hltanalysis/HltTree");
+    if (fUseSkimmingBranch) trees.push_back("skimanalysis/HltTree");
+    if (fUseJets) trees.push_back(Form("%s/t", fJetCollection.Data()));
+    if (fUseTrackBranch) trees.push_back(TString(fTrackTreeName) + "/trackTree");
+    if (fIsMc && fUseGenTrackBranch) trees.push_back("HiGenParticleAna/hi");
+    for (const TString& path : trees)
+    {
+        TTree* t = (TTree*)f->Get(path);
+        if (!t || t->GetEntries() != evt->GetEntries())
+        {
+            std::cerr << "Skipping " << f->GetName() << ": " << path
+                      << (t ? TString(Form(" has %lld entries, HiTree %lld", t->GetEntries(), evt->GetEntries())) : TString(" missing")) << std::endl;
+            return kFALSE;
+        }
+    }
+    return kTRUE;
 }
 
 //_________________
@@ -1276,7 +1348,7 @@ Event* ForestReader::returnEvent()
 {
     // std::cout << "ForestReader::returnEvent" << std::endl;
 
-    readEvent();
+    if (!readEvent()) return nullptr;
 
     Int_t nBadJets{0};
 
